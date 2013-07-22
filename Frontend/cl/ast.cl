@@ -1,7 +1,10 @@
 
 package program;
 
-Chunk ::= Stat:head StatList:tail
+Chunk ::= Stat:head StatList:tail | Stat:head StatList:tail LastStat:last
+
+Stat ::= Asm | FunctionCall | Do | While | RepeatUntil | IfThenElse | For | ForIn
+			| FunctionDef | LocalFuncDef | LocalDecl
 
 
 Prog ::= Output Input Polynom
