@@ -8,7 +8,8 @@ public class LuaTable {
 	private LuaFunction forwardFunction = null;
 	private LuaTable forwardTable = null;
 	private final Map<Object, Object> pairs;
-
+	private LuaTable metatable;
+	
 	public LuaTable() {
 		pairs = new HashMap<>();
 	}
@@ -106,5 +107,13 @@ public class LuaTable {
 
 	public void unset(Object key) {
 		pairs.remove(key);
+	}
+
+	public LuaTable getMetatable() {
+		return metatable;
+	}
+
+	public void setMetatable(LuaTable metatable) {
+		this.metatable = metatable;
 	}
 }
