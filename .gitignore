@@ -6,6 +6,8 @@ CompilerFrontend/dist
 Frontend/java
 Frontend/classes
 
+Frontend/testoutput/*
+
 # Package Files #
 *.war
 *.ear
