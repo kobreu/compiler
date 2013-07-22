@@ -9,4 +9,9 @@ public class FunctionNode extends Node {
 		return null;
 	}
 
+	public Chunk getChunk() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
