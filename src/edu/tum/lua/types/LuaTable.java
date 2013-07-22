@@ -5,96 +5,97 @@ import java.util.Map;
 
 public class LuaTable {
 
-	private final Map<Object, LuaType> types;
+	private LuaFunction forwardFunction = null;
+	private LuaTable forwardTable = null;
 	private final Map<Object, Object> pairs;
 
 	public LuaTable() {
-		types = new HashMap<>();
 		pairs = new HashMap<>();
 	}
 
-	public LuaType getType(String key) {
-		LuaType type = types.get(key);
-
-		if (type == null) {
-			return LuaType.NIL;
-		}
-
-		return type;
-	}
-
 	public Object get(Object key) {
-		return pairs.get(key);
-	}
+		Object value = pairs.get(key);
 
-	public LuaTable getLuaTable(Object key) {
-		if (types.get(key) != LuaType.TABLE) {
-			throw new IllegalArgumentException();
+		if (value != null) {
+			return value;
 		}
 
-		return (LuaTable) pairs.get(key);
-	}
-
-	public String getString(Object key) {
-		if (types.get(key) != LuaType.STRING) {
-			throw new IllegalArgumentException();
+		if (forwardTable != null) {
+			return forwardTable.get(key);
 		}
 
-		return (String) pairs.get(key);
-	}
-
-	public double getNumber(Object key) {
-		if (types.get(key) != LuaType.NUMBER) {
-			throw new IllegalArgumentException();
+		if (forwardFunction != null) {
+			return forwardFunction.apply(key).get(0);
 		}
 
-		return ((Double) pairs.get(key)).doubleValue();
-	}
-
-	public LuaFunction getLuaFunction(Object key) {
-		if (types.get(key) != LuaType.FUNCTION) {
-			throw new IllegalArgumentException();
-		}
-
-		return (LuaFunction) pairs.get(key);
+		return null;
 	}
 
 	public boolean getBoolean(Object key) {
-		if (types.get(key) != LuaType.BOOLEAN) {
+		Object value = get(key);
+
+		if (LuaType.getTypeOf(value) != LuaType.BOOLEAN) {
 			throw new IllegalArgumentException();
 		}
 
-		return ((Boolean) pairs.get(key)).booleanValue();
+		return ((Boolean) value).booleanValue();
 	}
 
-	public void set(Object key, LuaTable value) {
-		types.put(key, LuaType.TABLE);
+	public LuaFunction getLuaFunction(Object key) {
+		Object value = get(key);
+
+		if (LuaType.getTypeOf(value) != LuaType.FUNCTION) {
+			throw new IllegalArgumentException();
+		}
+
+		return (LuaFunction) value;
+	}
+
+	public LuaTable getLuaTable(Object key) {
+		Object value = get(key);
+
+		if (LuaType.getTypeOf(value) != LuaType.TABLE) {
+			throw new IllegalArgumentException();
+		}
+
+		return (LuaTable) value;
+	}
+
+	public double getNumber(Object key) {
+		Object value = get(key);
+
+		if (LuaType.getTypeOf(value) != LuaType.NUMBER) {
+			throw new IllegalArgumentException();
+		}
+
+		return ((Double) value).doubleValue();
+	}
+
+	public String getString(Object key) {
+		Object value = get(key);
+
+		if (LuaType.getTypeOf(value) != LuaType.STRING) {
+			throw new IllegalArgumentException();
+		}
+
+		return (String) value;
+	}
+
+	public void set(Object key, Object value) {
 		pairs.put(key, value);
 	}
 
-	public void set(Object key, String value) {
-		types.put(key, LuaType.STRING);
-		pairs.put(key, value);
+	public void setIndex(LuaFunction function) {
+		forwardFunction = function;
+		forwardTable = null;
 	}
 
-	public void set(Object key, double value) {
-		types.put(key, LuaType.NUMBER);
-		pairs.put(key, value);
-	}
-
-	public void set(Object key, LuaFunction value) {
-		types.put(key, LuaType.FUNCTION);
-		pairs.put(key, value);
-	}
-
-	public void set(Object key, boolean value) {
-		types.put(key, LuaType.BOOLEAN);
-		pairs.put(key, value);
+	public void setIndex(LuaTable table) {
+		forwardFunction = null;
+		forwardTable = table;
 	}
 
 	public void unset(Object key) {
-		types.remove(key);
 		pairs.remove(key);
 	}
-
 }

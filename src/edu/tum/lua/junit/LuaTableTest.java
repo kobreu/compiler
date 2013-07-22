@@ -18,13 +18,6 @@ public class LuaTableTest {
 	}
 
 	@Test
-	public void testGetType() {
-		table.set("key1", true);
-		assertEquals(LuaType.BOOLEAN, table.getType("key1"));
-		assertEquals(LuaType.NIL, table.getType("key2"));		
-	}
-
-	@Test
 	public void testGet() {
 		fail("Not yet implemented"); // TODO
 	}

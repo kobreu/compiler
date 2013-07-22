@@ -1,5 +1,11 @@
 package edu.tum.lua.ast;
 
-public class Node {
+import java.util.List;
 
+public class Node {
+	private List<Node> children;
+	
+	public List<Node> getChildren() {
+		return children;
+	}
 }
