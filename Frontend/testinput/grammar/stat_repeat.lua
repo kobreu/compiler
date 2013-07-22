@@ -1,0 +1,1 @@
+repeat a=1 until false end

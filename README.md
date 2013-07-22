@@ -6,6 +6,13 @@ Continuous Integration
 
 Jenkins: http://131.159.58.108:80/
 
+Getting "Frontend" to run
+=====
+
+ 1. Import Project in Eclipse
+ 2. run build.xml
+ 3. Profit!!!
+
 Team
 ======
 
