@@ -88,7 +88,7 @@ white_space = {new_line} | [ \t\f]
 "/"              { return symbol(DIV); }
 "^"              { return symbol(POW); }
 "%"              { return symbol(MOD); }
-".."			 { return symbol(TIL); }
+".."			 { return symbol(CONCAT); }
 "and"            { return symbol(AND); }
 "or"             { return symbol(OR); }
 "."				 { return symbol(DOT); }
