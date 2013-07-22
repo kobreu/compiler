@@ -1,5 +1,9 @@
 *.class
 .metadata
+CompilerFrontend/bin
+CompilerFrontend/gen
+CompilerFrontend/dist
+
 
 # Package Files #
 *.war
