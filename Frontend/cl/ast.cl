@@ -1,26 +1,24 @@
 
 package program;
 
-Chunk ::= Stat:head StatList:tail | Stat:head StatList:tail LastStat:last
+Chunk ::= StatList:stats | StatList:stats LastStat:last
 
-Stat ::= Asm | FunctionCall | Do | While | RepeatUntil | IfThenElse | For | ForIn
-			| FunctionDef | LocalFuncDef | LocalDecl
+StatList ::= Stat:head StatList:tail
 
+Block ::= Chunk:chunk
 
-Prog ::= Output Input Polynom
+Stat ::= {Asm} VarList:varlist ExpList:explist 
+		| {FunctionCall} 
+		| {Do} Block:block
+		| {While} Exp:exp Block:block
+		| {RepeatUntil} Block:block Exp:exp
+		| {IfThenElse} Exp:ifexp Block:thenblock Elseif:elseifpart Block:elseblock
+		| {For} "String":ident Exp:start Exp:end Exp:step Block:block
+		| {ForIn} NameList:namelist ExpList:explist Block:block
+		| {FunctionDef} FuncName:name FuncBody:body
+		| {LocalFuncDef} "String":ident FuncBody:body
+		| {LocalDecl} NameList:namelist ExpList:explist
+		
+Elseif ::= ElseifPart:head Elseif:tail
 
-Output  ::= "String":var 
-
-Constraint ::= "int":lower "String":var "int":upper
-
-Input ::= Constraint:head Input:tail
-
-Term  ::= "int":number "String":var "int":exp ExpSeq:expr
-
-PolyPart  ::= Term:head PolyPart:tail
-
-ExpSeq  ::= Exp:head ExpSeq:tail
-
-Exp     ::= "String":var "int":exp
-
-Polynom ::= "String":var PolyPart:polypart
+ElseifPart ::= Exp:exp Block:block
