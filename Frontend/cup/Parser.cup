@@ -67,7 +67,20 @@ non terminal FuncName funcname;
 non terminal VarList varlist;
 non terminal Var var;
 non terminal NameList namelist;
-non terminal ExpList
+non terminal ExpList explist;
+non terminal Exp;
+non terminal PrefixExp prefixexp;
+non terminal FunctionCall functioncall;
+non terminal Args args;
+non terminal Function function;
+non terminal FuncBody funcbody;
+non terminal ParList parlist;
+non terminal TableConstructor tableconstructor;
+non terminal FieldList fieldlist;
+non terminal Field field;
+non terminal FieldSep fieldsep;
+non terminal BinOp binop;
+non terminal UnOp unop;
 
 /*non terminal Prog       prog;
 non terminal StmtList;
