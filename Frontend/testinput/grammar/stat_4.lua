@@ -1,1 +1,0 @@
-while false do a=1 end

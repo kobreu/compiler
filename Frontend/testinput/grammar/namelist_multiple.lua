@@ -1,0 +1,1 @@
+for a,b,c in 1 do end
