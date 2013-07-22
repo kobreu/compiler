@@ -58,6 +58,7 @@ white_space = {new_line} | [ \t\f]
 "return"		{ return symbol(RETURN); }
 "break"			{ return symbol(BREAK); }
 
+/* special values */
 "nil"			{ return symbol(NIL); }
 "false"			{ return symbol(FALSE); }
 "true"			{ return symbol(TRUE); }
@@ -72,6 +73,7 @@ white_space = {new_line} | [ \t\f]
 
 /* separators */
 ";"               { return symbol(SEMI); }
+","				 { return symbol(COM); }
 
 /* binary operators */
 "=="             { return symbol(EQ); }
@@ -89,12 +91,24 @@ white_space = {new_line} | [ \t\f]
 ".."			 { return symbol(TIL); }
 "and"            { return symbol(AND); }
 "or"             { return symbol(OR); }
+"."				 { return symbol(DOT); }
+":"				 { return symbol(DDOT); }
 
 /* unary operators */
 
 "not"			{ return symbol(NOT); }
 "#"				{ return symbol(LENGTH); }
 
+/* parenthesis */
+"(" 			{ return symbol(PAREN); }
+")" 			{ return symbol(RPAREN); }
+"["				{ return symbol(LBRACK); }
+"]"				{ return symbol(RBRACK); }
+"{"				{ return symbol(LCURL); }
+"}"				{ return symbol(RCURL); }
+
+/* assignment */
+"="				{ return symbol(ASM); }
 
 /* white space */
 {white_space}     { /* ignore */ }
