@@ -1,0 +1,123 @@
+
+/**
+*   CUP Parser
+*/
+
+import java.util.*;
+import java.io.*;
+import java_cup.runtime.Symbol;
+import node.*;
+
+
+/* Preliminaries to use the scanner.  */
+scan with {: return lexer.next_token(); :};
+
+
+parser code {: 
+  public boolean syntaxErrors;
+
+
+  Lexer lexer;
+
+  public Parser(Lexer lex) {
+      super(lex);
+      lexer = lex;
+  }
+
+  
+  public void report_error(String message, Object info) {
+    syntaxErrors = true;
+    
+    System.out.print(message);
+    
+    if ( !(info instanceof Symbol) ) return;
+    Symbol symbol = (Symbol) info;
+    
+    if ( symbol.left < 0 || symbol.right < 0 ) return;
+    
+    System.out.println(" at line "+symbol.left+", column "+symbol.right);
+  }
+:}; 
+
+
+
+/* Terminals (tokens returned by lexer). */
+terminal         OUT, IN;
+terminal         ADD, MUL, POW;
+terminal         SEMI, EQ, LEQ;
+
+terminal Integer NUMBER;
+terminal String  VARIABLE;
+
+non terminal Prog       prog;
+non terminal Output     output;
+non terminal Input      input;
+non terminal Constraint	constraint;
+non terminal Polynom    poly;
+non terminal PolyPart   poly_part;
+non terminal Term       term;  
+non terminal ExpSeq     expseq;
+non terminal Exp        exp;    
+
+
+/* Grammar */
+
+prog      ::= output:o input:i poly:p SEMI
+              {: RESULT = new Prog(o, i, p); :}
+            ;
+
+output    ::= OUT VARIABLE:v SEMI
+               {: RESULT = new Output(v); :}
+            ;        
+
+input  ::= constraint:i input:is
+            {: RESULT = new Input(i, is); :}
+          | constraint:i
+            {: RESULT = new Input(i, null); :}     
+          ;
+
+constraint  ::= IN NUMBER:n1 LEQ VARIABLE:v LEQ NUMBER:n2 SEMI
+                {: RESULT = new Constraint(n1, v, n2); :}
+              ;
+
+poly    ::= VARIABLE:v EQ poly_part:p
+            {: RESULT = new Polynom(v, p); :}
+          ; 
+
+poly_part ::= term:t ADD poly_part:p
+              {: RESULT = new PolyPart(t, p); :}
+            | term:t
+              {: RESULT = new PolyPart(t, null); :}
+            ;  
+
+term      ::= NUMBER:n
+              {: RESULT = new Term(n, null, 0, null); :}
+            | VARIABLE:v
+              {: RESULT = new Term(1, v, 1, null); :}
+            | NUMBER:n MUL VARIABLE:v
+              {: RESULT = new Term(n, v, 1, null); :}
+            | NUMBER:n MUL VARIABLE:v POW NUMBER:e
+              {: RESULT = new Term(n, v, e, null); :}
+            | VARIABLE:v POW NUMBER:e
+              {: RESULT = new Term(1, v, e, null); :}
+            | VARIABLE:v MUL expseq:expr
+              {: RESULT = new Term(1, v, 1, expr); :}
+            | NUMBER:n MUL VARIABLE:v MUL expseq:expr
+              {: RESULT = new Term(n, v, 1, expr); :}
+            | NUMBER:n MUL VARIABLE:v POW NUMBER:e MUL expseq:expr
+              {: RESULT = new Term(n, v, e, expr); :}
+            | VARIABLE:v POW NUMBER:e MUL expseq:expr
+              {: RESULT = new Term(1, v, e, expr); :}
+           ;
+
+expseq    ::= exp:e expseq:es
+              {: RESULT = new ExpSeq(e, es); :}
+            | exp:e
+              {: RESULT = new ExpSeq(e, null); :}
+            ;
+
+exp       ::= VARIABLE:v POW NUMBER:e 
+              {: RESULT = new Exp(v, e); :}
+            | VARIABLE:v
+              {: RESULT = new Exp(v, 1); :}
+           ; 
