@@ -1,4 +1,4 @@
-<project name="Compiler" default="jflex" basedir=".">
+<project name="Compiler" default="compile" basedir=".">
   <property name="cl"      location="cl"      />
   <property name="cup"     location="cup"     />
   <property name="flex"    location="flex"    />
@@ -72,8 +72,38 @@
   <target name="jflex" depends="cup">
     <jflex file="${flex}/Scanner.jflex" destdir="${java}" />
   </target>
-	
-	
+
+  <target name="copy_src" depends="jflex">
+   <copy todir="${java}">
+     <fileset dir="${src}" includes="**/**.java" />
+   </copy>
+  </target>
+
+  <target name="compile" depends="copy_src">
+    <javac srcdir="${java}" destdir="${classes}" debug="on">
+      <classpath refid="libraries" />
+    </javac>
+  </target>
+
+  <target name="dist" depends="compile">
+    <jar jarfile="${dist}/Compiler.jar" basedir="${classes}">
+     <manifest>
+       <attribute name="Main-Class" value="Main" />
+       <attribute name="Class-Path" value="java-cup-11a-runtime.jar" />
+     </manifest>
+    </jar>
+   <copy todir="${dist}">
+     <fileset dir="${lib}" includes="**/**.jar"/>
+   </copy>  
+
+  </target>
+
+  <target name="run" depends="dist">
+    <java jar="${dist}/Compiler.jar" fork="true">
+      <arg value="input.test" />
+    </java>
+  </target>
+
   <target name="clean">
     <delete dir="${java}" />
     <delete dir="${classes}" />
