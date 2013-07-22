@@ -13,6 +13,11 @@ public class LuaTable {
 		pairs = new HashMap<>();
 	}
 
+	public LuaTable(LuaTable table) {
+		this();
+		forwardTable = table;
+	}
+
 	public Object get(Object key) {
 		Object value = pairs.get(key);
 
@@ -82,6 +87,10 @@ public class LuaTable {
 	}
 
 	public void set(Object key, Object value) {
+		if (key == null || LuaType.getTypeOf(key) == null) {
+			throw new IllegalArgumentException();
+		}
+		
 		pairs.put(key, value);
 	}
 
