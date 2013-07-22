@@ -1,0 +1,150 @@
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * Copyright (C) 2001       Gerwin Klein <lsf@jflex.de>                    *
+ * Copyright (C) 2001       Bernhard Rumpe <rumpe@in.tum.de>               *
+ * All rights reserved.                                                    *
+ *                                                                         *
+ * This program is free software; you can redistribute it and/or modify    *
+ * it under the terms of the GNU General Public License. See the file      *
+ * COPYRIGHT for more information.                                         *
+ *                                                                         *
+ * This program is distributed in the hope that it will be useful,         *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of          *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the           *
+ * GNU General Public License for more details.                            *
+ *                                                                         *
+ * You should have received a copy of the GNU General Public License along *
+ * with this program; if not, write to the Free Software Foundation, Inc., *
+ * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA                 *
+ *                                                                         *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+/* Edited by Korbinian Breu */
+
+/* Parser code to change the way the parser reports errors (include
+   line and column number of the error). */
+parser code {:
+    
+    /* Change the method report_error so it will display the line and
+       column of where the error occurred in the input as well as the
+       reason for the error which is passed into the method in the
+       String 'message'. */
+    public void report_error(String message, Object info) {
+   
+        /* Create a StringBuffer called 'm' with the string 'Error' in it. */
+        StringBuffer m = new StringBuffer("Error");
+   
+        /* Check if the information passed to the method is the same
+           type as the type java_cup.runtime.Symbol. */
+        if (info instanceof java_cup.runtime.Symbol) {
+            /* Declare a java_cup.runtime.Symbol object 's' with the
+               information in the object info that is being typecasted
+               as a java_cup.runtime.Symbol object. */
+            java_cup.runtime.Symbol s = ((java_cup.runtime.Symbol) info);
+   
+            /* Check if the line number in the input is greater or
+               equal to zero. */
+            if (s.left >= 0) {                
+                /* Add to the end of the StringBuffer error message
+                   the line number of the error in the input. */
+                m.append(" in line "+(s.left+1));   
+                /* Check if the column number in the input is greater
+                   or equal to zero. */
+                if (s.right >= 0)                    
+                    /* Add to the end of the StringBuffer error message
+                       the column number of the error in the input. */
+                    m.append(", column "+(s.right+1));
+            }
+        }
+   
+        /* Add to the end of the StringBuffer error message created in
+           this method the message that was passed into this method. */
+        m.append(" : "+message);
+   
+        /* Print the contents of the StringBuffer 'm', which contains
+           an error message, out on a line. */
+        System.err.println(m);
+    }
+   
+    /* Change the method report_fatal_error so when it reports a fatal
+       error it will display the line and column number of where the
+       fatal error occurred in the input as well as the reason for the
+       fatal error which is passed into the method in the object
+       'message' and then exit.*/
+    public void report_fatal_error(String message, Object info) {
+        report_error(message, info);
+        System.exit(1);
+    }
+:};
+
+// definition of tokens, if applicable with token type 
+terminal INPUT, FUNCTIONS, OUTPUT, END, ARGUMENTS;
+terminal IF, THEN, ELSE, FI, ERROR;
+terminal COMMA, LPAR, RPAR;
+terminal EQ, LE, LEQ, MINUS, PLUS, TIMES, DIV, UMINUS, SEMI, POWER;
+
+terminal String ID, NUMBER;
+
+non terminal Tprogram  program;
+non terminal Tparlist  par;
+non terminal Texplist  explist;
+non terminal Tdekllist dekllist;
+non terminal Tdekl     dekl;
+non terminal Texp      exp;
+non terminal Tboolexp  boolexp;
+non terminal Tident    ident;
+non terminal Tnumber   number;
+non terminal Tinputlist inputl;
+non terminal Tinput input;
+
+
+// precedences, left associativity
+precedence left EQ, LE, LEQ;
+precedence left MINUS, PLUS;
+precedence left TIMES, DIV;
+precedence left POWER;
+precedence left UMINUS;
+
+
+// here the rules start 
+program       ::= OUTPUT ident:i SEMI
+				  inputl:inl
+				  ident:i2 EQ exp:e SEMI
+                  {: RESULT = new Tprogram(i, inl, i2, e); :}
+                ;
+                
+inputl		  ::= input:in SEMI
+				  {: RESULT = new Tinputlist(in); :}
+				| inputl:inl input:in SEMI
+				  {: RESULT = new Tinputlist(inl, in); :}
+				;
+				  
+input		  ::= INPUT number:n LEQ ident:i LEQ number:nn
+				  {: RESULT = new Tinput(n, i, nn); :}
+				;
+
+exp           ::= number:n
+                  {: RESULT = n; :}
+                | ident:i
+                  {: RESULT = i; :}
+                | LPAR exp:e RPAR
+                  {: RESULT = e; :}
+                | MINUS exp:e                
+                  {: RESULT = new Tuminus(e); :} %prec UMINUS
+                | exp:l PLUS exp:r
+                  {: RESULT = new Texpinfix(l,'+',r); :}
+                | exp:l TIMES exp:r
+                  {: RESULT = new Texpinfix(l,'*',r); :}
+                | exp:l DIV exp:r
+                  {: RESULT = new Texpinfix(l,'/',r); :}
+                | exp:l MINUS exp:r
+                  {: RESULT = new Texpinfix(l,'-',r); :}
+                | exp:l POWER exp:r
+                  {: RESULT = new Texpinfix(l, '^', r); :}
+                ;    
+
+ident         ::= ID:n
+                  {: RESULT = new Tident(n); :}
+                ;
+
+number        ::= NUMBER:z
+                  {: RESULT = new Tnumber(z); :}
+                ;
