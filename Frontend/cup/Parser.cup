@@ -46,7 +46,7 @@ parser code {:
 terminal         ADD, MUL, SUB, DIV, MOD, POW, CONCAT;
 terminal         AND, OR, NOT, LENGTH;
 terminal 		 LPAREN, RPAREN, LBRACK, RBRACK, LCURL, RCURL;
-treminal         ASM; //Assigment =
+terminal         ASM; //Assigment =
 terminal		 DOT, DDOT;
 terminal         SEMI, EQ, LEQ ,NEQ , LE, GR, GEQ;
 terminal		 LOCAL, FUNC, END;

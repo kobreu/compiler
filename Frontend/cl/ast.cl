@@ -1,5 +1,8 @@
 
-package node;
+package program;
+
+Chunk ::= Stat:head StatList:tail
+
 
 Prog ::= Output Input Polynom
 
