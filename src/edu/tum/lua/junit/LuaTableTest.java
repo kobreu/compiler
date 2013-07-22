@@ -89,7 +89,7 @@ public class LuaTableTest {
 		table.setIndex(f2);
 		
 		// TODO
-		assertEquals(f.apply(true), table.get(true) );
+		assertEquals(f2.apply(true), table.get(true) );
 		
 	}
 	
