@@ -3,7 +3,8 @@
 CompilerFrontend/bin
 CompilerFrontend/gen
 CompilerFrontend/dist
-
+Frontend/java
+Frontend/classes
 
 # Package Files #
 *.war
