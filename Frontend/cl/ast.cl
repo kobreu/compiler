@@ -22,3 +22,15 @@ Stat ::= {Asm} VarList:varlist ExpList:explist
 Elseif ::= ElseifPart:head Elseif:tail
 
 ElseifPart ::= Exp:exp Block:block
+
+LastStat ::= Explist:explist
+
+FuncName ::= "String":ident MemberList:members "String":method
+
+MemberList ::= "String":head MemberList:tail
+
+VarList ::= Var:head VarList:tail
+
+Var ::=  {Variable} "String":var 
+		| {TabIndex} PrefixExp:preexp Exp:indexexp 
+		| {TabIndex} PrefixExp:preexp "String":ident 

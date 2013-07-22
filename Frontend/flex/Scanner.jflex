@@ -30,6 +30,10 @@ import java_cup.runtime.Symbol;
 
 Id = [_a-zA-Z]+[_0-9a-zA-Z]*
 
+String = \" Asci \" | \' Asci \'
+
+Asci = [_0-9a-zA-Z\r\n\t\f]*  /* FIXME */
+
 Int = 0 | [1-9][0-9]*
 
 Number = Int | Int ("."[0-9]+)
@@ -63,6 +67,7 @@ white_space = {new_line}+ | [\t\f]+
 "false"			{ return symbol(FALSE); }
 "true"			{ return symbol(TRUE); }
 "..."			{ return symbol(PARAMS); }
+{String}		{ return symbol(TEXT, new String(yytext()))}
 
 
 /* identifiers */
