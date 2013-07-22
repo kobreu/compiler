@@ -100,7 +100,7 @@ white_space = {new_line}+ | [\t\f]+
 "#"				{ return symbol(LENGTH); }
 
 /* parenthesis */
-"(" 			{ return symbol(PAREN); }
+"(" 			{ return symbol(LPAREN); }
 ")" 			{ return symbol(RPAREN); }
 "["				{ return symbol(LBRACK); }
 "]"				{ return symbol(RBRACK); }

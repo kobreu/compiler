@@ -41,23 +41,46 @@ parser code {:
 
 
 
-/* Terminals (tokens returned by lexer). */
-terminal         OUT, IN;
-terminal         ADD, MUL, POW;
-terminal         SEMI, EQ, LEQ;
+ Terminals (tokens returned by lexer). */
 
-terminal Integer NUMBER;
-terminal String  VARIABLE;
+terminal         ADD, MUL, SUB, DIV, MOD, POW, CONCAT;
+terminal         AND, OR, NOT, LENGTH;
+terminal 		 LPAREN, RPAREN, LBRACK, RBRACK, LCURL, RCURL;
+treminal         ASM; //Assigment =
+terminal		 DOT, DDOT;
+terminal         SEMI, EQ, LEQ ,NEQ , LE, GR, GEQ;
+terminal		 LOCAL, FUNC, END;
+terminal  		 DO, WHILE, FOR, IN, REPEAT, UNTIL;
+terminal         IF, THEN, ELSE, ELSEIF, RETURN, BREAK;
+terminal         NIL, FALSE, TRUE, PARAMS;
+terminal		SEMI, COM;
 
-non terminal Prog       prog;
-non terminal Output     output;
+terminal Double NUMBER;
+terminal String  ID;
+
+ 
+non terminal Chunk chunk;
+non terminal Block block;
+non terminal Stat stat;
+non terminal LastStat laststat;
+non terminal FuncName funcname;
+non terminal VarList varlist;
+non terminal Var var;
+non terminal NameList namelist;
+non terminal ExpList
+
+/*non terminal Prog       prog;
+non terminal StmtList;
+non terminal Stmt;
 non terminal Input      input;
 non terminal Constraint	constraint;
 non terminal Polynom    poly;
 non terminal PolyPart   poly_part;
 non terminal Term       term;  
 non terminal ExpSeq     expseq;
-non terminal Exp        exp;    
+non terminal Exp        exp;    */
+
+
 
 
 /* Grammar */
@@ -75,6 +98,9 @@ input  ::= constraint:i input:is
           | constraint:i
             {: RESULT = new Input(i, null); :}     
           ;
+
+
+
 
 constraint  ::= IN NUMBER:n1 LEQ VARIABLE:v LEQ NUMBER:n2 SEMI
                 {: RESULT = new Constraint(n1, v, n2); :}
