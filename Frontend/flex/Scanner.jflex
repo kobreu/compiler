@@ -36,7 +36,7 @@ Number = Int | Int ("."[0-9]+)
 
 new_line = \r|\n|\r\n;
 
-white_space = {new_line} | [ \t\f]
+white_space = {new_line}+ | [\t\f]+
 
 %%
 
@@ -58,6 +58,7 @@ white_space = {new_line} | [ \t\f]
 "return"		{ return symbol(RETURN); }
 "break"			{ return symbol(BREAK); }
 
+/* special values */
 "nil"			{ return symbol(NIL); }
 "false"			{ return symbol(FALSE); }
 "true"			{ return symbol(TRUE); }
@@ -72,6 +73,7 @@ white_space = {new_line} | [ \t\f]
 
 /* separators */
 ";"               { return symbol(SEMI); }
+","				 { return symbol(COM); }
 
 /* binary operators */
 "=="             { return symbol(EQ); }
@@ -86,18 +88,30 @@ white_space = {new_line} | [ \t\f]
 "/"              { return symbol(DIV); }
 "^"              { return symbol(POW); }
 "%"              { return symbol(MOD); }
-".."			 { return symbol(TIL); }
+".."			 { return symbol(CONCAT); }
 "and"            { return symbol(AND); }
 "or"             { return symbol(OR); }
+"."				 { return symbol(DOT); }
+":"				 { return symbol(DDOT); }
 
 /* unary operators */
 
 "not"			{ return symbol(NOT); }
 "#"				{ return symbol(LENGTH); }
 
+/* parenthesis */
+"(" 			{ return symbol(PAREN); }
+")" 			{ return symbol(RPAREN); }
+"["				{ return symbol(LBRACK); }
+"]"				{ return symbol(RBRACK); }
+"{"				{ return symbol(LCURL); }
+"}"				{ return symbol(RCURL); }
+
+/* assignment */
+"="				{ return symbol(ASM); }
 
 /* white space */
-{white_space}     { /* ignore */ }
+{white_space}    { return symbol(WS); }
 
 /* error fallback */
 .|\n              {  /* throw new Error("Illegal character <"+ yytext()+">");*/
