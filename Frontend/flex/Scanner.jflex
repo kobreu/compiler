@@ -36,7 +36,7 @@ Number = Int | Int ("."[0-9]+)
 
 new_line = \r|\n|\r\n;
 
-white_space = {new_line} | [ \t\f]
+white_space = {new_line}+ | [\t\f]+
 
 %%
 
@@ -111,7 +111,7 @@ white_space = {new_line} | [ \t\f]
 "="				{ return symbol(ASM); }
 
 /* white space */
-{white_space}     { /* ignore */ }
+{white_space}    { return symbol(WS); }
 
 /* error fallback */
 .|\n              {  /* throw new Error("Illegal character <"+ yytext()+">");*/
