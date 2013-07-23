@@ -30,9 +30,7 @@ import java_cup.runtime.Symbol;
 
 Id = [_a-zA-Z]+[_0-9a-zA-Z]*
 
-String = \" Asci \" | \' Asci \'
-
-Asci = [_0-9a-zA-Z\r\n\t\f]*  /* FIXME */
+String = \"[^"]*\" | \'[^']*\'
 
 Int = 0 | [1-9][0-9]*
 
