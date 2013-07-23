@@ -9,7 +9,7 @@ public abstract class BinaryArithmeticOperation extends ArithmeticOperation {
 	public Object apply(Object op1, Object op2) throws NoSuchMethodException {
 		try {
 			return apply(convert(op1), convert(op2));
-		} catch (OperationNotSupportedException e) {
+		} catch (NumberFormatException | OperationNotSupportedException e) {
 			LuaFunction handler = getHandler(handlerName(), op1, op2);
 			return handler.apply(op1, op2).get(0);
 		}

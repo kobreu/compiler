@@ -23,7 +23,13 @@ public class ArithmeticOperation {
 			if (object instanceof LuaTable) {
 				LuaTable table = ((LuaTable) object).getMetatable();
 
-				if (table != null) {
+				if (table == null) {
+					continue;
+				}
+				
+				Object function = table.get(event);
+				
+				if (LuaType.getTypeOf(function) == LuaType.FUNCTION) {
 					return table.getLuaFunction(event);
 				}
 			}
