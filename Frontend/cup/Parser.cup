@@ -6,7 +6,7 @@ import java.util.*;
 import java.io.*;
 import java_cup.runtime.Symbol;
 import java_cup.runtime.*;
-import node.*;
+import program.*;
 
 
 /* Preliminaries to use the scanner.  */

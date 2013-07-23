@@ -63,14 +63,15 @@
 
   <target name="cup" depends="classgen">
     <cup srcfile="${cup}/Parser.cup" 
-         destdir="${java}" 
+         destdir="${java}/parser" 
          interface="true"
+         package="parser"
 	 parser="Parser"
     />
   </target>
 
   <target name="jflex" depends="cup">
-    <jflex file="${flex}/Scanner.jflex" destdir="${java}" />
+    <jflex file="${flex}/Scanner.jflex" destdir="${java}"/>
   </target>
 	
 	
