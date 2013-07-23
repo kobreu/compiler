@@ -8,7 +8,7 @@ import main.Main;
 
 import org.junit.Test;
 
-import program.*;
+import edu.tum.lua.ast.*;
 
 public class TestFunctionCall {
 
