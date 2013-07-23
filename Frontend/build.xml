@@ -5,6 +5,7 @@
 	<property name="src" location="src" />
 	<property name="java" location="java" />
 	<property name="test" location="test" />
+	<property name="testoutput" location="testoutput" />
 	<property name="classes" location="classes" />
 	<property name="dist" location="dist" />
 	<property name="lib" location="lib" />
@@ -40,6 +41,7 @@
 	<taskdef name="cup" classname="java_cup.anttask.CUPTask" classpath="${bin}/java-cup-11a.jar" />
 
 	<target name="init">
+		<mkdir dir="${testoutput}" />
 		<mkdir dir="${classes}" />
 		<mkdir dir="${java}" />
 		<mkdir dir="${dist}" />
