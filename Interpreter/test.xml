@@ -7,7 +7,7 @@
   <property name="classes" location="classes" />
   <property name="dist"    location="dist"    />
   <property name="lib"     location="lib"     />
-  <property name="bin"     location="binlib"  />
+  <property name="bin"     location="bin"  />
   <property name="test"	   location="test" />
   <property name="testoutput" location="testoutput" />
   <property environment="env" />
@@ -61,8 +61,6 @@
   </target>
 
   <target name="clean">
-    <delete dir="${java}" />
-    <delete dir="${classes}" />
-    <delete dir="${dist}" />
+    <delete dir="${bin}" />
   </target>
 </project>
