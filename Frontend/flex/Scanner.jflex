@@ -135,6 +135,17 @@ white_space = {new_line}+ | [\t\f]+
 	\\				{ string.append(’\\’); }
 }
 
+<STRING> {
+	"'" 				{ yybegin(YYINITIAL);
+					  return symbol(TEXT,
+					  string.toString()); }
+	[^\n\r"'"\\]+ 	{ string.append( yytext() ); }
+	\\t 			{ string.append(’\t’); }
+	\\n 			{ string.append(’\n’); }
+	\\r 			{ string.append(’\r’); }
+	\\				{ string.append(’\\’); }
+}
+
 /* error fallback */
 .|\n              {  /* throw new Error("Illegal character <"+ yytext()+">");*/
 		    error("Illegal character <"+ yytext()+">");
