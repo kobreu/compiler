@@ -1,5 +1,5 @@
 
-package program;
+package edu.tum.lua.ast;
 
 Chunk ::= StatList:stats LastStat:last
 

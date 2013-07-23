@@ -52,7 +52,7 @@
 	</target>
 
 	<target name="cup" depends="classgen">
-		<cup srcfile="${cup}/Parser.cup" destdir="${java}/parser" interface="true" package="parser"
+		<cup srcfile="${cup}/Parser.cup" destdir="${java}/edu/tum/lua/parser" interface="true" package="edu.tum.lua.parser"
 parser="Parser" />
 	</target>
 

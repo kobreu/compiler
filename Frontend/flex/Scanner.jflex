@@ -2,7 +2,7 @@
 /**
 *   JFlex Scanner
 */
-package parser;
+package edu.tum.lua.parser;
 import java_cup.runtime.Symbol;
 
 
