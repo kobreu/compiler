@@ -9,6 +9,7 @@
   <property name="lib"     location="lib"     />
   <property name="bin"     location="binlib"  />
   <property name="test"	   location="test" />
+  <property name="testoutput" location="testoutput" />
   <property environment="env" />
 
   <!-- We rely on CUP-10k-TUM, JFlex 1.3.5 and Classgen 1.5pre -->
@@ -34,6 +35,7 @@
 
   <target name="init">
     <mkdir dir="${bin}"/>
+    <mkdir dir="${testoutput}" />
   </target>
 
   <target name="compile" depends="init">
