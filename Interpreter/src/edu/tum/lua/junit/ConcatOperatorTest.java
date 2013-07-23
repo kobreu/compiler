@@ -19,7 +19,7 @@ public class ConcatOperatorTest {
 	}
 	
 	@Test
-	public void testApply() throws NoSuchMethodException {
+	public void testApply() {
 		ConcatOperator op = new ConcatOperator();
 		String op1 = "abc";
 		String op2 = "def";

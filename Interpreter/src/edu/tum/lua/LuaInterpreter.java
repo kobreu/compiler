@@ -37,6 +37,7 @@ public class LuaInterpreter {
 		return null;
 	}
 
+	@SuppressWarnings("unused")
 	public static Object eval(Expression exp, Environment environment) {
 		return null;
 	}
