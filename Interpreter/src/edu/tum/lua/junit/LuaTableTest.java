@@ -50,7 +50,7 @@ public class LuaTableTest {
 		assertEquals(null, emptyTable.get(tmpTable));
 
 		// Function
-		LuaFunction tmpFunction = new LuaFunction(new LuaTable(), new FunctionNode());
+		LuaFunction tmpFunction = new LuaFunction(null, new FunctionNode());
 		table.set(tmpFunction, "value5");
 		assertEquals("value5", table.get(tmpFunction));
 		assertEquals(null, emptyTable.get(tmpFunction));
@@ -69,7 +69,7 @@ public class LuaTableTest {
 
 	@Test
 	public void testSetGetLuaFunction() {
-		LuaFunction f = new LuaFunction(new LuaTable(), new FunctionNode());
+		LuaFunction f = new LuaFunction(null, new FunctionNode());
 		table.set("a", f);
 		assertEquals(f, table.getLuaFunction("a"));
 	}

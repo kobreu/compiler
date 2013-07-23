@@ -14,7 +14,7 @@ import edu.tum.lua.types.LuaTable;
 public class LogicalOperatorTest {
 
 	private final Object[] falseObjects = { null, false };
-	private final Object[] trueObjects = { "a", new LuaTable(), new LuaFunction(new LuaTable(), new FunctionNode()),
+	private final Object[] trueObjects = { "a", new LuaTable(), new LuaFunction(null, new FunctionNode()),
 			1.0, true };
 
 	@Test
