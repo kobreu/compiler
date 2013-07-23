@@ -11,6 +11,7 @@ public class ToString extends LuaFunctionNative {
 	@Override
 	public List<Object> apply(List<Object> arguments) {
 		if (arguments.isEmpty()) {
+			// TODO at least one argument necessary
 			throw new IllegalStateException();
 		}
 		
@@ -42,7 +43,8 @@ public class ToString extends LuaFunctionNative {
 			return list;
 		}
 		
-		return list;
+		// TODO no known Type
+		throw new IllegalStateException();
 	}
 
 }
