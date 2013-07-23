@@ -2,7 +2,9 @@ package edu.tum.lua.junit;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+
+import java.util.Collections;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -10,6 +12,7 @@ import org.junit.Test;
 import edu.tum.lua.ast.FunctionNode;
 import edu.tum.lua.types.LuaFunction;
 import edu.tum.lua.types.LuaFunctionInterpreted;
+import edu.tum.lua.types.LuaFunctionNative;
 import edu.tum.lua.types.LuaTable;
 
 public class LuaTableTest {
@@ -94,6 +97,15 @@ public class LuaTableTest {
 		assertEquals("b", table.getString("a"));
 	}
 
+	protected static class TestFunction extends LuaFunctionNative {
+		@Override
+		public List<Object> apply(List<Object> arguments) {
+			assertEquals(1, arguments.size());
+			String key = (String) arguments.get(0);
+			return Collections.singletonList((Object) (key + "value"));
+		}
+	}
+
 	@Test
 	public void testSetIndex() {
 		LuaTable t1 = new LuaTable();
@@ -106,7 +118,12 @@ public class LuaTableTest {
 		assertEquals(1.0, t1.get("t1"));
 		assertEquals(2.0, t1.get("t2"));
 
-		fail("Forward Method search - Not yet implemented");
+		t1.setIndex((LuaTable) null);
+		assertEquals(null, t1.get("t2"));
+
+		t1.setIndex(new TestFunction());
+		assertEquals(1.0, t1.get("t1"));
+		assertEquals("t2value", t1.get("t2"));
 	}
 
 	@Test(expected = IllegalArgumentException.class)
