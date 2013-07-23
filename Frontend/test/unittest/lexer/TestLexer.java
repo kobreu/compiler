@@ -100,6 +100,80 @@ public class TestLexer {
 		symbolsForCase = new Integer[] { sym.ID, sym.ASM, sym.PARAMS };
 		symbols.put(file, Arrays.asList(symbolsForCase));
 		
+		file = "testinput/grammar/exp_false.lua";
+		files.add(file);
+		symbolsForCase = new Integer[] { sym.ID, sym.ASM, sym.FALSE };
+		symbols.put(file, Arrays.asList(symbolsForCase));
+		
+		file = "testinput/grammar/exp_function.lua";
+		files.add(file);
+		symbolsForCase = new Integer[] { sym.ID, sym.ASM, sym.FUNC, sym.WS, sym.LPAREN, sym.RPAREN, sym.WS, sym.END };
+		symbols.put(file, Arrays.asList(symbolsForCase));
+		
+		file = "testinput/grammar/exp_nil.lua";
+		files.add(file);
+		symbolsForCase = new Integer[] { sym.ID, sym.ASM, sym.NIL };
+		symbols.put(file, Arrays.asList(symbolsForCase));
+		
+		file = "testinput/grammar/exp_number.lua";
+		files.add(file);
+		symbolsForCase = new Integer[] { sym.ID, sym.ASM, sym.NUMBER };
+		symbols.put(file, Arrays.asList(symbolsForCase));
+		
+		file = "testinput/grammar/exp_prefixexp.lua";
+		files.add(file);
+		symbolsForCase = new Integer[] { sym.ID, sym.ASM, sym.LPAREN, sym.NIL, sym.RPAREN };
+		symbols.put(file, Arrays.asList(symbolsForCase));
+		
+		file = "testinput/grammar/exp_string.lua";
+		files.add(file);
+		symbolsForCase = new Integer[] { sym.ID, sym.ASM, sym.TEXT };
+		symbols.put(file, Arrays.asList(symbolsForCase));
+		
+		file = "testinput/grammar/exp_tableconstructor.lua";
+		files.add(file);
+		symbolsForCase = new Integer[] { sym.ID, sym.ASM, sym.LCURL, sym.NUMBER, sym.COM, sym.NUMBER, sym.COM, sym.NUMBER, sym.RCURL };
+		symbols.put(file, Arrays.asList(symbolsForCase));
+		
+		file = "testinput/grammar/exp_true.lua";
+		files.add(file);
+		symbolsForCase = new Integer[] { sym.ID, sym.ASM, sym.TRUE };
+		symbols.put(file, Arrays.asList(symbolsForCase));
+		
+		file = "testinput/grammar/exp_unop.lua";
+		files.add(file);
+		symbolsForCase = new Integer[] { sym.ID, sym.ASM, sym.SUB, sym.NUMBER };
+		symbols.put(file, Arrays.asList(symbolsForCase));
+		
+		file = "testinput/grammar/explist_multiple.lua";
+		files.add(file);
+		symbolsForCase = new Integer[] { sym.FOR, sym.WS, sym.ID, sym.WS, sym.IN, sym.WS, sym.NUMBER, sym.COM, sym.NUMBER, sym.COM, sym.NUMBER, sym.WS, sym.DO, sym.WS, sym.END };
+		symbols.put(file, Arrays.asList(symbolsForCase));
+		
+		file = "testinput/grammar/field_exp.lua";
+		files.add(file);
+		symbolsForCase = new Integer[] { sym.ID, sym.ASM, sym.LCURL, sym.LBRACK, sym.NUMBER, sym.RBRACK, sym.ASM, sym.NUMBER };
+		symbols.put(file, Arrays.asList(symbolsForCase));
+		
+		file = "testinput/grammar/field_name.lua";
+		files.add(file);
+		symbolsForCase = new Integer[] { sym.ID, sym.ASM, sym.LCURL, sym.LBRACK, sym.ID, sym.RBRACK, sym.ASM, sym.NUMBER };
+		symbols.put(file, Arrays.asList(symbolsForCase));
+		
+		file = "testinput/grammar/fieldlist_separator_at_end.lua";
+		files.add(file);
+		symbolsForCase = new Integer[] { sym.ID, sym.ASM, sym.LCURL, sym.NUMBER, sym.SEMI, sym.NUMBER, sym.SEMI, sym.NUMBER, sym.COM, sym.NUMBER, sym.COM, sym.RCURL };
+		symbols.put(file, Arrays.asList(symbolsForCase));
+		
+		file = "testinput/grammar/funcname_add_to_table.lua";
+		files.add(file);
+		symbolsForCase = new Integer[] { sym.FUNC, sym.WS, sym.ID, sym.DOT, sym.ID, sym.DOT, sym.ID, sym.WS, sym.LBRACK, sym.RBRACK, sym.WS, sym.END };
+		symbols.put(file, Arrays.asList(symbolsForCase));
+		
+		file = "testinput/grammar/funcname_colon.lua";
+		files.add(file);
+		symbolsForCase = new Integer[] { sym.FUNC, sym.WS, sym.ID, sym.WS, sym.DDOT, sym.WS, sym.ID, sym.WS, sym.LBRACK, sym.RBRACK, sym.WS, sym.END };
+		symbols.put(file, Arrays.asList(symbolsForCase));
 	}
 	
 	@Test
