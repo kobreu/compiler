@@ -1,16 +1,19 @@
 
 package program;
 
-Chunk ::= StatList:stats | StatList:stats LastStat:last
-
-StatList ::= Stat*
+Chunk ::= StatList:stats LastStat:last
 
 Block ::= Chunk:chunk
 
+StatList ::= Stat*
+
+LastStat ::= {LastReturn} ExpList:explist
+			| {LastBreak}
+			
 Stat ::= {Asm} 				VarList:varlist ExpList:explist 
-		| FunctionCall 
-		| {DoExp} 				Block:block
-		| {WhileExp} 			Exp:exp Block:block
+		| {FuncCallStmt}	FunctionCall:call
+		| {DoExp} 			Block:block
+		| {WhileExp} 		Exp:exp Block:block
 		| {RepeatUntil} 	Block:block Exp:exp
 		| {IfThenElse} 		Exp:ifexp Block:thenblock Block:elseblock
 		| {ForExp} 			"String":ident Exp:start Exp:end Exp:step Block:block
@@ -19,7 +22,16 @@ Stat ::= {Asm} 				VarList:varlist ExpList:explist
 		| {LocalFuncDef} 	"String":ident FuncBody:body
 		| {LocalDecl} 		NameList:namelist ExpList:explist
 
-LastStat ::= ExpList:explist
+Exp ::=  {Nil} 
+		| {BooleanExp} "boolean":value  
+		| {Number} 	"double":number
+		| {TextExp} Text:text
+		| {Dots} "String":dots
+		| {FunctionExp} Function:function 	
+		| {PreExp} PrefixExp:preexp
+		| {TableConstructor} FieldList:fieldlist
+		| {Binop} Exp:leftexp "int":op Exp:rightexp
+		| {Unop} "int":op Exp:exp 
 
 FuncName ::= "String":ident MemberList:members "String":method
 
@@ -30,8 +42,7 @@ Member ::= "String":member
 VarList ::= Var*
 
 Var ::=  {Variable} "String":var 
-		| {TabIndex} PrefixExp:preexp Exp:indexexp 
-		| {TabIndex} PrefixExp:preexp "String":ident 
+		| {VarTabIndex} PrefixExp:preexp Exp:indexexp 
 
 NameList ::= Name*
 
@@ -39,26 +50,16 @@ Name ::= "String":name
 
 ExpList ::= Exp*
 
-Exp ::=  {Nil} 
-		| {BooleanExp} "boolean":value  
-		| {Number} 	"double":number
-		| Text
-		| {Dots} "String":dots
-		| Function 	
-		| PrefixExp
-		| {TableConstructor} FieldList:fieldlist
-		| {Binop} Exp:leftexp "int":op Exp:rightexp
-		| {Unop} "int":op Exp:exp 
+PrefixExp ::= 	{PrefixExpVar} Var:var 
+				| {PrefixExpFuncCall} FunctionCall:call 
+				| {PrefixExpExp} Exp:exp
 
-PrefixExp ::= 	Var 
-				| FunctionCall 
-				| Exp
+
+Args ::=  {ArgsExpList} ExpList:explist
+		| {ArgsTableConst} FieldList:fieldlist 
+		| {ArgsText} Text:text 
 
 FunctionCall ::=  PrefixExp:preexp Args:args
-
-Args ::=  ExpList
-		| {TableConst} FieldList:fieldlist 
-		| Text 
 		
 Text ::= "String":text
 
@@ -68,11 +69,11 @@ FuncBody ::= ParList:parlist Block:block
 
 ParList ::= NameList:namelist "String":dots
 
-FieldList ::= Field*
+Field ::= 	{FieldLRExp} Exp:leftexp Exp:rightexp 
+			| {FieldNameExp} Name:name Exp:exp 
+			| {FieldExp} Exp:fieldexp
 
-Field ::= 	{LRExp} Exp:leftexp Exp:rightexp 
-			| {NameExp} Name:name Exp:exp 
-			| Exp
+FieldList ::= Field*
 	
 Op::= enum
          ADD, SUB, MUL, DIV, POW, MOD, CONCAT, 
