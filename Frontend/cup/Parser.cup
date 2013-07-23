@@ -6,7 +6,7 @@ import java.util.*;
 import java.io.*;
 import java_cup.runtime.Symbol;
 import java_cup.runtime.*;
-import program.*;
+import edu.tum.lua.ast.*;
 
 
 /* Preliminaries to use the scanner.  */
