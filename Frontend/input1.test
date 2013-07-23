@@ -1,5 +1,0 @@
-OUTPUT x;
-INPUT 0<=y<=5;
-INPUT 0<=a<=2;
-INPUT 0<=b<=2;
-x=y+100+y;

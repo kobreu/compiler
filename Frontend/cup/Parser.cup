@@ -1,12 +1,12 @@
-
-/**
-*   CUP Parser
+/*
+  CUP Parser
 */
 
 import java.util.*;
 import java.io.*;
 import java_cup.runtime.Symbol;
-import node.*;
+import java_cup.runtime.*;
+import edu.tum.lua.ast.*;
 
 
 /* Preliminaries to use the scanner.  */
@@ -20,8 +20,10 @@ parser code {:
   Lexer lexer;
 
   public Parser(Lexer lex) {
+  		
       super(lex);
       lexer = lex;
+     
   }
 
   
@@ -41,83 +43,135 @@ parser code {:
 
 
 
-/* Terminals (tokens returned by lexer). */
-terminal         OUT, IN;
-terminal         ADD, MUL, POW;
-terminal         SEMI, EQ, LEQ;
+ /* Terminals (tokens returned by lexer). */
 
-terminal Integer NUMBER;
-terminal String  VARIABLE;
+terminal         ADD, MUL, SUB, DIV, MOD, POW, CONCAT;
+terminal         AND, OR, NOT, LENGTH;
+terminal 		 LPAREN, RPAREN, LBRACK, RBRACK, LCURL, RCURL;
+terminal         ASM; //Assigment =
+terminal		 DOT, DDOT;
+terminal         EQ, LEQ ,NEQ , LE, GR, GEQ;
+terminal		 LOCAL, FUNC, END;
+terminal  		 DO, WHILE, FOR, IN, REPEAT, UNTIL;
+terminal         IF, THEN, ELSE, ELSEIF, RETURN, BREAK;
+terminal         NIL, FALSE, TRUE, PARAMS;
+terminal		 SEMI, COM, WS;
 
-non terminal Prog       prog;
-non terminal Output     output;
-non terminal Input      input;
-non terminal Constraint	constraint;
-non terminal Polynom    poly;
-non terminal PolyPart   poly_part;
-non terminal Term       term;  
-non terminal ExpSeq     expseq;
-non terminal Exp        exp;    
+terminal Double Number;
+terminal String  Id;
+
+
+ /*NON TERMINALS */
+non terminal Chunk chunk;
+non terminal Block block;
+non terminal Stat stat;
+non terminal StatList statlist;
+non terminal LastStat laststat;
+non terminal FuncName funcname;
+non terminal IfThenElse optelse;
+non terminal VarList varlist;
+non terminal Var var;
+non terminal NameList namelist;
+non terminal ExpList explist;
+non terminal Exp exp;
+non terminal PrefixExp prefixexp;
+non terminal FunctionCall functioncall;
+non terminal Args args;
+non terminal Function function;
+non terminal FuncBody funcbody;
+non terminal ParList parlist;
+non terminal TableConstructor tableconstructor;
+non terminal FieldList fieldlist;
+non terminal Field field;
+non terminal FieldSep fieldsep;
+non terminal BinOp binop;
+non terminal UnOp unop;
+non terminal optsemi, empty, optws, optforexp, optexplist, optasm, optdotname, optcolonname;
 
 
 /* Grammar */
 
-prog      ::= output:o input:i poly:p SEMI
-              {: RESULT = new Prog(o, i, p); :}
-            ;
+empty 		::=  /* nothing */;
+chunk 		::=      statlist:stats
+                 	{:  RESULT = new Chunk(stats); :}
+                 
+                 	|   statlist: stats laststat:last
+                 	{:  RESULT = new Chunk(stats, last); :}
+                 	;
 
-output    ::= OUT VARIABLE:v SEMI
-               {: RESULT = new Output(v); :}
-            ;        
+statlist    ::=      stat:s optsemi statlist:stats 
+					{:  RESULT = new Statlist(s, stats); :}
+					|
+					 stat:s optws statlist:stats 
+                 	{:  RESULT = new Statlist(s, stats); :}
+                 	;
+				
+optsemi		::= 	SEMI | empty;
 
-input  ::= constraint:i input:is
-            {: RESULT = new Input(i, is); :}
-          | constraint:i
-            {: RESULT = new Input(i, null); :}     
-          ;
+optws		::= 	WS | empty;
 
-constraint  ::= IN NUMBER:n1 LEQ VARIABLE:v LEQ NUMBER:n2 SEMI
-                {: RESULT = new Constraint(n1, v, n2); :}
-              ;
+block       ::=     chunk:c
+				 	{: RESULT = new Block(c); :}
+					;
+					
+					
+stat        ::=     varlist:vl ASM explist:el
+					{: RESULT = new Stat(vl,el); :}
+				
+					| functioncall:fcall
+					{: RESULT = new FunctionCall(fcall); :}
+				
+					| DO block:b END 
+					{: RESULT = new Do(b); :}
+				
+         			| WHILE exp:e DO block:b END
+					{: RESULT = new While(e,b); :}
+					
+					| REPEAT block:b UNTIL exp:e
+					{: RESULT = new While(e,b); :}
+					
+					| IF exp:e THEN block:b optelse:elseblock END
+					{: RESULT = new IfThenElse(e,b,elseblock); :}
 
-poly    ::= VARIABLE:v EQ poly_part:p
-            {: RESULT = new Polynom(v, p); :}
-          ; 
+					| FOR Id:id ASM exp:e1 COM exp:e2 optforexp:e3 DO block:b END
+					{: RESULT = new For(id,e1,e2,e3,b); :}
+					
+					| FOR namelist:nl IN explist:el DO block:b END
+					{: RESULT = new ForIn(nl,el,b); :}
+					
+					| FUNC funcname:fn funcbody:fb
+					{: RESULT = new FunctionDef(fn,fb); :}
+					
+					| LOCAL FUNC funcname:fn funcbody:fb
+					{: RESULT = new LocalFuncDef(fn,fb); :}
+					
+					| LOCAL namelist:nl optasm optexplist:oel
+					{: RESULT = new LocalDecl(nl,oel); :}
+					;
+					
+					
+optforexp   ::=     COM exp:e {: RESULT = e; :}				
+					| {: RESULT = 1; :}
+					;
 
-poly_part ::= term:t ADD poly_part:p
-              {: RESULT = new PolyPart(t, p); :}
-            | term:t
-              {: RESULT = new PolyPart(t, null); :}
-            ;  
+optexplist  ::= 	explist:el {: RESULT = el; :}	
+					| empty
+					;	
 
-term      ::= NUMBER:n
-              {: RESULT = new Term(n, null, 0, null); :}
-            | VARIABLE:v
-              {: RESULT = new Term(1, v, 1, null); :}
-            | NUMBER:n MUL VARIABLE:v
-              {: RESULT = new Term(n, v, 1, null); :}
-            | NUMBER:n MUL VARIABLE:v POW NUMBER:e
-              {: RESULT = new Term(n, v, e, null); :}
-            | VARIABLE:v POW NUMBER:e
-              {: RESULT = new Term(1, v, e, null); :}
-            | VARIABLE:v MUL expseq:expr
-              {: RESULT = new Term(1, v, 1, expr); :}
-            | NUMBER:n MUL VARIABLE:v MUL expseq:expr
-              {: RESULT = new Term(n, v, 1, expr); :}
-            | NUMBER:n MUL VARIABLE:v POW NUMBER:e MUL expseq:expr
-              {: RESULT = new Term(n, v, e, expr); :}
-            | VARIABLE:v POW NUMBER:e MUL expseq:expr
-              {: RESULT = new Term(1, v, e, expr); :}
-           ;
+optasm  ::= 	ASM {: RESULT = ASM; :}	
+					| empty
+					;	
 
-expseq    ::= exp:e expseq:es
-              {: RESULT = new ExpSeq(e, es); :}
-            | exp:e
-              {: RESULT = new ExpSeq(e, null); :}
-            ;
+optelse		::= 	ELSE block:b {: RESULT = b; :}	
+					| empty
+					;	
+					
+laststat	::=		RETURN optexplist:el {: RESULT = el; :}		
+					| BREAK 
+					| empty
+					;
 
-exp       ::= VARIABLE:v POW NUMBER:e 
-              {: RESULT = new Exp(v, e); :}
-            | VARIABLE:v
-              {: RESULT = new Exp(v, 1); :}
-           ; 
+funcname	::=		Id:id optdotname:id1 optcolonname:id2;
+
+
+				  

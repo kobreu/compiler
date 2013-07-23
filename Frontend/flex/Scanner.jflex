@@ -2,11 +2,13 @@
 /**
 *   JFlex Scanner
 */
-
+package edu.tum.lua.parser;
 import java_cup.runtime.Symbol;
+
 
 %%
 
+%public
 %class Lexer
 %cup
 %implements sym
@@ -14,6 +16,8 @@ import java_cup.runtime.Symbol;
 %column
 
 %{
+
+  StringBuffer string = new StringBuffer();
 
   private Symbol symbol(int sym) {
     return new Symbol(sym, yyline+1, yycolumn+1);
@@ -28,39 +32,121 @@ import java_cup.runtime.Symbol;
   }
 %} 
 
-Var = [a-zA-Z]+
 
-Int = 0 | [1-9][0-9]*
+
+
+	
+Id = [_a-zA-Z]+[_0-9a-zA-Z]*
+
+Number = (0 | [1-9][0-9]*) ("."[0-9]+)?
 
 new_line = \r|\n|\r\n;
 
-white_space = {new_line} | [ \t\f]
+white_space = {new_line}+ | [\t\f]+
+
+%state STRING
 
 %%
 
+<YYINITIAL> {
+
+\" { string.setLength(0); yybegin(STRING); }
 
 /* keywords */
-"OUTPUT"          {return symbol(OUT); }
-"INPUT"           { return symbol(IN); }
+"local"         {return symbol(LOCAL); }
+"function"      { return symbol(FUNC); }
+"end"			{ return symbol(END); }
+"do"			{ return symbol(DO); }
+"while"			{ return symbol(WHILE); }
+"for"			{ return symbol(FOR); }
+"in"			{ return symbol(IN); }
+"repeat"		{ return symbol(REPEAT); }
+"until"			{ return symbol(UNTIL); }
+"if"			{ return symbol(IF); }
+"then"			{ return symbol(THEN); }
+"else"			{ return symbol(ELSE); }
+"elseif"		{ return symbol(ELSEIF); }
+"return"		{ return symbol(RETURN); }
+"break"			{ return symbol(BREAK); }
 
-/* variables */
-{Var}           { return symbol(VARIABLE, yytext()); }
-  
-/* numbers */
-{Int} { return symbol(NUMBER, new Integer(Integer.parseInt(yytext()))); }
+/* special values */
+"nil"			{ return symbol(NIL); }
+"false"			{ return symbol(FALSE); }
+"true"			{ return symbol(TRUE); }
+"..."			{ return symbol(PARAMS); }
 
 /* separators */
 ";"               { return symbol(SEMI); }
+","				 { return symbol(COM); }
 
-/* operators */
-"="               { return symbol(EQ); }
-"<="               { return symbol(LEQ); }
-"+"               { return symbol(ADD); }
-"*"               { return symbol(MUL); }
-"^"               { return symbol(POW); }
+/* binary operators */
+"=="             { return symbol(EQ); }
+"~="             { return symbol(NEQ); }
+"<="             { return symbol(LEQ); }
+"<"              { return symbol(LE); }
+">"              { return symbol(GR); }
+">="             { return symbol(GEQ); }
+"+"              { return symbol(ADD); }
+"-"              { return symbol(SUB); }
+"*"              { return symbol(MUL); }
+"/"              { return symbol(DIV); }
+"^"              { return symbol(POW); }
+"%"              { return symbol(MOD); }
+".."			 { return symbol(CONCAT); }
+"and"            { return symbol(AND); }
+"or"             { return symbol(OR); }
+"."				 { return symbol(DOT); }
+":"				 { return symbol(DDOT); }
+
+/* unary operators */
+
+"not"			{ return symbol(NOT); }
+"#"				{ return symbol(LENGTH); }
+
+/* parenthesis */
+"(" 			{ return symbol(LPAREN); }
+")" 			{ return symbol(RPAREN); }
+"["				{ return symbol(LBRACK); }
+"]"				{ return symbol(RBRACK); }
+"{"				{ return symbol(LCURL); }
+"}"				{ return symbol(RCURL); }
+
+/* identifiers */
+{Id}           { return symbol(ID, yytext()); }
+  
+/* numbers */
+{Number} { return symbol(NUMBER, new Double(Double.parseDouble(yytext()))); }
+
+/* assignment */
+"="				{ return symbol(ASM); }
 
 /* white space */
-{white_space}     { /* ignore */ }
+{white_space}    { return symbol(WS); }
+
+}
+
+<STRING> {
+	\" 				{ yybegin(YYINITIAL);
+					  return symbol(TEXT,
+					  string.toString()); }
+	[^\n\r\"\\]+ 	{ string.append( yytext() ); }
+	\\t 			{ string.append("\t"); }
+	\\n 			{ string.append("\n"); }
+	\\r 			{ string.append("\r"); }
+	\\\"			{ string.append("\\\""); } 
+	\\				{ string.append("\\"); }
+}
+
+<STRING> {
+	"'" 			{ yybegin(YYINITIAL);
+					  return symbol(TEXT,
+					  string.toString()); }
+	[^\n\r"'"\\]+ 	{ string.append( yytext() ); }
+	\\t 			{ string.append("\t"); }
+	\\n 			{ string.append("\n"); }
+	\\r 			{ string.append("\r"); }
+	\\				{ string.append("\\"); }
+}
 
 /* error fallback */
 .|\n              {  /* throw new Error("Illegal character <"+ yytext()+">");*/
