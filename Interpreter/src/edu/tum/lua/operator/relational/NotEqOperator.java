@@ -6,7 +6,7 @@ public class NotEqOperator {
 	
 	private EqOperator eqOperator;
 	
-	public boolean apply(Object o1, Object o2) {
+	public boolean apply(Object o1, Object o2) throws NoSuchMethodException {
 		
 		return !eqOperator.apply(o1, o2);
 		

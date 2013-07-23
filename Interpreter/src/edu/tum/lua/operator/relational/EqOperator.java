@@ -1,10 +1,13 @@
 package edu.tum.lua.operator.relational;
 
+import edu.tum.lua.operator.Operator;
+import edu.tum.lua.operator.logical.LogicalOperator;
+import edu.tum.lua.types.LuaFunction;
 import edu.tum.lua.types.LuaType;
 
-public class EqOperator {
+public class EqOperator extends Operator {
 	
-	public boolean apply(Object o1, Object o2) {
+	public boolean apply(Object o1, Object o2) throws NoSuchMethodException {
 		
 		// If LuaType is different return false
 		if(LuaType.getTypeOf(o1) != LuaType.getTypeOf(o2)) {
@@ -36,7 +39,9 @@ public class EqOperator {
 		// Compare tables using metamethod "eq"
 		if(LuaType.getTypeOf(o1) == LuaType.TABLE &&
 				LuaType.getTypeOf(o2) == LuaType.TABLE) {
-			// TODO use metamethod "eq" to compare tables
+			
+			LuaFunction handler = getHandler(handlerName(), o1, o2);
+			return LogicalOperator.isTrue(handler.apply(o1, o2).get(0));
 			
 		}
 		
@@ -45,8 +50,7 @@ public class EqOperator {
 		return o1 == o2;
 	}
 	
-	// TODO Handler name implementation?
-	// Comparison of tables (and userdata) can be changed by setting
-	// the eq metamethod.
-
+	protected String handlerName() {
+		return "eq";
+	}
 }
