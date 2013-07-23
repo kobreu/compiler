@@ -29,7 +29,7 @@ Exp ::=  {Nil}
 		| {Dots} "String":dots
 		| {FunctionExp} Function:function 	
 		| {PreExp} PrefixExp:preexp
-		| {TableConstructor} FieldList:fieldlist
+		| {TableConstructorExp} TableConstructor:tablecons
 		| {Binop} Exp:leftexp "int":op Exp:rightexp
 		| {Unop} "int":op Exp:exp 
 
@@ -56,7 +56,7 @@ PrefixExp ::= 	{PrefixExpVar} Var:var
 
 
 Args ::=  {ArgsExpList} ExpList:explist
-		| {ArgsTableConst} FieldList:fieldlist 
+		| {ArgsTableConst} TableConstructor:tablecons
 		| {ArgsText} Text:text 
 
 FunctionCall ::=  PrefixExp:preexp Args:args
@@ -68,6 +68,8 @@ Function ::= Function:func FuncBody:body
 FuncBody ::= ParList:parlist Block:block
 
 ParList ::= NameList:namelist "String":dots
+
+TableConstructor ::= FieldList:fieldlist
 
 Field ::= 	{FieldLRExp} Exp:leftexp Exp:rightexp 
 			| {FieldNameExp} Name:name Exp:exp 
