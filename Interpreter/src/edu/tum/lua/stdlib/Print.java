@@ -13,6 +13,7 @@ public class Print extends LuaFunctionNative {
 	
 	@Override
 	public List<Object> apply(List<Object> arguments){
+		if (arguments.size()==0) stdOut.println();
 		for (Object v : arguments){
 			LinkedList<Object> arg = new LinkedList<Object>();
 			arg.add(v);
