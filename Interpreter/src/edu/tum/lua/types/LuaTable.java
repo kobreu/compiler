@@ -90,6 +90,10 @@ public class LuaTable {
 
 		return (String) value;
 	}
+	
+	public boolean isEmpty() {
+		return pairs.isEmpty();
+	}
 
 	public void set(Object key, Object value) {
 		if (key == null || LuaType.getTypeOf(key) == null) {
