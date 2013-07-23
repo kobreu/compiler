@@ -8,4 +8,3 @@ CompilerFrontend/dist
 # Package Files #
 *.war
 *.ear
-/Interpreter/.project
