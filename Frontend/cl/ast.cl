@@ -8,7 +8,7 @@ StatList ::= Stat*
 Block ::= Chunk:chunk
 
 Stat ::= {Asm} 				VarList:varlist ExpList:explist 
-		| {FunctionCall} 
+		| FunctionCall 
 		| {Do} 				Block:block
 		| {While} 			Exp:exp Block:block
 		| {RepeatUntil} 	Block:block Exp:exp
@@ -19,7 +19,7 @@ Stat ::= {Asm} 				VarList:varlist ExpList:explist
 		| {LocalFuncDef} 	"String":ident FuncBody:body
 		| {LocalDecl} 		NameList:namelist ExpList:explist
 
-LastStat ::= Explist:explist
+LastStat ::= ExpList:explist
 
 FuncName ::= "String":ident MemberList:members "String":method
 
@@ -42,39 +42,37 @@ ExpList ::= Exp*
 Exp ::=  {Nil} 
 		| {Boolean} "boolean":value  
 		| {Number} 	"double":number
-		| {String}	"String":text
-		| {Dots}
-		| {Function} 	
-		| {PrefixExp} 
-		| {TableConstructor} 
+		| String
+		| {Dots} "String":dots
+		| Function 	
+		| PrefixExp
+		| {TableConstructor} FieldList:fieldlist
 		| {Binop} Exp:leftexp "int":op Exp:rightexp
 		| {Unop} "int":op Exp:exp 
 
-{Dots} 	"String":dots
-
-PrefixExp ::= 	{Var} 
-				| {FunctionCall} 
-				| {Exp}
+PrefixExp ::= 	Var 
+				| FunctionCall 
+				| Exp
 
 FunctionCall ::=  PrefixExp:preexp Args:args
 
-Args ::=  {ExpList}
-		| {TableConstructor} 
-		| {String} 
+Args ::=  ExpList
+		| {TableConst} FieldList:fieldlist 
+		| String 
+		
+String ::= "String":text
 
 Function ::= Function:func FuncBody:body
 
 FuncBody ::= ParList:parlist Block:block
 
-ParList ::= Namelist:namelist Dots:dots
-
-TableConstructor ::= FieldList
+ParList ::= NameList:namelist "String":dots
 
 FieldList ::= Field*
 
 Field ::= 	{LRExp} Exp:leftexp Exp:rightexp 
 			| {NameExp} Name:name Exp:exp 
-			| {Exp}
+			| Exp
 	
 Op::= enum
          ADD, SUB, MUL, DIV, POW, MOD, CONCAT, 
