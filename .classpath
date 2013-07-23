@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="CompilerFrontend/java-cup-11a.jar"/>
+	<classpathentry kind="lib" path="CompilerFrontend/JFlex.jar"/>
+	<classpathentry kind="lib" path="Frontend/binlib/classgen-framework.jar"/>
+	<classpathentry kind="lib" path="Frontend/binlib/classgen.jar"/>
+	<classpathentry kind="lib" path="Frontend/binlib/java-cup-11a.jar"/>
+	<classpathentry kind="lib" path="Frontend/binlib/JFlex.jar"/>
+	<classpathentry kind="lib" path="Frontend/dist/Compiler.jar"/>
+	<classpathentry kind="lib" path="Frontend/dist/java-cup-11a-runtime.jar"/>
+	<classpathentry kind="lib" path="Frontend/lib/java-cup-11a-runtime.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
