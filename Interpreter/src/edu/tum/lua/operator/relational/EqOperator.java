@@ -7,43 +7,39 @@ import edu.tum.lua.types.LuaType;
 
 public class EqOperator extends Operator {
 
-	public boolean apply(Object o1, Object o2) throws NoSuchMethodException {
-
-		// If LuaType is different return false
-		if (LuaType.getTypeOf(o1) != LuaType.getTypeOf(o2)) {
+	public Boolean apply(Object op1, Object op2) {
+		if (LuaType.getTypeOf(op1) != LuaType.getTypeOf(op2)) {
 			return false;
 		}
 
-		// Compare two numbers
-		if (LuaType.getTypeOf(o1) == LuaType.NUMBER && LuaType.getTypeOf(o2) == LuaType.NUMBER) {
-
-			// TODO is comparison by reference or value?
-			return o1 == o2;
+		if (op1 == op2) {
+			return true;
 		}
 
-		// Compare two strings
-		if (LuaType.getTypeOf(o1) == LuaType.STRING && LuaType.getTypeOf(o2) == LuaType.STRING) {
+		switch (LuaType.getTypeOf(op1)) {
+		case BOOLEAN:
+		case NUMBER:
+		case STRING:
+			return op1.equals(op2);
 
-			int comparison = ((String) o1).compareTo((String) o2);
+		case FUNCTION:
+			return false;
 
-			if (comparison == 0) {
-				return true;
+		case TABLE:
+			try {
+				LuaFunction handler1 = getHandler(handlerName(), op1);
+				LuaFunction handler2 = getHandler(handlerName(), op2);
+				
+				if (handler1 == handler2) {
+					return LogicalOperator.isTrue(handler1.apply(op1, op2).get(0));
+				}
+			} catch (NoSuchMethodException e) {
+				return false;
 			}
-
-			return false;
+		
+		default:
+			throw new IllegalStateException();
 		}
-
-		// Compare tables using metamethod "eq"
-		if (LuaType.getTypeOf(o1) == LuaType.TABLE && LuaType.getTypeOf(o2) == LuaType.TABLE) {
-
-			LuaFunction handler = getHandler(handlerName(), o1, o2);
-			return LogicalOperator.isTrue(handler.apply(o1, o2).get(0));
-
-		}
-
-		// Everything else is compared by reference
-		// tables without "eq", functions. (, and userdata, threads)
-		return o1 == o2;
 	}
 
 	protected String handlerName() {
