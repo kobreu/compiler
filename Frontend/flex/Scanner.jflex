@@ -32,9 +32,6 @@ import java_cup.runtime.Symbol;
   }
 %} 
 
-
-
-
 	
 Id = [_a-zA-Z]+[_0-9a-zA-Z]*
 
@@ -42,7 +39,18 @@ Number = (0 | [1-9][0-9]*) ("."[0-9]+)?
 
 new_line = \r|\n|\r\n;
 
+line_terminator = \r|\n|\r\n
+
+input_character = [^\r\n]
+
 white_space = {new_line}+ | [\t\f]+
+
+/* comments */
+
+Comment = {EndOfLineComment} | {MultipleLineComment}
+EndOfLineComment = "--" {input_character}* {line_terminator}
+MultipleLineComment = "--[""="*"[" {CommentContent} "]""="*"]"
+CommentContent = ([^("]""="*"]")])*
 
 %state STRING
 
@@ -122,6 +130,9 @@ white_space = {new_line}+ | [\t\f]+
 
 /* white space */
 {white_space}    { return symbol(WS); }
+
+/* comments */
+{Comment} { /* ignore */ }
 
 }
 
