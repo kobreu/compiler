@@ -1,15 +1,12 @@
 package edu.tum.lua.operator.relational;
 
-
+/**
+ * The NotEqual operator is the exact opposite of the Equal operator
+ */
 public class NotEqOperator {
-/* The NotEqual operator is the exact opposite of the Equal operator */
-	
-	private EqOperator eqOperator;
-	
-	public boolean apply(Object o1, Object o2) throws NoSuchMethodException {
-		
-		return !eqOperator.apply(o1, o2);
-		
-	}
+	private final static EqOperator eqOperator = new EqOperator();
 
+	public boolean apply(Object o1, Object o2) {
+		return !eqOperator.apply(o1, o2);
+	}
 }
