@@ -1,8 +1,8 @@
 package main;
 
-import parser.Lexer;
-import parser.Parser;
-import program.*;
+import edu.tum.lua.parser.Lexer;
+import edu.tum.lua.parser.Parser;
+import edu.tum.lua.ast.*;
 
 
 public class Main {
