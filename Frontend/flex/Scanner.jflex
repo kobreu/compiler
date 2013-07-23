@@ -15,6 +15,8 @@ import java_cup.runtime.Symbol;
 
 %{
 
+  StringBuffer string = new StringBuffer();
+
   private Symbol symbol(int sym) {
     return new Symbol(sym, yyline+1, yycolumn+1);
   }
@@ -28,20 +30,25 @@ import java_cup.runtime.Symbol;
   }
 %} 
 
+
+
+
+	
 Id = [_a-zA-Z]+[_0-9a-zA-Z]*
 
-String = \"[^"]*\" | \'[^']*\'
-
-Int = 0 | [1-9][0-9]*
-
-Number = Int | Int ("."[0-9]+)
+Number = (0 | [1-9][0-9]*) ("."[0-9]+)?
 
 new_line = \r|\n|\r\n;
 
 white_space = {new_line}+ | [\t\f]+
 
+%state STRING
+
 %%
 
+<YYINITIAL> {
+
+\" { string.setLength(0); yybegin(STRING); }
 
 /* keywords */
 "local"         {return symbol(LOCAL); }
@@ -65,14 +72,6 @@ white_space = {new_line}+ | [\t\f]+
 "false"			{ return symbol(FALSE); }
 "true"			{ return symbol(TRUE); }
 "..."			{ return symbol(PARAMS); }
-{String}		{ return symbol(TEXT, new String(yytext()))}
-
-
-/* identifiers */
-{Id}           { return symbol(ID, yytext()); }
-  
-/* numbers */
-{Number} { return symbol(NUMBER, new Double(Double.parseDouble(yytext()))); }
 
 /* separators */
 ";"               { return symbol(SEMI); }
@@ -110,11 +109,31 @@ white_space = {new_line}+ | [\t\f]+
 "{"				{ return symbol(LCURL); }
 "}"				{ return symbol(RCURL); }
 
+/* identifiers */
+{Id}           { return symbol(ID, yytext()); }
+  
+/* numbers */
+{Number} { return symbol(NUMBER, new Double(Double.parseDouble(yytext()))); }
+
 /* assignment */
 "="				{ return symbol(ASM); }
 
 /* white space */
 {white_space}    { return symbol(WS); }
+
+}
+
+<STRING> {
+	\" 				{ yybegin(YYINITIAL);
+					  return symbol(TEXT,
+					  string.toString()); }
+	[^\n\r\"\\]+ 	{ string.append( yytext() ); }
+	\\t 			{ string.append(’\t’); }
+	\\n 			{ string.append(’\n’); }
+	\\r 			{ string.append(’\r’); }
+	/*\\\"			{ string.append(’\"’); } */
+	\\				{ string.append(’\\’); }
+}
 
 /* error fallback */
 .|\n              {  /* throw new Error("Illegal character <"+ yytext()+">");*/
