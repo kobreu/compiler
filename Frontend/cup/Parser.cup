@@ -47,7 +47,7 @@ parser code {:
 
 terminal         ADD, MUL, SUB, DIV, MOD, POW, CONCAT;
 terminal         AND, OR, NOT, LENGTH;
-terminal 		 LPAREN, RPAREN, BRACK, RBRACK, LCURL, RCURL;
+terminal 		 LPAREN, RPAREN, LBRACK, RBRACK, LCURL, RCURL;
 terminal         ASM; //Assigment =
 terminal		 DOT, DDOT;
 terminal         EQ, LEQ ,NEQ , LE, GR, GEQ;
@@ -86,7 +86,7 @@ non terminal Field field;
 non terminal FieldSep fieldsep;
 non terminal BinOp binop;
 non terminal UnOp unop;
-non terminal optsemi, empty, optws, optforexp, optexplist, optasm;
+non terminal optsemi, empty, optws, optforexp, optexplist, optasm, optdotname, optcolonname;
 
 
 /* Grammar */
@@ -171,6 +171,7 @@ laststat	::=		RETURN optexplist:el {: RESULT = el; :}
 					| empty
 					;
 
+funcname	::=		Id:id optdotname:id1 optcolonname:id2;
 
 
-				
+				  
