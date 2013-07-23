@@ -25,7 +25,7 @@ public class LuaFunction {
 			currentEnvironment.set(formalParameterNames.get(i), arguments.get(i));
 		}
 
-		return LuaInterpreter.eval(node.getChunk());
+		return LuaInterpreter.eval(node.getChunk(), currentEnvironment);
 	}
 
 	public List<Object> apply(Object... arguments) {
