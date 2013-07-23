@@ -1,6 +1,6 @@
 package edu.tum.lua.ast;
 
-public class Stat {
+public class Statement {
 
 	public enum Types {FOO, BAR, RETURN, ASSIGN}
 	
@@ -8,5 +8,4 @@ public class Stat {
 		// TODO Auto-generated method stub
 		return Types.FOO;
 	}
-
 }

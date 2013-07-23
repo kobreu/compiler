@@ -8,13 +8,13 @@ import edu.tum.lua.ast.FunctionNode;
 import edu.tum.lua.operator.logical.AndOperator;
 import edu.tum.lua.operator.logical.NotOperator;
 import edu.tum.lua.operator.logical.OrOperator;
-import edu.tum.lua.types.LuaFunction;
+import edu.tum.lua.types.LuaFunctionInterpreted;
 import edu.tum.lua.types.LuaTable;
 
 public class LogicalOperatorTest {
 
 	private final Object[] falseObjects = { null, false };
-	private final Object[] trueObjects = { "a", new LuaTable(), new LuaFunction(new LuaTable(), new FunctionNode()),
+	private final Object[] trueObjects = { "a", new LuaTable(), new LuaFunctionInterpreted(null, new FunctionNode()),
 			1.0, true };
 
 	@Test
