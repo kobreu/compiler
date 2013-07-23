@@ -20,6 +20,10 @@ public class LuaTable {
 	}
 
 	public Object get(Object key) {
+		if (LuaType.getTypeOf(key) == LuaType.NIL) {
+			throw new IllegalArgumentException();
+		}
+		
 		Object value = pairs.get(key);
 
 		if (value != null) {
