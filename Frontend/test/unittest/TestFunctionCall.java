@@ -8,7 +8,7 @@ import main.Main;
 
 import org.junit.Test;
 
-import visitors.Prog;
+import program.*;
 
 public class TestFunctionCall {
 
@@ -17,7 +17,7 @@ public class TestFunctionCall {
 		String[] args = new String[2];
 		args[0] = "testinput/arith/arith_simple.lua";
 		try {
-			Prog prog = (new Main()).run(args);
+			Chunk chunk = (new Main()).run(args);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
