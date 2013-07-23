@@ -1,4 +1,4 @@
-<project name="Compiler" default="compile" basedir=".">
+<project name="Compiler" default="test" basedir=".">
   <property name="cl"      location="cl"      />
   <property name="cup"     location="cup"     />
   <property name="flex"    location="flex"    />
@@ -14,13 +14,13 @@
   <!-- We rely on CUP-10k-TUM, JFlex 1.3.5 and Classgen 1.5pre -->
   <!-- residing in our directory ``bin'' -->
   <path id="binaries">
-    <pathelement location="${bin}" />
-    <fileset dir="${bin}">
+    <pathelement location="${lib}" />
+    <fileset dir="${lib}">
       <include name="**/*.jar" />
       <include name="**/*.zip" />
     </fileset>
     <pathelement path="${java.class.path}" />
-    <pathelement path="${classes}" />
+    <pathelement path="${bin}" />
   </path>
 
   <path id="libraries">
@@ -38,18 +38,19 @@
 
   <target name="compile" depends="init">
     <javac srcdir="${src}" destdir="${bin}" debug="on">
+    	<classpath refid="binaries" />
     </javac>
   </target>
 
   <target name="test" depends="compile">
   	 <junit>
   	    <classpath>
-  	      <pathelement location="${classes}" />    
+  	      <pathelement location="${bin}" />    
   	      <pathelement location="${lib}/junit-4.11.jar"/>
     	  <pathelement location="${lib}/hamcrest-core-1.3.jar"/>
   	    </classpath>
   	    <batchtest todir="testoutput">
-  	       <fileset dir="${test}">
+  	       <fileset dir="${src}">
   	            <include name="**/*Test*" />
   	       </fileset>
   	    </batchtest>
