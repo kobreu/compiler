@@ -77,7 +77,7 @@ Field ::= 	{FieldLRExp} Exp:leftexp Exp:rightexp
 
 FieldList ::= Field*
 	
-Op::= enum
+Op ::= enum
          ADD, SUB, MUL, DIV, POW, MOD, CONCAT, 
 		 LT, LE, GT, GE, EQ, NEQ, 
 		 AND, OR, UNM, NOT, LEN

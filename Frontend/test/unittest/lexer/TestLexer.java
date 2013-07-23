@@ -30,7 +30,7 @@ public class TestLexer {
 		Integer[] symbolsForCase;
 		String file;
 		
-		file = "testinput/grammar/chunk_with_return.lua";
+		/*file = "testinput/grammar/chunk_with_return.lua";
 		files.add(file);
 		symbolsForCase = new Integer[] { sym.ID, sym.ASM, sym.NUMBER, sym.WS, sym.ID, sym.ASM, sym.NUMBER, sym.WS, sym.RETURN, sym.WS, sym.ID, sym.COM, sym.ID };
 		symbols.put(file, Arrays.asList(symbolsForCase));
@@ -38,7 +38,7 @@ public class TestLexer {
 		file = "testinput/lexer/assignment_with_spaces.lua";
 		files.add(file);
 		symbolsForCase = new Integer[] { sym.ID, sym.WS, sym.ASM, sym.WS, sym.ID };
-		symbols.put(file, Arrays.asList(symbolsForCase));
+		symbols.put(file, Arrays.asList(symbolsForCase));*/
 		
 		file = "testinput/grammar/args_explist_none.lua";
 		files.add(file);
