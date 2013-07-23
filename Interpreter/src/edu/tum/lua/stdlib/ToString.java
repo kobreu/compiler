@@ -3,6 +3,7 @@ package edu.tum.lua.stdlib;
 import java.util.LinkedList;
 import java.util.List;
 
+import edu.tum.lua.LuaRuntimeException;
 import edu.tum.lua.types.LuaFunctionNative;
 import edu.tum.lua.types.LuaType;
 
@@ -11,8 +12,7 @@ public class ToString extends LuaFunctionNative {
 	@Override
 	public List<Object> apply(List<Object> arguments) {
 		if (arguments.isEmpty()) {
-			// TODO at least one argument necessary
-			throw new IllegalStateException();
+			throw new LuaRuntimeException("empty input");
 		}
 		
 		List<Object> list = new LinkedList<Object>();
@@ -43,8 +43,7 @@ public class ToString extends LuaFunctionNative {
 			return list;
 		}
 		
-		// TODO no known Type
-		throw new IllegalStateException();
+		throw new LuaRuntimeException("unknown Object");
 	}
 
 }
