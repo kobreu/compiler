@@ -1,15 +1,13 @@
 package edu.tum.lua.junit;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import edu.tum.lua.Environment;
-import edu.tum.lua.ast.FunctionNode;
 import edu.tum.lua.operator.relational.EqOperator;
+import edu.tum.lua.stdlib.ExampleStdlibFunction;
 import edu.tum.lua.types.LuaFunction;
-import edu.tum.lua.types.LuaFunctionInterpreted;
 import edu.tum.lua.types.LuaTable;
 
 public class RelationalOperatorTest {
@@ -17,7 +15,7 @@ public class RelationalOperatorTest {
 	EqOperator eq;
 
 	private final Object[] luaObjects = { null, false, "a", 1.0, new LuaTable(),
-			new LuaFunctionInterpreted(new Environment(null), new FunctionNode()) };
+			new ExampleStdlibFunction() };
 
 	@Before
 	public void setUp() throws Exception {
@@ -41,8 +39,8 @@ public class RelationalOperatorTest {
 		assertEquals(false, eq.apply(t1, t2));
 
 		// Two functions
-		LuaFunction f1 = new LuaFunctionInterpreted(null, new FunctionNode());
-		LuaFunction f2 = new LuaFunctionInterpreted(null, new FunctionNode());
+		LuaFunction f1 = new ExampleStdlibFunction();
+		LuaFunction f2 = new ExampleStdlibFunction();
 		assertEquals(true, eq.apply(f1, f1));
 		assertEquals(false, eq.apply(f1, f2));
 

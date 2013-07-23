@@ -43,6 +43,12 @@ public class ArithmeticOperatorTest {
 		testBinaryOperator(new SubOperator(), op1, op2, op1 - op2);
 		testUnaryOperator(new UnmOperator(), op1, -op1);
 	}
+	
+	@Test
+	public void testApplyMeta() {
+		fail("Not yet implemented");
+	}
+	
 
 	private void testUnaryOperator(UnmOperator op, double op1, double result) {
 		try {

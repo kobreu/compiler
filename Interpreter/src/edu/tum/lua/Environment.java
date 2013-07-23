@@ -3,7 +3,7 @@ package edu.tum.lua;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.tum.lua.ast.Expression;
+import edu.tum.lua.ast.Exp;
 import edu.tum.lua.types.LuaTable;
 
 public class Environment extends LuaTable {
@@ -22,10 +22,10 @@ public class Environment extends LuaTable {
 		super(forward);
 	}
 
-	public void assign(List<String> identifiers, List<Expression> expressions) {
+	public void assign(List<String> identifiers, List<Exp> expressions) {
 		List<Object> values = new ArrayList<>(expressions.size());
 
-		for (Expression exp : expressions) {
+		for (Exp exp : expressions) {
 			values.add(LuaInterpreter.eval(exp, this));
 		}
 

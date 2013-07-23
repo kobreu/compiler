@@ -1,10 +1,12 @@
 package edu.tum.lua;
 
+import static edu.tum.lua.ast.LegacyAdapter.convert;
+
 import java.util.List;
 
 import edu.tum.lua.ast.Chunk;
-import edu.tum.lua.ast.Expression;
-import edu.tum.lua.ast.Statement;
+import edu.tum.lua.ast.Exp;
+import edu.tum.lua.ast.Stat;
 
 public class LuaInterpreter {
 
@@ -12,34 +14,19 @@ public class LuaInterpreter {
 		return eval(chunk, new Environment());
 	}
 
+	@SuppressWarnings("unused")
 	public static List<Object> eval(Chunk chunk, Environment environment) {
-		for (Statement statement : chunk.getStats()) {
-			switch (statement.getType()) {
-			case BAR:
-				break;
-
-			case RETURN:
-				return null;
-
-			case ASSIGN:
-				environment.get("foo");
-				environment.set("foo", "bar");
-				break;
-
-			case FOO:
-				break;
-
-			default:
-				break;
-			}
+		for (Stat statement : convert(chunk.stats)) {
+			// TODO
 		}
 
 		return null;
 	}
 
 	@SuppressWarnings("unused")
-	public static Object eval(Expression exp, Environment environment) {
-		return null;
+	public static Object eval(Exp exp, Environment environment) {
+
+		return false;
 	}
 
 }
