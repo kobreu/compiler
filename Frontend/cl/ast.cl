@@ -9,11 +9,11 @@ Block ::= Chunk:chunk
 
 Stat ::= {Asm} 				VarList:varlist ExpList:explist 
 		| FunctionCall 
-		| {Do} 				Block:block
-		| {While} 			Exp:exp Block:block
+		| {DoExp} 				Block:block
+		| {WhileExp} 			Exp:exp Block:block
 		| {RepeatUntil} 	Block:block Exp:exp
 		| {IfThenElse} 		Exp:ifexp Block:thenblock Block:elseblock
-		| {For} 			"String":ident Exp:start Exp:end Exp:step Block:block
+		| {ForExp} 			"String":ident Exp:start Exp:end Exp:step Block:block
 		| {ForIn} 			NameList:namelist ExpList:explist Block:block
 		| {FunctionDef} 	FuncName:name FuncBody:body
 		| {LocalFuncDef} 	"String":ident FuncBody:body
@@ -40,9 +40,9 @@ Name ::= "String":name
 ExpList ::= Exp*
 
 Exp ::=  {Nil} 
-		| {Boolean} "boolean":value  
+		| {BooleanExp} "boolean":value  
 		| {Number} 	"double":number
-		| String
+		| Text
 		| {Dots} "String":dots
 		| Function 	
 		| PrefixExp
@@ -58,9 +58,9 @@ FunctionCall ::=  PrefixExp:preexp Args:args
 
 Args ::=  ExpList
 		| {TableConst} FieldList:fieldlist 
-		| String 
+		| Text 
 		
-String ::= "String":text
+Text ::= "String":text
 
 Function ::= Function:func FuncBody:body
 

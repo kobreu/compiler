@@ -2,11 +2,13 @@
 /**
 *   JFlex Scanner
 */
-
+package parser;
 import java_cup.runtime.Symbol;
+
 
 %%
 
+%public
 %class Lexer
 %cup
 %implements sym
@@ -128,22 +130,22 @@ white_space = {new_line}+ | [\t\f]+
 					  return symbol(TEXT,
 					  string.toString()); }
 	[^\n\r\"\\]+ 	{ string.append( yytext() ); }
-	\\t 			{ string.append(’\t’); }
-	\\n 			{ string.append(’\n’); }
-	\\r 			{ string.append(’\r’); }
-	/*\\\"			{ string.append(’\"’); } */
-	\\				{ string.append(’\\’); }
+	\\t 			{ string.append("\t"); }
+	\\n 			{ string.append("\n"); }
+	\\r 			{ string.append("\r"); }
+	\\\"			{ string.append("\\\""); } 
+	\\				{ string.append("\\"); }
 }
 
 <STRING> {
-	"'" 				{ yybegin(YYINITIAL);
+	"'" 			{ yybegin(YYINITIAL);
 					  return symbol(TEXT,
 					  string.toString()); }
 	[^\n\r"'"\\]+ 	{ string.append( yytext() ); }
-	\\t 			{ string.append(’\t’); }
-	\\n 			{ string.append(’\n’); }
-	\\r 			{ string.append(’\r’); }
-	\\				{ string.append(’\\’); }
+	\\t 			{ string.append("\t"); }
+	\\n 			{ string.append("\n"); }
+	\\r 			{ string.append("\r"); }
+	\\				{ string.append("\\"); }
 }
 
 /* error fallback */

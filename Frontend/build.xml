@@ -52,7 +52,8 @@
 	</target>
 
 	<target name="cup" depends="classgen">
-		<cup srcfile="${cup}/Parser.cup" destdir="${java}" interface="true" parser="Parser" />
+		<cup srcfile="${cup}/Parser.cup" destdir="${java}/parser" interface="true" package="parser"
+parser="Parser" />
 	</target>
 
 	<target name="jflex" depends="cup">
@@ -120,4 +121,5 @@
 		<delete dir="${classes}" />
 		<delete dir="${dist}" />
 	</target>
+
 </project>
