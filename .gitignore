@@ -8,6 +8,8 @@ Frontend/classes
 
 Frontend/testoutput/*
 
+Interpreter/testoutput/*
+
 # Package Files #
 *.war
 *.ear
