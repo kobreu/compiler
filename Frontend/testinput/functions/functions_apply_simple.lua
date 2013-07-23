@@ -1,4 +1,4 @@
-function x
+function addx (x)
 	return x
 end
-x(5);
+addx(5);
