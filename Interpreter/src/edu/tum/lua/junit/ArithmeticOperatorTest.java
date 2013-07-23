@@ -1,12 +1,13 @@
 package edu.tum.lua.junit;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import edu.tum.lua.operator.arithmetic.AddOperator;
-import edu.tum.lua.operator.arithmetic.BinaryArithmeticOperation;
+import edu.tum.lua.operator.arithmetic.BinaryArithmeticOperator;
 import edu.tum.lua.operator.arithmetic.DivOperator;
 import edu.tum.lua.operator.arithmetic.ModOperator;
 import edu.tum.lua.operator.arithmetic.MulOperator;
@@ -62,7 +63,7 @@ public class ArithmeticOperatorTest {
 		}
 	}
 
-	private void testBinaryOperator(BinaryArithmeticOperation op, double op1, double op2, double result) {
+	private void testBinaryOperator(BinaryArithmeticOperator op, double op1, double op2, double result) {
 		try {
 			assertEquals(result, op.apply(op1, op2));
 			assertEquals(result, op.apply(Double.toString(op1), op2));

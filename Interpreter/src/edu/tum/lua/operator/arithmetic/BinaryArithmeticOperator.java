@@ -4,7 +4,7 @@ import javax.naming.OperationNotSupportedException;
 
 import edu.tum.lua.types.LuaFunction;
 
-public abstract class BinaryArithmeticOperation extends ArithmeticOperation {
+public abstract class BinaryArithmeticOperator extends ArithmeticOperator {
 
 	public Object apply(Object op1, Object op2) throws NoSuchMethodException {
 		try {

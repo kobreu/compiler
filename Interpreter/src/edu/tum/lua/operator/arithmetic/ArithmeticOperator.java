@@ -6,7 +6,7 @@ import edu.tum.lua.types.LuaFunction;
 import edu.tum.lua.types.LuaTable;
 import edu.tum.lua.types.LuaType;
 
-public class ArithmeticOperation {
+public class ArithmeticOperator {
 
 	protected static double convert(Object object) throws OperationNotSupportedException {
 		if (LuaType.getTypeOf(object) == LuaType.NUMBER) {
@@ -26,9 +26,9 @@ public class ArithmeticOperation {
 				if (table == null) {
 					continue;
 				}
-				
+
 				Object function = table.get(event);
-				
+
 				if (LuaType.getTypeOf(function) == LuaType.FUNCTION) {
 					return table.getLuaFunction(event);
 				}

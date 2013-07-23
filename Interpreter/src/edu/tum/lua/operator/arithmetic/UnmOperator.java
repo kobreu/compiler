@@ -4,7 +4,7 @@ import javax.naming.OperationNotSupportedException;
 
 import edu.tum.lua.types.LuaFunction;
 
-public final class UnmOperator extends ArithmeticOperation {
+public final class UnmOperator extends ArithmeticOperator {
 	public Object apply(Object op1) throws NoSuchMethodException {
 		try {
 			return -convert(op1);

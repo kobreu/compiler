@@ -1,6 +1,6 @@
 package edu.tum.lua.operator.arithmetic;
 
-public final class ModOperator extends BinaryArithmeticOperation {
+public final class ModOperator extends BinaryArithmeticOperator {
 
 	@Override
 	protected double apply(double op1, double op2) {
