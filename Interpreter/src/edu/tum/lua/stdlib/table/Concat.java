@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import edu.tum.lua.LuaBadArgumentException;
+import edu.tum.lua.LuaRuntimeException;
 import edu.tum.lua.Preconditions;
 import edu.tum.lua.operator.list.LengthOperator;
 import edu.tum.lua.types.LuaFunctionNative;
@@ -55,8 +56,12 @@ public class Concat extends LuaFunctionNative {
 			r.add(result);
 			return r;
 		}
+		if (table.get(begin) == null)
+			throw new LuaRuntimeException("invalid value at index " + begin + " in table or concat");
 		result = table.get(begin).toString();
 		for (double i = begin + 1; i <= end; i = i + 1) {
+			if (LuaType.getTypeOf(table.get(i)) != LuaType.NUMBER && LuaType.getTypeOf(table.get(i)) != LuaType.STRING)
+				throw new LuaRuntimeException("invalid value at index " + i + " in table for concat");
 			result = result.concat(sep);
 			result = result.concat(table.get(i).toString());
 		}
