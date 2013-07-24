@@ -7,7 +7,7 @@ import java.util.Map.Entry;
 
 import edu.tum.lua.LuaRuntimeException;
 
-public class LuaTable {
+public class LuaTable implements Iterable<Map.Entry<Object, Object>> {
 
 	private LuaTable metatable;
 	private final Map<Object, Object> pairs;
@@ -176,6 +176,11 @@ public class LuaTable {
 
 	public void unset(Object key) {
 		pairs.remove(key);
+	}
+
+	@Override
+	public Iterator<Entry<Object, Object>> iterator() {
+		return pairs.entrySet().iterator();
 	}
 
 }
