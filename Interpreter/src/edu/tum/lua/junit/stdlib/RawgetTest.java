@@ -7,14 +7,14 @@ import java.util.LinkedList;
 import org.junit.Test;
 
 import edu.tum.lua.LuaRuntimeException;
-import edu.tum.lua.stdlib.Rawget;
+import edu.tum.lua.stdlib.RawGet;
 import edu.tum.lua.types.LuaTable;
 
 public class RawgetTest {
 
 	@Test
 	public void test() {
-		Rawget r = new Rawget();
+		RawGet r = new RawGet();
 		LinkedList<Object> l =new LinkedList<Object>();
 		
 		try{

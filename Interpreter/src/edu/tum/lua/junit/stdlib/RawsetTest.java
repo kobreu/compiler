@@ -9,14 +9,14 @@ import java.util.Collections;
 import org.junit.Test;
 
 import edu.tum.lua.LuaRuntimeException;
-import edu.tum.lua.stdlib.Rawset;
+import edu.tum.lua.stdlib.RawSet;
 import edu.tum.lua.types.LuaTable;
 
 public class RawsetTest {
 
 	@Test
 	public void test() {
-		Rawset r = new Rawset();
+		RawSet r = new RawSet();
 
 		try {
 			r.apply(Collections.emptyList());

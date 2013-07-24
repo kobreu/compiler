@@ -9,6 +9,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import edu.tum.lua.LuaRuntimeException;
 import edu.tum.lua.stdlib.ExampleStdlibFunction;
 import edu.tum.lua.types.LuaFunction;
 import edu.tum.lua.types.LuaFunctionNative;
@@ -27,6 +28,9 @@ public class LuaTableTest {
 	public void testGet() {
 		LuaTable table = new LuaTable();
 		LuaTable emptyTable = new LuaTable();
+
+		// Nil
+		assertEquals(null, table.get(null));
 
 		// Boolean
 		table.set(true, "value1");
@@ -57,11 +61,6 @@ public class LuaTableTest {
 		table.set(tmpFunction, "value5");
 		assertEquals("value5", table.get(tmpFunction));
 		assertEquals(null, emptyTable.get(tmpFunction));
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void testGetNil() {
-		table.get(null);
 	}
 
 	@Test
@@ -99,8 +98,8 @@ public class LuaTableTest {
 	protected static class TestFunction extends LuaFunctionNative {
 		@Override
 		public List<Object> apply(List<Object> arguments) {
-			assertEquals(1, arguments.size());
-			String key = (String) arguments.get(0);
+			assertEquals(2, arguments.size());
+			String key = (String) arguments.get(1);
 			return Collections.singletonList((Object) (key + "value"));
 		}
 	}
@@ -111,7 +110,7 @@ public class LuaTableTest {
 		LuaTable t2 = new LuaTable();
 
 		t1.setMetatable(new LuaTable());
-		t1.setIndex(t2);
+		t1.setMetaIndex(t2);
 
 		t1.set("t1", 1.0);
 		t2.set("t2", 2.0);
@@ -119,15 +118,15 @@ public class LuaTableTest {
 		assertEquals(1.0, t1.get("t1"));
 		assertEquals(2.0, t1.get("t2"));
 
-		t1.setIndex((LuaTable) null);
+		t1.setMetaIndex((LuaTable) null);
 		assertEquals(null, t1.get("t2"));
 
-		t1.setIndex(new TestFunction());
+		t1.setMetaIndex(new TestFunction());
 		assertEquals(1.0, t1.get("t1"));
 		assertEquals("t2value", t1.get("t2"));
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = LuaRuntimeException.class)
 	public void testSetNil() {
 		table.set(null, "a");
 	}
