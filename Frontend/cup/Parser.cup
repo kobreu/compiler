@@ -146,6 +146,7 @@ stat        	::=     varlist:vl ASM explist:el
 					
 						| FOR namelist:nl IN explist:el DO block:b END
 						{: RESULT = new ForIn(nl,el,b); :}
+						;
 					
 				/*		| FUNC ID:id optdotname:dots optcolonname:col funcname:fn funcbody:fb
 						{: RESULT = new FunctionDef(fn,fb); :}
@@ -189,10 +190,11 @@ optcolonname	::=		DDOT ID:id
 						| empty {: RESULT =(Exp) new NumberExp(1.0); :}
 						;*/
 
-optexplist  	::= 	COM exp:e optexplist:el {:  
-						ExpList el1 = (ExpList) el;
-						el1.setElementAt(e,0);
-						RESULT = el1; :}	
+optexplist		::=		COM exp:e optexplist:el
+						{: ExpList el1 = (ExpList) el;
+							el1.setElementAt(e,0);
+							RESULT = el1; 
+						:}	
 						| empty  {: RESULT = new ExpList(); :}	
 						;	
 
