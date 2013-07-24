@@ -67,6 +67,24 @@ public class Environment extends LuaTable {
 		set("unpack", new Unpack());
 		set("_VERSION", "Java Lua -1");
 		set("xpcall", new NotImplementedFunction());
+
+		LuaTable coroutine = new LuaTable();
+		LuaTable _package = new LuaTable();
+		LuaTable string = new LuaTable();
+		LuaTable table = new LuaTable();
+		LuaTable math = new LuaTable();
+		LuaTable io = new LuaTable();
+		LuaTable os = new LuaTable();
+		LuaTable debug = new LuaTable();
+
+		set("coroutine", coroutine);
+		set("package", _package);
+		set("string", string);
+		set("table", table);
+		set("math", math);
+		set("io", io);
+		set("os", os);
+		set("debug", debug);
 	}
 
 	public Environment(Environment forward) {
