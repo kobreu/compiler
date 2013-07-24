@@ -1,4 +1,4 @@
-package edu.tum.lua.junit;
+package edu.tum.lua.junit.operator;
 
 import static org.junit.Assert.assertEquals;
 

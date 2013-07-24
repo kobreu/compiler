@@ -1,7 +1,11 @@
-package edu.tum.lua.junit;
+package edu.tum.lua.junit.operator;
 
+import static edu.tum.lua.Preconditions.checkArguments;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+
+import java.util.Collections;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -14,7 +18,9 @@ import edu.tum.lua.operator.arithmetic.MulOperator;
 import edu.tum.lua.operator.arithmetic.PowOperator;
 import edu.tum.lua.operator.arithmetic.SubOperator;
 import edu.tum.lua.operator.arithmetic.UnmOperator;
+import edu.tum.lua.types.LuaFunctionNative;
 import edu.tum.lua.types.LuaTable;
+import edu.tum.lua.types.LuaType;
 
 public class ArithmeticOperatorTest {
 
@@ -43,12 +49,43 @@ public class ArithmeticOperatorTest {
 		testBinaryOperator(new SubOperator(), op1, op2, op1 - op2);
 		testUnaryOperator(new UnmOperator(), op1, -op1);
 	}
-	
-	@Test
-	public void testApplyMeta() {
-		fail("Not yet implemented");
+
+	protected static class FracAdd extends LuaFunctionNative {
+		LuaType[][] types = { { LuaType.TABLE }, { LuaType.TABLE } };
+
+		@Override
+		public List<Object> apply(List<Object> arguments) {
+			checkArguments("frac_add", arguments, types);
+			LuaTable frac1 = (LuaTable) arguments.get(0);
+			LuaTable frac2 = (LuaTable) arguments.get(1);
+			LuaTable result = new LuaTable();
+			result.set("a", frac1.getNumber("a") + frac2.getNumber("a"));
+			result.set("b", frac1.get("b"));
+			return Collections.singletonList((Object) result);
+		}
 	}
-	
+
+	@Test
+	public void testApplyMeta() throws NoSuchMethodException {
+		LuaTable frac1 = new LuaTable();
+		LuaTable frac2 = new LuaTable();
+		LuaTable meta = new LuaTable();
+
+		frac1.set("a", 2.0);
+		frac1.set("b", 3.0);
+
+		frac2.set("a", 1.0);
+		frac2.set("b", 3.0);
+
+		meta.set("__add", new FracAdd());
+		frac2.setMetatable(meta);
+
+		AddOperator add = new AddOperator();
+		LuaTable result = (LuaTable) add.apply(frac1, frac2);
+
+		assertEquals((Object) 3.0, (Double) result.getNumber("a"));
+		assertEquals((Object) 3.0, (Double) result.getNumber("b"));
+	}
 
 	private void testUnaryOperator(UnmOperator op, double op1, double result) {
 		try {

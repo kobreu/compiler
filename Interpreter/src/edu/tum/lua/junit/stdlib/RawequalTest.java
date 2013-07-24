@@ -7,13 +7,13 @@ import java.util.LinkedList;
 import org.junit.Test;
 
 import edu.tum.lua.LuaRuntimeException;
-import edu.tum.lua.stdlib.Rawequal;
+import edu.tum.lua.stdlib.RawEqual;
 
 public class RawequalTest {
 
 	@Test
 	public void test() {
-		Rawequal r = new Rawequal();
+		RawEqual r = new RawEqual();
 		LinkedList<Object> l = new LinkedList<Object>();
 		
 		try{
