@@ -7,7 +7,7 @@ import edu.tum.lua.Preconditions;
 import edu.tum.lua.types.LuaFunctionNative;
 import edu.tum.lua.types.LuaType;
 
-public class Rawequal extends LuaFunctionNative {
+public class RawEqual extends LuaFunctionNative {
 
 	LuaType[][] expectedTypes = { null, null };
 
