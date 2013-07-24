@@ -5,6 +5,7 @@ CompilerFrontend/gen
 CompilerFrontend/dist
 Frontend/java
 Frontend/classes
+Frontend/bin
 
 Frontend/testoutput/*
 
