@@ -9,7 +9,8 @@
 	<property name="classes" location="classes" />
 	<property name="dist" location="dist" />
 	<property name="lib" location="lib" />
-	<property name="bin" location="binlib" />
+	<property name="binlib" location="binlib" />
+	<property name="bin" location="bin" />
 	<property environment="env" />
 
 	<path id="binaries">
@@ -23,8 +24,8 @@
 	</path>
 
 	<path id="libraries">
-		<pathelement location="${lib}" />
-		<fileset dir="${lib}">
+		<pathelement location="${binlib}" />
+		<fileset dir="${binlib}">
 			<include name="**/*.jar" />
 			<include name="**/*.zip" />
 		</fileset>
@@ -37,13 +38,14 @@
 
 	<target name="compile" depends="init">
 		<javac srcdir="${java}" destdir="${bin}" debug="on">
+			<classpath refid="libraries">
+			</classpath>
 		</javac>
 	</target>
 
 	<target name="clean">
-		<delete dir="${java}" />
 		<delete dir="${classes}" />
-		<delete dir="${dist}" />
+		<delete dir="${bin}" />
 	</target>
 
 </project>
