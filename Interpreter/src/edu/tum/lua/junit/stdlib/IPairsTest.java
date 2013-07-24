@@ -29,8 +29,8 @@ public class IPairsTest {
 
 		// Second return-value is the same table
 		assertEquals(table, ipairs.apply(table).get(1));
-		// Third return-value is nil
-		assertEquals(null, ipairs.apply(table).get(2));
+		// Third return-value is 0.0
+		assertEquals(0.0, ipairs.apply(table).get(2));
 
 		// Empty table
 		// > f, t, v = pairs({})
