@@ -27,7 +27,6 @@ import edu.tum.lua.stdlib.Type;
 import edu.tum.lua.stdlib.Unpack;
 import edu.tum.lua.stdlib.VoidFunction;
 import edu.tum.lua.stdlib.table.Concat;
-import edu.tum.lua.stdlib.table.MaxN;
 import edu.tum.lua.types.LuaTable;
 
 public class Environment extends LuaTable {
@@ -78,7 +77,15 @@ public class Environment extends LuaTable {
 		table.set("concat", new Concat());
 		table.set("maxn", new MaxN());
 
+		// TODO math.huge math.pi
+		// TODO set implemented functions
 		LuaTable math = new LuaTable();
+		math.set("fmod", new NotImplementedFunction());
+		math.set("frexp", new NotImplementedFunction());
+		math.set("ldexp", new NotImplementedFunction());
+		math.set("modf", new NotImplementedFunction());
+		math.set("randomseed", new NotImplementedFunction());
+
 		LuaTable io = new LuaTable();
 		LuaTable os = new LuaTable();
 		LuaTable debug = new LuaTable();
