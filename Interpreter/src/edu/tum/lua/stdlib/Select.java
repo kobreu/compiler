@@ -1,7 +1,9 @@
 package edu.tum.lua.stdlib;
 
+import java.util.LinkedList;
 import java.util.List;
 
+import edu.tum.lua.LuaRuntimeException;
 import edu.tum.lua.types.LuaFunctionNative;
 import edu.tum.lua.types.LuaType;
 
@@ -9,12 +11,11 @@ public class Select extends LuaFunctionNative{
 
 	@Override
 	public List<Object> apply(List<Object> arguments) {
-		if (arguments.size()<1) throw new IllegalArgumentException();
+		if (arguments.size()<1) throw new LuaRuntimeException("bad argument : number expected, got no value");
 		Object firstArgument = arguments.get(0);
 		if (LuaType.getTypeOf(firstArgument)==LuaType.NUMBER){
 			double index = (double) firstArgument;
-			if (index < 1) throw new IllegalArgumentException();
-			if (arguments.size()<=index) throw new IllegalArgumentException();
+			if (index < 1) throw new LuaRuntimeException("bad argument : index out of range");
 			for (int i = 0; i< index;i++){
 				arguments.remove(0);
 			}
@@ -22,12 +23,19 @@ public class Select extends LuaFunctionNative{
 		}
 		else if (LuaType.getTypeOf(firstArgument) == LuaType.STRING){
 			if (firstArgument.toString().equals("#")){
-			if (arguments.size()==1) throw new IllegalArgumentException();
-			arguments.remove(0);
-			return arguments;
+				if (arguments.size()==1) {
+					LinkedList<Object> l = new LinkedList<Object>();
+					l.add(0.0);
+					return l;
+				}
+				else{
+					arguments.remove(0);
+					return arguments;
+				}
 			}
+			else throw new LuaRuntimeException("bad argument : number expected, got string");
 		}
-		throw new IllegalArgumentException();
+		throw new LuaRuntimeException("bad argument : number expected");
 	}
 
 }
