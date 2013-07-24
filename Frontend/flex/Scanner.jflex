@@ -43,7 +43,7 @@ line_terminator = \r|\n|\r\n
 
 input_character = [^\r\n]
 
-white_space = {new_line}+ | [\t\f]+
+white_space = [ \r\n\t\f]+
 
 /* comments */
 
@@ -52,13 +52,15 @@ EndOfLineComment = "--" {input_character}* {line_terminator}
 MultipleLineComment = "--[""="*"[" {CommentContent} "]""="*"]"
 CommentContent = ([^("]""="*"]")])*
 
-%state STRING
+%state STRINGDOUBLE
+%state STRINGSINGLE
 
 %%
 
 <YYINITIAL> {
 
-\" { string.setLength(0); yybegin(STRING); }
+\" { string.setLength(0); yybegin(STRINGDOUBLE); }
+\' { string.setLength(0); yybegin(STRINGSINGLE); }
 
 /* keywords */
 "local"         {return symbol(LOCAL); }
@@ -136,19 +138,19 @@ CommentContent = ([^("]""="*"]")])*
 
 }
 
-<STRING> {
-	\" 				{ yybegin(YYINITIAL);
+<STRINGDOUBLE> {
+	"\"" 				{ yybegin(YYINITIAL);
 					  return symbol(TEXT,
 					  string.toString()); }
 	[^\n\r\"\\]+ 	{ string.append( yytext() ); }
-	\\t 			{ string.append("\t"); }
-	\\n 			{ string.append("\n"); }
-	\\r 			{ string.append("\r"); }
-	\\\"			{ string.append("\\\""); } 
-	\\				{ string.append("\\"); }
+	"\\t" 			{ string.append("\t"); }
+	"\\n" 			{ string.append("\n"); }
+	"\\r" 			{ string.append("\r"); }
+	\\\\            { string.append("\\"); }
+	\\\"			{ string.append("\""); }
 }
 
-<STRING> {
+<STRINGSINGLE> {
 	"'" 			{ yybegin(YYINITIAL);
 					  return symbol(TEXT,
 					  string.toString()); }
@@ -156,7 +158,9 @@ CommentContent = ([^("]""="*"]")])*
 	\\t 			{ string.append("\t"); }
 	\\n 			{ string.append("\n"); }
 	\\r 			{ string.append("\r"); }
-	\\				{ string.append("\\"); }
+	\\\\            { string.append("\\"); }
+	\\\'			{ string.append("\'"); }
+
 }
 
 /* error fallback */
