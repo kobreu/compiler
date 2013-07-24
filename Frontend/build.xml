@@ -25,6 +25,8 @@
 
 	<path id="libraries">
 		<pathelement location="${binlib}" />
+		<pathelement location="${lib}" />
+
 		<fileset dir="${binlib}">
 			<include name="**/*.jar" />
 			<include name="**/*.zip" />
