@@ -32,23 +32,20 @@ public final class Preconditions {
 		while (typeIterator.hasNext()) {
 			int pos = typeIterator.nextIndex() + 1;
 			LuaType[] types = typeIterator.next();
+			/*
+			 * Begin Edit
+			 */
+			if (argsIterator.hasNext()) {
+				LuaType argsType = LuaType.getTypeOf(argsIterator.next());
 
-			if (!argsIterator.hasNext()) {
-				if (Arrays.asList(types).contains((Object) null))
-					continue;
-
-				throw new LuaBadArgumentException(pos, functionName, printTypes(types), "no value");
-			} else {
 				if (types == null)
 					continue;
 
-				LuaType argsType = LuaType.getTypeOf(argsIterator.next());
-
-				if (argsType == null)
-					throw new RuntimeException();
-
 				if (!Arrays.asList(types).contains(argsType))
 					throw new LuaBadArgumentException(pos, functionName, printTypes(types), argsType.toString());
+			} else {
+				if (types == null || !Arrays.asList(types).contains((Object) null))
+					throw new LuaBadArgumentException(pos, functionName, printTypes(types), "no value");
 			}
 
 			/*
