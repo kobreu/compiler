@@ -54,20 +54,13 @@ PrefixExp ::= 	{PrefixExpVar} Var:var
 				| {PrefixExpFuncCall} FunctionCall:call 
 				| {PrefixExpExp} Exp:exp
 
-
-Args ::=  {ArgsExpList} ExpList:explist
-		| {ArgsTableConst} TableConstructor:tablecons
-		| {ArgsText} Text:text 
-
-FunctionCall ::=  PrefixExp:preexp Args:args
+FunctionCall ::=  PrefixExp:preexp ExpList:explist
 		
 Text ::= "String":text
 
-Function ::= Function:func FuncBody:body
+Function ::= FuncBody:body
 
-FuncBody ::= ParList:parlist Block:block
-
-ParList ::= NameList:namelist "String":dots
+FuncBody ::= NameList:args "boolean":varargs Block:block
 
 TableConstructor ::= FieldList:fieldlist
 
