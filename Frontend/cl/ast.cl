@@ -18,8 +18,8 @@ Stat ::= {Asm} 				VarList:varlist ExpList:explist
 		| {IfThenElse} 		Exp:ifexp Block:thenblock Block:elseblock
 		| {ForExp} 			"String":ident Exp:start Exp:end Exp:step Block:block
 		| {ForIn} 			NameList:namelist ExpList:explist Block:block
-		| {FunctionDef} 	FuncName:name FuncBody:body
-		| {LocalFuncDef} 	"String":ident FuncBody:body
+		| {FunctionDef} 	"String":ident NameList:members NameList:args "boolean":varargs Block:block
+		| {LocalFuncDef} 	"String":ident NameList:args "boolean":varargs Block:block
 		| {LocalDecl} 		NameList:namelist ExpList:explist
 
 Exp ::=  {Nil} 
@@ -27,17 +27,11 @@ Exp ::=  {Nil}
 		| {Number} 	"double":number
 		| {TextExp} Text:text
 		| {Dots} "String":dots
-		| {FunctionExp} Function:function 	
+		| {Closure} NameList:args "boolean":varargs Block:block 	
 		| {PreExp} PrefixExp:preexp
 		| {TableConstructorExp} TableConstructor:tablecons
 		| {Binop} Exp:leftexp "int":op Exp:rightexp
 		| {Unop} "int":op Exp:exp 
-
-FuncName ::= "String":ident MemberList:members "String":method
-
-MemberList ::= Member*
-
-Member ::= "String":member
 
 VarList ::= Var*
 
@@ -58,14 +52,10 @@ FunctionCall ::=  PrefixExp:preexp ExpList:explist
 		
 Text ::= "String":text
 
-Function ::= FuncBody:body
-
-FuncBody ::= NameList:args "boolean":varargs Block:block
-
 TableConstructor ::= FieldList:fieldlist
 
 Field ::= 	{FieldLRExp} Exp:leftexp Exp:rightexp 
-			| {FieldNameExp} Name:name Exp:exp 
+			| {FieldNameExp} "String":ident Exp:exp 
 			| {FieldExp} Exp:fieldexp
 
 FieldList ::= Field*

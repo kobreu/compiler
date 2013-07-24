@@ -67,6 +67,7 @@ non terminal Block block;
 non terminal Stat stat;
 non terminal StatList statlist;
 non terminal LastStat laststat;
+
 non terminal FuncName funcname;
 non terminal IfThenElse optelse;
 non terminal VarList varlist;
@@ -76,34 +77,31 @@ non terminal ExpList explist;
 non terminal Exp exp;
 non terminal PrefixExp prefixexp;
 non terminal FunctionCall functioncall;
-non terminal Args args;
+non terminal args;
 non terminal Function function;
 non terminal FuncBody funcbody;
 non terminal ParList parlist;
 non terminal TableConstructor tableconstructor;
 non terminal FieldList fieldlist;
-non terminal  field;
-non terminal  fieldsep;
-non terminal  binop;
-non terminal  unop;
+non terminal Field field;
+non terminal fieldsep;
+non terminal Binop binop;
+non terminal Unop unop;
 non terminal optsemi, empty, optws, optforexp, optexplist, optasm, optdotname, optcolonname, optvarlist;
 
 
 /* Grammar */
 
-empty 			::=  	/* nothing */;
-chunk 			::=      statlist:stats
-                 		{:  RESULT = new Chunk(stats); :}
-                 
-                 		|   statlist: stats laststat:last
+empty			::= 	;
+
+chunk 			::=      statlist:stats laststat:last
                  		{:  RESULT = new Chunk(stats, last); :}
                  		;
 
-statlist    	::=      		stat:s optsemi statlist:stats 
-						{:  RESULT = new Statlist(s, stats); :}
-						|
-					 	stat:s optws statlist:stats 
-                 		{:  RESULT = new Statlist(s, stats); :}
+statlist    	::=      stat:s SEMI statlist:stats 
+						{:  RESULT = new StatList(stats.insertElementAt(s, 0)); :}
+						|  stat:s WS statlist:stats 
+						{:  RESULT = new StatList(stats.insertElementAt(s, 0)); :}
                  	;
 				
 optsemi			::= 	SEMI | empty;
@@ -128,7 +126,7 @@ stat        	::=     varlist:vl ASM explist:el
 						{: RESULT = new WhileExp(e,b); :}
 					
 						| REPEAT block:b UNTIL exp:e
-						{: RESULT = new RepeatUntil(e,b); :}
+						{: RESULT = new RepeatUntil(b,e); :}
 					
 						| IF exp:e THEN block:b optelse:elseblock END
 						{: RESULT = new IfThenElse(e,b,elseblock); :}
@@ -142,13 +140,22 @@ stat        	::=     varlist:vl ASM explist:el
 						| FUNC funcname:fn funcbody:fb
 						{: RESULT = new FunctionDef(fn,fb); :}
 					
-						| LOCAL FUNC funcname:fn funcbody:fb
-						{: RESULT = new LocalFuncDef(fn,fb); :}
+						| LOCAL FUNC ID:id optdotname:dots optcolonname:col funcname:fn funcbody:fb
+						{: RESULT = new LocalFuncDef(id,fb); :}
 					
-						| LOCAL namelist:nl optasm optexplist:oel
+						| LOCAL namelist:nl optasm:oel
 						{: RESULT = new LocalDecl(nl,oel); :}
 						;
 					
+optdotname		::= 	DOT ID:id optdotname:dots
+						{: RESULT = new NameList(dots.insertElementAt(id, 0)) :}
+						| empty
+						{: RESULT = new NameList() :}
+						
+optcolonname	::=		DDOT ID:id
+						{: RESULT = new Name(id):}
+						| empty
+						{: RESULT = null:}
 					
 optforexp   	::=     COM exp:e {: RESULT = e; :}				
 						| {: RESULT = 1; :}
@@ -158,11 +165,13 @@ optexplist  	::= 	explist:el {: RESULT = el; :}
 						| empty
 						;	
 
-optasm  		::= 	ASM {: RESULT = ASM; :}	
+optasm  		::= 	ASM explist:el {: RESULT = el; :}	
 						| empty
 						;	
 
 optelse			::= 	ELSE block:b {: RESULT = b; :}	
+						| ELSEIF exp:e THEN block:b optelse:elseblock
+						  {: RESULT = new IfThenElse(e, b, elseblock):}
 						| empty
 						;	
 					
@@ -170,11 +179,8 @@ laststat		::=		RETURN optexplist:el {: RESULT = new LastReturn(el); :}
 						| BREAK {: RESULT = new LastBreak(); :}	
 						| empty
 						;
-
-funcname		::=		ID:id optdotname:id1 optcolonname:id2			
-						{: RESULT = new FuncName(id,id1,id2); :}
-						;
-					
+				
+			
 varlist			::=    	var:v
 						{: RESULT = new Var(v); :}
 						| var:v COM varlist:vl
@@ -240,11 +246,19 @@ prefixexp		::=		var:v
 						{: RESULT = new PrefixExpExp(e); :}
 						;
 
-functioncall 	::=		prefixexp:pe args:ag
-						{: RESULT = new FunctionCall(pe,ag); :}	
-						| prefixexp:pe DDOT ID:id args:ag
-						{: RESULT = new FunctionCall(pe,ag); :}	
+functioncall 	::=		prefixexp:pe args:explist
+						{: RESULT = new FunctionCall(pe,explist); :}	
+						| prefixexp:pe DDOT ID:id args:explist
+						{:explist.insertElementAt("self", 0);
+						  RESULT = new FunctionCall(new Var(pe, id), explist); :}	
 						;
+						
+						
+
+| prefixexp:pe DDOT ID:id args:ag
+{: explist.insertElementAt("self", 0);
+new Var(pe, id);
+RESULT = new FunctionCall(pe,ag); :} 
 
 args  		 	::= 	LPAREN RPAREN
 						{: RESULT = new ArgsExpList(); :}	
