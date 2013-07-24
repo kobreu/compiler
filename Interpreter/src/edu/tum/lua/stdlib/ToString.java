@@ -9,41 +9,36 @@ import edu.tum.lua.types.LuaType;
 
 public class ToString extends LuaFunctionNative {
 
+	LuaType[][] expectedTypes = { null };
+
 	@Override
 	public List<Object> apply(List<Object> arguments) {
-		if (arguments.isEmpty()) {
-			throw new LuaRuntimeException("empty input");
-		}
+		Preconditions.checkArguments("tostring", arguments, expectedTypes);
 		
 		List<Object> list = new LinkedList<Object>();
 		Object o = arguments.get(0);
 		
-		if (LuaType.getTypeOf(o) == LuaType.STRING) {
-			list.add(o);
-			return list;
+		switch (enum LuaType.getTypeOf(o)) {
+			case LuaType.STRING:
+				list.add(o);
+				return list;
+			case LuaType.BOOLEAN:
+				list.add( Boolean.toString((boolean) o) );
+				return list;
+			case LuaType.NIL:
+				list.add("nil");
+				return list;
+			case LuaType.NUMBER:
+				list.add(Double.toString((double) o));
+				return list;
+			case LuaType.TABLE:
+				list.add(o.toString());
+				return list;
+			case LuaType.FUNCTION:
+				list.add(o.toString());
+				return list;
+			default:
+				throw new LuaRuntimeException("unknown Object");
 		}
-		
-		if (LuaType.getTypeOf(o) == LuaType.BOOLEAN) {
-			list.add( Boolean.toString((boolean) o) );
-			return list;
-		}
-		
-		if (LuaType.getTypeOf(o) == LuaType.NIL) {
-			list.add("nil");
-			return list;
-		}
-		
-		if (LuaType.getTypeOf(o) == LuaType.NUMBER) {
-			list.add(Double.toString((double) o));
-			return list;
-		}
-		
-		if (LuaType.getTypeOf(o) == LuaType.TABLE || LuaType.getTypeOf(o) == LuaType.FUNCTION) {
-			list.add(o.toString());
-			return list;
-		}
-		
-		throw new LuaRuntimeException("unknown Object");
 	}
-
 }
