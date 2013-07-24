@@ -30,7 +30,10 @@ public class ToString extends LuaFunctionNative {
 			list.add("nil");
 			return list;
 		case NUMBER:
-			list.add(Double.toString((double) o));
+			if (((Double) o).doubleValue() == new Double(((Double) o).intValue()).doubleValue())
+				list.add(Integer.toString(((Double) o).intValue()));
+			else
+				list.add(((Double) o).toString());
 			return list;
 		case TABLE:
 			list.add(o.toString());

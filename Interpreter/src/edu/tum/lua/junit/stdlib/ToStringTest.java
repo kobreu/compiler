@@ -45,6 +45,8 @@ public class ToStringTest {
 		l.add("Hello World");
 		l.add("fail");
 		assertEquals("Translating a String", "Hello World", (String) p.apply(l).get(0));
+
+		assertEquals("Translating 5.0 as 5", "5", (String) p.apply(new Double(5)).get(0));
 	}
 
 }

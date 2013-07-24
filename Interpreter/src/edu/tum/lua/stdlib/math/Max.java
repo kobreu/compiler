@@ -7,7 +7,7 @@ import edu.tum.lua.Preconditions;
 import edu.tum.lua.types.LuaFunctionNative;
 import edu.tum.lua.types.LuaType;
 
-public class Exp extends LuaFunctionNative {
+public class Max extends LuaFunctionNative {
 
 	// TODO the expected types are not right
 	// max(v ..) they all need to be numbers
