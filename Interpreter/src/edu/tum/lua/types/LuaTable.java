@@ -1,6 +1,7 @@
 package edu.tum.lua.types;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class LuaTable {
@@ -9,7 +10,7 @@ public class LuaTable {
 	private LuaTable forwardTable = null;
 	private final Map<Object, Object> pairs;
 	private LuaTable metatable;
-	
+
 	public LuaTable() {
 		pairs = new HashMap<>();
 	}
@@ -23,7 +24,7 @@ public class LuaTable {
 		if (LuaType.getTypeOf(key) == LuaType.NIL) {
 			throw new IllegalArgumentException();
 		}
-		
+
 		Object value = pairs.get(key);
 
 		if (value != null) {
@@ -90,7 +91,12 @@ public class LuaTable {
 
 		return (String) value;
 	}
-	
+
+	public Iterator<Object> getIterator() {
+		Iterator<Object> iter = pairs.keySet().iterator();
+		return iter;
+	}
+
 	public boolean isEmpty() {
 		return pairs.isEmpty();
 	}
@@ -99,7 +105,7 @@ public class LuaTable {
 		if (key == null || LuaType.getTypeOf(key) == null) {
 			throw new IllegalArgumentException();
 		}
-		
+
 		pairs.put(key, value);
 	}
 
