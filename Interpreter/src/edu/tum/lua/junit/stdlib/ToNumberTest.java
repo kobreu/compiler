@@ -36,7 +36,7 @@ public class ToNumberTest {
 
 		l = new LinkedList<Object>();
 		l.add("Hello123");
-		assertEquals("Translating a false String", null, (double) p.apply(l).get(0));
+		assertEquals("Translating a false String", null, p.apply(l).get(0));
 
 		l = new LinkedList<Object>();
 		l.add("FF");
