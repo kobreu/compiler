@@ -10,11 +10,15 @@ import edu.tum.lua.types.LuaType;
 
 public class ToNumber extends LuaFunctionNative {
 
-	LuaType[][] expectedTypes = { { LuaType.STRING, LuaType.NUMBER }, { LuaType.NUMBER } };
+	LuaType[][] expectedTypesOne = { { LuaType.STRING, LuaType.NUMBER } };
+	LuaType[][] expectedTypesTwo = { { LuaType.STRING, LuaType.NUMBER }, { LuaType.NUMBER } };
 
 	@Override
 	public List<Object> apply(List<Object> arguments) {
-		Preconditions.checkArguments("tonumber", arguments, expectedTypes);
+		if (arguments.size() == 1)
+			Preconditions.checkArguments("tonumber", arguments, expectedTypesOne);
+		else
+			Preconditions.checkArguments("tonumber", arguments, expectedTypesTwo);
 
 		List<Object> list = new LinkedList<Object>();
 		Object o = arguments.get(0);

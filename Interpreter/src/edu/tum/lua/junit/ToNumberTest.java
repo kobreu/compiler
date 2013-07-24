@@ -28,7 +28,7 @@ public class ToNumberTest {
 		}
 
 		l.add("1234");
-		assertEquals("Translating a true int String", 1234, (int) p.apply(l).get(0));
+		assertEquals("Translating a true int String", 1234, (int) Math.ceil((double) p.apply(l).get(0)));
 
 		l = new LinkedList<Object>();
 		l.add("42.21");
