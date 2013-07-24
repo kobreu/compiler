@@ -38,7 +38,25 @@ public class ToNumberTest {
 		l.add("Hello123");
 		assertEquals("Translating a false String", null, (double) p.apply(l).get(0));
 
-		// TODO Test for base argument not completed yet
+		l = new LinkedList<Object>();
+		l.add("FF");
+		l.add(new Integer(16));
+		assertEquals("Translating a String, Base", 255, (int) Math.ceil((double) p.apply(l).get(0)));
+
+		l = new LinkedList<Object>();
+		l.add("10");
+		l.add(new Integer(16));
+		assertEquals("Translating a String, Base", 10, (int) Math.ceil((double) p.apply(l).get(0)));
+
+		l = new LinkedList<Object>();
+		l.add(new Integer(10));
+		l.add(new Integer(16));
+		assertEquals("Translating a Number, Base", 10, (int) Math.ceil((double) p.apply(l).get(0)));
+
+		l = new LinkedList<Object>();
+		l.add(new Integer(10));
+		l.add(new Integer(5));
+		assertEquals("Translating a Number, Base < Number", null, (double) p.apply(l).get(0));
 	}
 
 }
