@@ -18,26 +18,20 @@ Stat ::= {Asm} 				VarList:varlist ExpList:explist
 		| {IfThenElse} 		Exp:ifexp Block:thenblock Block:elseblock
 		| {ForExp} 			"String":ident Exp:start Exp:end Exp:step Block:block
 		| {ForIn} 			NameList:namelist ExpList:explist Block:block
-		| {FunctionDef} 	FuncName:name FuncBody:body
-		| {LocalFuncDef} 	"String":ident FuncBody:body
+		| {FunctionDef} 	"String":ident NameList:members NameList:args "boolean":varargs Block:block
+		| {LocalFuncDef} 	"String":ident NameList:args "boolean":varargs Block:block
 		| {LocalDecl} 		NameList:namelist ExpList:explist
 
 Exp ::=  {Nil} 
 		| {BooleanExp} "boolean":value  
-		| {Number} 	"double":number
-		| {TextExp} Text:text
+		| {NumberExp} 	"double":number
+		| {TextExp} "String":text
 		| {Dots} "String":dots
-		| {FunctionExp} Function:function 	
+		| {Closure} NameList:args "boolean":varargs Block:block 	
 		| {PreExp} PrefixExp:preexp
-		| {TableConstructor} FieldList:fieldlist
+		| {TableConstructorExp} TableConstructor:tablecons
 		| {Binop} Exp:leftexp "int":op Exp:rightexp
 		| {Unop} "int":op Exp:exp 
-
-FuncName ::= "String":ident MemberList:members "String":method
-
-MemberList ::= Member*
-
-Member ::= "String":member
 
 VarList ::= Var*
 
@@ -54,28 +48,19 @@ PrefixExp ::= 	{PrefixExpVar} Var:var
 				| {PrefixExpFuncCall} FunctionCall:call 
 				| {PrefixExpExp} Exp:exp
 
-
-Args ::=  {ArgsExpList} ExpList:explist
-		| {ArgsTableConst} FieldList:fieldlist 
-		| {ArgsText} Text:text 
-
-FunctionCall ::=  PrefixExp:preexp Args:args
+FunctionCall ::=  PrefixExp:preexp ExpList:explist
 		
-Text ::= "String":text
 
-Function ::= Function:func FuncBody:body
 
-FuncBody ::= ParList:parlist Block:block
-
-ParList ::= NameList:namelist "String":dots
+TableConstructor ::= FieldList:fieldlist
 
 Field ::= 	{FieldLRExp} Exp:leftexp Exp:rightexp 
-			| {FieldNameExp} Name:name Exp:exp 
+			| {FieldNameExp} "String":ident Exp:exp 
 			| {FieldExp} Exp:fieldexp
 
 FieldList ::= Field*
 	
-Op::= enum
+Op ::= enum
          ADD, SUB, MUL, DIV, POW, MOD, CONCAT, 
 		 LT, LE, GT, GE, EQ, NEQ, 
 		 AND, OR, UNM, NOT, LEN

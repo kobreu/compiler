@@ -1,1 +1,1 @@
-while false do a=1 end
+while true do a=1 end
