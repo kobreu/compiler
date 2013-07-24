@@ -7,18 +7,17 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import edu.tum.lua.stdlib.Next;
-import edu.tum.lua.stdlib.Pairs;
+import edu.tum.lua.stdlib.IPairs;
 import edu.tum.lua.types.LuaFunction;
 import edu.tum.lua.types.LuaTable;
 
-public class PairsTest {
+public class IPairsTest {
 
-	Pairs pairs;
+	IPairs ipairs;
 
 	@Before
 	public void setUp() throws Exception {
-		pairs = new Pairs();
+		ipairs = new IPairs();
 	}
 
 	@Test
@@ -26,24 +25,30 @@ public class PairsTest {
 
 		LuaTable table = new LuaTable();
 
-		// First return-value is the next() function
-		assertEquals((new Next()).getClass(), pairs.apply(table).get(0).getClass());
+		// First return-value is the private inext() function
 
 		// Second return-value is the same table
-		// TODO Did it get changed??
-		assertEquals(table, pairs.apply(table).get(1));
-
+		assertEquals(table, ipairs.apply(table).get(1));
 		// Third return-value is nil
-		assertEquals(null, pairs.apply(table).get(2));
+		assertEquals(null, ipairs.apply(table).get(2));
 
-		// Empty table returns nil
+		// Empty table
 		// > f, t, v = pairs({})
 		// > print(f(t,v)) >> nil
-		List<Object> returnList = pairs.apply(table);
+		List<Object> returnList = ipairs.apply(table);
 		LuaFunction returnFunction = (LuaFunction) returnList.get(0);
 		LuaTable returnTable = (LuaTable) returnList.get(1);
 		Object returnObject = returnList.get(2);
-		assertEquals(null, returnFunction.apply(returnTable, returnObject));
+
+		// TODO write some more testcases
+		// for example
+
+		// {[1] = "one"}
+		// {["1"] = "one"}
+		// {[0] = "zero", [1] = "one"}
+		// {[0] = "zero", [1] = "one", [2] = "two"}
+		// {[0] = "zero", [1] = "one", [2] = "two", [4] = "four"}
 
 	}
+
 }
