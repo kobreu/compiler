@@ -38,7 +38,7 @@ public class TestXMLSerializer extends XMLTestCase {
 	public void testSerialize() throws TransformerException {
 		Chunk chunk = new Chunk(new StatList(), new LastReturn(new ExpList(
 				new Unop(Op.UNM, new NumberExp(1.0)))));
-
+		
 		XMLSerializer serializer = new XMLSerializer();
 
 		Document doc = serializer.serialize(chunk);

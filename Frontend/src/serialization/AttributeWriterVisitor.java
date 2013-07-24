@@ -5,8 +5,15 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 import edu.tum.lua.ast.Binop;
+import edu.tum.lua.ast.Closure;
+import edu.tum.lua.ast.Dots;
+import edu.tum.lua.ast.FieldNameExp;
+import edu.tum.lua.ast.FunctionDef;
+import edu.tum.lua.ast.LocalFuncDef;
+import edu.tum.lua.ast.Name;
 import edu.tum.lua.ast.NumberExp;
 import edu.tum.lua.ast.Op;
+import edu.tum.lua.ast.TextExp;
 import edu.tum.lua.ast.Unop;
 import edu.tum.lua.ast.Variable;
 import edu.tum.lua.ast.VisitorAdaptor;
@@ -65,10 +72,53 @@ public class AttributeWriterVisitor extends VisitorAdaptor {
 	}
 	
 	public void visit(NumberExp numberExp) {
-		addAttr("value", String.valueOf(numberExp.number));
+		addAttr("number", String.valueOf(numberExp.number));
 	}
 	
 	public void visit(Variable var) {
-		addAttr("name", var.var);
+		addAttr("var", var.var);
+	}
+	
+	@Override
+	public void visit(Closure closure) {
+		addAttr("varargs", String.valueOf(closure.varargs));
+	}
+	
+	@Override
+	public void visit(Dots dots) {
+		addAttr("dots", dots.dots);
+	}
+	
+	@Override
+	public void visit(FieldNameExp fieldNameExp) {
+		addAttr("ident", fieldNameExp.ident);
+	}
+	
+	@Override
+	public void visit(FunctionDef functionDef) {
+		addAttr("ident", functionDef.ident);
+		addAttr("varargs", String.valueOf(functionDef.varargs));
+	}
+	
+	@Override
+	public void visit(LocalFuncDef localFuncDef) {
+		addAttr("ident", localFuncDef.ident);
+		addAttr("varargs", String.valueOf(localFuncDef.varargs));
+	}	
+	
+	@Override
+	public void visit(Name name) {
+		addAttr("name", name.name);
+	}
+	
+	@Override
+	public void visit(TextExp textExp) {
+		addAttr("text", textExp.text);
+	}
+
+	@Override
+	public void visit() {
+		// TODO Auto-generated method stub
+		super.visit();
 	}
 }
