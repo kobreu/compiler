@@ -30,10 +30,6 @@ public class ToStringTest {
 		assertEquals("Translating a String", "Hello World", (String) p.apply(l).get(0));
 
 		l = new LinkedList<Object>();
-		l.add(new Integer(5));
-		assertEquals("Translating a Integer", "5", (String) p.apply(l).get(0));
-
-		l = new LinkedList<Object>();
 		l.add(new Double(2.5));
 		assertEquals("Translating a Double", Double.toString(new Double(2.5)), (String) p.apply(l).get(0));
 
@@ -45,8 +41,10 @@ public class ToStringTest {
 		l.add(null);
 		assertEquals("Translating a nil", "nil", (String) p.apply(l).get(0));
 
-		// TODO Check for Function, table --> How to implement the Lua-id? is
-		// this the Object-Id in Java
+		l = new LinkedList<Object>();
+		l.add("Hello World");
+		l.add("fail");
+		assertEquals("Translating a String", "Hello World", (String) p.apply(l).get(0));
 	}
 
 }

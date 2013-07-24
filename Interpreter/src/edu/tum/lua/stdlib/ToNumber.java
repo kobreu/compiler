@@ -15,15 +15,12 @@ public class ToNumber extends LuaFunctionNative {
 
 	@Override
 	public List<Object> apply(List<Object> arguments) {
-		if (arguments.size() == 1)
-			Preconditions.checkArguments("tonumber", arguments, expectedTypesOne);
-		else
-			Preconditions.checkArguments("tonumber", arguments, expectedTypesTwo);
-
 		List<Object> list = new LinkedList<Object>();
 		Object o = arguments.get(0);
 
 		if (arguments.size() == 1) {
+			Preconditions.checkArguments("tonumber", arguments, expectedTypesOne);
+
 			switch (LuaType.getTypeOf(o)) {
 			case NUMBER:
 				list.add(o);
@@ -40,28 +37,34 @@ public class ToNumber extends LuaFunctionNative {
 			}
 
 			return list;
-		}
+		} else {
+			Preconditions.checkArguments("tonumber", arguments, expectedTypesTwo);
 
-		Object b = arguments.get(1);
+			Double b = (Double) arguments.get(1);
 
-		if (LuaType.getTypeOf(b) != LuaType.NUMBER || (int) b >= 36 || (int) b <= 2) {
-			throw new LuaRuntimeException("base expected as Number between 2 and 36");
-		}
+			if (b.intValue() > 36 || b.intValue() < 2) {
+				throw new LuaRuntimeException("base expected as Number between 2 and 36");
+			}
 
-		if (LuaType.getTypeOf(o) == LuaType.NUMBER) {
-			return this.apply(Double.toString((double) o), b);
-		}
+			if (LuaType.getTypeOf(o) == LuaType.NUMBER) {
+				return this.apply(Integer.toString(((Double) o).intValue()), b);
+			}
 
-		if (LuaType.getTypeOf(o) != LuaType.STRING) {
-			list.add(null);
+			if (LuaType.getTypeOf(o) != LuaType.STRING) {
+
+				list.add(null);
+				return list;
+			}
+
+			try {
+				System.out.println((String) o);
+				System.out.println(b.intValue());
+				Integer i = Integer.parseInt((String) o, b.intValue());
+				list.add(new Double(i.intValue()));
+			} catch (NumberFormatException e) {
+				list.add(null);
+			}
 			return list;
 		}
-
-		try {
-			list.add(new Double(Integer.parseInt((String) o, (int) b)));
-		} catch (NumberFormatException e) {
-			list.add(null);
-		}
-		return list;
 	}
 }

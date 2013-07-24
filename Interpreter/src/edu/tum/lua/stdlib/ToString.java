@@ -10,8 +10,7 @@ import edu.tum.lua.types.LuaType;
 
 public class ToString extends LuaFunctionNative {
 
-	LuaType[][] expectedTypes = { { LuaType.NUMBER, LuaType.NIL, LuaType.BOOLEAN, LuaType.FUNCTION, LuaType.STRING,
-			LuaType.TABLE } };
+	LuaType[][] expectedTypes = { null };
 
 	@Override
 	public List<Object> apply(List<Object> arguments) {
@@ -42,5 +41,9 @@ public class ToString extends LuaFunctionNative {
 		default:
 			throw new LuaRuntimeException("unknown Object");
 		}
+	}
+
+	protected String handlerName() {
+		return "__tostring";
 	}
 }
