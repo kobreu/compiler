@@ -20,17 +20,17 @@ public class ToNumber extends LuaFunctionNative {
 		Object o = arguments.get(0);
 
 		if (arguments.size() == 1) {
-			switch (enum LuaType.getTypeOf(o)) {
-			case LuaType.NUMBER:
+			switch (LuaType.getTypeOf(o)) {
+			case NUMBER:
 				list.add(o);
 				break;
-			case LuaType.STRING:
+			case STRING:
 				list.add(new Double(Double.parseDouble((String) o)));
 				break;
 			default:
 				list.add(null);
 			}
-			
+
 			return list;
 		}
 
@@ -48,7 +48,7 @@ public class ToNumber extends LuaFunctionNative {
 			list.add(null);
 			return list;
 		}
-		
+
 		list.add(new Double(Integer.parseInt((String) o, (int) b)));
 		return list;
 	}
