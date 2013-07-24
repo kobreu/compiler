@@ -8,7 +8,7 @@ import java.util.List;
 import edu.tum.lua.Environment;
 import edu.tum.lua.LuaInterpreter;
 import edu.tum.lua.ast.Chunk;
-import edu.tum.lua.ast.Function;
+import edu.tum.lua.ast.FunctionDef;
 
 public class LuaFunctionInterpreted implements LuaFunction {
 
@@ -16,10 +16,10 @@ public class LuaFunctionInterpreted implements LuaFunction {
 	private final List<String> argumentNames;
 	private final Chunk chunk;
 
-	public LuaFunctionInterpreted(Function node, Environment e) {
+	public LuaFunctionInterpreted(FunctionDef node, Environment e) {
 		environment = e;
-		argumentNames = convert(node.body.parlist.namelist);
-		chunk = node.body.block.chunk;
+		argumentNames = convert(node.args);
+		chunk = node.block.chunk;
 	}
 
 	@Override

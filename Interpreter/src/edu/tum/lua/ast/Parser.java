@@ -8,7 +8,7 @@ public class Parser {
 	 * Should parse the string of Lua Code and transform it into an AST, and
 	 * throw an error if there is a problem of syntax.
 	 */
-	public static Function parseString(String s) throws LuaRuntimeException {
+	public static FunctionDef parseString(@SuppressWarnings("unused") String s) throws LuaRuntimeException {
 		throw new LuaRuntimeException("not yet implemented");
 	}
 
