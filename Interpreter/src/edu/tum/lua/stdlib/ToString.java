@@ -10,7 +10,8 @@ import edu.tum.lua.types.LuaType;
 
 public class ToString extends LuaFunctionNative {
 
-	LuaType[][] expectedTypes = { null };
+	LuaType[][] expectedTypes = { { LuaType.NUMBER, LuaType.NIL, LuaType.BOOLEAN, LuaType.FUNCTION, LuaType.STRING,
+			LuaType.TABLE } };
 
 	@Override
 	public List<Object> apply(List<Object> arguments) {

@@ -49,6 +49,11 @@ public class ToNumberTest {
 		assertEquals("Translating a String, Base", 10, (int) Math.ceil((double) p.apply(l).get(0)));
 
 		l = new LinkedList<Object>();
+		l.add("Z");
+		l.add(new Integer(36));
+		assertEquals("Translating a String, Base", 35, (int) Math.ceil((double) p.apply(l).get(0)));
+
+		l = new LinkedList<Object>();
 		l.add(new Integer(10));
 		l.add(new Integer(16));
 		assertEquals("Translating a Number, Base", 10, (int) Math.ceil((double) p.apply(l).get(0)));

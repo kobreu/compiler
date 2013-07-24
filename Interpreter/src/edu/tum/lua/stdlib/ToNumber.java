@@ -29,7 +29,11 @@ public class ToNumber extends LuaFunctionNative {
 				list.add(o);
 				break;
 			case STRING:
-				list.add(new Double(Double.parseDouble((String) o)));
+				try {
+					list.add(new Double(Double.parseDouble((String) o)));
+				} catch (NumberFormatException e) {
+					list.add(null);
+				}
 				break;
 			default:
 				list.add(null);
@@ -53,7 +57,11 @@ public class ToNumber extends LuaFunctionNative {
 			return list;
 		}
 
-		list.add(new Double(Integer.parseInt((String) o, (int) b)));
+		try {
+			list.add(new Double(Integer.parseInt((String) o, (int) b)));
+		} catch (NumberFormatException e) {
+			list.add(null);
+		}
 		return list;
 	}
 }
