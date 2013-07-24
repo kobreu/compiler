@@ -37,8 +37,6 @@ Id = [_a-zA-Z]+[_0-9a-zA-Z]*
 
 Number = (0 | [1-9][0-9]*) ("."[0-9]+)?
 
-new_line = \r|\n|\r\n;
-
 line_terminator = \r|\n|\r\n
 
 input_character = [^\r\n]
