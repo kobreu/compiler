@@ -82,10 +82,10 @@ non terminal FuncBody funcbody;
 non terminal ParList parlist;
 non terminal TableConstructor tableconstructor;
 non terminal FieldList fieldlist;
-non terminal Field field;
-non terminal FieldSep fieldsep;
-non terminal BinOp binop;
-non terminal UnOp unop;
+non terminal  field;
+non terminal  fieldsep;
+non terminal  binop;
+non terminal  unop;
 non terminal optsemi, empty, optws, optforexp, optexplist, optasm, optdotname, optcolonname, optvarlist;
 
 
@@ -292,8 +292,8 @@ fieldlist		 ::=    field:f
 
 field			 ::=	LBRACK exp:e RPAREN ASM exp:e1
 						{: RESULT = new FieldLRExp(e,e1); :}
-						| ID:id ASM exp:e
-						{: RESULT = new FieldNameExp(id,e); :}
+						| TEXT:txt ASM exp:e
+						{: RESULT = new FieldNameExp(txt,e); :}
 						| exp:e
 						{: RESULT = new FieldExp(e); :}
 						;		
@@ -302,44 +302,44 @@ fieldsep		::= 	COM
 						| SEMI
 						;
 					
-binop			::=		ADD:op
-						{: RESULT = op.intValue(); :}
-						| SUB:op
-						{: RESULT = op.intValue();; :}
-						| MUL:op
-						{: RESULT = op.intValue();; :}
-						| DIV:op
-						{: RESULT = op.intValue();; :}
-						| MOD:op
-						{: RESULT = op.intValue();; :}
-						| POW:op
-						{: RESULT = op.intValue();; :}
-						| CONCAT:op
-						{: RESULT = op.intValue();; :}
-						| EQ:op
-						{: RESULT = op.intValue();; :}
-						| LEQ:op
-						{: RESULT = op.intValue();; :}
-						| NEQ:op
-						{: RESULT = op.intValue();; :}
-						| LE:op
-						{: RESULT = op.intValue();; :}
-						| GR:op
-						{: RESULT = op.intValue();; :}
-						| GEQ:op
-						{: RESULT = op.intValue();; :}
-						| AND:op
-						{: RESULT = op.intValue();; :}
-						| OR:op
-						{: RESULT = op.intValue();; :}
+binop			::=		ADD
+						{: RESULT = Op.ADD; :}
+						| SUB
+						{: RESULT = Op.SUB; :}
+						| MUL
+						{: RESULT = Op.MUL; :}
+						| DIV
+						{: RESULT = Op.DIV; :}
+						| MOD
+						{: RESULT = Op.MOD; :}
+						| POW
+						{: RESULT = Op.POW; :}
+						| CONCAT
+						{: RESULT = Op.CONCAT; :}
+						| EQ
+						{: RESULT = Op.EQ; :}
+						| LEQ
+						{: RESULT = Op.LE; :}
+						| NEQ
+						{: RESULT = Op.NEQ; :}
+						| LE
+						{: RESULT = Op.LT; :}
+						| GR
+						{: RESULT = Op.GT; :}
+						| GEQ
+						{: RESULT = Op.GE; :}
+						| AND
+						{: RESULT = Op.AND; :}
+						| OR
+						{: RESULT = Op.OR; :}
 						;
 						
-unop			::=		SUB:op
-						{: RESULT = op.intValue();; :}
-						| NOT:op 
-						{: RESULT = op.intValue();; :}
-						| LENGTH:op
-						{: RESULT = op.intValue();; :}
+unop			::=		SUB
+						{: RESULT = Op.UNM; :}
+						| NOT
+						{: RESULT = Op.NOT; :}
+						| LENGTH
+						{: RESULT = Op.LEN; :}
 						;
 								
 					
