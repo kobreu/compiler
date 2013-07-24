@@ -7,11 +7,11 @@ public enum LuaType {
 		if (object == null) {
 			return NIL;
 		}
-		
+
 		if (object instanceof Boolean) {
 			return BOOLEAN;
 		}
-		
+
 		if (object instanceof LuaFunction) {
 			return FUNCTION;
 		}
@@ -19,7 +19,7 @@ public enum LuaType {
 		if (object instanceof Double) {
 			return NUMBER;
 		}
-		
+
 		if (object instanceof String) {
 			return STRING;
 		}
@@ -27,8 +27,8 @@ public enum LuaType {
 		if (object instanceof LuaTable) {
 			return TABLE;
 		}
-		
-		return null;
+
+		throw new IllegalArgumentException("Expected Lua Type, got " + object.getClass().toString());
 	}
 
 	String id;
