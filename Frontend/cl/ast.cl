@@ -24,8 +24,8 @@ Stat ::= {Asm} 				VarList:varlist ExpList:explist
 
 Exp ::=  {Nil} 
 		| {BooleanExp} "boolean":value  
-		| {Number} 	"double":number
-		| {TextExp} Text:text
+		| {NumberExp} 	"double":number
+		| {TextExp} "String":text
 		| {Dots} "String":dots
 		| {Closure} NameList:args "boolean":varargs Block:block 	
 		| {PreExp} PrefixExp:preexp
@@ -50,7 +50,7 @@ PrefixExp ::= 	{PrefixExpVar} Var:var
 
 FunctionCall ::=  PrefixExp:preexp ExpList:explist
 		
-Text ::= "String":text
+
 
 TableConstructor ::= FieldList:fieldlist
 
