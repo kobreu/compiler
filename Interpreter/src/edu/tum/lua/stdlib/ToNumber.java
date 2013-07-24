@@ -10,16 +10,22 @@ import edu.tum.lua.types.LuaType;
 
 public class ToNumber extends LuaFunctionNative {
 
-	LuaType[][] expectedTypesOne = { { LuaType.STRING, LuaType.NUMBER } };
-	LuaType[][] expectedTypesTwo = { { LuaType.STRING, LuaType.NUMBER }, { LuaType.NUMBER } };
+	LuaType[][] expectedTypes = { { LuaType.STRING, LuaType.NUMBER }, { null, LuaType.NUMBER } };
+
+	// LuaType[][] expectedTypesOne = { { LuaType.STRING, LuaType.NUMBER } };
+	// LuaType[][] expectedTypesTwo = { { LuaType.STRING, LuaType.NUMBER }, {
+	// LuaType.NUMBER } };
 
 	@Override
 	public List<Object> apply(List<Object> arguments) {
+		Preconditions.checkArguments("tonumber", arguments, expectedTypes);
+
 		List<Object> list = new LinkedList<Object>();
 		Object o = arguments.get(0);
 
 		if (arguments.size() == 1) {
-			Preconditions.checkArguments("tonumber", arguments, expectedTypesOne);
+			// Preconditions.checkArguments("tonumber", arguments,
+			// expectedTypesOne);
 
 			switch (LuaType.getTypeOf(o)) {
 			case NUMBER:
@@ -38,7 +44,8 @@ public class ToNumber extends LuaFunctionNative {
 
 			return list;
 		} else {
-			Preconditions.checkArguments("tonumber", arguments, expectedTypesTwo);
+			// Preconditions.checkArguments("tonumber", arguments,
+			// expectedTypesTwo);
 
 			Double b = (Double) arguments.get(1);
 
@@ -57,8 +64,6 @@ public class ToNumber extends LuaFunctionNative {
 			}
 
 			try {
-				System.out.println((String) o);
-				System.out.println(b.intValue());
 				Integer i = Integer.parseInt((String) o, b.intValue());
 				list.add(new Double(i.intValue()));
 			} catch (NumberFormatException e) {

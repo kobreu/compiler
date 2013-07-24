@@ -33,7 +33,8 @@ public final class Preconditions {
 			int pos = typeIterator.nextIndex() + 1;
 			LuaType[] types = typeIterator.next();
 			/*
-			 * Begin Edit
+			 * now accepts { {specialTypes}, null as all types, {null as
+			 * optional argument, specialType } }
 			 */
 			if (argsIterator.hasNext()) {
 				LuaType argsType = LuaType.getTypeOf(argsIterator.next());

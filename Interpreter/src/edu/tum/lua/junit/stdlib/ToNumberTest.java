@@ -16,7 +16,6 @@ public class ToNumberTest {
 		LinkedList<Object> l;
 
 		l = new LinkedList<Object>();
-
 		try {
 			p.apply(l);
 			fail("Accept empty input");
@@ -64,6 +63,16 @@ public class ToNumberTest {
 		l.add("F");
 		l.add(new Double(5));
 		assertEquals("Translating a Number, Base < Number", null, p.apply(l).get(0));
+
+		l = new LinkedList<Object>();
+		l.add("123");
+		l.add(new Boolean(true));
+		try {
+			p.apply(l);
+			fail("Accept boolean base");
+		} catch (Exception e) {
+			assertTrue("Don't accept boolean base", true);
+		}
 	}
 
 }
