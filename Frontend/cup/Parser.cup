@@ -41,6 +41,9 @@ parser code {:
   }
 :}; 
 
+action code {:
+	private boolean vaargs = false;
+:};
 
 
 
@@ -141,8 +144,8 @@ stat        	::=     varlist:vl ASM explist:el
 						| FUNC ID:id optdotname:dots optcolonname:col funcname:fn funcbody:fb
 						{: RESULT = new FunctionDef(fn,fb); :}
 					
-						| LOCAL FUNC ID:id LPAREN args:ag varags:va RPAREN funcbody:fb
-						{: RESULT = new LocalFuncDef(id, ag, ?, fb); :}
+						| LOCAL FUNC ID:id LPAREN args:ag RPAREN funcbody:fb
+						{: RESULT = new LocalFuncDef(id, ag, vaargs, fb); :}
 					
 						| LOCAL namelist:nl optasm:oel
 						{: RESULT = new LocalDecl(nl,oel); :}
@@ -153,12 +156,12 @@ args 			::=		ID:id COM args:a
 						   RESULT = a; :}
 						| ID:id
 						{: RESULT = new NameList(id); :}
+						| PARAMS	
+						{: vaargs = true; 
+						  RESULT = new NameList(); :}
 						| empty
 						{: RESULT = new NameList(); :}
 						;
-						
-vargs			::=		PARAMS
-						| empty
 				
 					
 optdotname		::= 	DOT ID:id optdotname:dots
