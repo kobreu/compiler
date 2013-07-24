@@ -10,14 +10,17 @@ public final class Preconditions {
 	private static String printTypes(LuaType[] types) {
 		StringBuilder builder = new StringBuilder();
 
-		for (int i = 0; i < types.length; i++) {
-			builder.append(types[i].toString());
+		if (types == null)
+			builder.append("any type");
+		else {
+			for (int i = 0; i < types.length; i++) {
+				builder.append(types[i].toString());
 
-			if (i < types.length - 1) {
-				builder.append(" or ");
+				if (i < types.length - 1) {
+					builder.append(" or ");
+				}
 			}
 		}
-
 		return builder.toString();
 	}
 
