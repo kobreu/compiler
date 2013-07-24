@@ -27,6 +27,7 @@ import edu.tum.lua.stdlib.Type;
 import edu.tum.lua.stdlib.Unpack;
 import edu.tum.lua.stdlib.VoidFunction;
 import edu.tum.lua.stdlib.table.Concat;
+import edu.tum.lua.stdlib.table.MaxN;
 import edu.tum.lua.types.LuaTable;
 
 public class Environment extends LuaTable {
