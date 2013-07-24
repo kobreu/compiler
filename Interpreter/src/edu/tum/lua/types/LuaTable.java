@@ -6,18 +6,17 @@ import java.util.Map;
 
 public class LuaTable {
 
-	private LuaFunction forwardFunction = null;
-	private LuaTable forwardTable = null;
 	private final Map<Object, Object> pairs;
 	private LuaTable metatable;
 
 	public LuaTable() {
 		pairs = new HashMap<>();
+		metatable = null;
 	}
 
 	public LuaTable(LuaTable table) {
 		this();
-		forwardTable = table;
+		setIndex(table);
 	}
 
 	public Object get(Object key) {
@@ -31,12 +30,18 @@ public class LuaTable {
 			return value;
 		}
 
-		if (forwardTable != null) {
-			return forwardTable.get(key);
-		}
+		if (metatable != null) {
+			Object __index = metatable.get("__index");
 
-		if (forwardFunction != null) {
-			return forwardFunction.apply(key).get(0);
+			if (LuaType.getTypeOf(__index) == LuaType.TABLE) {
+				return ((LuaTable) __index).get(key);
+			} else if (LuaType.getTypeOf(__index) == LuaType.FUNCTION) {
+				return ((LuaFunction) __index).apply(key).get(0);
+			} else if (LuaType.getTypeOf(__index) == LuaType.NIL) {
+				return null;
+			} else {
+				throw new RuntimeException("Not supported yet: " + LuaType.getTypeOf(__index));
+			}
 		}
 
 		return null;
@@ -110,13 +115,19 @@ public class LuaTable {
 	}
 
 	public void setIndex(LuaFunction function) {
-		forwardFunction = function;
-		forwardTable = null;
+		if (metatable == null) {
+			throw new IllegalStateException();
+		}
+
+		metatable.set("__index", function);
 	}
 
 	public void setIndex(LuaTable table) {
-		forwardFunction = null;
-		forwardTable = table;
+		if (metatable == null) {
+			throw new IllegalStateException();
+		}
+
+		metatable.set("__index", table);
 	}
 
 	public void unset(Object key) {

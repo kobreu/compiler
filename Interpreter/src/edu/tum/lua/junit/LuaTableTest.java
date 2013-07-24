@@ -109,6 +109,8 @@ public class LuaTableTest {
 	public void testSetIndex() {
 		LuaTable t1 = new LuaTable();
 		LuaTable t2 = new LuaTable();
+
+		t1.setMetatable(new LuaTable());
 		t1.setIndex(t2);
 
 		t1.set("t1", 1.0);
