@@ -13,7 +13,7 @@ import edu.tum.lua.LuaRuntimeException;
 import edu.tum.lua.types.LuaFunctionNative;
 import edu.tum.lua.types.LuaType;
 
-public class Loadfile extends LuaFunctionNative {
+public class LoadFile extends LuaFunctionNative {
 
 	@Override
 	public List<Object> apply(List<Object> arguments) {
@@ -41,7 +41,7 @@ public class Loadfile extends LuaFunctionNative {
 			inputReader.close();
 		} catch (IOException e) {
 		}
-		Loadstring l = new Loadstring();
+		LoadString l = new LoadString();
 		return l.apply(result);
 	}
 

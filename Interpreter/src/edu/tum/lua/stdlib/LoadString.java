@@ -12,7 +12,7 @@ import edu.tum.lua.types.LuaFunctionInterpreted;
 import edu.tum.lua.types.LuaFunctionNative;
 import edu.tum.lua.types.LuaType;
 
-public class Loadstring extends LuaFunctionNative {
+public class LoadString extends LuaFunctionNative {
 
 	LuaType[][] expectedTypes = { { LuaType.STRING } };
 

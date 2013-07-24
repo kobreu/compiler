@@ -10,7 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import edu.tum.lua.LuaRuntimeException;
-import edu.tum.lua.stdlib.ExampleStdlibFunction;
+import edu.tum.lua.stdlib.VoidFunction;
 import edu.tum.lua.types.LuaFunction;
 import edu.tum.lua.types.LuaFunctionNative;
 import edu.tum.lua.types.LuaTable;
@@ -57,7 +57,7 @@ public class LuaTableTest {
 		assertEquals(null, emptyTable.get(tmpTable));
 
 		// Function
-		LuaFunction tmpFunction = new ExampleStdlibFunction();
+		LuaFunction tmpFunction = new VoidFunction();
 		table.set(tmpFunction, "value5");
 		assertEquals("value5", table.get(tmpFunction));
 		assertEquals(null, emptyTable.get(tmpFunction));
@@ -71,7 +71,7 @@ public class LuaTableTest {
 
 	@Test
 	public void testSetGetLuaFunction() {
-		LuaFunction f = new ExampleStdlibFunction();
+		LuaFunction f = new VoidFunction();
 		table.set("a", f);
 		assertEquals(f, table.getLuaFunction("a"));
 	}

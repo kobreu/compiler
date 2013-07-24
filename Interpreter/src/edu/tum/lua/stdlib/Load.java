@@ -29,7 +29,7 @@ public class Load extends LuaFunctionNative {
 			iter = f.apply(Collections.emptyList());
 		}
 
-		Loadstring l = new Loadstring();
+		LoadString l = new LoadString();
 		return l.apply(result);
 	}
 

@@ -7,13 +7,13 @@ import org.junit.Test;
 import edu.tum.lua.operator.logical.AndOperator;
 import edu.tum.lua.operator.logical.NotOperator;
 import edu.tum.lua.operator.logical.OrOperator;
-import edu.tum.lua.stdlib.ExampleStdlibFunction;
+import edu.tum.lua.stdlib.VoidFunction;
 import edu.tum.lua.types.LuaTable;
 
 public class LogicalOperatorTest {
 
 	private final Object[] falseObjects = { null, false };
-	private final Object[] trueObjects = { "a", new LuaTable(), new ExampleStdlibFunction(), 1.0, true };
+	private final Object[] trueObjects = { "a", new LuaTable(), new VoidFunction(), 1.0, true };
 
 	@Test
 	public void testAnd() {

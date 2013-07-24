@@ -6,7 +6,7 @@ import java.util.LinkedList;
 
 import org.junit.Test;
 
-import edu.tum.lua.stdlib.ExampleStdlibFunction;
+import edu.tum.lua.stdlib.VoidFunction;
 import edu.tum.lua.stdlib.Print;
 import edu.tum.lua.types.LuaTable;
 
@@ -22,7 +22,7 @@ public class PrintTest {
 		l.add(null);
 		l.add(true);
 		l.add(new LuaTable());
-		l.add(new ExampleStdlibFunction());
+		l.add(new VoidFunction());
 		LinkedList<Object> l1 = new LinkedList<Object>();
 
 		assertNull(p.apply(l));

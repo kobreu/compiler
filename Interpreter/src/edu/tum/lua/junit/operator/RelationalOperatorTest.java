@@ -6,7 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import edu.tum.lua.operator.relational.EqOperator;
-import edu.tum.lua.stdlib.ExampleStdlibFunction;
+import edu.tum.lua.stdlib.VoidFunction;
 import edu.tum.lua.types.LuaFunction;
 import edu.tum.lua.types.LuaTable;
 
@@ -15,7 +15,7 @@ public class RelationalOperatorTest {
 	EqOperator eq;
 
 	private final Object[] luaObjects = { null, false, "a", 1.0, new LuaTable(),
-			new ExampleStdlibFunction() };
+			new VoidFunction() };
 
 	@Before
 	public void setUp() throws Exception {
@@ -39,8 +39,8 @@ public class RelationalOperatorTest {
 		assertEquals(false, eq.apply(t1, t2));
 
 		// Two functions
-		LuaFunction f1 = new ExampleStdlibFunction();
-		LuaFunction f2 = new ExampleStdlibFunction();
+		LuaFunction f1 = new VoidFunction();
+		LuaFunction f2 = new VoidFunction();
 		assertEquals(true, eq.apply(f1, f1));
 		assertEquals(false, eq.apply(f1, f2));
 

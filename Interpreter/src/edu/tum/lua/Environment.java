@@ -7,8 +7,14 @@ import edu.tum.lua.ast.Exp;
 import edu.tum.lua.stdlib.Assert;
 import edu.tum.lua.stdlib.Error;
 import edu.tum.lua.stdlib.GetMetatable;
+import edu.tum.lua.stdlib.IPairs;
+import edu.tum.lua.stdlib.Load;
+import edu.tum.lua.stdlib.LoadFile;
+import edu.tum.lua.stdlib.LoadString;
 import edu.tum.lua.stdlib.Next;
 import edu.tum.lua.stdlib.NotImplementedFunction;
+import edu.tum.lua.stdlib.PCall;
+import edu.tum.lua.stdlib.Pairs;
 import edu.tum.lua.stdlib.Print;
 import edu.tum.lua.stdlib.RawEqual;
 import edu.tum.lua.stdlib.RawGet;
@@ -19,6 +25,7 @@ import edu.tum.lua.stdlib.ToNumber;
 import edu.tum.lua.stdlib.ToString;
 import edu.tum.lua.stdlib.Type;
 import edu.tum.lua.stdlib.Unpack;
+import edu.tum.lua.stdlib.VoidFunction;
 import edu.tum.lua.types.LuaTable;
 
 public class Environment extends LuaTable {
@@ -34,19 +41,19 @@ public class Environment extends LuaTable {
 	 */
 	Environment() {
 		set("assert", new Assert());
-		set("collectgarbage", new NotImplementedFunction());
+		set("collectgarbage", new VoidFunction());
 		set("dofile", new NotImplementedFunction());
 		set("error", new Error());
 		set("_G", this);
 		set("getfenv", new NotImplementedFunction());
 		set("getmetatable", new GetMetatable());
-		set("ipairs", new NotImplementedFunction());
-		set("load", new NotImplementedFunction());
-		set("loadfile", new NotImplementedFunction());
-		set("loadstring", new NotImplementedFunction());
+		set("ipairs", new IPairs());
+		set("load", new Load());
+		set("loadfile", new LoadFile());
+		set("loadstring", new LoadString());
 		set("next", new Next());
-		set("pairs", new NotImplementedFunction());
-		set("pcall", new NotImplementedFunction());
+		set("pairs", new Pairs());
+		set("pcall", new PCall());
 		set("print", new Print());
 		set("rawequal", new RawEqual());
 		set("rawget", new RawGet());
