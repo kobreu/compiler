@@ -5,6 +5,7 @@ import static edu.tum.lua.Preconditions.checkArguments;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 
 import edu.tum.lua.LuaRuntimeException;
 import edu.tum.lua.types.LuaFunctionNative;
@@ -13,14 +14,12 @@ import edu.tum.lua.types.LuaType;
 
 public class Next extends LuaFunctionNative {
 
+	LuaType[][] expectedTypes = { { LuaType.TABLE } };
 	private Object index;
 	private LuaTable table;
-	private Iterator<Object> iter;
 
-	private Object nextindex;
-	private Object nextvalue;
-
-	LuaType[][] expectedTypes = { { LuaType.TABLE } };
+	private Iterator<Entry<Object, Object>> iter;
+	private Entry<Object, Object> nextEntry;
 
 	@Override
 	public List<Object> apply(List<Object> arguments) {
@@ -32,13 +31,10 @@ public class Next extends LuaFunctionNative {
 		checkArguments("next", arguments, expectedTypes);
 
 		table = (LuaTable) arguments.get(0);
-
 		// If the second argument is absent, then it is interpreted as nil.
-		if (arguments.size() != 2) {
-			index = null;
-		} else {
-			index = arguments.get(1);
-		}
+		index = (arguments.size() == 2) ? arguments.get(1) : null;
+
+		iter = table.getIterator();
 
 		// When called with nil as its second argument, next returns an initial
 		// index and its associated value
@@ -48,30 +44,26 @@ public class Next extends LuaFunctionNative {
 			if (!iter.hasNext()) {
 				return null;
 			}
-
-			nextindex = iter.next();
-			nextvalue = table.get(nextindex);
-
-			return Arrays.asList(nextindex, nextvalue);
+			nextEntry = iter.next();
+			return Arrays.asList(nextEntry.getKey(), nextEntry.getValue());
 		}
 
 		// Return next index and next associated value
 		while (iter.hasNext()) {
 
-			if (iter.next() == index) {
+			nextEntry = iter.next();
+
+			if (nextEntry.getKey().equals(index)) {
 				// When called with the last index, next returns nil.
 				if (!iter.hasNext()) {
 					return null;
 				}
-				nextindex = iter.next();
-				nextvalue = table.get(nextindex);
-				return Arrays.asList(nextindex, nextvalue);
+				nextEntry = iter.next();
+				return Arrays.asList(nextEntry.getKey(), nextEntry.getValue());
 			}
 
 		}
-
 		// If index is not valid throw error
 		throw new LuaRuntimeException("Invalid key for next");
-
 	}
 }

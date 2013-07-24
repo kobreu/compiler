@@ -1,13 +1,12 @@
 package edu.tum.lua.junit;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 import java.util.Arrays;
 
 import org.junit.Test;
 
-import edu.tum.lua.types.LuaFunctionNative;
+import edu.tum.lua.stdlib.Next;
 import edu.tum.lua.types.LuaTable;
 
 public class NextTest {
@@ -16,11 +15,13 @@ public class NextTest {
 	// TODO write Unit tests
 	// > next() >> exception
 
-	LuaFunctionNative next;
+	Next next;
 	LuaTable testTable;
 
 	@Test
 	public void testApplyListOfObject() {
+
+		next = new Next();
 
 		// > next({}) >> nil
 		assertEquals(null, next.apply(new LuaTable()));
@@ -42,7 +43,5 @@ public class NextTest {
 		// > next({[1] = 4, [2] = 5}, 1) >> 2,5 or nil
 		testTable.set(2.0, 5.0);
 		// TODO
-
-		fail("Not yet implemented");
 	}
 }

@@ -1,9 +1,9 @@
 package edu.tum.lua.types;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 public class LuaTable {
 
@@ -98,8 +98,8 @@ public class LuaTable {
 		return (String) value;
 	}
 
-	public Set<Entry<Object, Object>> getIterator() {
-		Set<Entry<Object, Object>> iter = pairs.entrySet();
+	public Iterator<Entry<Object, Object>> getIterator() {
+		Iterator<Entry<Object, Object>> iter = pairs.entrySet().iterator();
 		return iter;
 	}
 
