@@ -11,7 +11,7 @@ import edu.tum.lua.types.LuaTable;
 
 public class SetMetatableTest {
 
-	SetMetatable setMetatable;
+	private SetMetatable setMetatable;
 
 	@Before
 	public void setUp() {
