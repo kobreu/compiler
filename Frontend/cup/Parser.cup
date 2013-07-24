@@ -43,7 +43,7 @@ parser code {:
 
 action code {:
 	private boolean vaargs = false;
-:}
+:};
 
 
 
@@ -102,14 +102,18 @@ chunk 			::=      statlist:stats laststat:last
                  		{:  RESULT = new Chunk(stats, last); :}
                  		;
 
-statlist    	::=      stat:s SEMI statlist:stats 
+statlist    	::=      stat:s SEMI 
+						{:  System.out.println("Inside the single stat");
+						 	RESULT = new StatList(s); :}
+						|stat:s SEMI statlist:stats 
 						{:  stats.setElementAt(s,0);
 						 	RESULT = stats; :}
 						|  	stat:s WS statlist:stats 
 						{:  stats.setElementAt(s,0);
 							RESULT = stats; :}
 						| 	empty
-						{: 	RESULT = new StatList(); :}
+						{: 	System.out.println("Stat List created here");
+						RESULT = new StatList(); :}
 						
 						
                  	;
@@ -169,8 +173,8 @@ stat        	::=     varlist:vl ASM explist:el
 						| empty
 						{: RESULT = new NameList(); :}
 						;
-				*/
-/*
+				
+
 				
 					
 optdotname		::= 	DOT ID:id optdotname:dots
@@ -184,9 +188,9 @@ optcolonname	::=		DDOT ID:id
 						{: RESULT = new Name(id):}
 						| empty
 						{: RESULT = null:}
-						;*/
+						;
 					
-/*optforexp   	::=     COM exp:e {: RESULT =(Exp) e; :}				
+optforexp   	::=     COM exp:e {: RESULT =(Exp) e; :}				
 						| empty {: RESULT =(Exp) new NumberExp(1.0); :}
 						;*/
 
@@ -218,8 +222,8 @@ laststat		::=		RETURN optexplist:el {: RESULT = new LastReturn( (ExpList) el); :
 						{: RESULT = new Var(v); :}
 						| var:v COM varlist:vl
 						{: RESULT = new VarList(vl.add(id)); :}
-						;*/
-/*					
+						;
+				
 optvarlist 		::=		COM var:v optvarlist:ovl
 						{: RESULT = new VarList(ovl.add(id)); :}
 						| COM var:v

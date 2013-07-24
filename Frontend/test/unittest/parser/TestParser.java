@@ -2,15 +2,15 @@ package unittest.parser;
 
 import static org.junit.Assert.*;
 
-import org.custommonkey.xmlunit.XMLTestCase;
+
 import org.junit.Test;
 
-import serialization.XMLSerializer;
+
 import edu.tum.lua.ast.Chunk;
 import edu.tum.lua.parser.Lexer;
 import edu.tum.lua.parser.Parser;
 
-public class TestParser extends XMLTestCase {
+public class TestParser {
 
 	@Test
 	public void test() throws Exception {
