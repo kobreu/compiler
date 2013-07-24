@@ -32,4 +32,7 @@ public class AssertTest {
 	public void testApply() {
 		assertfunction.apply(false);
 	}
+
+	// TODO write assertfunction.apply(false, "message") and check if it returns
+	// message
 }
