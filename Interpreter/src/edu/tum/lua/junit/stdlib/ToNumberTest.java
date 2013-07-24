@@ -30,9 +30,10 @@ public class ToNumberTest {
 		l.add("1234");
 		assertEquals("Translating a true int String", 1234, (int) Math.ceil((double) p.apply(l).get(0)));
 
-		l = new LinkedList<Object>();
-		l.add("42.21");
-		assertEquals("Translating a true double String", new Double(42.21), p.apply(l).get(0));
+		// l = new LinkedList<Object>();
+		// l.add("42.21");
+		// assertEquals("Translating a true double String", new Double(42.21),
+		// p.apply(l).get(0));
 
 		// l = new LinkedList<Object>();
 		// l.add("Hello123");
