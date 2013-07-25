@@ -91,7 +91,7 @@ non terminal Field field;
 non terminal fieldsep;
 non terminal Integer binop;
 non terminal Integer unop;
-non terminal optsemi, empty, optws, optexplist, optasm, optdotname, optcolonname, optvarlist;
+non terminal optsemi, empty, optws, optasm, optexplist, optdotname, optcolonname, optvarlist;
 
 precedence left  ADD, MUL, SUB, DIV, MOD, POW, CONCAT, EQ, LEQ ,NEQ , LE, GR, GEQ, AND, OR;
 /* Grammar */
@@ -108,7 +108,7 @@ block 			::=     statlist:stats laststat:lstat
                  			System.out.println("Inside block with laststat");   
                  			RESULT = new Block(stats,lstat);  }
                  		:}
-                 	
+                 		| empty {: System.out.println("Inside empty block"); RESULT = new Block(null,null);; :}
                  		;
 
 	
@@ -131,7 +131,8 @@ statlist		::=		stat:s optsemi optws
 							RESULT = sl;
 							}
 						:}	
-									
+						
+								
 						;
 						
 						
@@ -149,6 +150,7 @@ stat        	::=    		varlist:vl ASM explist:el
 								System.out.println("Inside stat");
 								RESULT = new Asm(vl,el);
 						:}
+						
 						| 	DO WS block:b END 
 						{:    
 								System.out.println("Inside DO END");
@@ -167,7 +169,11 @@ stat        	::=    		varlist:vl ASM explist:el
 						:}
 						| FOR optws namelist:nl  IN optws explist:el optws DO optws block:b END
 						{: RESULT = new ForIn(nl,el,b); :}
+						| LOCAL namelist:nl optasm explist:el
+						{: RESULT = new LocalDecl(nl,el); :}
 						;
+						
+						
 						
 
 optelse			::= 	ELSE optws block:b {: RESULT = b; :}						
@@ -220,7 +226,7 @@ namelist    	::=    	ID:id optws
 							RESULT = nl;
 							} 
 						:} 
-						| empty												
+																	
 						;
 						
 var				::=		ID:id
@@ -248,6 +254,10 @@ exp				::=		NIL
 						| unop:uop exp:e
 						{: RESULT = new Unop(uop,e); :}
 						;	
+
+	
+			
+
 
 binop			::=		ADD
 						{: RESULT = Op.ADD; :}
@@ -289,7 +299,7 @@ unop			::=		SUB
 						{: RESULT = Op.LEN; :}
 						;
 								
-
+optasm			::= 	ASM	  | empty;
 						
 optsemi			::= 	SEMI  | empty ;
 
