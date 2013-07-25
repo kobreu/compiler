@@ -105,7 +105,6 @@ public class Environment extends LuaTable {
 		table.set("insert", new Insert());
 		table.set("remove", new Remove());
 		table.set("sort", new Sort());
-		;
 
 		// TODO math.huge math.pi
 		// TODO set implemented functions
