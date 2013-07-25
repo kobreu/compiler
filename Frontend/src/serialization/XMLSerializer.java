@@ -65,7 +65,7 @@ public class XMLSerializer {
 		
 		doc = docBuilder.newDocument();
 		
-		Element chunkE = doc.createElement("Chunk");
+		Element chunkE = doc.createElement(chunk.getClass().getSimpleName());
 		doc.appendChild(chunkE);
 		currElement = chunkE;
 		

@@ -11,6 +11,7 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+
 import edu.tum.lua.ast.Binop;
 import edu.tum.lua.ast.Block;
 import edu.tum.lua.ast.Closure;
@@ -35,9 +36,12 @@ public class XMLDeserializer {
 		return -1;
 	}
 
-	public VisitorNode deserialize(Element ele) {
+	private VisitorNode deserialize(Element ele) {
 		ele.normalize();
 		try {
+			if(ele.getName().equals("Null")) {
+				return null;
+			}
 			if (ele.getName().equals("NumberExp")) {
 				NumberExp exp = new NumberExp(Double.valueOf(ele
 						.attributeValue("number")));
@@ -92,10 +96,14 @@ public class XMLDeserializer {
 					Element child = (Element) ele.elements().get(i);
 
 					deserializedChildren[i] = deserialize(child);
-					constructorClasses[i] = deserializedChildren[i].getClass();
+					if(deserializedChildren[i] != null) {
+						constructorClasses[i] = deserializedChildren[i].getClass();
+					} else {
+						constructorClasses[i] = Object.class;
+					}
 				}
-
-				Constructor constructor = ConstructorUtils.getMatchingAccessibleConstructor(clazz, constructorClasses);
+				
+				Constructor constructor = findConstructor(clazz, constructorClasses);
 
 				VisitorNode deserialized = (VisitorNode) constructor
 						.newInstance(deserializedChildren);
@@ -123,6 +131,24 @@ public class XMLDeserializer {
 		}
 		return null;
 
+	}
+
+	private Constructor findConstructor(Class clazz, Class[] constructorClasses) {
+		Constructor[] constructors = clazz.getDeclaredConstructors();
+		outer: for(Constructor c : constructors) {
+			if(c.getParameterTypes().length != constructorClasses.length) continue;
+			int index = 0;
+			for(Class paramClass : c.getParameterTypes()) {
+				Class match = constructorClasses[index++];
+				if(match == Object.class || paramClass == match || paramClass == match.getSuperclass()) {
+					// ok
+				} else {
+					break outer;
+				}
+			}
+			return c;
+		}
+		throw new RuntimeException("Didn't find constructor!");
 	}
 
 	public VisitorNode deserialize(String file) {
