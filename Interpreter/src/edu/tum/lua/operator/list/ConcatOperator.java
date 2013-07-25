@@ -3,8 +3,8 @@ package edu.tum.lua.operator.list;
 import javax.naming.OperationNotSupportedException;
 
 import edu.tum.lua.operator.Operator;
-import edu.tum.lua.types.LuaType;
 import edu.tum.lua.types.LuaFunction;
+import edu.tum.lua.types.LuaType;
 
 public class ConcatOperator extends Operator {
 
@@ -21,7 +21,7 @@ public class ConcatOperator extends Operator {
 		try {
 			return applyString(convert(op1), convert(op2));
 		} catch (OperationNotSupportedException e) {
-			LuaFunction handler = getHandler("concat", op1, op2);
+			LuaFunction handler = getHandler("__concat", op1, op2);
 			return handler.apply(op1, op2);
 		}
 

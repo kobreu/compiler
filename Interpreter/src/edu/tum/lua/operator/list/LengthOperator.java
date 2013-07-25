@@ -13,7 +13,7 @@ public class LengthOperator extends Operator {
 		} else if (LuaType.getTypeOf(op) == LuaType.TABLE) {
 			return applyTable((LuaTable) op);
 		} else {
-			LuaFunction handler = getHandler("length", op);
+			LuaFunction handler = getHandler("__len", op);
 			return handler.apply(op);
 		}
 	}
