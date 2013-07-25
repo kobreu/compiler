@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.tum.lua.ast.Exp;
+import edu.tum.lua.junit.stdlib.Setfenv;
 import edu.tum.lua.stdlib.Assert;
 import edu.tum.lua.stdlib.Error;
 import edu.tum.lua.stdlib.GetMetatable;
@@ -96,7 +97,7 @@ public class Environment extends LuaTable {
 		set("rawget", new RawGet());
 		set("rawset", new RawSet());
 		set("select", new Select());
-		set("setfenv", new NotImplementedFunction());
+		set("setfenv", new Setfenv());
 		set("setmetatable", new SetMetatable());
 		set("tonumber", new ToNumber());
 		set("tostring", new ToString());

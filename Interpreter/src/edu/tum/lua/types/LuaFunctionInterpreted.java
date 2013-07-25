@@ -12,7 +12,7 @@ import edu.tum.lua.ast.FunctionDef;
 
 public class LuaFunctionInterpreted implements LuaFunction {
 
-	private final Environment environment;
+	private Environment environment;
 	private final List<String> argumentNames;
 	private final Chunk chunk;
 
@@ -40,5 +40,9 @@ public class LuaFunctionInterpreted implements LuaFunction {
 
 	public Environment getEnvironment() {
 		return environment;
+	}
+
+	public void setEnvironment(Environment e) {
+		environment = e;
 	}
 }
