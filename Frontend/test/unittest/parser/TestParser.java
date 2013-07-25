@@ -6,10 +6,10 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 
-import edu.tum.lua.ast.Chunk;
+import edu.tum.lua.ast.Block;
 import edu.tum.lua.parser.Lexer;
 import edu.tum.lua.parser.Parser;
-
+import edu.tum.lua.parser.*;
 public class TestParser {
 
 	@Test
@@ -25,11 +25,12 @@ public class TestParser {
 			System.exit(1);
 		}
 
-		Chunk prog = null;
+		Block prog = null;
 
 		try {
 			Parser p = new Parser(scanner);
-			prog = (Chunk) p.parse().value;
+			prog = (Block) p.parse().value;
+			System.out.println(prog.toString());
 
 		} catch (java.io.IOException e) {
 			System.out.println("An I/O error occured while parsing : \n" + e);

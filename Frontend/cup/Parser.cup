@@ -97,10 +97,11 @@ non terminal optsemi, empty, optws, optforexp, optexplist, optasm, optdotname, o
 
 
 
-chunk 			::=     statlist:stats
+block 			::=     statlist:stats 
                  		{:                 	    
-                 		RESULT = new Chunk(stats);
+                 		RESULT = new Block(stats,null);
                  		:}
+                 		
                  		;
 
 
