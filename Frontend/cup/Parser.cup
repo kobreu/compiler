@@ -81,7 +81,7 @@ non terminal ExpList explist;
 non terminal Exp exp, optforexp;
 non terminal PrefixExp prefixexp;
 non terminal FunctionCall functioncall;
-non terminal args;
+non terminal ExpList args;
 non terminal Function function;
 non terminal FuncBody funcbody;
 non terminal ParList parlist;
@@ -169,8 +169,23 @@ stat        	::=    		varlist:vl ASM explist:el
 						:}
 						| FOR optws namelist:nl  IN optws explist:el optws DO optws block:b END
 						{: RESULT = new ForIn(nl,el,b); :}
+						| functioncall:funccall
+							{: RESULT = new FuncCallStmt(funccall); :}
 						;
 						
+functioncall	::=		prefixexp:prefixexp args:args
+						{: 
+							RESULT = new FunctionCall(prefixexp, args);
+							System.out.println("Returning FUNCCALL");
+						:}
+						;
+						
+args			::=		LPAREN explist:explist RPAREN
+							{: 
+								RESULT = explist; 
+								System.out.println("Returning args");
+							:}
+						;
 
 optelse			::= 	ELSE optws block:b {: RESULT = b; :}						
 						| empty
@@ -196,19 +211,19 @@ varlist			::=     var:v
 						;
 						
 explist			::=     exp:e 
-						{:
-						RESULT= new ExpList(e);
-						:}
+							{:
+							RESULT= new ExpList(e);
+							:}
 						| exp:e COM explist:el
-						{:
-						if(el == null) {
-						el = new ExpList(e);
-						RESULT = el;} 
-						else {
-						el.insertElementAt(e,0);
-						RESULT = el;} :}
-						
-						
+							{:
+								if(el == null) {
+									el = new ExpList(e);
+								RESULT = el;} 
+								else {
+									el.insertElementAt(e,0);
+								RESULT = el;}
+	
+							:}
 						;
 						
 namelist    	::=    	ID:id optws
@@ -233,23 +248,26 @@ var				::=		ID:id
 						;
 						
 exp				::=		NIL
-						{: RESULT = new Nil(); :}  
+							{: RESULT = new Nil(); :}  
 						| FALSE
-						{: RESULT = new BooleanExp(false); :}  
+							{: RESULT = new BooleanExp(false); :}  
 						| TRUE
-						{: RESULT = new BooleanExp(true); :} 
-						|
-						NUMBER:num
-						{: 					   
-						RESULT = new NumberExp(num); 						
-						:} 
+							{: RESULT = new BooleanExp(true); :} 
+						| NUMBER:num
+							{: 					   
+								RESULT = new NumberExp(num); 						
+							:} 
 						| ID:id 
-						{: RESULT = new TextExp(id); :}
+							{: RESULT = new TextExp(id); :}
 						| exp:e1 binop:op exp:e2
-						{: RESULT = new Binop(e1,op,e2); :}
+							{: RESULT = new Binop(e1,op,e2); :}
 						| unop:uop exp:e
-						{: RESULT = new Unop(uop,e); :}
+							{: RESULT = new Unop(uop,e); :}
+						| prefixexp:prefixexp
+							{: RESULT = new PreExp(prefixexp); :}
 						;	
+						
+prefixexp		::=		LPAREN RPAREN;
 
 binop			::=		ADD
 						{: RESULT = Op.ADD; :}
