@@ -1,7 +1,10 @@
 package edu.tum.lua.types;
 
+import java.io.File;
+
 public enum LuaType {
-	BOOLEAN("boolean"), FUNCTION("function"), NIL("nil"), NUMBER("number"), STRING("string"), TABLE("table");
+	BOOLEAN("boolean"), FUNCTION("function"), NIL("nil"), NUMBER("number"), STRING("string"), TABLE("table"), USERDATA(
+			"userdata");
 
 	public static LuaType getTypeOf(Object object) {
 		if (object == null) {
@@ -26,6 +29,10 @@ public enum LuaType {
 
 		if (object instanceof LuaTable) {
 			return TABLE;
+		}
+
+		if (object instanceof File) {
+			return USERDATA;
 		}
 
 		throw new IllegalArgumentException("Expected Lua Type, got " + object.getClass().toString());
