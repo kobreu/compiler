@@ -51,6 +51,8 @@ import edu.tum.lua.stdlib.math.Tanh;
 import edu.tum.lua.stdlib.table.Concat;
 import edu.tum.lua.stdlib.table.Insert;
 import edu.tum.lua.stdlib.table.MaxN;
+import edu.tum.lua.stdlib.table.Remove;
+import edu.tum.lua.stdlib.table.Sort;
 import edu.tum.lua.types.LuaTable;
 
 public class Environment extends LuaTable {
@@ -101,6 +103,9 @@ public class Environment extends LuaTable {
 		table.set("concat", new Concat());
 		table.set("maxn", new MaxN());
 		table.set("insert", new Insert());
+		table.set("remove", new Remove());
+		table.set("sort", new Sort());
+		;
 
 		// TODO math.huge math.pi
 		// TODO set implemented functions
