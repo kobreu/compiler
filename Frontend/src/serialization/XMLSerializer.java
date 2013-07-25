@@ -47,7 +47,7 @@ public class XMLSerializer {
 		
 		@Override
 		public void visitGeneric(VisitorNode node) {
-			appendToCurrAndDive(node.getClass().getSimpleName().toLowerCase());
+			appendToCurrAndDive(node.getClass().getSimpleName());
 			addAttributes(node);
 			node.childrenAccept(this);
 			lift();
@@ -65,7 +65,7 @@ public class XMLSerializer {
 		
 		doc = docBuilder.newDocument();
 		
-		Element chunkE = doc.createElement("chunk");
+		Element chunkE = doc.createElement("Chunk");
 		doc.appendChild(chunkE);
 		currElement = chunkE;
 		
