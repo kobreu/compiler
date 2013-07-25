@@ -59,7 +59,7 @@ public class TestParser {
 		}
 	}
 
-	private String tokenLookup(int symb) {
+	public static String tokenLookup(int symb) {
 		switch (symb) {
 		case sym.ADD:
 			return "ADD";
@@ -109,6 +109,8 @@ public class TestParser {
 			return "LBRACK";
 		case sym.LCURL:
 			return "LCURL";
+		case sym.LPAREN:
+			return "LPAREN";
 		case sym.LE:
 			return "LE";
 		case sym.LENGTH:
@@ -129,6 +131,8 @@ public class TestParser {
 			return "NUMBER";
 		case sym.REPEAT:
 			return "REPEAT";
+		case sym.RPAREN:
+			return "RPAREN";
 		case sym.UNTIL:
 			return "UNTIL";
 		case sym.OR:

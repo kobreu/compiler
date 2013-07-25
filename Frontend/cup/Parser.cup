@@ -108,7 +108,9 @@ block 			::=     statlist:stats laststat:lstat
                  			System.out.println("Inside block with laststat");   
                  			RESULT = new Block(stats,lstat);  }
                  		:}
-                 	
+                 		| empty {:
+                 			RESULT = new Block(null, null);
+                 		:}
                  		;
 
 	
