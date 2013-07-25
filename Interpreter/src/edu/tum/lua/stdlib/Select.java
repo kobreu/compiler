@@ -11,7 +11,7 @@ import edu.tum.lua.types.LuaType;
 
 public class Select extends LuaFunctionNative {
 
-	LuaType[][] expectedTypes = { { LuaType.NUMBER, LuaType.STRING } };
+	private static final LuaType[][] expectedTypes = { { LuaType.NUMBER, LuaType.STRING } };
 
 	@Override
 	public List<Object> apply(List<Object> arguments) {

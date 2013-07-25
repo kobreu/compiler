@@ -13,7 +13,7 @@ import edu.tum.lua.types.LuaType;
 
 public class Concat extends LuaFunctionNative {
 
-	LuaType[][] expectedTypes = { { LuaType.TABLE } };
+	private static final LuaType[][] expectedTypes = { { LuaType.TABLE } };
 
 	@Override
 	public List<Object> apply(List<Object> arguments) {

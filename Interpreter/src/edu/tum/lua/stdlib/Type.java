@@ -9,7 +9,7 @@ import edu.tum.lua.types.LuaType;
 
 public class Type extends LuaFunctionNative {
 
-	LuaType[][] expectedTypes = { null };
+	private static final LuaType[][] expectedTypes = { null };
 
 	@Override
 	public List<Object> apply(List<Object> arguments) {

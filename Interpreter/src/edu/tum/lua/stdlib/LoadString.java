@@ -14,7 +14,7 @@ import edu.tum.lua.types.LuaType;
 
 public class LoadString extends LuaFunctionNative {
 
-	LuaType[][] expectedTypes = { { LuaType.STRING } };
+	private static final LuaType[][] expectedTypes = { { LuaType.STRING } };
 
 	@Override
 	public List<Object> apply(List<Object> arguments) {

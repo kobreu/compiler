@@ -11,7 +11,7 @@ import edu.tum.lua.types.LuaType;
 
 public class Load extends LuaFunctionNative {
 
-	LuaType[][] expectedTypes = { { LuaType.FUNCTION } };
+	private static final LuaType[][] expectedTypes = { { LuaType.FUNCTION } };
 
 	@Override
 	public List<Object> apply(List<Object> arguments) {

@@ -11,7 +11,7 @@ import edu.tum.lua.types.LuaType;
 
 public class RawSet extends LuaFunctionNative {
 
-	LuaType[][] expectedTypes = { { LuaType.TABLE }, null, null };
+	private static final LuaType[][] expectedTypes = { { LuaType.TABLE }, null, null };
 
 	@Override
 	public List<Object> apply(List<Object> arguments) {
