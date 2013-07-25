@@ -131,8 +131,12 @@ public class TestParser {
 			return "OR";
 		case sym.SEMI:
 			return "SEMI";
+		case sym.TRUE:
+			return "TRUE";
 		case sym.WS:
 			return "WS";
+		case sym.WHILE:
+				return "WHILE";
 		default:
 			return "UNKNOWN";
 		}
