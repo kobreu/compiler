@@ -21,6 +21,8 @@ public class LengthOperator extends Operator {
 
 	private Object applyTable(LuaTable op) {
 		MaxN m = new MaxN();
+		if (op.get(1.0) == null)
+			return 0.0;
 		return m.apply(op).get(0);
 	}
 
