@@ -7,4 +7,8 @@ public class LuaBadArgumentException extends LuaRuntimeException {
 	public LuaBadArgumentException(int pos, String functionName, String expected, String got) {
 		super("bad argument #" + pos + " to '" + functionName + "' (" + expected + " expected, got " + got + ")");
 	}
+
+	public LuaBadArgumentException(int pos, String functionName, String message) {
+		super("bad argument #" + pos + " to '" + functionName + "' (" + message + ")");
+	}
 }
