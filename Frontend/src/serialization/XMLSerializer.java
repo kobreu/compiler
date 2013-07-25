@@ -11,8 +11,6 @@ import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
-import com.sun.beans.decoder.DocumentHandler;
-
 import edu.tum.lua.ast.Block;
 import edu.tum.lua.ast.VisitorNode;
 

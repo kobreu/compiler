@@ -28,8 +28,6 @@ import org.dom4j.io.XMLWriter;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
-import com.sun.beans.decoder.DocumentHandler;
-import com.sun.org.apache.xpath.internal.operations.Number;
 
 import edu.tum.lua.ast.Asm;
 import edu.tum.lua.ast.Binop;

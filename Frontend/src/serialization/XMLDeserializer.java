@@ -18,6 +18,7 @@ import edu.tum.lua.ast.Closure;
 import edu.tum.lua.ast.Dots;
 import edu.tum.lua.ast.Exp;
 import edu.tum.lua.ast.FieldNameExp;
+import edu.tum.lua.ast.ForExp;
 import edu.tum.lua.ast.FunctionDef;
 import edu.tum.lua.ast.LocalFuncDef;
 import edu.tum.lua.ast.Name;
@@ -70,6 +71,12 @@ public class XMLDeserializer {
 				NameList args = (NameList) deserialize((Element) ele.elements().get(1));
 				Block block = (Block) deserialize((Element) ele.elements().get(2));
 				return new FunctionDef(ele.attributeValue("ident"), members, args, Boolean.valueOf(ele.attributeValue("varargs")).booleanValue(), block);
+			} else if(ele.getName().equals("ForExp")) {
+				Exp ex1 = (Exp) deserialize((Element) ele.elements().get(0));
+				Exp ex2 = (Exp) deserialize((Element) ele.elements().get(1));
+				Exp ex3 = (Exp) deserialize((Element) ele.elements().get(2));
+				Block block = (Block) deserialize((Element) ele.elements().get(3));
+				return new ForExp(ele.attributeValue("ident"),ex1, ex2, ex3, block);
 			} else if(ele.getName().equals("LocalFuncDef")) {
 				NameList args = (NameList) deserialize((Element) ele.elements().get(0));
 				Block block = (Block) deserialize((Element) ele.elements().get(1));
