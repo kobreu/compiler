@@ -32,12 +32,19 @@ public class Sub extends LuaFunctionNative {
 			return Collections.emptyList();
 		}
 
-		if (j > s.length() || j == -1) {
+		if (j > s.length()) {
 			j = s.length();
 		}
 
-		if (i < -1) {
+		if (j < 0) {
+			j += s.length() + 1;
+		}
 
+		if (i == -1) {
+			i = 0;
+		}
+
+		if (i < 0) {
 			i += s.length() + 1;
 			s += s;
 		}
