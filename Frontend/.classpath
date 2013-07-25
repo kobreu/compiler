@@ -6,6 +6,8 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/java-cup-11a-runtime.jar"/>
 	<classpathentry kind="lib" path="lib/xmlunit-1.4.jar"/>
+	<classpathentry kind="lib" path="lib/dom4j-2.0.0-ALPHA-2.jar"/>
+	<classpathentry kind="lib" path="lib/commons-lang3-3.1.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
