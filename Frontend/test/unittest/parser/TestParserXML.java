@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import java_cup.runtime.Symbol;
+
 import org.custommonkey.xmlunit.XMLTestCase;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
@@ -47,20 +49,29 @@ public class TestParserXML extends XMLTestCase {
 		List<String> xmlFiles = new ArrayList<>();
 		List<String> luaFiles = new ArrayList<>();
 		
-		xmlFiles.add("testinput/grammar/chunk_sequence_without_semicolons.xml");
+		/*xmlFiles.add("testinput/grammar/chunk_sequence_without_semicolons.xml");
 		luaFiles.add("testinput/grammar/chunk_sequence_without_semicolons.lua");
 		
 		xmlFiles.add("testinput/grammar/chunk_sequence_with_semicolons.xml");
 		luaFiles.add("testinput/grammar/chunk_sequence_with_semicolons.lua");
 		
 		xmlFiles.add("testinput/grammar/block.xml");
-		luaFiles.add("testinput/grammar/block.lua");
+		luaFiles.add("testinput/grammar/block.lua");*/
 
 		xmlFiles.add("testinput/grammar/args_explist_none.xml");
 		luaFiles.add("testinput/grammar/args_explist_none.lua");
 		
 		xmlFiles.add("testinput/grammar/args_explist_some.xml");
 		luaFiles.add("testinput/grammar/args_explist_some.lua");
+
+		xmlFiles.add("testinput/grammar/args_string.xml");
+		luaFiles.add("testinput/grammar/args_string.lua");
+		
+		xmlFiles.add("testinput/grammar/args_tableconstructor.xml");
+		luaFiles.add("testinput/grammar/args_tableconstructor.lua");
+		
+		xmlFiles.add("testinput/grammar/binop_dotdot.xml");
+		luaFiles.add("testinput/grammar/binop_dotdot.lua");
 		
 		xmlFiles.add("testinput/grammar/explist_multiple.xml");
 		luaFiles.add("testinput/grammar/explist_multiple.lua");
@@ -87,6 +98,19 @@ public class TestParserXML extends XMLTestCase {
 			// check if the file deserializes correctly
 			Block b = (Block) deserializer.deserialize(xmlFile);
 			assertNotNull("Block should not be null for file " + luaFile, b);
+
+			Lexer outputScanner = new Lexer(new java.io.FileReader(luaFile));
+
+			// print out the tokens
+			Symbol token;
+			token = outputScanner.next_token();
+			while (token.sym != 0) {
+				System.out.print(TestParser.tokenLookup(token.sym) + " ");
+				token = outputScanner.next_token();
+			}
+			System.out.println();
+			
+			
 			
 			lexer = new Lexer(new FileReader(luaFile));
 			parser = new Parser(lexer);

@@ -54,6 +54,10 @@ public class XMLSerializer {
 		doc = DocumentHelper.createDocument();
 		doc.setName("Block");
 		
+		if(chunk == null) {
+			return doc;
+		}
+		
 		Element chunkE = doc.addElement(chunk.getClass().getSimpleName());
 		currElement = chunkE;
 		
