@@ -1,13 +1,13 @@
 package edu.tum.lua.junit.stdlib;
 
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertEquals;
 
 import java.util.LinkedList;
 
 import org.junit.Test;
 
-import edu.tum.lua.stdlib.VoidFunction;
 import edu.tum.lua.stdlib.Print;
+import edu.tum.lua.stdlib.VoidFunction;
 import edu.tum.lua.types.LuaTable;
 
 public class PrintTest {
@@ -25,7 +25,7 @@ public class PrintTest {
 		l.add(new VoidFunction());
 		LinkedList<Object> l1 = new LinkedList<Object>();
 
-		assertNull(p.apply(l));
-		assertNull(p.apply(l1));
+		assertEquals(0, p.apply(l).size());
+		assertEquals(0, p.apply(l1).size());
 	}
 }
