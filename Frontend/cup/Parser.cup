@@ -47,20 +47,21 @@ parser code {:
 
  /* Terminals (tokens returned by lexer). */
 
-terminal         ADD, MUL, SUB, DIV, MOD, POW, CONCAT;
-terminal         AND, OR, NOT, LENGTH;
-terminal 		 LPAREN, RPAREN, LBRACK, RBRACK, LCURL, RCURL;
+
 terminal         ASM; //Assigment =
 terminal		 DOT, DDOT;
-terminal         EQ, LEQ ,NEQ , LE, GR, GEQ;
 terminal		 LOCAL, FUNC, END;
 terminal  		 DO, WHILE, FOR, IN, REPEAT, UNTIL;
 terminal         IF, THEN, ELSE, ELSEIF, RETURN, BREAK;
 terminal         NIL, FALSE, TRUE, PARAMS;
+terminal         ADD, MUL, SUB, DIV, MOD, POW, CONCAT;
+terminal         EQ, LEQ ,NEQ , LE, GR, GEQ, AND, OR; 
+terminal         NOT, LENGTH;
+terminal 		 LPAREN, RPAREN, LBRACK, RBRACK, LCURL, RCURL;
 terminal		 SEMI, COM, WS;
-
 terminal Double NUMBER;
 terminal String  ID, TEXT;
+
 
 
 
@@ -92,7 +93,7 @@ non terminal Integer binop;
 non terminal Integer unop;
 non terminal optsemi, empty, optws, optexplist, optasm, optdotname, optcolonname, optvarlist;
 
-
+precedence left  ADD, MUL, SUB, DIV, MOD, POW, CONCAT, EQ, LEQ ,NEQ , LE, GR, GEQ, AND, OR;
 /* Grammar */
 
 start with block;
@@ -164,7 +165,8 @@ stat        	::=    		varlist:vl ASM explist:el
 						{: 		
 								RESULT = new ForExp(id,e1,e2,e3,b); 
 						:}
-						
+						| FOR optws namelist:nl  IN optws explist:el optws DO optws block:b END
+						{: RESULT = new ForIn(nl,el,b); :}
 						;
 						
 
@@ -191,7 +193,7 @@ varlist			::=     var:v
 						:}								
 						;
 						
-explist			::=     exp:e
+explist			::=     exp:e 
 						{:
 						RESULT= new ExpList(e);
 						:}
@@ -205,6 +207,20 @@ explist			::=     exp:e
 						RESULT = el;} :}
 						
 						
+						;
+						
+namelist    	::=    	ID:id optws
+						{: RESULT = new NameList(new Name(id)); :}  
+						| ID:id COM namelist:nl
+						{: 	if(nl== null){					    		
+					    	nl =new NameList(new Name(id));
+							RESULT = nl;}
+							else{		
+							nl.insertElementAt(new Name(id),0);
+							RESULT = nl;
+							} 
+						:} 
+						| empty												
 						;
 						
 var				::=		ID:id
@@ -227,7 +243,53 @@ exp				::=		NIL
 						:} 
 						| ID:id 
 						{: RESULT = new TextExp(id); :}
+						| exp:e1 binop:op exp:e2
+						{: RESULT = new Binop(e1,op,e2); :}
+						| unop:uop exp:e
+						{: RESULT = new Unop(uop,e); :}
 						;	
+
+binop			::=		ADD
+						{: RESULT = Op.ADD; :}
+						| SUB
+						{: RESULT = Op.SUB; :}
+						| MUL
+						{: RESULT = Op.MUL; :}
+						| DIV
+						{: RESULT = Op.DIV; :}
+						| MOD
+						{: RESULT = Op.MOD; :}
+						| POW
+						{: RESULT = Op.POW; :}
+						| CONCAT
+						{: RESULT = Op.CONCAT; :}
+						| EQ
+						{: RESULT = Op.EQ; :}
+						| LEQ
+						{: RESULT = Op.LE; :}
+						| NEQ
+						{: RESULT = Op.NEQ; :}
+						| LE
+						{: RESULT = Op.LT; :}
+						| GR
+						{: RESULT = Op.GT; :}
+						| GEQ
+						{: RESULT = Op.GE; :}
+						| AND
+						{: RESULT = Op.AND; :}
+						| OR
+						{: RESULT = Op.OR; :}
+						;
+						
+unop			::=		SUB
+						{: RESULT = Op.UNM; :}
+						| NOT
+						{: RESULT = Op.NOT; :}
+						| LENGTH
+						{: RESULT = Op.LEN; :}
+						;
+								
+
 						
 optsemi			::= 	SEMI  | empty ;
 
