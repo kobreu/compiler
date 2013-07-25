@@ -32,38 +32,23 @@ public final class Preconditions {
 		while (typeIterator.hasNext()) {
 			int pos = typeIterator.nextIndex() + 1;
 			LuaType[] types = typeIterator.next();
-			/*
-			 * now accepts { {specialTypes}, null as all types, {null as
-			 * optional argument, specialType } }
-			 */
+
 			if (argsIterator.hasNext()) {
 				LuaType argsType = LuaType.getTypeOf(argsIterator.next());
 
-				if (types == null)
+				if (types == null) {
 					continue;
+				}
 
-				if (!Arrays.asList(types).contains(argsType))
+				if (!Arrays.asList(types).contains(argsType)) {
 					throw new LuaBadArgumentException(pos, functionName, printTypes(types), argsType.toString());
+				}
 			} else {
-				if (types == null || !Arrays.asList(types).contains((Object) null))
+				if (types == null || !Arrays.asList(types).contains((Object) null)) {
 					throw new LuaBadArgumentException(pos, functionName, printTypes(types), "no value");
-			}
 
-			/*
-			 * @Matthias if (!argsIterator.hasNext()) { throw new
-			 * LuaBadArgumentException(pos, functionName, printTypes(types),
-			 * "no value"); }
-			 * 
-			 * if (types == null) { continue; }
-			 * 
-			 * 
-			 * LuaType argsType = LuaType.getTypeOf(argsIterator.next()); if
-			 * (argsType == null) throw new RuntimeException();
-			 * 
-			 * if (!Arrays.asList(types).contains(argsType)) { throw new
-			 * LuaBadArgumentException(pos, functionName, printTypes(types),
-			 * argsType.toString()); }
-			 */
+				}
+			}
 		}
 	}
 }
