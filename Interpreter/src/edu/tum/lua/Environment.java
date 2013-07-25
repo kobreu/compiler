@@ -7,6 +7,7 @@ import edu.tum.lua.ast.Exp;
 import edu.tum.lua.stdlib.Assert;
 import edu.tum.lua.stdlib.Error;
 import edu.tum.lua.stdlib.GetMetatable;
+import edu.tum.lua.stdlib.Getfenv;
 import edu.tum.lua.stdlib.IPairs;
 import edu.tum.lua.stdlib.Load;
 import edu.tum.lua.stdlib.LoadFile;
@@ -81,7 +82,7 @@ public class Environment extends LuaTable {
 		set("dofile", new NotImplementedFunction());
 		set("error", new Error());
 		set("_G", this);
-		set("getfenv", new NotImplementedFunction());
+		set("getfenv", new Getfenv());
 		set("getmetatable", new GetMetatable());
 		set("ipairs", new IPairs());
 		set("load", new Load());

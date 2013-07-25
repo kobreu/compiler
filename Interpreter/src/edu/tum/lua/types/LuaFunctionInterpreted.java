@@ -37,4 +37,8 @@ public class LuaFunctionInterpreted implements LuaFunction {
 	public List<Object> apply(Object... arguments) {
 		return apply(Arrays.asList(arguments));
 	}
+
+	public Environment getEnvironment() {
+		return environment;
+	}
 }
