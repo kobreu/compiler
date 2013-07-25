@@ -79,9 +79,9 @@ public class LuaTable implements Iterable<Map.Entry<Object, Object>> {
 		return (LuaTable) value;
 	}
 
-	public Object getMetatable() {
+	public LuaTable getMetatable() {
 		if (metatable != null && metatable.get("__metatable") != null) {
-			return metatable.get("__metatable");
+			return (LuaTable) metatable.get("__metatable");
 		}
 
 		return metatable;
