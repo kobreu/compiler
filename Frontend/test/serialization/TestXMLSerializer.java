@@ -96,5 +96,9 @@ public class TestXMLSerializer extends XMLTestCase {
 		assertXMLEqual(doc, doc2);
 	}
 	
+	@Test
+	public void testTest() {
+	}
+	
 
 }

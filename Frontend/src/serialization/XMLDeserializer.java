@@ -154,16 +154,16 @@ public class XMLDeserializer {
 
 	}
 
-	public Chunk deserialize(String file) {
+	public VisitorNode deserialize(String file) {
 		return deserialize(new File(file));
 	}
 
-	public Chunk deserialize(File file) {
+	public VisitorNode deserialize(File file) {
         SAXReader reader = new SAXReader();
         Document document;
 		try {
 			document = reader.read(file);
-			return (Chunk) deserialize(document.getRootElement());
+			return (Block) deserialize(document.getRootElement());
 
 		} catch (DocumentException e) {
 			// TODO Auto-generated catch block

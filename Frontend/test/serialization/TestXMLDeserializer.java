@@ -22,6 +22,7 @@ import org.xml.sax.SAXException;
 import com.sun.org.apache.xpath.internal.operations.Number;
 
 import edu.tum.lua.ast.Binop;
+import edu.tum.lua.ast.Block;
 import edu.tum.lua.ast.Chunk;
 import edu.tum.lua.ast.ExpList;
 import edu.tum.lua.ast.LastReturn;
@@ -38,7 +39,7 @@ public class TestXMLDeserializer extends XMLTestCase {
 	public void testDeserialize() throws TransformerException {
 		XMLDeserializer xml = new XMLDeserializer();
 		
-		xml.deserialize(new File("testing.xml"));
+		Block block = (Block) xml.deserialize(new File("testing.xml"));
 	}
 	
 	
