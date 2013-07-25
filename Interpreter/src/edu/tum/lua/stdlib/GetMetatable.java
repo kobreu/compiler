@@ -11,17 +11,12 @@ import edu.tum.lua.types.LuaType;
 
 public class GetMetatable extends LuaFunctionNative {
 
-	private static final LuaType[][] types = { { LuaType.TABLE }, { LuaType.TABLE, LuaType.NIL } };
+	private static final LuaType[][] types = { { LuaType.TABLE } };
 
 	@Override
 	public List<Object> apply(List<Object> arguments) {
-		checkArguments("setmetatable", arguments, types);
-
+		checkArguments("getmetatable", arguments, types);
 		LuaTable table = (LuaTable) arguments.get(0);
-		LuaTable metaTable = (LuaTable) arguments.get(1);
-
-		table.setMetatable(metaTable);
-
-		return Collections.singletonList((Object) table);
+		return Collections.singletonList(table.getMetatable());
 	}
 }
