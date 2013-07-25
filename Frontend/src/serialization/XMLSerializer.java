@@ -12,7 +12,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-import edu.tum.lua.ast.Chunk;
+import edu.tum.lua.ast.Block;
 import edu.tum.lua.ast.VisitorNode;
 
 public class XMLSerializer {
@@ -55,7 +55,7 @@ public class XMLSerializer {
 
 	}
 	
-	public Document serialize(Chunk chunk) {
+	public Document serialize(Block chunk) {
 		try {
 			docBuilder = docFactory.newDocumentBuilder();
 		} catch (ParserConfigurationException e) {

@@ -4,7 +4,6 @@ import edu.tum.lua.ast.Asm;
 import edu.tum.lua.ast.Binop;
 import edu.tum.lua.ast.Block;
 import edu.tum.lua.ast.BooleanExp;
-import edu.tum.lua.ast.Chunk;
 import edu.tum.lua.ast.Closure;
 import edu.tum.lua.ast.DoExp;
 import edu.tum.lua.ast.Dots;
@@ -58,7 +57,6 @@ public abstract class VisitorAdapterGeneric extends VisitorAdaptor {
 	  public void visit(NameList nameList) {visitGeneric(nameList);  }
 	  public void visit(ExpList expList) { visitGeneric(expList);  }
 	  public void visit(FieldList fieldList) { visitGeneric(fieldList);  }
-	  public void visit(Chunk chunk) { visitGeneric(chunk);  }
 	  public void visit(Block block) {  visitGeneric(block);  }
 	  public void visit(Name name) { visitGeneric(name); }
 	  public void visit(FunctionCall functionCall) { visitGeneric(functionCall); }

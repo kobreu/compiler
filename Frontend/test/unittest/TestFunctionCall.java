@@ -17,7 +17,7 @@ public class TestFunctionCall {
 		String[] args = new String[2];
 		args[0] = "testinput/arith/arith_simple.lua";
 		try {
-			Chunk chunk = (new Main()).run(args);
+			Block chunk = (new Main()).run(args);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

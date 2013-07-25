@@ -23,7 +23,7 @@ import com.sun.org.apache.xpath.internal.operations.Number;
 
 import edu.tum.lua.ast.Asm;
 import edu.tum.lua.ast.Binop;
-import edu.tum.lua.ast.Chunk;
+import edu.tum.lua.ast.Block;
 import edu.tum.lua.ast.ExpList;
 import edu.tum.lua.ast.LastReturn;
 import edu.tum.lua.ast.LastStat;
@@ -39,7 +39,7 @@ public class TestXMLSerializer extends XMLTestCase {
 
 	@Test
 	public void testSerialize() throws TransformerException {
-		Chunk chunk = new Chunk(new StatList(), new LastReturn(new ExpList(
+		Block chunk = new Block(new StatList(), new LastReturn(new ExpList(
 				new Unop(Op.UNM, new NumberExp(1.0)))));
 		
 		XMLSerializer serializer = new XMLSerializer();
@@ -60,7 +60,7 @@ public class TestXMLSerializer extends XMLTestCase {
 	
 	@Test
 	public void testMoreComplete() throws TransformerException {
-		Chunk chunk = new Chunk(new StatList(new Asm(new VarList(new Variable("var")), new ExpList(new Binop(new NumberExp(1.0), Op.ADD,  new NumberExp(5.0))) )), new LastReturn(new ExpList(
+	    Block chunk = new Block(new StatList(new Asm(new VarList(new Variable("var")), new ExpList(new Binop(new NumberExp(1.0), Op.ADD,  new NumberExp(5.0))) )), new LastReturn(new ExpList(
 				new Unop(Op.UNM, new NumberExp(1.0)))));
 		
 		XMLSerializer serializer = new XMLSerializer();
@@ -81,7 +81,7 @@ public class TestXMLSerializer extends XMLTestCase {
 	
 	@Test
 	public void testCompare() throws ParserConfigurationException, SAXException, IOException {
-		Chunk chunk = new Chunk(new StatList(), new LastReturn(new ExpList(
+		Block  chunk = new Block(new StatList(), new LastReturn(new ExpList(
 				new Unop(Op.UNM, new NumberExp(1.0)))));
 		
 		XMLSerializer serializer = new XMLSerializer();
