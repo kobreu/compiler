@@ -3,7 +3,6 @@ package edu.tum.lua;
 import java.util.ArrayList;
 import java.util.List;
 
-import sun.misc.Sort;
 import edu.tum.lua.ast.Exp;
 import edu.tum.lua.stdlib.Assert;
 import edu.tum.lua.stdlib.Error;
@@ -60,6 +59,8 @@ import edu.tum.lua.stdlib.string.Upper;
 import edu.tum.lua.stdlib.table.Concat;
 import edu.tum.lua.stdlib.table.Insert;
 import edu.tum.lua.stdlib.table.MaxN;
+import edu.tum.lua.stdlib.table.Remove;
+import edu.tum.lua.stdlib.table.Sort;
 import edu.tum.lua.types.LuaTable;
 
 public class Environment extends LuaTable {
