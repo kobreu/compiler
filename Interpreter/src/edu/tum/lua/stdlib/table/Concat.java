@@ -40,11 +40,8 @@ public class Concat extends LuaFunctionNative {
 		}
 
 		LengthOperator l = new LengthOperator();
-		double end = 0.0;
-		try {
-			end = (double) l.apply(table);
-		} catch (NoSuchMethodException e) {
-		}
+		double end = (double) l.apply(table);
+
 		if (arguments.size() > 3) {
 			if (LuaType.getTypeOf(arguments.get(3)) != LuaType.NUMBER)
 				throw new LuaBadArgumentException(4, "table.concat", "number", LuaType.getTypeOf(arguments.get(3))

@@ -1,5 +1,6 @@
 package edu.tum.lua.operator.relational;
 
+import edu.tum.lua.LuaRuntimeException;
 import edu.tum.lua.operator.Operator;
 import edu.tum.lua.operator.logical.LogicalOperator;
 import edu.tum.lua.types.LuaFunction;
@@ -29,14 +30,14 @@ public class EqOperator extends Operator {
 			try {
 				LuaFunction handler1 = getHandler(handlerName(), op1);
 				LuaFunction handler2 = getHandler(handlerName(), op2);
-				
+
 				if (handler1 == handler2) {
 					return LogicalOperator.isTrue(handler1.apply(op1, op2).get(0));
 				}
-			} catch (NoSuchMethodException e) {
+			} catch (LuaRuntimeException ex) {
 				return false;
 			}
-		
+
 		default:
 			throw new IllegalStateException();
 		}
@@ -44,5 +45,10 @@ public class EqOperator extends Operator {
 
 	protected String handlerName() {
 		return "eq";
+	}
+
+	@Override
+	public Object apply(Object... operands) {
+		return apply(operands[0], operands[1]);
 	}
 }

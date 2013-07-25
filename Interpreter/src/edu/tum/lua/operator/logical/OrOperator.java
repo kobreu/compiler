@@ -8,4 +8,9 @@ public final class OrOperator extends LogicalOperator {
 
 		return op2;
 	}
+
+	@Override
+	public Object apply(Object... operands) {
+		return apply(operands[0], operands[1]);
+	}
 }

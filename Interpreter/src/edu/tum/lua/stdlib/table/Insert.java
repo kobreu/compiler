@@ -24,7 +24,7 @@ public class Insert extends LuaFunctionNative {
 		try {
 			length = (double) op.apply(table);
 			pos = length + 1;
-		} catch (NoSuchMethodException e) {
+		} catch (LuaRuntimeException e) {
 		}
 		if (arguments.size() == 1) {
 			throw new LuaRuntimeException("wrong number of arguments to table.insert");

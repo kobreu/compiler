@@ -6,7 +6,7 @@ import edu.tum.lua.types.LuaFunction;
 
 public abstract class BinaryArithmeticOperator extends ArithmeticOperator {
 
-	public Object apply(Object op1, Object op2) throws NoSuchMethodException {
+	public Object apply(Object op1, Object op2) {
 		try {
 			return apply(convert(op1), convert(op2));
 		} catch (NumberFormatException | OperationNotSupportedException e) {
@@ -18,5 +18,10 @@ public abstract class BinaryArithmeticOperator extends ArithmeticOperator {
 	protected abstract double apply(double op1, double op2);
 
 	protected abstract String handlerName();
+
+	@Override
+	public Object apply(Object... operands) {
+		return apply(operands[0], operands[1]);
+	}
 
 }

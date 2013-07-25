@@ -7,7 +7,7 @@ import edu.tum.lua.types.LuaType;
 
 public class LengthOperator extends Operator {
 
-	public Object apply(Object op) throws NoSuchMethodException {
+	public Object apply(Object op) {
 		if (LuaType.getTypeOf(op) == LuaType.STRING) {
 			return op.toString().length();
 		} else if (LuaType.getTypeOf(op) == LuaType.TABLE) {
@@ -24,6 +24,11 @@ public class LengthOperator extends Operator {
 			value++;
 		}
 		return value;
+	}
+
+	@Override
+	public Object apply(Object... operands) {
+		return apply(operands[0]);
 	}
 
 }

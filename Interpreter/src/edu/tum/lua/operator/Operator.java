@@ -1,14 +1,15 @@
 package edu.tum.lua.operator;
 
+import edu.tum.lua.LuaRuntimeException;
 import edu.tum.lua.types.LuaFunction;
 import edu.tum.lua.types.LuaTable;
 import edu.tum.lua.types.LuaType;
 
 public abstract class Operator {
-	protected static LuaFunction getHandler(String event, Object... objects) throws NoSuchMethodException {
+	protected static LuaFunction getHandler(String event, Object... objects) {
 		for (Object object : objects) {
 			if (object instanceof LuaTable) {
-				LuaTable table = (LuaTable) ((LuaTable) object).getMetatable();
+				LuaTable table = ((LuaTable) object).getMetatable();
 
 				if (table == null) {
 					continue;
@@ -22,6 +23,8 @@ public abstract class Operator {
 			}
 		}
 
-		throw new NoSuchMethodException();
+		throw new LuaRuntimeException("missing metamethod");
 	}
+
+	public abstract Object apply(Object... operands);
 }

@@ -5,7 +5,7 @@ import javax.naming.OperationNotSupportedException;
 import edu.tum.lua.operator.Operator;
 import edu.tum.lua.types.LuaType;
 
-public class ArithmeticOperator extends Operator {
+public abstract class ArithmeticOperator extends Operator {
 
 	protected static double convert(Object object) throws OperationNotSupportedException {
 		if (LuaType.getTypeOf(object) == LuaType.NUMBER) {
@@ -16,4 +16,5 @@ public class ArithmeticOperator extends Operator {
 
 		throw new OperationNotSupportedException();
 	}
+
 }

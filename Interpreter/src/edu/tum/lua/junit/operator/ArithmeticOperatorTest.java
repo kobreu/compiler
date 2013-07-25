@@ -10,6 +10,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import edu.tum.lua.LuaRuntimeException;
 import edu.tum.lua.operator.arithmetic.AddOperator;
 import edu.tum.lua.operator.arithmetic.BinaryArithmeticOperator;
 import edu.tum.lua.operator.arithmetic.DivOperator;
@@ -66,7 +67,7 @@ public class ArithmeticOperatorTest {
 	}
 
 	@Test
-	public void testApplyMeta() throws NoSuchMethodException {
+	public void testApplyMeta() {
 		LuaTable frac1 = new LuaTable();
 		LuaTable frac2 = new LuaTable();
 		LuaTable meta = new LuaTable();
@@ -88,17 +89,13 @@ public class ArithmeticOperatorTest {
 	}
 
 	private void testUnaryOperator(UnmOperator op, double op1, double result) {
-		try {
-			assertEquals(result, op.apply(op1));
-			assertEquals(result, op.apply(Double.toString(op1)));
-		} catch (NoSuchMethodException e) {
-			fail();
-		}
+		assertEquals(result, op.apply(op1));
+		assertEquals(result, op.apply(Double.toString(op1)));
 
 		for (Object inOp : invalidObjects) {
 			try {
 				op.apply(inOp);
-			} catch (NoSuchMethodException ex) {
+			} catch (LuaRuntimeException ex) {
 				continue;
 			}
 
@@ -107,20 +104,16 @@ public class ArithmeticOperatorTest {
 	}
 
 	private void testBinaryOperator(BinaryArithmeticOperator op, double op1, double op2, double result) {
-		try {
-			assertEquals(result, op.apply(op1, op2));
-			assertEquals(result, op.apply(Double.toString(op1), op2));
-			assertEquals(result, op.apply(op1, Double.toString(op2)));
-			assertEquals(result, op.apply(Double.toString(op1), Double.toString(op2)));
-		} catch (NoSuchMethodException e) {
-			fail();
-		}
+		assertEquals(result, op.apply(op1, op2));
+		assertEquals(result, op.apply(Double.toString(op1), op2));
+		assertEquals(result, op.apply(op1, Double.toString(op2)));
+		assertEquals(result, op.apply(Double.toString(op1), Double.toString(op2)));
 
 		for (Object inOp1 : invalidObjects) {
 			for (Object inOp2 : invalidObjects) {
 				try {
 					op.apply(inOp1, inOp2);
-				} catch (NoSuchMethodException ex) {
+				} catch (LuaRuntimeException ex) {
 					continue;
 				}
 

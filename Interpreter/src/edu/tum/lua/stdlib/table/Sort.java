@@ -69,7 +69,7 @@ public class Sort extends LuaFunctionNative {
 		LengthOperator op = new LengthOperator();
 		try {
 			length = (double) op.apply(table);
-		} catch (NoSuchMethodException e) {
+		} catch (LuaRuntimeException e) {
 		}
 
 		if (length != 0.0) {

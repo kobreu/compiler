@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import edu.tum.lua.LuaBadArgumentException;
+import edu.tum.lua.LuaRuntimeException;
 import edu.tum.lua.Preconditions;
 import edu.tum.lua.operator.list.LengthOperator;
 import edu.tum.lua.types.LuaFunctionNative;
@@ -30,7 +31,7 @@ public class Unpack extends LuaFunctionNative {
 		double length = 0;
 		try {
 			length = (double) op.apply(table);
-		} catch (NoSuchMethodException e) {
+		} catch (LuaRuntimeException e) {
 		}
 
 		double to = length;

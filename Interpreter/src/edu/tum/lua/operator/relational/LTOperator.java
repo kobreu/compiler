@@ -8,18 +8,16 @@ import edu.tum.lua.types.LuaType;
 public class LTOperator extends Operator {
 	/* Less Than operator: a < b */
 
-	public boolean apply(Object o1, Object o2) throws NoSuchMethodException {
+	public boolean apply(Object o1, Object o2) {
 
 		// Compare two numbers
-		if (LuaType.getTypeOf(o1) == LuaType.NUMBER
-				&& LuaType.getTypeOf(o2) == LuaType.NUMBER) {
+		if (LuaType.getTypeOf(o1) == LuaType.NUMBER && LuaType.getTypeOf(o2) == LuaType.NUMBER) {
 
 			return (Double) o1 < (Double) o2;
 		}
 
 		// Compare two strings
-		if (LuaType.getTypeOf(o1) == LuaType.STRING
-				&& LuaType.getTypeOf(o2) == LuaType.STRING) {
+		if (LuaType.getTypeOf(o1) == LuaType.STRING && LuaType.getTypeOf(o2) == LuaType.STRING) {
 
 			int comparison = ((String) o1).compareTo((String) o2);
 			if (comparison < 0) {
@@ -38,5 +36,10 @@ public class LTOperator extends Operator {
 
 	public String handlerName() {
 		return "lt";
+	}
+
+	@Override
+	public Object apply(Object... operands) {
+		return apply(operands[0], operands[1]);
 	}
 }

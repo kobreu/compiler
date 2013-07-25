@@ -5,25 +5,19 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
-import edu.tum.lua.LuaRuntimeException;
-import edu.tum.lua.operator.OperatorRegistery;
+import edu.tum.lua.operator.Operator;
+import edu.tum.lua.operator.OperatorRegistry;
 import edu.tum.lua.operator.arithmetic.AddOperator;
 
 public class OperatorRegisteryTest {
 
 	@Test
 	public void test() {
-		OperatorRegistery op = new OperatorRegistery();
 		try {
-			op.apply(20);
+			Operator op = OperatorRegistry.registry[20];
 			fail();
-		} catch (LuaRuntimeException e) {
+		} catch (ArrayIndexOutOfBoundsException e) {
 		}
-		try {
-			assertTrue(op.apply(0) instanceof AddOperator);
-		} catch (LuaRuntimeException e) {
-			fail();
-		}
+		assertTrue(OperatorRegistry.registry[0] instanceof AddOperator);
 	}
-
 }

@@ -17,7 +17,7 @@ public class ConcatOperator extends Operator {
 		throw new OperationNotSupportedException();
 	}
 
-	public Object apply(Object op1, Object op2) throws NoSuchMethodException {
+	public Object apply(Object op1, Object op2) {
 		try {
 			return applyString(convert(op1), convert(op2));
 		} catch (OperationNotSupportedException e) {
@@ -29,5 +29,10 @@ public class ConcatOperator extends Operator {
 
 	protected String applyString(String op1, String op2) {
 		return op1.concat(op2);
+	}
+
+	@Override
+	public Object apply(Object... operands) {
+		return apply(operands[0], operands[1]);
 	}
 }

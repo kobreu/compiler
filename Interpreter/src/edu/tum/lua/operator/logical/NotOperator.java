@@ -8,4 +8,9 @@ public final class NotOperator extends LogicalOperator {
 
 		return Boolean.TRUE;
 	}
+
+	@Override
+	public Object apply(Object... operands) {
+		return apply(operands[0]);
+	}
 }
