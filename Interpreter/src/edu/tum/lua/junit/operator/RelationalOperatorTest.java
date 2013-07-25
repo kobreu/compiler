@@ -6,6 +6,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import edu.tum.lua.operator.relational.EqOperator;
+import edu.tum.lua.operator.relational.LEOperator;
+import edu.tum.lua.operator.relational.LTOperator;
 import edu.tum.lua.stdlib.VoidFunction;
 import edu.tum.lua.types.LuaFunction;
 import edu.tum.lua.types.LuaTable;
@@ -13,9 +15,10 @@ import edu.tum.lua.types.LuaTable;
 public class RelationalOperatorTest {
 
 	EqOperator eq;
+	LEOperator le;
+	LTOperator lt;
 
-	private final Object[] luaObjects = { null, false, "a", 1.0, new LuaTable(),
-			new VoidFunction() };
+	private final Object[] luaObjects = { null, false, "a", 1.0, new LuaTable(), new VoidFunction() };
 
 	@Before
 	public void setUp() throws Exception {
@@ -23,7 +26,12 @@ public class RelationalOperatorTest {
 	}
 
 	@Test
-	public void testApply() {
+	public void testApply() throws NoSuchMethodException {
+
+		/*
+		 * Equal ==
+		 */
+
 		// Two Numbers
 		assertEquals(true, eq.apply(1.0, 1.0));
 		assertEquals(false, eq.apply(1.0, 2.0));
@@ -50,6 +58,21 @@ public class RelationalOperatorTest {
 				assertEquals(luaObject1 == luaObject2, eq.apply(luaObject1, luaObject2));
 			}
 		}
+
+		/*
+		 * Less or Equal <=
+		 */
+		assertEquals(true, le.apply(4.0, 5.0));
+		assertEquals(true, le.apply(5.0, 5.0));
+		assertEquals(false, le.apply(6.0, 5.0));
+
+		/*
+		 * Less than <
+		 */
+		assertEquals(true, le.apply(4.0, 5.0));
+		assertEquals(false, le.apply(5.0, 5.0));
+		assertEquals(false, le.apply(6.0, 5.0));
+
 	}
 
 }
