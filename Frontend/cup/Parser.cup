@@ -114,44 +114,47 @@ block 			::=     statlist:stats laststat:lstat
 
 statlist		::=		stat:s optsemi optws
 						{: 	
-						System.out.println("Inside single stat"); 			
-						RESULT = new StatList(s);
+							System.out.println("Inside single stat"); 			
+							RESULT = new StatList(s);
 						:}	
 						
 						|  stat:s optsemi optws statlist:sl 
 						{:						
-					    if(sl== null){
-					    System.out.println("Inside recu stat"); 	
-					    sl =new StatList(s);
-						RESULT = sl;}
-						else{
-						System.out.println("Inside recu stat");
-						sl.insertElementAt(s,0);
-						RESULT = sl;
-						}
+					   		if(sl== null){
+					    	System.out.println("Inside recu stat"); 	
+					    	sl =new StatList(s);
+							RESULT = sl;}
+							else{
+							System.out.println("Inside recu stat");
+							sl.insertElementAt(s,0);
+							RESULT = sl;
+							}
 						:}	
 									
 						;
 						
-optsemi			::= 	SEMI  | empty ;
-
-optws			::= 	WS | empty ;
 						
 laststat		::=		RETURN optexplist:el 
-						{:    System.out.println("Inside laststat");
-						 RESULT = new LastReturn( (ExpList) el); :}		
-						| BREAK {: RESULT = new LastBreak(); :}	
-						| empty
+						{:    
+							System.out.println("Inside laststat");
+							RESULT = new LastReturn( (ExpList) el); 
+						:}		
+						| 	BREAK {: RESULT = new LastBreak(); :}	
+						| 	empty
 						; 	
 					
 stat        	::=    	varlist:vl ASM explist:el 
-						{: System.out.println("Inside stat");
-						RESULT = new Asm(vl,el);
+						{: 
+							System.out.println("Inside stat");
+							RESULT = new Asm(vl,el);
 						:}
 						| DO WS block:b END 
-						{:    System.out.println("Inside DO END");
-						RESULT = new DoExp(b); :}
-						
+						{:    
+							System.out.println("Inside DO END");
+							RESULT = new DoExp(b); 
+						:}
+						| WHILE optws exp:e  optws DO optws block:b END
+						{: RESULT = new WhileExp(e,b); :}
 						;
 						
 						
@@ -193,15 +196,23 @@ var				::=		ID:id
 						:}						
 						;
 						
-exp				::=		
+exp				::=		NIL
+						{: RESULT = new Nil(); :}  
+						| FALSE
+						{: RESULT = new BooleanExp(false); :}  
+						| TRUE
+						{: RESULT = new BooleanExp(true); :} 
+						|
 						NUMBER:num
-						{: 
-					  
-						RESULT = new NumberExp(num); 
-						
+						{: 					   
+						RESULT = new NumberExp(num); 						
 						:} 
-						
+						| ID:id 
+						{: RESULT = new TextExp(id); :}
 						;	
 						
+optsemi			::= 	SEMI  | empty ;
+
+optws			::= 	WS | empty ;
 						
 empty			::=		;
