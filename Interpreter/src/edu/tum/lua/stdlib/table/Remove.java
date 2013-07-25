@@ -5,7 +5,6 @@ import java.util.List;
 
 import edu.tum.lua.LuaBadArgumentException;
 import edu.tum.lua.Preconditions;
-import edu.tum.lua.operator.list.LengthOperator;
 import edu.tum.lua.types.LuaFunctionNative;
 import edu.tum.lua.types.LuaTable;
 import edu.tum.lua.types.LuaType;
@@ -19,12 +18,8 @@ public class Remove extends LuaFunctionNative {
 		Preconditions.checkArguments("table.remove", arguments, expectedTypes);
 		LuaTable table = (LuaTable) arguments.get(0);
 
-		double length = 0.0;
-		LengthOperator op = new LengthOperator();
-		try {
-			length = (double) op.apply(table);
-		} catch (NoSuchMethodException e) {
-		}
+		MaxN op = new MaxN();
+		double length = (double) op.apply(table).get(0);
 
 		double pos = length;
 		if (arguments.size() > 1) {

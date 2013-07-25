@@ -9,7 +9,7 @@ import java.util.Collections;
 import org.junit.Test;
 
 import edu.tum.lua.LuaRuntimeException;
-import edu.tum.lua.operator.list.LengthOperator;
+import edu.tum.lua.stdlib.table.MaxN;
 import edu.tum.lua.stdlib.table.Remove;
 import edu.tum.lua.types.LuaTable;
 
@@ -51,7 +51,7 @@ public class RemoveTest {
 	@Test
 	public void functionnalTest() {
 		Remove r = new Remove();
-		LengthOperator op = new LengthOperator();
+		MaxN op = new MaxN();
 		LuaTable table = new LuaTable();
 		table.set(1.0, "a");
 		table.set(2.0, "b");
@@ -59,7 +59,7 @@ public class RemoveTest {
 		table.set(5.0, "e");
 		try {
 			assertEquals("e", r.apply(table).get(0));
-			assertEquals(4.0, (double) op.apply(table), 0.0);
+			assertEquals(4.0, (double) op.apply(table).get(0), 0.0);
 			assertEquals(null, r.apply(table, 3.0).get(0));
 			assertEquals("c", table.get(3.0));
 			assertEquals(0, r.apply(table, 4.0).size());
@@ -67,7 +67,6 @@ public class RemoveTest {
 
 		} catch (LuaRuntimeException e) {
 			fail();
-		} catch (NoSuchMethodException e) {
 		}
 	}
 }

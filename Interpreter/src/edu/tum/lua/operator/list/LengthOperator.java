@@ -1,7 +1,6 @@
 package edu.tum.lua.operator.list;
 
 import edu.tum.lua.operator.Operator;
-import edu.tum.lua.stdlib.table.MaxN;
 import edu.tum.lua.types.LuaFunction;
 import edu.tum.lua.types.LuaTable;
 import edu.tum.lua.types.LuaType;
@@ -20,10 +19,11 @@ public class LengthOperator extends Operator {
 	}
 
 	private Object applyTable(LuaTable op) {
-		MaxN m = new MaxN();
-		if (op.get(1.0) == null)
-			return 0.0;
-		return m.apply(op).get(0);
+		double value = 0;
+		while (op.get(value + 1) != null) {
+			value++;
+		}
+		return value;
 	}
 
 }
