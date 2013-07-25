@@ -14,7 +14,11 @@ public final class Preconditions {
 			builder.append("any type");
 		else {
 			for (int i = 0; i < types.length; i++) {
-				builder.append(types[i].toString());
+				if (types[i] == null) {
+					builder.append("optional");
+				} else {
+					builder.append(types[i].toString());
+				}
 
 				if (i < types.length - 1) {
 					builder.append(" or ");
