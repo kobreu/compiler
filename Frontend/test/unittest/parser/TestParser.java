@@ -127,6 +127,10 @@ public class TestParser {
 			return "NOT";
 		case sym.NUMBER:
 			return "NUMBER";
+		case sym.REPEAT:
+			return "REPEAT";
+		case sym.UNTIL:
+			return "UNTIL";
 		case sym.OR:
 			return "OR";
 		case sym.SEMI:
