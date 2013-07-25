@@ -10,8 +10,11 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
+import org.apache.commons.lang3.reflect.ConstructorUtils;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 import org.xml.sax.SAXException;
 
 
@@ -28,6 +31,15 @@ import org.xml.sax.SAXException;
 
 
 
+
+
+
+
+
+
+
+import sun.reflect.misc.ConstructorUtil;
+import edu.tum.lua.ast.Binop;
 import edu.tum.lua.ast.Block;
 import edu.tum.lua.ast.Chunk;
 import edu.tum.lua.ast.Closure;
@@ -53,59 +65,66 @@ public class XMLDeserializer {
 	}
 
 	public VisitorNode deserialize(Element ele) {
+		ele.normalize();
 		try {
-			if (ele.getTagName().equals("NumberExp")) {
+			if (ele.getName().equals("NumberExp")) {
 				NumberExp exp = new NumberExp(Double.valueOf(ele
-						.getAttribute("number")));
+						.attributeValue("number")));
 				return exp;
-			} else if (ele.getTagName().equals("Unop")) {
-				Exp child = (Exp) deserialize((Element) ele.getChildNodes().item(0));
-				Unop unop = new Unop(opToInt(ele.getAttribute("op")), child );
+			} else if (ele.getName().equals("Binop")) {
+				Exp child1 = (Exp) deserialize((Element) ele.elements().get(0));
+				Exp child2 = (Exp) deserialize((Element) ele.elements().get(1));
+
+				Binop binop = new Binop(child1, opToInt(ele.attributeValue("op")), child2 );
+				return binop;
+			}	else if (ele.getName().equals("Unop")) {
+				Exp child = (Exp) deserialize((Element) ele.elements().get(0));
+				Unop unop = new Unop(opToInt(ele.attributeValue("op")), child );
 				return unop;
-			} else if (ele.getTagName().equals("Closure")) {
-				NameList args = (NameList) deserialize((Element) ele.getChildNodes().item(0));
-				Block block = (Block) deserialize((Element) ele.getChildNodes().item(1));
-				return new  Closure(args, Boolean.valueOf(ele.getAttribute("varargs")).booleanValue(), block);
-			} else if (ele.getTagName().equals("Dots")) {
-				return new Dots(ele.getAttribute("dots"));
-			} else if(ele.getTagName().equals("FieldNameExp")) {
-				Exp exp = (Exp) deserialize((Element) ele.getChildNodes().item(0));
-				return new FieldNameExp(ele.getAttribute("ident"), exp);
-			} else if(ele.getTagName().equals("FunctionDef")) {
-				NameList members = (NameList) deserialize((Element) ele.getChildNodes().item(0));
-				NameList args = (NameList) deserialize((Element) ele.getChildNodes().item(1));
-				Block block = (Block) deserialize((Element) ele.getChildNodes().item(2));
-				return new FunctionDef(ele.getAttribute("ident"), members, args, Boolean.valueOf(ele.getAttribute("varargs")).booleanValue(), block);
-			} else if(ele.getTagName().equals("LocalFuncDef")) {
-				NameList args = (NameList) deserialize((Element) ele.getChildNodes().item(0));
-				Block block = (Block) deserialize((Element) ele.getChildNodes().item(1));
-				return new LocalFuncDef(ele.getAttribute("ident"), args, Boolean.valueOf(ele.getAttribute("varargs")).booleanValue(), block);
-			} else if(ele.getTagName().equals("Name")) {
-				return new Name(ele.getAttribute("name"));
-			} else if(ele.getTagName().equals("TextExp")) {
-				return new TextExp(ele.getAttribute("text"));
-			} else if(ele.getTagName().equals("Variable")) {
-				return new Variable(ele.getAttribute("var"));
+			} else if (ele.getName().equals("Closure")) {
+				NameList args = (NameList) deserialize((Element) ele.elements().get(0));
+				Block block = (Block) deserialize((Element) ele.elements().get(1));
+				return new  Closure(args, Boolean.valueOf(ele.attributeValue("varargs")).booleanValue(), block);
+			} else if (ele.getName().equals("Dots")) {
+				return new Dots(ele.attributeValue("dots"));
+			} else if(ele.getName().equals("FieldNameExp")) {
+				Exp exp = (Exp) deserialize((Element) ele.elements().get(0));
+				return new FieldNameExp(ele.attributeValue("ident"), exp);
+			} else if(ele.getName().equals("FunctionDef")) {
+				NameList members = (NameList) deserialize((Element) ele.elements().get(0));
+				NameList args = (NameList) deserialize((Element) ele.elements().get(1));
+				Block block = (Block) deserialize((Element) ele.elements().get(2));
+				return new FunctionDef(ele.attributeValue("ident"), members, args, Boolean.valueOf(ele.attributeValue("varargs")).booleanValue(), block);
+			} else if(ele.getName().equals("LocalFuncDef")) {
+				NameList args = (NameList) deserialize((Element) ele.elements().get(0));
+				Block block = (Block) deserialize((Element) ele.elements().get(1));
+				return new LocalFuncDef(ele.attributeValue("ident"), args, Boolean.valueOf(ele.attributeValue("varargs")).booleanValue(), block);
+			} else if(ele.getName().equals("Name")) {
+				return new Name(ele.attributeValue("name"));
+			} else if(ele.getName().equals("TextExp")) {
+				return new TextExp(ele.attributeValue("text"));
+			} else if(ele.getName().equals("Variable")) {
+				return new Variable(ele.attributeValue("var"));
 			}
 			
 			else { // without attributes can be done automatically
 
 				Class clazz = Class.forName("edu.tum.lua.ast."
-						+ ele.getTagName());
+						+ ele.getName());
 
 				VisitorNode[] deserializedChildren = new VisitorNode[ele
-						.getChildNodes().getLength()];
-				Class[] constructorClasses = new Class[ele.getChildNodes()
-						.getLength()];
+						.elements().size()];
+				Class[] constructorClasses = new Class[ele.elements()
+						.size()];
 
-				for (int i = 0; i < ele.getChildNodes().getLength(); i++) {
-					Element child = (Element) ele.getChildNodes().item(i);
+				for (int i = 0; i < ele.elements().size(); i++) {
+					Element child = (Element) ele.elements().get(i);
 
 					deserializedChildren[i] = deserialize(child);
 					constructorClasses[i] = deserializedChildren[i].getClass();
 				}
 
-				Constructor constructor = clazz.getDeclaredConstructor(constructorClasses);
+				Constructor constructor = ConstructorUtils.getMatchingAccessibleConstructor(clazz, constructorClasses);
 
 				VisitorNode deserialized = (VisitorNode) constructor
 						.newInstance(deserializedChildren);
@@ -113,9 +132,6 @@ public class XMLDeserializer {
 				return deserialized;
 			}
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SecurityException e) {
@@ -143,23 +159,18 @@ public class XMLDeserializer {
 	}
 
 	public Chunk deserialize(File file) {
-		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder dBuilder;
-		Document doc = null;
+        SAXReader reader = new SAXReader();
+        Document document;
 		try {
-			dBuilder = dbFactory.newDocumentBuilder();
-			doc = dBuilder.parse(file);
+			document = reader.read(file);
+			return (Chunk) deserialize(document.getRootElement());
 
-		} catch (ParserConfigurationException | SAXException | IOException e) {
+		} catch (DocumentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return null;
 
-		doc.getDocumentElement().normalize();
-		System.out.println("Root element :"
-				+ doc.getDocumentElement().getNodeName());
-
-		return (Chunk) deserialize(doc.getDocumentElement());
 	}
 
 }

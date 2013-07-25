@@ -63,7 +63,7 @@ public class AttributeWriterVisitor extends VisitorAdaptor {
 	
 	@Override
 	public void visit(Binop binop) {
-		addAttr("op", String.valueOf(binop.op));
+		addAttr("op", oplookup(binop.op));
 	}
 	
 	@Override

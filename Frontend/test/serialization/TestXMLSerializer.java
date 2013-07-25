@@ -21,6 +21,7 @@ import org.xml.sax.SAXException;
 
 import com.sun.org.apache.xpath.internal.operations.Number;
 
+import edu.tum.lua.ast.Asm;
 import edu.tum.lua.ast.Binop;
 import edu.tum.lua.ast.Chunk;
 import edu.tum.lua.ast.ExpList;
@@ -30,6 +31,8 @@ import edu.tum.lua.ast.NumberExp;
 import edu.tum.lua.ast.Op;
 import edu.tum.lua.ast.StatList;
 import edu.tum.lua.ast.Unop;
+import edu.tum.lua.ast.VarList;
+import edu.tum.lua.ast.Variable;
 import edu.tum.lua.ast.Visitor;
 
 public class TestXMLSerializer extends XMLTestCase {
@@ -50,6 +53,27 @@ public class TestXMLSerializer extends XMLTestCase {
 		DOMSource source = new DOMSource(doc);
 
 		StreamResult result = new StreamResult(new File("testing.xml"));
+		transformer.transform(source, result);
+
+		System.out.println("Done");
+	}
+	
+	@Test
+	public void testMoreComplete() throws TransformerException {
+		Chunk chunk = new Chunk(new StatList(new Asm(new VarList(new Variable("var")), new ExpList(new Binop(new NumberExp(1.0), Op.ADD,  new NumberExp(5.0))) )), new LastReturn(new ExpList(
+				new Unop(Op.UNM, new NumberExp(1.0)))));
+		
+		XMLSerializer serializer = new XMLSerializer();
+
+		Document doc = serializer.serialize(chunk);
+
+		// write the content into xml file
+		TransformerFactory transformerFactory = TransformerFactory
+				.newInstance();
+		Transformer transformer = transformerFactory.newTransformer();
+		DOMSource source = new DOMSource(doc);
+
+		StreamResult result = new StreamResult(new File("testing2.xml"));
 		transformer.transform(source, result);
 
 		System.out.println("Done");
