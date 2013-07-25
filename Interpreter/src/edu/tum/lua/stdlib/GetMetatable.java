@@ -17,6 +17,6 @@ public class GetMetatable extends LuaFunctionNative {
 	public List<Object> apply(List<Object> arguments) {
 		checkArguments("getmetatable", arguments, types);
 		LuaTable table = (LuaTable) arguments.get(0);
-		return Collections.singletonList(table.getMetatable());
+		return Collections.singletonList((Object) table.getMetatable());
 	}
 }
