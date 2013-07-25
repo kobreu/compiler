@@ -30,7 +30,7 @@ public class MaxNTest {
 		assertEquals(1.2, maxN.apply(table).get(0));
 		table.set(-1.0, "a");
 		assertEquals(1.2, maxN.apply(table).get(0));
-		table.unset(1.2);
+		table.set(1.2, null);
 		assertEquals(0.0, maxN.apply(table).get(0));
 	}
 

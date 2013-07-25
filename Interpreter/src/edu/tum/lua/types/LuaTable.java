@@ -120,6 +120,11 @@ public class LuaTable implements Iterable<Map.Entry<Object, Object>> {
 			throw new LuaRuntimeException("table index is nil");
 		}
 
+		if (value == null) {
+			pairs.remove(key);
+			return;
+		}
+
 		pairs.put(key, value);
 	}
 
@@ -172,10 +177,6 @@ public class LuaTable implements Iterable<Map.Entry<Object, Object>> {
 		}
 
 		this.metatable = metatable;
-	}
-
-	public void unset(Object key) {
-		pairs.remove(key);
 	}
 
 	@Override

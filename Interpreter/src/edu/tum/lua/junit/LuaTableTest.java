@@ -135,7 +135,7 @@ public class LuaTableTest {
 	public void testUnset() {
 		table.set("a", "a");
 		assertTrue(null != table.get("a"));
-		table.unset("a");
+		table.set("a", null);
 		assertTrue(null == table.get("a"));
 	}
 
