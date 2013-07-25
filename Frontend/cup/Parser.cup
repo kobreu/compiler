@@ -95,37 +95,73 @@ non terminal optsemi, empty, optws, optforexp, optexplist, optasm, optdotname, o
 
 /* Grammar */
 
+start with block;
 
 
-block 			::=     statlist:stats 
-                 		{:                 	    
-                 		RESULT = new Block(stats,null);
+block 			::=     statlist:stats laststat:lstat
+                 		{:       
+                 			if(lstat == null)   {   
+                 			System.out.println("Inside block");    	    
+                 			RESULT = new Block(stats,null); 	}
+                 			else	{
+                 			System.out.println("Inside block with laststat");   
+                 			RESULT = new Block(stats,lstat);  }
                  		:}
-                 		
+                 	
                  		;
 
-
+	
 
 statlist		::=		stat:s SEMI WS
-						{: 				
+						{: 	
+						System.out.println("Inside single stat"); 			
+						RESULT = new StatList(s);
+						:}	
+						| stat:s
+						{: 	
+						System.out.println("Inside single stat"); 			
 						RESULT = new StatList(s);
 						:}	
 						|  stat:s SEMI WS statlist:sl 
 						{:						
 					    if(sl== null){
+					    System.out.println("Inside recu stat"); 	
 					    sl =new StatList(s);
 						RESULT = sl;}
 						else{
+						   System.out.println("Inside recu stat");
 						sl.insertElementAt(s,0);
 						RESULT = sl;
 						}
-						:}				
+						:}	
+						|  stat:s  WS statlist:sl 
+						{:						
+					    if(sl== null){
+					    System.out.println("Inside recu stat"); 	
+					    sl =new StatList(s);
+						RESULT = sl;}
+						else{
+						   System.out.println("Inside recu stat");
+						sl.insertElementAt(s,0);
+						RESULT = sl;
+						}
+						:}					
 						;
+						
+laststat		::=		RETURN optexplist:el 
+						{:    System.out.println("Inside laststat");
+						 RESULT = new LastReturn( (ExpList) el); :}		
+						| BREAK {: RESULT = new LastBreak(); :}	
+						| empty
+						; 	
 					
 stat        	::=    	varlist:vl ASM explist:el 
-						{: 
+						{: System.out.println("Inside stat");
 						RESULT = new Asm(vl,el);
 						:}
+						| DO WS block:b END 
+						{:    System.out.println("Inside DO END");
+						RESULT = new DoExp(b); :}
 						
 						;
 						
