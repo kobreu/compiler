@@ -27,8 +27,8 @@ public class LuaInterpreter {
 
 	public static Object eval(Exp exp, Environment environment) {
 		ExpVisitor visitor = new ExpVisitor(environment);
-		exp.traverseBottomUp(visitor);
-		return visitor.getReturn();
+		exp.accept(visitor);
+		return visitor.popLast();
 	}
 
 	public static void eval(FunctionCall call, Environment environment2) {

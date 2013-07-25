@@ -1,27 +1,33 @@
 package edu.tum.lua;
 
 import java.util.Deque;
+import java.util.Enumeration;
 import java.util.LinkedList;
-import java.util.List;
 
 import edu.tum.lua.ast.Binop;
 import edu.tum.lua.ast.BooleanExp;
 import edu.tum.lua.ast.Closure;
 import edu.tum.lua.ast.Dots;
 import edu.tum.lua.ast.Exp;
+import edu.tum.lua.ast.ExpList;
 import edu.tum.lua.ast.FunctionCall;
-import edu.tum.lua.ast.LegacyAdapter;
 import edu.tum.lua.ast.Nil;
 import edu.tum.lua.ast.NumberExp;
-import edu.tum.lua.ast.Op;
+import edu.tum.lua.ast.PreExp;
 import edu.tum.lua.ast.PrefixExp;
 import edu.tum.lua.ast.PrefixExpVar;
+import edu.tum.lua.ast.Stat;
+import edu.tum.lua.ast.SyntaxNode;
 import edu.tum.lua.ast.TableConstructorExp;
 import edu.tum.lua.ast.TextExp;
 import edu.tum.lua.ast.Unop;
+import edu.tum.lua.ast.Variable;
 import edu.tum.lua.ast.VisitorAdaptor;
-import edu.tum.lua.operator.arithmetic.AddOperator;
+import edu.tum.lua.operator.Operator;
+import edu.tum.lua.operator.OperatorRegistry;
 import edu.tum.lua.types.LuaFunction;
+import edu.tum.lua.types.LuaTable;
+import edu.tum.lua.types.LuaType;
 
 public class ExpVisitor extends VisitorAdaptor {
 
@@ -34,12 +40,12 @@ public class ExpVisitor extends VisitorAdaptor {
 		evaluationStack = new LinkedList<>();
 	}
 
-	public Object getReturn() {
+	public Object popLast() {
 		if (evaluationStack.size() > 1) {
 			throw new IllegalStateException();
 		}
 
-		return evaluationStack.getLast();
+		return evaluationStack.removeLast();
 	}
 
 	@Override
@@ -79,7 +85,7 @@ public class ExpVisitor extends VisitorAdaptor {
 
 	@Override
 	public void visit(PrefixExp exp) {
-		// NOP
+		exp.accept(this);
 	}
 
 	@Override
@@ -89,57 +95,98 @@ public class ExpVisitor extends VisitorAdaptor {
 
 	@Override
 	public void visit(Binop binop) {
-		// Reverse stack order!
-		Object op2 = evaluationStack.removeLast();
+		binop.leftexp.accept(this);
 		Object op1 = evaluationStack.removeLast();
-		Object result;
 
-		switch (binop.op) {
-		case Op.ADD:
-			// FIXME: Create Registry for Operators
-			AddOperator add = new AddOperator();
-			try {
-				result = add.apply(op1, op2);
-			} catch (NoSuchMethodException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				throw new LuaRuntimeException("missing handler");
-			}
-			break;
+		binop.rightexp.accept(this);
+		Object op2 = evaluationStack.removeLast();
 
-		default:
-			throw new RuntimeException("Not yet implemented");
-		}
-
-		evaluationStack.addLast(result);
+		Operator operator = OperatorRegistry.registry[binop.op];
+		evaluationStack.addLast(operator.apply(op1, op2));
 	}
 
 	@Override
 	public void visit(Unop unop) {
-		Object op1 = evaluationStack.removeLast();
-		throw new RuntimeException("Not yet implemented");
+		unop.exp.accept(this);
+		Object op = evaluationStack.removeLast();
+
+		Operator operator = OperatorRegistry.registry[unop.op];
+		evaluationStack.addLast(operator.apply(op));
 	}
 
 	@Override
 	public void visit(PrefixExpVar expVar) {
-
+		expVar.childrenAccept(this);
 	}
 
-	private Object doFunctionCall(FunctionCall call) {
-		PrefixExp prefixExp = call.preexp;
+	@Override
+	public void visit(Variable variable) {
+		evaluationStack.addLast(environment.get(variable.var));
+	}
 
-		/* Get LuaFunction */
-		LuaFunction function;
-		Object f;
+	private Deque<Object> findCallHandler(Object object) {
+		Deque<Object> result;
 
-		if (prefixExp instanceof PrefixExpVar) {
-			PrefixExpVar var = (PrefixExpVar) prefixExp;
+		switch (LuaType.getTypeOf(object)) {
+		case FUNCTION:
+			result = new LinkedList<>();
+			result.add(object);
+			return result;
+
+			/*
+			 * meta.__call(object, ...) - metafunctions take the table as first
+			 * argument!
+			 */
+		case TABLE:
+			LuaTable meta = ((LuaTable) object).getMetatable();
+
+			if (meta != null) {
+				result = findCallHandler(meta.get("__call"));
+				result.add(object);
+				return result;
+			}
+
+		default:
+			throw new LuaRuntimeException("attempt to call a " + LuaType.getTypeOf(object) + " value");
+		}
+	}
+
+	@Override
+	public void visit(FunctionCall call) {
+		call.preexp.accept(this);
+
+		Deque<Object> args = findCallHandler(evaluationStack.removeLast());
+		LuaFunction f = (LuaFunction) args.removeFirst();
+
+		ExpVisitor visitor = new ExpVisitor(environment);
+		Enumeration<Exp> iterator = call.explist.elements();
+
+		while (iterator.hasMoreElements()) {
+			iterator.nextElement().accept(this);
+			args.addLast(visitor.popLast());
 		}
 
-		List<Exp> argsExp = LegacyAdapter.convert(call.explist);
+		java.util.List<Object> result = f.apply(args);
 
-		/* __call methametod -> */
+		SyntaxNode callParent = call.getParent();
 
-		return null;
+		// Discard everything
+		if (callParent instanceof Stat) {
+			return;
+		}
+
+		if (callParent.getParent().getParent() instanceof ExpList) {
+			PreExp preExp = (PreExp) callParent.getParent();
+			ExpList list = (ExpList) preExp.getParent();
+
+			if (list.elementAt(list.size() - 1) == preExp) {
+				evaluationStack.addAll(f.apply(args));
+				return;
+			}
+		}
+
+		if (!result.isEmpty()) {
+			evaluationStack.add(result.get(0));
+		}
 	}
 }

@@ -9,8 +9,10 @@ import org.junit.Test;
 import edu.tum.lua.Environment;
 import edu.tum.lua.StatementVisitor;
 import edu.tum.lua.ast.Asm;
+import edu.tum.lua.ast.Binop;
 import edu.tum.lua.ast.ExpList;
 import edu.tum.lua.ast.NumberExp;
+import edu.tum.lua.ast.Op;
 import edu.tum.lua.ast.VarList;
 import edu.tum.lua.ast.Variable;
 
@@ -27,11 +29,12 @@ public class StatementVisitorTest {
 
 	@Test
 	public void testVisitAsm() {
-		Asm asm = new Asm(new VarList(new Variable("a")), new ExpList(new NumberExp(1.0)));
+		Asm asm = new Asm(new VarList(new Variable("a")), new ExpList(new Binop(new NumberExp(1.0), Op.ADD,
+				new NumberExp(1.0))));
 
 		assertEquals(null, environment.get("a"));
 		visitor.visit(asm);
-		assertEquals(1.0, environment.get("a"));
+		assertEquals(2.0, environment.get("a"));
 	}
 
 	@Test
