@@ -66,18 +66,18 @@ terminal String  ID, TEXT;
 
  /*NON TERMINALS */
 non terminal Chunk chunk;
-non terminal Block block;
+non terminal Block block, optelse ;
 non terminal Stat stat;
 non terminal StatList statlist;
 non terminal LastStat laststat;
 
 non terminal FuncName funcname;
-non terminal IfThenElse optelse;
+non terminal IfThenElse ifthenelse;
 non terminal VarList varlist;
 non terminal Var var;
 non terminal NameList namelist;
 non terminal ExpList explist;
-non terminal Exp exp;
+non terminal Exp exp, optforexp;
 non terminal PrefixExp prefixexp;
 non terminal FunctionCall functioncall;
 non terminal args;
@@ -90,7 +90,7 @@ non terminal Field field;
 non terminal fieldsep;
 non terminal Integer binop;
 non terminal Integer unop;
-non terminal optsemi, empty, optws, optforexp, optexplist, optasm, optdotname, optcolonname, optvarlist;
+non terminal optsemi, empty, optws, optexplist, optasm, optdotname, optcolonname, optvarlist;
 
 
 /* Grammar */
@@ -143,21 +143,39 @@ laststat		::=		RETURN optexplist:el
 						| 	empty
 						; 	
 					
-stat        	::=    	varlist:vl ASM explist:el 
+stat        	::=    		varlist:vl ASM explist:el 
 						{: 
-							System.out.println("Inside stat");
-							RESULT = new Asm(vl,el);
+								System.out.println("Inside stat");
+								RESULT = new Asm(vl,el);
 						:}
-						| DO WS block:b END 
+						| 	DO WS block:b END 
 						{:    
-							System.out.println("Inside DO END");
-							RESULT = new DoExp(b); 
+								System.out.println("Inside DO END");
+								RESULT = new DoExp(b); 
 						:}
-						| WHILE optws exp:e  optws DO optws block:b END
-						{: RESULT = new WhileExp(e,b); :}
+						|  	WHILE optws exp:e  optws DO optws block:b END
+						{: 		RESULT = new WhileExp(e,b); :}
+						|  	REPEAT optws block:b  UNTIL optws exp:e
+						{: 		RESULT = new RepeatUntil(b,e); :}
+						|  	IF optws exp:e optws THEN optws block:b optelse:elseblock END
+						{: 	RESULT = new IfThenElse(e, b, elseblock);
+						:}
+						| 	FOR optws ID:id optws ASM optws exp:e1 optws COM optws exp:e2  optforexp:e3 optws DO optws block:b END
+						{: 		
+								RESULT = new ForExp(id,e1,e2,e3,b); 
+						:}
+						
 						;
 						
-						
+
+optelse			::= 	ELSE optws block:b {: RESULT = b; :}						
+						| empty
+						;	
+												
+optforexp		::=		COM optws exp:e {: RESULT = e; :}				
+						| empty {: RESULT = new NumberExp(1.0); :}
+						;
+
 varlist			::=     var:v
 						{: 							
 						RESULT= new VarList(v);
@@ -212,6 +230,7 @@ exp				::=		NIL
 						;	
 						
 optsemi			::= 	SEMI  | empty ;
+
 
 optws			::= 	WS | empty ;
 						
