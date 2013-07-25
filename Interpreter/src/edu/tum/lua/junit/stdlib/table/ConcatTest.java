@@ -79,14 +79,11 @@ public class ConcatTest {
 		table.set(1.0, "a");
 		table.set(2.0, "b");
 		table.set(3.0, "c");
-		try {
-			assertEquals(c.apply(table).get(0).toString(), "abc");
-			assertEquals(c.apply(table, " ").get(0).toString(), "a b c");
-			assertEquals(c.apply(table, " ", 2.0).get(0).toString(), "b c");
-			assertEquals(c.apply(table, " ", 2.0, 2.0).get(0).toString(), "b");
-		} catch (LuaRuntimeException e) {
-			fail();
-		}
+
+		assertEquals(c.apply(table).get(0).toString(), "abc");
+		assertEquals(c.apply(table, " ").get(0).toString(), "a b c");
+		assertEquals(c.apply(table, " ", 2.0).get(0).toString(), "b c");
+		assertEquals(c.apply(table, " ", 2.0, 2.0).get(0).toString(), "b");
 	}
 
 	@Test
