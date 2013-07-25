@@ -26,6 +26,7 @@ import edu.tum.lua.stdlib.ToString;
 import edu.tum.lua.stdlib.Type;
 import edu.tum.lua.stdlib.Unpack;
 import edu.tum.lua.stdlib.VoidFunction;
+import edu.tum.lua.stdlib.Xpcall;
 import edu.tum.lua.stdlib.math.Abs;
 import edu.tum.lua.stdlib.math.Acos;
 import edu.tum.lua.stdlib.math.Asin;
@@ -101,7 +102,7 @@ public class Environment extends LuaTable {
 		set("type", new Type());
 		set("unpack", new Unpack());
 		set("_VERSION", "Java Lua -1");
-		set("xpcall", new NotImplementedFunction());
+		set("xpcall", new Xpcall());
 
 		LuaTable coroutine = new LuaTable();
 		LuaTable _package = new LuaTable();
