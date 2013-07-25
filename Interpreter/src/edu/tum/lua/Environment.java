@@ -66,7 +66,7 @@ public class Environment extends LuaTable {
 	/**
 	 * Create a new global environment.
 	 */
-	Environment() {
+	public Environment() {
 		set("assert", new Assert());
 		set("collectgarbage", new VoidFunction());
 		set("dofile", new NotImplementedFunction());
@@ -161,7 +161,10 @@ public class Environment extends LuaTable {
 		List<Object> values = new ArrayList<>(expressions.size());
 
 		for (Exp exp : expressions) {
-			values.add(LuaInterpreter.eval(exp, this));
+			Object value = LuaInterpreter.eval(exp, this);
+			values.add(value);
+
+			// TODO Adjust values!
 		}
 
 		for (int i = 0; i < identifiers.size(); i++) {
