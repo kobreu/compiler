@@ -34,7 +34,7 @@ public class LengthOperatorTest {
 		op3.set("key", d3);
 		try {
 			assertEquals(op1.length(), op.apply(op1));
-			assertEquals(d1, op.apply(op2));
+			assertEquals(d3, op.apply(op2));
 			assertEquals(d2, op.apply(op3));
 		} catch (NoSuchMethodException e) {
 			fail();
