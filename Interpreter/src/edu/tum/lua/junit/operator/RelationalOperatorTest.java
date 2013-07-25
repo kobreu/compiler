@@ -23,6 +23,8 @@ public class RelationalOperatorTest {
 	@Before
 	public void setUp() throws Exception {
 		eq = new EqOperator();
+		le = new LEOperator();
+		lt = new LTOperator();
 	}
 
 	@Test
@@ -69,9 +71,9 @@ public class RelationalOperatorTest {
 		/*
 		 * Less than <
 		 */
-		assertEquals(true, le.apply(4.0, 5.0));
-		assertEquals(false, le.apply(5.0, 5.0));
-		assertEquals(false, le.apply(6.0, 5.0));
+		assertEquals(true, lt.apply(4.0, 5.0));
+		assertEquals(false, lt.apply(5.0, 5.0));
+		assertEquals(false, lt.apply(6.0, 5.0));
 
 	}
 
