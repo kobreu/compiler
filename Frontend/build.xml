@@ -22,10 +22,13 @@
 		</fileset>
 		<pathelement path="${java.class.path}" />
 		<pathelement path="${classes}" />
+		
+		<pathelement location="${lib}/xmlunit-1.4.jar" />
 	</path>
 
 	<path id="libraries">
 		<pathelement location="${lib}" />
+
 		<fileset dir="${lib}">
 			<include name="**/*.jar" />
 			<include name="**/*.zip" />
@@ -77,6 +80,7 @@ parser="Parser" />
 				<pathelement location="${classes}" />
 				<pathelement location="${lib}/junit-4.11.jar" />
 				<pathelement location="${lib}/hamcrest-core-1.3.jar" />
+				<pathelement location="${lib}/xmlunit-1.4.jar" />
 			</classpath>
 			<batchtest todir="testoutput">
 				<fileset dir="${test}">
