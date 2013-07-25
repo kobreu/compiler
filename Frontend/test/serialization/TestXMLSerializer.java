@@ -2,8 +2,12 @@ package serialization;
 
 import static org.junit.Assert.*;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -15,10 +19,16 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.custommonkey.xmlunit.XMLTestCase;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.DocumentHelper;
+import org.dom4j.io.OutputFormat;
+import org.dom4j.io.SAXReader;
+import org.dom4j.io.XMLWriter;
 import org.junit.Test;
-import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
+import com.sun.beans.decoder.DocumentHandler;
 import com.sun.org.apache.xpath.internal.operations.Number;
 
 import edu.tum.lua.ast.Asm;
@@ -38,28 +48,25 @@ import edu.tum.lua.ast.Visitor;
 public class TestXMLSerializer extends XMLTestCase {
 
 	@Test
-	public void testSerialize() throws TransformerException {
+	public void testSerialize() throws TransformerException, IOException {
 		Block chunk = new Block(new StatList(), new LastReturn(new ExpList(
 				new Unop(Op.UNM, new NumberExp(1.0)))));
 		
 		XMLSerializer serializer = new XMLSerializer();
 
 		Document doc = serializer.serialize(chunk);
-
-		// write the content into xml file
-		TransformerFactory transformerFactory = TransformerFactory
-				.newInstance();
-		Transformer transformer = transformerFactory.newTransformer();
-		DOMSource source = new DOMSource(doc);
-
-		StreamResult result = new StreamResult(new File("testing.xml"));
-		transformer.transform(source, result);
+		
+		// Pretty print the document to System.out
+        OutputFormat format = OutputFormat.createPrettyPrint();
+        XMLWriter writer = new XMLWriter( System.out, format );
+        writer.write( doc );
+        writer.close();
 
 		System.out.println("Done");
 	}
 	
 	@Test
-	public void testMoreComplete() throws TransformerException {
+	public void testMoreComplete() throws TransformerException, IOException {
 	    Block chunk = new Block(new StatList(new Asm(new VarList(new Variable("var")), new ExpList(new Binop(new NumberExp(1.0), Op.ADD,  new NumberExp(5.0))) )), new LastReturn(new ExpList(
 				new Unop(Op.UNM, new NumberExp(1.0)))));
 		
@@ -67,34 +74,15 @@ public class TestXMLSerializer extends XMLTestCase {
 
 		Document doc = serializer.serialize(chunk);
 
-		// write the content into xml file
-		TransformerFactory transformerFactory = TransformerFactory
-				.newInstance();
-		Transformer transformer = transformerFactory.newTransformer();
-		DOMSource source = new DOMSource(doc);
+		// Pretty print the document to System.out
+        OutputFormat format = OutputFormat.createPrettyPrint();
+        XMLWriter writer = new XMLWriter( System.out, format );
+        writer.write( doc );
 
-		StreamResult result = new StreamResult(new File("testing2.xml"));
-		transformer.transform(source, result);
 
 		System.out.println("Done");
 	}
 	
-	@Test
-	public void testCompare() throws ParserConfigurationException, SAXException, IOException {
-		Block  chunk = new Block(new StatList(), new LastReturn(new ExpList(
-				new Unop(Op.UNM, new NumberExp(1.0)))));
-		
-		XMLSerializer serializer = new XMLSerializer();
-		
-		Document doc = serializer.serialize(chunk);
-		
-		File fXmlFile = new File("testing.xml");
-		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-		Document doc2 = dBuilder.parse(fXmlFile);
-		
-		assertXMLEqual(doc, doc2);
-	}
 	
 	@Test
 	public void testTest() {

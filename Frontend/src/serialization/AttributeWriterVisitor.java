@@ -1,8 +1,8 @@
 package serialization;
 
-import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
+
+import org.dom4j.Document;
+import org.dom4j.Element;
 
 import edu.tum.lua.ast.Binop;
 import edu.tum.lua.ast.Closure;
@@ -21,18 +21,15 @@ import edu.tum.lua.ast.VisitorNode;
 
 public class AttributeWriterVisitor extends VisitorAdaptor {
 
-	private Node currElement;
+	private Element currElement;
 	
 	private Document document;
 	
 	private void addAttr(String name, String value) {
-		Attr attr = document.createAttribute(name);
-		attr.setValue(value);
-		currElement.getAttributes().setNamedItem(attr);
+		currElement.addAttribute(name, value);
 	}
 	
-	
-	public AttributeWriterVisitor(Node curr, Document doc) {
+	public AttributeWriterVisitor(Element curr, Document doc) {
 		currElement = curr;
 		document = doc;
 	}

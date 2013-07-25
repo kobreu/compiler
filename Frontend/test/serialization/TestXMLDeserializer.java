@@ -17,7 +17,7 @@ public class TestXMLDeserializer extends XMLTestCase {
 	public void testDeserialize() throws TransformerException {
 		XMLDeserializer xml = new XMLDeserializer();
 		
-		Block block = (Block) xml.deserialize(new File("testing.xml"));
+		Block block = (Block) xml.deserialize(new File("testinput/grammar/args_explist_none.xml"));
 	}
 	
 	

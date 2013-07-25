@@ -7,37 +7,34 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
+import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+
+import com.sun.beans.decoder.DocumentHandler;
 
 import edu.tum.lua.ast.Block;
 import edu.tum.lua.ast.VisitorNode;
 
 public class XMLSerializer {
 	
-	DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-	DocumentBuilder docBuilder = null;
 	private Document doc;
 	
-	private Node currElement;
+	private Element currElement;
 	
 	private class XMLVisitor extends VisitorAdapterGeneric {
 		
 		private void appendToCurrAndDive(String tagname) {
-			Element el = doc.createElement(tagname);
-			currElement.appendChild(el);
+			Element el = currElement.addElement(tagname);
 			currElement = el;
 		}
 		
 		private void appendToCurrAndSwim(String tagname) {
-			Element el = doc.createElement(tagname);
-			currElement.appendChild(el);
+			currElement.addElement(tagname);
 		}
 		
 		private void lift() {
-			currElement = currElement.getParentNode();
+			currElement = currElement.getParent();
 		}
 		
 		private void addAttributes(VisitorNode node) {
@@ -56,17 +53,10 @@ public class XMLSerializer {
 	}
 	
 	public Document serialize(Block chunk) {
-		try {
-			docBuilder = docFactory.newDocumentBuilder();
-		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
-			return null;
-		}
+		doc = DocumentHelper.createDocument();
+		doc.setName("Block");
 		
-		doc = docBuilder.newDocument();
-		
-		Element chunkE = doc.createElement(chunk.getClass().getSimpleName());
-		doc.appendChild(chunkE);
+		Element chunkE = doc.addElement(chunk.getClass().getSimpleName());
 		currElement = chunkE;
 		
 		// create root node for the block

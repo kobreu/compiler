@@ -81,6 +81,8 @@ parser="Parser" />
 				<pathelement location="${lib}/junit-4.11.jar" />
 				<pathelement location="${lib}/hamcrest-core-1.3.jar" />
 				<pathelement location="${lib}/xmlunit-1.4.jar" />
+				<pathelement location="${lib}/dom4j-2.0.0-ALPHA-2.jar" />
+				<pathelement location="${lib}/java-cup-11a-runtime.jar" />
 			</classpath>
 			<batchtest todir="testoutput">
 				<fileset dir="${test}">
