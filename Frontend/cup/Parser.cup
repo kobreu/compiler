@@ -112,41 +112,30 @@ block 			::=     statlist:stats laststat:lstat
 
 	
 
-statlist		::=		stat:s SEMI WS
+statlist		::=		stat:s optsemi optws
 						{: 	
 						System.out.println("Inside single stat"); 			
 						RESULT = new StatList(s);
 						:}	
-						| stat:s
-						{: 	
-						System.out.println("Inside single stat"); 			
-						RESULT = new StatList(s);
-						:}	
-						|  stat:s SEMI WS statlist:sl 
+						
+						|  stat:s optsemi optws statlist:sl 
 						{:						
 					    if(sl== null){
 					    System.out.println("Inside recu stat"); 	
 					    sl =new StatList(s);
 						RESULT = sl;}
 						else{
-						   System.out.println("Inside recu stat");
+						System.out.println("Inside recu stat");
 						sl.insertElementAt(s,0);
 						RESULT = sl;
 						}
 						:}	
-						|  stat:s  WS statlist:sl 
-						{:						
-					    if(sl== null){
-					    System.out.println("Inside recu stat"); 	
-					    sl =new StatList(s);
-						RESULT = sl;}
-						else{
-						   System.out.println("Inside recu stat");
-						sl.insertElementAt(s,0);
-						RESULT = sl;
-						}
-						:}					
+									
 						;
+						
+optsemi			::= 	SEMI  | empty ;
+
+optws			::= 	WS | empty ;
 						
 laststat		::=		RETURN optexplist:el 
 						{:    System.out.println("Inside laststat");
