@@ -1,0 +1,22 @@
+<Block>
+	<StatList>
+		<Asm>
+			<VarList>
+				<Variable var="a" />
+			</VarList>
+			<ExpList>
+				<PreExp>
+					<PrefixExpFuncCall>
+						<FunctionCall>
+							<PrefixExpVar>
+								<Variable var="b" />
+							</PrefixExpVar>
+							<ExpList />
+						</FunctionCall>
+					</PrefixExpFuncCall>
+				</PreExp>
+			</ExpList>
+		</Asm>
+	</StatList>
+	<Null />
+</Block>
