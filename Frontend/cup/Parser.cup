@@ -65,7 +65,6 @@ terminal String  ID, TEXT;
 
 
  /*NON TERMINALS */
-non terminal Chunk chunk;
 non terminal Block block;
 non terminal Stat stat;
 non terminal StatList statlist;
@@ -95,12 +94,13 @@ non terminal optsemi, empty, optws, optforexp, optexplist, optasm, optdotname, o
 
 /* Grammar */
 
+start with block;
 
-
-chunk 			::=     statlist:stats
+block 			::=     statlist:stats 
                  		{:                 	    
-                 		RESULT = new Chunk(stats);
+                 		RESULT = new Block(stats,null);
                  		:}
+                 		
                  		;
 
 
@@ -135,12 +135,12 @@ varlist			::=     var:v
 						:}
 						| var:v COM varlist:vl
 						{: 
-						if(vl==null){
-						vl = new VarList(v);
-						RESULT = vl; }
-						else {
-						vl.insertElementAt(v,0);
-						RESULT = vl; }
+						  if(vl==null){
+						  vl = new VarList(v);
+					 	  RESULT = vl; }
+						  else {
+						  vl.insertElementAt(v,0);
+						  RESULT = vl; }
 						:}								
 						;
 						

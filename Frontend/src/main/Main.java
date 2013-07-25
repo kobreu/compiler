@@ -15,7 +15,7 @@ public class Main {
    * @param argv   the command line, argv[0] is the filename to run
    *               the parser on.
    */
-  public Chunk run(String argv[]) 
+  public Block run(String argv[]) 
     throws java.io.IOException, java.lang.Exception
  {
     Lexer scanner = null;
@@ -31,11 +31,11 @@ public class Main {
       System.exit(1);
     }
     
-    Chunk prog = null;
+    Block prog = null;
     
     try {
       Parser p = new Parser(scanner);
-      prog = (Chunk) p.parse().value;
+      prog = (Block) p.parse().value;
       
     }
     catch (java.io.IOException e) {

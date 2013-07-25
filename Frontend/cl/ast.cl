@@ -1,9 +1,7 @@
 
 package edu.tum.lua.ast;
 
-Chunk ::= StatList:stats LastStat:last
-
-Block ::= Chunk:chunk
+Block ::= StatList:stats LastStat:last
 
 StatList ::= Stat*
 
