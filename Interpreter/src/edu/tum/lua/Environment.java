@@ -3,6 +3,7 @@ package edu.tum.lua;
 import java.util.ArrayList;
 import java.util.List;
 
+import sun.misc.Sort;
 import edu.tum.lua.ast.Exp;
 import edu.tum.lua.stdlib.Assert;
 import edu.tum.lua.stdlib.Error;
@@ -48,11 +49,17 @@ import edu.tum.lua.stdlib.math.Sinh;
 import edu.tum.lua.stdlib.math.Sqrt;
 import edu.tum.lua.stdlib.math.Tan;
 import edu.tum.lua.stdlib.math.Tanh;
+import edu.tum.lua.stdlib.string.Byte;
+import edu.tum.lua.stdlib.string.Char;
+import edu.tum.lua.stdlib.string.Len;
+import edu.tum.lua.stdlib.string.Lower;
+import edu.tum.lua.stdlib.string.Rep;
+import edu.tum.lua.stdlib.string.Reverse;
+import edu.tum.lua.stdlib.string.Sub;
+import edu.tum.lua.stdlib.string.Upper;
 import edu.tum.lua.stdlib.table.Concat;
 import edu.tum.lua.stdlib.table.Insert;
 import edu.tum.lua.stdlib.table.MaxN;
-import edu.tum.lua.stdlib.table.Remove;
-import edu.tum.lua.stdlib.table.Sort;
 import edu.tum.lua.types.LuaTable;
 
 public class Environment extends LuaTable {
@@ -98,6 +105,22 @@ public class Environment extends LuaTable {
 		LuaTable coroutine = new LuaTable();
 		LuaTable _package = new LuaTable();
 		LuaTable string = new LuaTable();
+
+		string.set("byte", new Byte());
+		string.set("char", new Char());
+		string.set("dump", new NotImplementedFunction());
+		string.set("find", new NotImplementedFunction());
+		string.set("format", new NotImplementedFunction());
+		string.set("gmatch", new NotImplementedFunction());
+		string.set("gsub", new NotImplementedFunction());
+		string.set("len", new Len());
+		string.set("lower", new Lower());
+		string.set("match", new NotImplementedFunction());
+		string.set("rep", new Rep());
+		string.set("reverse", new Reverse());
+		string.set("sub", new Sub());
+		string.set("upper", new Upper());
+
 		LuaTable table = new LuaTable();
 
 		table.set("concat", new Concat());
