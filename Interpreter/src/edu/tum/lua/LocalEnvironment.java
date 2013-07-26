@@ -33,10 +33,17 @@ public class LocalEnvironment {
 		return forward.get(key);
 	}
 
+	/**
+	 * put a variable directly into this local environment
+	 */
 	public void setLocal(Object key, Object value) {
 		local.put(key, value);
 	}
 
+	/**
+	 * change the value of the variable if she already exist in the different
+	 * local environments, otherwise put it in the global environment
+	 */
 	public void set(Object key, Object value) {
 		if (local.containsKey(key))
 			local.put(key, value);
