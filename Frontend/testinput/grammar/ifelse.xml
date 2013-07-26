@@ -1,0 +1,16 @@
+<Block>
+	<StatList>
+		<IfThenElse>
+			<BooleanExp value="true" />
+			<Block>
+				<Null />
+				<Null />
+			</Block>
+			<Block>
+				<Null />
+				<Null />
+			</Block>
+		</IfThenElse>
+	</StatList>
+	<Null />
+</Block>

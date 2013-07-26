@@ -1,0 +1,16 @@
+<Block>
+	<StatList>
+		<Asm>
+			<VarList>
+				<Variable var="a" />
+			</VarList>
+			<ExpList>
+				<Binop op="EQ">
+					<NumberExp number="1.0" />
+					<NumberExp number="2.0" />
+				</Binop>
+			</ExpList>
+		</Asm>
+	</StatList>
+	<Null />
+</Block>
