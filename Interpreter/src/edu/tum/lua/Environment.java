@@ -29,6 +29,12 @@ import edu.tum.lua.stdlib.Type;
 import edu.tum.lua.stdlib.Unpack;
 import edu.tum.lua.stdlib.VoidFunction;
 import edu.tum.lua.stdlib.Xpcall;
+import edu.tum.lua.stdlib.coroutine.Create;
+import edu.tum.lua.stdlib.coroutine.Resume;
+import edu.tum.lua.stdlib.coroutine.Running;
+import edu.tum.lua.stdlib.coroutine.Status;
+import edu.tum.lua.stdlib.coroutine.Wrap;
+import edu.tum.lua.stdlib.coroutine.Yield;
 import edu.tum.lua.stdlib.math.Abs;
 import edu.tum.lua.stdlib.math.Acos;
 import edu.tum.lua.stdlib.math.Asin;
@@ -165,6 +171,13 @@ public class Environment extends LuaTable {
 		math.set("sqrt", new Sqrt());
 		math.set("tan", new Tan());
 		math.set("tanh", new Tanh());
+
+		coroutine.set("create", new Create());
+		coroutine.set("resume", new Resume());
+		coroutine.set("running", new Running());
+		coroutine.set("status", new Status());
+		coroutine.set("wrap", new Wrap());
+		coroutine.set("yield", new Yield());
 
 		LuaTable io = new LuaTable();
 		LuaTable os = new LuaTable();
