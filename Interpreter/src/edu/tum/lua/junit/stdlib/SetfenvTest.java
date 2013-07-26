@@ -8,7 +8,7 @@ import java.util.Collections;
 
 import org.junit.Test;
 
-import edu.tum.lua.Environment;
+import edu.tum.lua.GlobalEnvironment;
 import edu.tum.lua.LuaRuntimeException;
 import edu.tum.lua.stdlib.Setfenv;
 import edu.tum.lua.types.LuaTable;
@@ -51,7 +51,7 @@ public class SetfenvTest {
 	@Test
 	public void functionnalTest() {
 		Setfenv s = new Setfenv();
-		Environment env = new Environment();
+		GlobalEnvironment env = new GlobalEnvironment();
 		try {
 			s.apply(1.0, env);
 			fail();

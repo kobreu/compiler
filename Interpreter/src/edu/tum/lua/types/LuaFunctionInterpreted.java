@@ -5,7 +5,7 @@ import static edu.tum.lua.ast.LegacyAdapter.convert;
 import java.util.Arrays;
 import java.util.List;
 
-import edu.tum.lua.Environment;
+import edu.tum.lua.GlobalEnvironment;
 import edu.tum.lua.LocalEnvironment;
 import edu.tum.lua.LuaInterpreter;
 import edu.tum.lua.ast.Block;
@@ -39,11 +39,11 @@ public class LuaFunctionInterpreted implements LuaFunction {
 		return apply(Arrays.asList(arguments));
 	}
 
-	public Environment getGlobalEnvironment() {
+	public GlobalEnvironment getGlobalEnvironment() {
 		return environment.getGlobalEnvironment();
 	}
 
-	public void setGlobalEnvironment(Environment e) {
+	public void setGlobalEnvironment(GlobalEnvironment e) {
 		environment.setGlobalEnvironment(e);
 	}
 }

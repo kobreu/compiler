@@ -11,17 +11,23 @@ public class LocalEnvironment {
 
 	private final Map<Object, Object> local;
 	private final LocalEnvironment forward;
-	private Environment global;
+	private GlobalEnvironment global;
 
 	public LocalEnvironment() {
-		local = new HashMap<Object, Object>();
-		global = Environment.getGlobalEnvironment();
-		forward = null;
+		this(new GlobalEnvironment(), null);
 	}
 
 	public LocalEnvironment(LocalEnvironment l) {
+		this(l.global, l);
+	}
+
+	public LocalEnvironment(GlobalEnvironment g) {
+		this(g, null);
+	}
+
+	public LocalEnvironment(GlobalEnvironment g, LocalEnvironment l) {
 		local = new HashMap<>();
-		global = Environment.getGlobalEnvironment();
+		global = g;
 		forward = l;
 	}
 
@@ -46,11 +52,11 @@ public class LocalEnvironment {
 			forward.set(key, value);
 	}
 
-	public void setGlobalEnvironment(Environment env) {
+	public void setGlobalEnvironment(GlobalEnvironment env) {
 		global = env;
 	}
 
-	public Environment getGlobalEnvironment() {
+	public GlobalEnvironment getGlobalEnvironment() {
 		return global;
 	}
 

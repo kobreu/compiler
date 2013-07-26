@@ -3,7 +3,7 @@ package edu.tum.lua.stdlib;
 import java.util.Arrays;
 import java.util.List;
 
-import edu.tum.lua.Environment;
+import edu.tum.lua.GlobalEnvironment;
 import edu.tum.lua.LuaRuntimeException;
 import edu.tum.lua.Preconditions;
 import edu.tum.lua.types.LuaFunctionInterpreted;
@@ -22,7 +22,7 @@ public class Setfenv extends LuaFunctionNative {
 			throw new LuaRuntimeException("not supported in this version");
 		if (f instanceof LuaFunctionNative)
 			throw new LuaRuntimeException("not supported in this version");
-		((LuaFunctionInterpreted) f).setGlobalEnvironment((Environment) arguments.get(1));
+		((LuaFunctionInterpreted) f).setGlobalEnvironment((GlobalEnvironment) arguments.get(1));
 		return Arrays.asList(f);
 	}
 

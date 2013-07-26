@@ -8,7 +8,7 @@ import java.util.Collections;
 
 import org.junit.Test;
 
-import edu.tum.lua.Environment;
+import edu.tum.lua.GlobalEnvironment;
 import edu.tum.lua.LuaBadArgumentException;
 import edu.tum.lua.LuaRuntimeException;
 import edu.tum.lua.stdlib.Getfenv;
@@ -19,7 +19,7 @@ public class GetfenvTest {
 	public void emptyArgumentTest() {
 		Getfenv g = new Getfenv();
 		try {
-			assertTrue("accept empty argument", g.apply(Collections.emptyList()).get(0) instanceof Environment);
+			assertTrue("accept empty argument", g.apply(Collections.emptyList()).get(0) instanceof GlobalEnvironment);
 		} catch (LuaRuntimeException e) {
 			fail("don't accept empty argument");
 		}
@@ -51,7 +51,7 @@ public class GetfenvTest {
 	public void functionnalTest() {
 		Getfenv g = new Getfenv();
 		try {
-			assertTrue(g.apply(g).get(0) instanceof Environment);
+			assertTrue(g.apply(g).get(0) instanceof GlobalEnvironment);
 		} catch (LuaRuntimeException e) {
 			fail();
 		}

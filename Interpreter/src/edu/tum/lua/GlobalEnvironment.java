@@ -68,18 +68,18 @@ import edu.tum.lua.stdlib.table.Remove;
 import edu.tum.lua.stdlib.table.Sort;
 import edu.tum.lua.types.LuaTable;
 
-public class Environment extends LuaTable {
+public class GlobalEnvironment extends LuaTable {
 
-	private final static Environment _G = new Environment();
+	private final static GlobalEnvironment _G = new GlobalEnvironment();
 
-	public static Environment getGlobalEnvironment() {
+	public static GlobalEnvironment getGlobalEnvironment() {
 		return _G;
 	}
 
 	/**
 	 * Create a new global environment.
 	 */
-	public Environment() {
+	public GlobalEnvironment() {
 		set("assert", new Assert());
 		set("collectgarbage", new VoidFunction());
 		set("dofile", new NotImplementedFunction());
@@ -187,9 +187,5 @@ public class Environment extends LuaTable {
 		set("io", io);
 		set("os", os);
 		set("debug", debug);
-	}
-
-	public Environment(Environment forward) {
-		super(forward);
 	}
 }
