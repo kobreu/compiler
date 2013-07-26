@@ -41,47 +41,46 @@ parser code {:
   }
 :}; 
 
-action code {:
-	private boolean vaargs = false;
-:}
+
 
 
 
  /* Terminals (tokens returned by lexer). */
 
-terminal         ADD, MUL, SUB, DIV, MOD, POW, CONCAT;
-terminal         AND, OR, NOT, LENGTH;
-terminal 		 LPAREN, RPAREN, LBRACK, RBRACK, LCURL, RCURL;
+
 terminal         ASM; //Assigment =
 terminal		 DOT, DDOT;
-terminal         EQ, LEQ ,NEQ , LE, GR, GEQ;
 terminal		 LOCAL, FUNC, END;
 terminal  		 DO, WHILE, FOR, IN, REPEAT, UNTIL;
 terminal         IF, THEN, ELSE, ELSEIF, RETURN, BREAK;
 terminal         NIL, FALSE, TRUE, PARAMS;
+terminal         ADD, MUL, SUB, DIV, MOD, POW, CONCAT;
+terminal         EQ, LEQ ,NEQ , LE, GR, GEQ, AND, OR; 
+terminal         NOT, LENGTH;
+terminal 		 LPAREN, RPAREN, LBRACK, RBRACK, LCURL, RCURL;
 terminal		 SEMI, COM, WS;
-
 terminal Double NUMBER;
 terminal String  ID, TEXT;
 
 
+
+
  /*NON TERMINALS */
 non terminal Chunk chunk;
-non terminal Block block;
+non terminal Block block, optelse ;
 non terminal Stat stat;
 non terminal StatList statlist;
 non terminal LastStat laststat;
 
 non terminal FuncName funcname;
-non terminal IfThenElse optelse;
+non terminal IfThenElse ifthenelse;
 non terminal VarList varlist;
 non terminal Var var;
 non terminal NameList namelist;
-non terminal ExpList explist;
-non terminal Exp exp;
+non terminal ExpList explist,args;
+non terminal Exp exp, optforexp;
 non terminal PrefixExp prefixexp;
 non terminal FunctionCall functioncall;
-non terminal args;
 non terminal Function function;
 non terminal FuncBody funcbody;
 non terminal ParList parlist;
@@ -91,261 +90,300 @@ non terminal Field field;
 non terminal fieldsep;
 non terminal Integer binop;
 non terminal Integer unop;
-non terminal optsemi, empty, optws, optforexp, optexplist, optasm, optdotname, optcolonname, optvarlist;
+non terminal optsemi, empty, optws, optasm, optexplist, optdotname, optcolonname, optvarlist;
 
-
+precedence left ADD, MUL, SUB, DIV, MOD, POW, CONCAT, EQ, LEQ ,NEQ , LE, GR, GEQ, AND, OR;
+precedence left LPAREN, RPAREN;
 /* Grammar */
 
-empty			::= 	;
+start with block;
 
-chunk 			::=      statlist:stats laststat:last
-                 		{:  RESULT = new Chunk(stats, last); :}
+
+block 			::=     statlist:stats laststat:lstat
+                 		{:       
+                 			if(lstat == null)   {   
+                 			System.out.println("Inside block");    	    
+                 			RESULT = new Block(stats,null); 	}
+                 			else	{
+                 			System.out.println("Inside block with laststat");   
+                 			RESULT = new Block(stats,lstat);  }
+                 		:}
+                 		| empty {: System.out.println("Inside empty block"); RESULT = new Block(null,null);; :}
                  		;
 
-statlist    	::=      stat:s SEMI statlist:stats 
-						{:  stats.setElementAt(s,0);
-						 	RESULT = stats; :}
-						|  	stat:s WS statlist:stats 
-						{:  stats.setElementAt(s,0);
-							RESULT = stats; :}
-						| 	empty
-						{: 	RESULT = new StatList(); :}
-						
-						
-                 	;
-				
-optsemi			::= 	SEMI | empty;
+	
 
-optws			::= 	WS | empty;
-
-block       	::=     chunk:c
-				 		{: RESULT = new Block(c); :}
-						;
-					
-					
-stat        	::=     varlist:vl ASM explist:el
-						{: RESULT = new Asm(vl,el); :}
-				
-						| functioncall:fcall
-						{: RESULT = new FuncCallStmt(fcall); :}
-				
-						| DO block:b END 
-						{: RESULT = new DoExp(b); :}
-				
-         				| WHILE exp:e DO block:b END
-						{: RESULT = new WhileExp(e,b); :}
-					
-						| REPEAT block:b UNTIL exp:e
-						{: RESULT = new RepeatUntil(b,e); :}
-					
-						| IF exp:e THEN block:b /*optelse:elseblock*/ END
-						{: RESULT = new IfThenElse(e,b,null); :}
-
-						| FOR ID:id ASM exp:e1 COM exp:e2 /*optforexp:e3*/ DO block:b END
-						{: RESULT = new ForExp(id,e1,e2,null,b); :}
-					
-						| FOR namelist:nl IN explist:el DO block:b END
-						{: RESULT = new ForIn(nl,el,b); :}
-						;
-					
-				/*		| FUNC ID:id optdotname:dots optcolonname:col funcname:fn funcbody:fb
-						{: RESULT = new FunctionDef(fn,fb); :}
-					
-						| LOCAL FUNC ID:id LPAREN args:ag RPAREN funcbody:fb
-						{: RESULT = new LocalFuncDef(id, ag, vaargs, fb); :}
-					
-						| LOCAL namelist:nl optasm:oel
-						{: RESULT = new LocalDecl(nl,oel); :}
-						;
-					
-	args 			::=		ID:id COM args:a
-						{: a.setElementAt(id, 0);
-						   RESULT = a; :}
-						| ID:id
-						{: RESULT = new NameList(id); :}
-						| PARAMS	
-						{: vaargs = true; 
-						  RESULT = new NameList(); :}
-						| empty
-						{: RESULT = new NameList(); :}
-						;
-				*/
-/*
-				
-					
-optdotname		::= 	DOT ID:id optdotname:dots
-						{: dots.setElementAt(new Name(id), 0);  
-						   RESULT = dots; :}
-						| empty
-						{: RESULT = new NameList(); :}
-						;
-						
-optcolonname	::=		DDOT ID:id
-						{: RESULT = new Name(id):}
-						| empty
-						{: RESULT = null:}
-						;*/
-					
-/*optforexp   	::=     COM exp:e {: RESULT =(Exp) e; :}				
-						| empty {: RESULT =(Exp) new NumberExp(1.0); :}
-						;*/
-
-optexplist		::=		COM exp:e optexplist:el
-						{: ExpList el1 = (ExpList) el;
-							el1.setElementAt(e,0);
-							RESULT = el1; 
+statlist		::=		stat:s optsemi optws
+						{: 	
+							System.out.println("Inside single stat"); 			
+							RESULT = new StatList(s);
 						:}	
-						| empty  {: RESULT = new ExpList(); :}	
-						;	
-
-optasm  		::= 	ASM explist:el {: RESULT = el; :}	
-						| empty
-						;	
-
-/*optelse			::= 	ELSE block:b {: RESULT = b; :}	
-						| ELSEIF exp:e THEN block:b optelse:elseblock
-						  {: RESULT = new IfThenElse(e, b, elseblock):}
-						| empty
-						;	
-					*/
-laststat		::=		RETURN optexplist:el {: RESULT = new LastReturn( (ExpList) el); :}		
-						| BREAK {: RESULT = new LastBreak(); :}	
-						| empty
+						
+						|  stat:s optsemi optws statlist:sl 
+						{:						
+					   		if(sl== null){
+					    	System.out.println("Inside recu stat"); 	
+					    	sl =new StatList(s);
+							RESULT = sl;}
+							else{
+							System.out.println("Inside recu stat");
+							sl.insertElementAt(s,0);
+							RESULT = sl;
+							}
+						:}	
+						
+								
 						;
-				
-			
-/*varlist			::=    	var:v
-						{: RESULT = new Var(v); :}
-						| var:v COM varlist:vl
-						{: RESULT = new VarList(vl.add(id)); :}
-						;*/
-/*					
-optvarlist 		::=		COM var:v optvarlist:ovl
-						{: RESULT = new VarList(ovl.add(id)); :}
-						| COM var:v
-						{: RESULT = new VarList(id);  :}
+					
+						
+laststat		::=		RETURN optexplist:el 
+						{:    
+							System.out.println("Inside laststat");
+							RESULT = new LastReturn( (ExpList) el); 
+						:}		
+						| 	BREAK {: RESULT = new LastBreak(); :}	
+						| 	empty
+						; 	
+
+					
+stat        	::=    		varlist:vl ASM explist:el 
+						{: 
+								System.out.println("Inside stat");
+								RESULT = new Asm(vl,el);
+						:}
+						| functioncall:fc
+						{:
+						  RESULT = new FuncCallStmt(fc);
+						:}
+						
+						| 	DO WS block:b END 
+						{:    
+								System.out.println("Inside DO END");
+								RESULT = new DoExp(b); 
+						:}
+						|  	WHILE optws exp:e  optws DO optws block:b END
+						{: 		RESULT = new WhileExp(e,b); :}
+						|  	REPEAT optws block:b  UNTIL optws exp:e
+						{: 		RESULT = new RepeatUntil(b,e); :}
+						|  	IF optws exp:e optws THEN optws block:b optelse:elseblock END
+						{: 	RESULT = new IfThenElse(e, b, elseblock);
+						:}
+						| 	FOR optws ID:id optws ASM optws exp:e1 optws COM optws exp:e2  optforexp:e3 optws DO optws block:b END
+						{: 		
+								RESULT = new ForExp(id,e1,e2,e3,b); 
+						:}
+						| FOR optws namelist:nl  IN optws explist:el optws DO optws block:b END
+						{: RESULT = new ForIn(nl,el,b); :}
+						| FUNC funcname funcbody  
+		 				| LOCAL FUNC function ID:id funcbody 
+						| LOCAL namelist:nl optasm explist:el
+						{: RESULT = new LocalDecl(nl,el); :}
+						;
+	
+					
+funcname		::=     ID:id
+						| ID:id DOT funcname
+						| DDOT ID:id
+						;
+						
+
+optelse			::= 	ELSE optws block:b {: RESULT = b; :}						
 						| empty
-						;*/
+						;	
+												
+optforexp		::=		COM optws exp:e {: RESULT = e; :}				
+						| empty {: RESULT = new NumberExp(1.0); :}
+						;
+
+varlist			::=     var:v
+						{: 							
+						RESULT= new VarList(v);
+						:}
+						| var:v COM varlist:vl
+						{: 
+						if(vl==null){
+						vl = new VarList(v);
+						RESULT = vl; }
+						else {
+						vl.insertElementAt(v,0);
+						RESULT = vl; }
+						:}								
+						;
+	
+				
+explist			::=     exp:e 
+							{:
+							RESULT= new ExpList(e);
+							:}
+						| exp:e COM explist:el
+							{:
+								if(el == null) {
+									el = new ExpList(e);
+								RESULT = el;} 
+								else {
+									el.insertElementAt(e,0);
+								RESULT = el;}
+	
+							:}
+						;
+	
+						
+namelist    	::=    	ID:id optws
+						{: RESULT = new NameList(new Name(id)); :}  
+						/*| ID:id COM namelist:nl
+						{: 	if(nl== null){					    		
+					    	nl =new NameList(new Name(id));
+							RESULT = nl;}
+							else{		
+							nl.insertElementAt(new Name(id),0);
+							RESULT = nl;
+							} 
+						:}*/ 
+																	
+						;
 					
 var				::=		ID:id
-						{: RESULT = new Variable(id); :}
-						| prefixexp:pe LBRACK exp:e RBRACK
-						{: RESULT = new VarTabIndex(pe,e); :}
-						| prefixexp:pe DOT ID:id
-						{: RESULT = new VarTabIndex(pe,new TextExp(id)); :}
+						{:  						
+						RESULT =  new Variable(id);						
+						:}	
+						| prefixexp:pe LBRACK exp:e RBRACK	
+						{:  						
+						RESULT =  new VarTabIndex(pe,e);						
+						:}					
 						;
 
-namelist    	::=    	ID:id
-						{: RESULT = new NameList(new Name(id)); :}  
-						| ID:id COM namelist:nl
-						{: nl.setElementAt(new Name(id),0);
-						RESULT = nl; :} 
-						| empty
-						{: RESULT = new NameList(); :}
-						
-						;
-
-explist			::=     exp:e
-						{: RESULT = new ExpList(e); :}  
-						| exp:e COM explist:el
-						{: el.setElementAt(e,0);
-						RESULT = el; :}  
-						| empty
-						{: RESULT = new ExpList(); :}
-						;
 					
 exp				::=		NIL
-						{: RESULT = new Nil(); :}  
+							{: RESULT = new Nil(); :}  
 						| FALSE
-						{: RESULT = new BooleanExp(false); :}  
+							{: RESULT = new BooleanExp(false); :}  
 						| TRUE
-						{: RESULT = new BooleanExp(true); :} 
+							{: RESULT = new BooleanExp(true); :} 
 						| NUMBER:num
-						{: RESULT = new NumberExp(num); :} 
-						| ID:id 
-						{: RESULT = new TextExp(id); :}
-						/*| PARAMS:pa
-						{: RESULT = new Dots(pa); :}
-						| FUNC:fun
-						{: RESULT = new FunctionExp(fun); :} */
-						| prefixexp:pe
-						{: RESULT = new PreExp(pe); :}
+							{: 					   
+								RESULT = new NumberExp(num); 						
+							:} 
+						| TEXT:t 
+							{: RESULT = new TextExp(t); :}
+						| prefixexp:prefixexp
+							{: RESULT = new PreExp(prefixexp); :}
 						| tableconstructor:tc
-						{: RESULT = new TableConstructorExp(tc); :}
+								{: RESULT = new TableConstructorExp(tc); :} 
 						| exp:e1 binop:op exp:e2
-						{: RESULT = new Binop(e1,op,e2); :}
+							{: RESULT = new Binop(e1,op,e2); :}
 						| unop:uop exp:e
-						{: RESULT = new Unop(uop,e); :}
-						;
-
-prefixexp		::=		var:v		
-						{: RESULT = new PrefixExpVar(v); :}	
-						| functioncall:fc	
-						{: RESULT = new PrefixExpFuncCall(fc); :}
-						| LPAREN exp:e RPAREN
-						{: RESULT = new PrefixExpExp(e); :}
-						;
-
-/* functioncall 	::=		prefixexp:pe args:explist
-						{: RESULT = new FunctionCall(pe,explist); :}	
-						| prefixexp:pe DDOT ID:id args:explist
-						{:explist.insertElementAt("self", 0);
-						  RESULT = new FunctionCall(new Var(pe, id), explist); :}	
-						;
-
-
-
-					
-function		::=     FUNC funcbody:fb
-						{: RESULT = new Function(fb); :}
-						;
-
-funcbody		::=		LPAREN RPAREN block:b END
-						{: RESULT = new FuncBody(b); :}
-						| LPAREN parlist RPAREN block:b END
-						{: RESULT = new FuncBody(parlist, b); :}
-						;
-
- parlist  		::= 	namelist:nl
-                    	{: RESULT = new ParList(nl); :}
-						| namelist:nl COM PARAMS
-						{: RESULT = new ParList(nl,dots); :}
-						| PARAMS
-						{: RESULT = new ParList(dots); :}
-						; */
-					
-tableconstructor ::=	/*LCURL RCURL		
-						{: RESULT = new  FieldList(); :}
-						| */ LCURL fieldlist:fl RCURL	
-						{: RESULT = new TableConstructor(fl); :}
-						
+							{: RESULT = new Unop(uop,e); :}
+						| function:f
+							{: RESULT = new FunctionExp(f); :}
 						;	
-
-fieldlist		 ::=    field:f
-						{: RESULT = new FieldList(f); :}
-						|
-						field:f fieldsep
-						{: RESULT = new FieldList(f); :}
-						|
-						field:f fieldlist:fl fieldsep
-						{: fl.setElementAt(f,0);
-						RESULT = fl; :}
-						| empty
-						{: RESULT = new FieldList(); :}
+	
+					
+prefixexp		::=		var:v
+						{:
+							RESULT = new PrefixExpVar(v);
+						:}
+						| functioncall:fc {:
+							System.out.println("inside prefixexp");
+							RESULT =  new PrefixExpFuncCall(fc);
+						:}
+						/*| LPAREN exp:e RPAREN
+						{:
+							RESULT = new PrefixExpExp(e);
+						:}*/
+						;
+	
+	
+functioncall	::= 	prefixexp:pexp args:ar
+						{:
+							System.out.println("inside functioncall");
+							RESULT = new FuncCall(pexp,ar);
+						:}
+						| prefixexp:pexp DDOT TEXT:nam args:ar
+						{:
+							RESULT = new FuncCallSelf(pexp,new Name(nam),ar);
+						:} 
 						;
 
-field			 ::=	LBRACK exp:e RPAREN ASM exp:e1
-						{: RESULT = new FieldLRExp(e,e1); :}
-						| TEXT:txt ASM exp:e
-						{: RESULT = new FieldNameExp(txt,e); :}
-						| exp:e
-						{: RESULT = new FieldExp(e); :}
-						;		
+				
+args			::= 	LPAREN explist:el RPAREN
+						{:
+							RESULT = el;
+						:}
+						| LPAREN RPAREN {: RESULT = new ExpList(null); :}
+						| tableconstructor:tc {: RESULT = new ExpList(new TableConstructorExp(tc)); :}
+						| TEXT:txt {: RESULT = new ExpList(new TextExp(txt)); :} 
+						;
 
-fieldsep		::= 	COM
-						| SEMI
+function 		::=     FUNC optws funcbody:fb
+						{:
+							RESULT = new Function(fb);
+						:}
+						;
+						
+
+funcbody		::= 	LPAREN parlist:pl RPAREN block:bl END
+						{:
+								RESULT = new FuncBody(pl,bl);
+						:}
 						;
 					
+
+parlist			::=		namelist:nl
+						{:
+							RESULT = new ParList(nl,false);
+						:}
+						| namelist:nl COM PARAMS
+						{:
+							RESULT = new ParList(nl,true);
+						:}
+						| PARAMS
+						{:
+							RESULT = new ParList(null,true);
+						:}
+						| {:
+							RESULT = new ParList(null, false);
+						  :}
+						;
+	
+
+tableconstructor ::=    LCURL fieldlist:fl RCURL
+ 						{: RESULT = new TableConstructor(fl); :} 
+ 						; 
+
+ 						
+fieldlist		 ::= 	| field:f
+							{: RESULT = new FieldList(f); :}
+						| field:f fieldsep fieldlist:fl
+							{: if(fl==null) {
+									RESULT = new FieldList(f);
+								}
+								else
+								{
+									fl.insertElementAt(f,0);
+									RESULT = fl;
+								}						
+							:}
+ 						;
+ 						
+ 						
+field			::=		LBRACK exp:e1 RBRACK ASM exp:e2
+						{:
+						RESULT = new FieldLRExp(e1,e2);
+						:}	
+						| ID:ident ASM exp:e
+						{:
+						RESULT = new FieldNameExp(ident,e);
+						:}
+						| exp:e
+						{:
+						RESULT = new FieldExp(e);
+						:}
+						
+						;
+						
+
+fieldsep		::=		COM | SEMI						
+						;		
 binop			::=		ADD
 						{: RESULT = Op.ADD; :}
 						| SUB
@@ -386,5 +424,11 @@ unop			::=		SUB
 						{: RESULT = Op.LEN; :}
 						;
 								
-					
-					
+optasm			::= 	ASM	  | empty;
+						
+optsemi			::= 	SEMI  | empty ;
+
+
+optws			::= 	WS | empty ;
+						
+empty			::=		;

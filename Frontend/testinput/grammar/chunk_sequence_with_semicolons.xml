@@ -1,0 +1,29 @@
+<Block>
+	<StatList>
+		<Asm>
+			<VarList>
+				<Variable var="a" />
+			</VarList>
+			<ExpList>
+				<NumberExp number="1.0" />
+			</ExpList>
+		</Asm>
+		<Asm>
+			<VarList>
+				<Variable var="b" />
+			</VarList>
+			<ExpList>
+				<NumberExp number="2.0" />
+			</ExpList>
+		</Asm>
+		<Asm>
+			<VarList>
+				<Variable var="c" />
+			</VarList>
+			<ExpList>
+				<NumberExp number="3.0" />
+			</ExpList>
+		</Asm>
+	</StatList>
+	<Null />
+</Block>

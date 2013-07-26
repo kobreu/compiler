@@ -1,0 +1,35 @@
+<Block>
+	<StatList>
+		<Asm>
+			<VarList>
+				<Variable var="a" />
+			</VarList>
+			<ExpList>
+				<PreExp>
+					<PrefixExpFuncCall>
+						<FuncCall>
+							<PrefixExpVar>
+								<Variable var="b" />
+							</PrefixExpVar>
+							<ExpList>
+								<TableConstructorExp>
+									<TableConstructor>
+										<FieldList>
+											<FieldExp>
+												<NumberExp number="1.0" />
+											</FieldExp>
+											<FieldExp>
+												<NumberExp number="2.0" />
+											</FieldExp>
+										</FieldList>
+									</TableConstructor>
+								</TableConstructorExp>
+							</ExpList>
+						</FuncCall>
+					</PrefixExpFuncCall>
+				</PreExp>
+			</ExpList>
+		</Asm>
+	</StatList>
+	<Null />
+</Block>

@@ -1,0 +1,34 @@
+<Block>
+	<StatList>
+		<Asm>
+			<VarList>
+				<Variable var="a" />
+			</VarList>
+			<ExpList>
+				<NumberExp number="1" />
+			</ExpList>
+		</Asm>
+		<Asm>
+			<VarList>
+				<Variable var="b" />
+			</VarList>
+			<ExpList>
+				<NumberExp number="1" />
+			</ExpList>
+		</Asm>
+	</StatList>
+	<LastReturn>
+		<ExpList>
+			<PreExp>
+				<PrefixExpVar>
+					<Variable var="a" />
+				</PrefixExpVar>
+			</PreExp>
+			<PreExp>
+				<PrefixExpVar>
+					<Variable var="b" />
+				</PrefixExpVar>
+			</PreExp>
+		</ExpList>
+	</LastReturn>
+</Block>
