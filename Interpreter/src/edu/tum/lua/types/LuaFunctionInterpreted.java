@@ -7,19 +7,19 @@ import java.util.List;
 
 import edu.tum.lua.Environment;
 import edu.tum.lua.LuaInterpreter;
-import edu.tum.lua.ast.Chunk;
+import edu.tum.lua.ast.Block;
 import edu.tum.lua.ast.FunctionDef;
 
 public class LuaFunctionInterpreted implements LuaFunction {
 
 	private Environment environment;
 	private final List<String> argumentNames;
-	private final Chunk chunk;
+	private final Block block;
 
 	public LuaFunctionInterpreted(FunctionDef node, Environment e) {
 		environment = e;
 		argumentNames = convert(node.args);
-		chunk = node.block.chunk;
+		block = node.block;
 	}
 
 	@Override
@@ -30,7 +30,7 @@ public class LuaFunctionInterpreted implements LuaFunction {
 			currentEnvironment.set(argumentNames.get(i), arguments.get(i));
 		}
 
-		return LuaInterpreter.eval(chunk, currentEnvironment);
+		return LuaInterpreter.eval(block, currentEnvironment);
 	}
 
 	@Override
