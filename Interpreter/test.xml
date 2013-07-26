@@ -41,9 +41,12 @@
   </target>
 	
   <target name="compiledependencies" depends="init">
-  	 <subant antfile="build.xml" buildpath="../Frontend" target="clean compile">
+  	 <subant antfile="build.xml" buildpath="../Frontend" target="clean">
         <property name="build.dir" value="subant1.build"/>
   	 </subant>
+  	<subant antfile="build.xml" buildpath="../Frontend" target="compile">
+  	        <property name="build.dir" value="subant1.build"/>
+  	</subant>
   </target>
 
   <target name="compile" depends="compiledependencies">
