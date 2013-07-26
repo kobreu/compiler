@@ -57,25 +57,41 @@ public class StatementVisitorTest {
 	}
 
 	@Test
-	public void testVisitIf() {
+	public void testVisitIf() throws Exception {
 
-		// > a = 1
-		// > if a == 1 then b=1 else b=0 end
+		environment = new Environment();
+		visitor = new StatementVisitor(environment);
+
+		// > a = 1+1 >> a=2
+		// > if a == 2 then b=1 else b=0 end >> b=1
+		// > if b != 1 then c=1 else c=0 end >> c=0
 
 		Asm asm = new Asm(new VarList(new Variable("a")), new ExpList(new Binop(new NumberExp(1.0), Op.ADD,
 				new NumberExp(1.0))));
 
+		// > a = 1+1
 		assertEquals(null, environment.get("a"));
 		visitor.visit(asm);
 		assertEquals(2.0, environment.get("a"));
 
+		// > if a == 2 then b=1 else b=0 end >> b=1
 		assertEquals(null, environment.get("b"));
 		IfThenElse ifstatement = new IfThenElse(new Binop(new PreExp(new PrefixExpVar(new Variable("a"))), Op.EQ,
-				new NumberExp(5.0)), new Block(new StatList(new Asm(new VarList(new Variable("b")), new ExpList(
+				new NumberExp(2.0)), new Block(new StatList(new Asm(new VarList(new Variable("b")), new ExpList(
 				new NumberExp(1.0)))), null), new Block(new StatList(new Asm(new VarList(new Variable("b")),
-				new ExpList(new NumberExp(0.0)))), null));
+				new ExpList(new NumberExp(2.0)))), null));
+
+		visitor = new StatementVisitor(environment);
 		visitor.visit(ifstatement);
 		assertEquals(1.0, environment.get("b"));
+
+		// > if a == 2 then b=1 else b=0 end >> b=1
+
+		Block block2 = ParserUtil.loadString("if b != 1 then c=1 else c=0 end");
+
+		assertEquals(null, environment.get("c"));
+		LuaInterpreter.eval(block2, environment);
+		assertEquals(0.0, environment.get("c"));
 
 	}
 

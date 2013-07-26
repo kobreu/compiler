@@ -17,9 +17,8 @@ public class LuaTable implements Iterable<Map.Entry<Object, Object>> {
 		metatable = null;
 	}
 
-	public LuaTable(LuaTable table) {
+	protected LuaTable(LuaTable table) {
 		this();
-		// assign a metatable first (empty table)
 		metatable = new LuaTable();
 		setMetaIndex(table);
 	}
