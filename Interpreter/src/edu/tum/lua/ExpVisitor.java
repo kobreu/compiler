@@ -16,6 +16,7 @@ import edu.tum.lua.ast.Nil;
 import edu.tum.lua.ast.NumberExp;
 import edu.tum.lua.ast.PreExp;
 import edu.tum.lua.ast.PrefixExp;
+import edu.tum.lua.ast.PrefixExpFuncCall;
 import edu.tum.lua.ast.PrefixExpVar;
 import edu.tum.lua.ast.Stat;
 import edu.tum.lua.ast.SyntaxNode;
@@ -158,6 +159,11 @@ public class ExpVisitor extends VisitorAdaptor {
 	@Override
 	public void visit(PrefixExpVar expVar) {
 		expVar.var.accept(this);
+	}
+
+	@Override
+	public void visit(PrefixExpFuncCall exp) {
+		exp.call.accept(this);
 	}
 
 	@Override
