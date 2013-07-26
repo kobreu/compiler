@@ -1,9 +1,8 @@
 package edu.tum.lua.stdlib;
 
-import java.util.LinkedList;
+import java.util.Collections;
 import java.util.List;
 
-import edu.tum.lua.LuaRuntimeException;
 import edu.tum.lua.Preconditions;
 import edu.tum.lua.types.LuaFunctionNative;
 import edu.tum.lua.types.LuaType;
@@ -15,34 +14,25 @@ public class ToString extends LuaFunctionNative {
 	@Override
 	public List<Object> apply(List<Object> arguments) {
 		Preconditions.checkArguments("tostring", arguments, expectedTypes);
+		return Collections.singletonList((Object) toString(arguments.get(0)));
+	}
 
-		List<Object> list = new LinkedList<Object>();
-		Object o = arguments.get(0);
-
-		switch (LuaType.getTypeOf(o)) {
+	public static String toString(Object object) {
+		switch (LuaType.getTypeOf(object)) {
 		case STRING:
-			list.add(o);
-			return list;
+			return (String) object;
+
 		case BOOLEAN:
-			list.add(Boolean.toString((boolean) o));
-			return list;
+			return Boolean.toString((Boolean) object);
+
 		case NIL:
-			list.add("nil");
-			return list;
+			return "nil";
+
 		case NUMBER:
-			if (((Double) o).doubleValue() == new Double(((Double) o).intValue()).doubleValue())
-				list.add(Integer.toString(((Double) o).intValue()));
-			else
-				list.add(((Double) o).toString());
-			return list;
-		case TABLE:
-			list.add(o.toString());
-			return list;
-		case FUNCTION:
-			list.add(o.toString());
-			return list;
+			return Double.toString((Double) object).replaceAll("\\.0", "");
+
 		default:
-			throw new LuaRuntimeException("unknown Object");
+			return object.toString();
 		}
 	}
 
