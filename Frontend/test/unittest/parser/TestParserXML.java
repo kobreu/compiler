@@ -49,6 +49,12 @@ public class TestParserXML extends XMLTestCase {
 		List<String> xmlFiles = new ArrayList<>();
 		List<String> luaFiles = new ArrayList<>();
 		
+		xmlFiles.add("testinput/grammar/explist_tableconstructor.xml");
+		luaFiles.add("testinput/grammar/explist_tableconstructor.lua");
+		
+		xmlFiles.add("testinput/grammar/field_name.xml");
+		luaFiles.add("testinput/grammar/field_name.lua");
+		
 		xmlFiles.add("testinput/grammar/chunk_with_return.xml");
 		luaFiles.add("testinput/grammar/chunk_with_return.lua");
 		
@@ -149,7 +155,7 @@ public class TestParserXML extends XMLTestCase {
 
 	        //writer.write( document);
 	        
-	        assertXMLEqual(doc.asXML(), document.asXML());
+	        assertXMLEqual(xmlFile, doc.asXML(), document.asXML());
 
 		}
 		

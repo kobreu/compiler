@@ -370,9 +370,9 @@ field			::=		LBRACK exp:e1 RBRACK ASM exp:e2
 						{:
 						RESULT = new FieldLRExp(e1,e2);
 						:}	
-						| TEXT:txt ASM exp:e
+						| ID:ident ASM exp:e
 						{:
-						RESULT = new FieldNameExp(txt,e);
+						RESULT = new FieldNameExp(ident,e);
 						:}
 						| exp:e
 						{:
