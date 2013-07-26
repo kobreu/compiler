@@ -76,8 +76,8 @@ public class TestParserXML extends XMLTestCase {
 		xmlFiles.add("testinput/grammar/args_tableconstructor.xml");
 		luaFiles.add("testinput/grammar/args_tableconstructor.lua");
 		
-		xmlFiles.add("testinput/grammar/binop_plus.xml");
-		luaFiles.add("testinput/grammar/binop_plus.lua");
+		xmlFiles.add("testinput/grammar/binop_concat.xml");
+		luaFiles.add("testinput/grammar/binop_concat.lua");
 		
 		xmlFiles.add("testinput/grammar/explist_multiple.xml");
 		luaFiles.add("testinput/grammar/explist_multiple.lua");
