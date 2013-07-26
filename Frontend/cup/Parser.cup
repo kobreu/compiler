@@ -92,7 +92,8 @@ non terminal Integer binop;
 non terminal Integer unop;
 non terminal optsemi, empty, optws, optasm, optexplist, optdotname, optcolonname, optvarlist;
 
-precedence left  ADD, MUL, SUB, DIV, MOD, POW, CONCAT, EQ, LEQ ,NEQ , LE, GR, GEQ, AND, OR;
+precedence left ADD, MUL, SUB, DIV, MOD, POW, CONCAT, EQ, LEQ ,NEQ , LE, GR, GEQ, AND, OR;
+precedence left LPAREN, RPAREN;
 /* Grammar */
 
 start with block;
@@ -150,10 +151,10 @@ stat        	::=    		varlist:vl ASM explist:el
 								System.out.println("Inside stat");
 								RESULT = new Asm(vl,el);
 						:}
-						/*| functioncall:fc
+						| functioncall:fc
 						{:
 						  RESULT = new FuncCallStmt(fc);
-						:}*/
+						:}
 						
 						| 	DO WS block:b END 
 						{:    
@@ -297,16 +298,16 @@ functioncall	::= 	prefixexp:pexp args:ar
 							System.out.println("inside functioncall");
 							RESULT = new FuncCall(pexp,ar);
 						:}
-						/*| prefixexp:pexp DDOT TEXT:nam args:ar
+						| prefixexp:pexp DDOT TEXT:nam args:ar
 						{:
 							RESULT = new FuncCallSelf(pexp,new Name(nam),ar);
-						:} */
+						:} 
 						;
 
 				
 args			::= 	LPAREN explist:el RPAREN
 						{:
-						RESULT = el;
+							RESULT = el;
 						:}
 						| LPAREN RPAREN {: RESULT = new ExpList(null); :}
 						| tableconstructor:tc {: RESULT = new ExpList(new TableConstructorExp(tc)); :}

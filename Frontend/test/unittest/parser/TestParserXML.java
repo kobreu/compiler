@@ -49,8 +49,11 @@ public class TestParserXML extends XMLTestCase {
 		List<String> xmlFiles = new ArrayList<>();
 		List<String> luaFiles = new ArrayList<>();
 		
-		xmlFiles.add("testinput/grammar/function_funcbody.xml");
-		luaFiles.add("testinput/grammar/function_funcbody.lua");
+		xmlFiles.add("testinput/grammar/exp_function_application.xml");
+		luaFiles.add("testinput/grammar/exp_function_application.lua");
+		
+		/*xmlFiles.add("testinput/grammar/function_funcbody.xml");
+		luaFiles.add("testinput/grammar/function_funcbody.lua");*/
 		
 		/*xmlFiles.add("testinput/grammar/chunk_sequence_without_semicolons.xml");
 		luaFiles.add("testinput/grammar/chunk_sequence_without_semicolons.lua");
