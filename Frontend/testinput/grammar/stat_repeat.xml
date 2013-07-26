@@ -1,0 +1,21 @@
+<Block>
+	<StatList>
+		<RepeatUntil>
+			<Block>
+				<StatList>
+					<Asm>
+						<VarList>
+							<Variable var="a" />
+						</VarList>
+						<ExpList>
+							<NumberExp number="1.0" />
+						</ExpList>
+					</Asm>
+				</StatList>
+				<Null />
+			</Block>
+			<BooleanExp value="false" />
+		</RepeatUntil>
+	</StatList>
+	<Null />
+</Block>

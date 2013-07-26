@@ -5,6 +5,7 @@ import org.dom4j.Document;
 import org.dom4j.Element;
 
 import edu.tum.lua.ast.Binop;
+import edu.tum.lua.ast.BooleanExp;
 import edu.tum.lua.ast.Closure;
 import edu.tum.lua.ast.Dots;
 import edu.tum.lua.ast.FieldNameExp;
@@ -117,6 +118,11 @@ public class AttributeWriterVisitor extends VisitorAdaptor {
 	@Override
 	public void visit(ParList parList) {
 		addAttr("varparlist", String.valueOf(parList.varparlist));
+	}
+	
+	@Override
+	public void visit(BooleanExp booleanExp) {
+		addAttr("value", String.valueOf(booleanExp.value));
 	}
 
 	@Override

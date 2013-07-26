@@ -1,0 +1,13 @@
+<Block>
+	<StatList>
+		<Asm>
+			<VarList>
+				<Variable var="a" />
+			</VarList>
+			<ExpList>
+				<TextExp text="Yippiyippyeah" />
+			</ExpList>
+		</Asm>
+	</StatList>
+	<Null />
+</Block>

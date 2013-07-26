@@ -66,7 +66,7 @@ terminal String  ID, TEXT;
 
 
  /*NON TERMINALS */
-non terminal Chunk chunk;
+
 non terminal Block block, optelse ;
 non terminal Stat stat;
 non terminal StatList statlist;
@@ -90,25 +90,34 @@ non terminal Field field;
 non terminal fieldsep;
 non terminal Integer binop;
 non terminal Integer unop;
-non terminal optsemi, empty, optws, optasm, optexplist, optdotname, optcolonname, optvarlist;
+non terminal optsemi, empty,  optws, optasm;
 
 precedence left ADD, MUL, SUB, DIV, MOD, POW, CONCAT, EQ, LEQ ,NEQ , LE, GR, GEQ, AND, OR;
 precedence left LPAREN, RPAREN;
 /* Grammar */
 
 start with block;
+ 
 
-
-block 			::=     statlist:stats laststat:lstat
+block 			::=    statlist:stats laststat:lstat
                  		{:       
-                 			if(lstat == null)   {   
-                 			System.out.println("Inside block");    	    
-                 			RESULT = new Block(stats,null); 	}
-                 			else	{
-                 			System.out.println("Inside block with laststat");   
-                 			RESULT = new Block(stats,lstat);  }
+                 			   
+                 			 System.out.println("Inside block with laststat");    
+                 			RESULT = new Block(stats,lstat);  
                  		:}
-                 		| empty {: System.out.println("Inside empty block"); RESULT = new Block(null,null);; :}
+                 		| statlist:stats 
+                 		{:       
+                 			System.out.println("Inside block with laststat");     	    
+                 			RESULT = new Block(stats,null); 	
+                 			  
+                 		:}
+                 		| laststat:lstat {:
+                 		 		RESULT = new Block(null,lstat);  :}
+                 		
+                 		| 
+                 		empty {: 
+                 				System.out.println("Inside empty block"); RESULT = new Block(null,null);;
+                 				 :}
                  		;
 
 	
@@ -117,9 +126,9 @@ statlist		::=		stat:s optsemi optws
 						{: 	
 							System.out.println("Inside single stat"); 			
 							RESULT = new StatList(s);
-						:}	
+						:}							
 						
-						|  stat:s optsemi optws statlist:sl 
+						|  stat:s  optsemi optws statlist:sl 
 						{:						
 					   		if(sl== null){
 					    	System.out.println("Inside recu stat"); 	
@@ -131,22 +140,15 @@ statlist		::=		stat:s optsemi optws
 							RESULT = sl;
 							}
 						:}	
-						
-								
+					
+							
 						;
 					
 						
-laststat		::=		RETURN optexplist:el 
-						{:    
-							System.out.println("Inside laststat");
-							RESULT = new LastReturn( (ExpList) el); 
-						:}		
-						| 	BREAK {: RESULT = new LastBreak(); :}	
-						| 	empty
-						; 	
 
+ 
 					
-stat        	::=    		varlist:vl ASM explist:el 
+stat        	::=    		varlist:vl optws ASM optws explist:el 
 						{: 
 								System.out.println("Inside stat");
 								RESULT = new Asm(vl,el);
@@ -156,7 +158,7 @@ stat        	::=    		varlist:vl ASM explist:el
 						  RESULT = new FuncCallStmt(fc);
 						:}
 						
-						| 	DO WS block:b END 
+						| 	DO optws block:b END 
 						{:    
 								System.out.println("Inside DO END");
 								RESULT = new DoExp(b); 
@@ -165,8 +167,9 @@ stat        	::=    		varlist:vl ASM explist:el
 						{: 		RESULT = new WhileExp(e,b); :}
 						|  	REPEAT optws block:b  UNTIL optws exp:e
 						{: 		RESULT = new RepeatUntil(b,e); :}
-						|  	IF optws exp:e optws THEN optws block:b optelse:elseblock END
-						{: 	RESULT = new IfThenElse(e, b, elseblock);
+						|  IF optws exp:e optws THEN optws block:b optelse:elseblock  END
+						{: 
+							RESULT = new IfThenElse(e, b, elseblock);
 						:}
 						| 	FOR optws ID:id optws ASM optws exp:e1 optws COM optws exp:e2  optforexp:e3 optws DO optws block:b END
 						{: 		
@@ -180,7 +183,20 @@ stat        	::=    		varlist:vl ASM explist:el
 						{: RESULT = new LocalDecl(nl,el); :}
 						;
 	
-					
+laststat		::=		RETURN optws optsemi
+						{:    
+							System.out.println("Inside laststat");
+							RESULT = new LastReturn(null); 
+						:}
+						|	RETURN optws explist:el optws optsemi	
+						{:    
+							System.out.println("Inside laststat");
+							RESULT = new LastReturn(el); 
+						:}
+						| BREAK optws optsemi{: RESULT = new LastBreak(); :}	
+						| BREAK optws optsemi statlist{: RESULT = new LastBreak(); :}
+						
+						; 						
 funcname		::=     ID:id
 						| ID:id DOT funcname
 						| DDOT ID:id
@@ -188,6 +204,9 @@ funcname		::=     ID:id
 						
 
 optelse			::= 	ELSE optws block:b {: RESULT = b; :}						
+						| ELSEIF optws exp:e optws THEN optws block:bl optelse:elseblock 
+						{: Block tmpbl =new Block(new StatList(new IfThenElse(e,bl,elseblock)),null);
+						RESULT = tmpbl; :}
 						| empty
 						;	
 												
@@ -199,7 +218,7 @@ varlist			::=     var:v
 						{: 							
 						RESULT= new VarList(v);
 						:}
-						| var:v COM varlist:vl
+						| var:v COM optws varlist:vl
 						{: 
 						if(vl==null){
 						vl = new VarList(v);
@@ -211,11 +230,11 @@ varlist			::=     var:v
 						;
 	
 				
-explist			::=     exp:e 
-							{:
+explist			::=     exp:e  
+							{: 
 							RESULT= new ExpList(e);
 							:}
-						| exp:e COM explist:el
+						| exp:e  COM optws explist:el 
 							{:
 								if(el == null) {
 									el = new ExpList(e);
@@ -225,12 +244,13 @@ explist			::=     exp:e
 								RESULT = el;}
 	
 							:}
+							
 						;
-	
 						
-namelist    	::=    	ID:id optws
+			
+namelist    	::=    	ID:id  
 						{: RESULT = new NameList(new Name(id)); :}  
-						/*| ID:id COM namelist:nl
+						/* | ID:id optws COM namelist:nl
 						{: 	if(nl== null){					    		
 					    	nl =new NameList(new Name(id));
 							RESULT = nl;}
@@ -238,10 +258,12 @@ namelist    	::=    	ID:id optws
 							nl.insertElementAt(new Name(id),0);
 							RESULT = nl;
 							} 
-						:}*/ 
-																	
+						:}
+							*/										
 						;
 					
+					
+
 var				::=		ID:id
 						{:  						
 						RESULT =  new Variable(id);						
@@ -432,3 +454,4 @@ optsemi			::= 	SEMI  | empty ;
 optws			::= 	WS | empty ;
 						
 empty			::=		;
+

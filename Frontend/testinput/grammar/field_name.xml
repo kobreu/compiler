@@ -1,0 +1,21 @@
+<Block>
+	<StatList>
+		<Asm>
+			<VarList>
+				<Variable var="a" />
+			</VarList>
+			<ExpList>
+				<TableConstructorExp>
+					<TableConstructor>
+						<FieldList>
+							<FieldNameExp ident="name">
+								<NumberExp number="5.0" />
+							</FieldNameExp>
+						</FieldList>
+					</TableConstructor>
+				</TableConstructorExp>
+			</ExpList>
+		</Asm>
+	</StatList>
+	<Null />
+</Block>

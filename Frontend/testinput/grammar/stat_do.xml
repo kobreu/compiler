@@ -1,0 +1,20 @@
+<Block>
+	<StatList>
+		<DoExp>
+			<Block>
+				<StatList>
+					<Asm>
+						<VarList>
+							<Variable var="x" />
+						</VarList>
+						<ExpList>
+							<NumberExp number="1.0" />
+						</ExpList>
+					</Asm>
+				</StatList>
+				<Null />
+			</Block>
+		</DoExp>
+	</StatList>
+	<Null />
+</Block>
