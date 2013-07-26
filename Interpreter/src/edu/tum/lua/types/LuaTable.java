@@ -19,6 +19,8 @@ public class LuaTable implements Iterable<Map.Entry<Object, Object>> {
 
 	public LuaTable(LuaTable table) {
 		this();
+		// assign a metatable first (empty table)
+		metatable = new LuaTable();
 		setMetaIndex(table);
 	}
 
@@ -164,6 +166,7 @@ public class LuaTable implements Iterable<Map.Entry<Object, Object>> {
 	}
 
 	public void setMetaIndex(LuaTable table) {
+
 		if (metatable == null) {
 			throw new IllegalStateException();
 		}
