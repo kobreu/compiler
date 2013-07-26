@@ -64,7 +64,7 @@ public class StatementVisitorTest {
 
 		assertEquals(null, environment.get("c"));
 		LuaInterpreter.eval(block, environment);
-		assertEquals("'a'", environment.get("c"));
+		assertEquals("a", environment.get("c"));
 	}
 
 	@Test
@@ -98,7 +98,7 @@ public class StatementVisitorTest {
 
 		// > if a == 2 then b=1 else b=0 end >> b=1
 
-		Block block2 = ParserUtil.loadString("if b != 1 then c=1 else c=0 end");
+		Block block2 = ParserUtil.loadString("if b!=1 then c=1 else c=0 end");
 
 		assertEquals(null, environment.get("c"));
 		LuaInterpreter.eval(block2, environment);
@@ -182,11 +182,6 @@ public class StatementVisitorTest {
 
 	@Test
 	public void testVisitLocalDecl() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	@Test
-	public void testVisit() {
 		fail("Not yet implemented"); // TODO
 	}
 
