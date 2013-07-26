@@ -10,17 +10,27 @@ import edu.tum.lua.LocalEnvironment;
 import edu.tum.lua.LuaInterpreter;
 import edu.tum.lua.ast.Block;
 import edu.tum.lua.ast.FunctionDef;
+import edu.tum.lua.ast.LocalFuncDef;
 
 public class LuaFunctionInterpreted implements LuaFunction {
 
 	private final LocalEnvironment environment;
 	private final List<String> argumentNames;
 	private final Block block;
+	private final boolean varargs;
 
 	public LuaFunctionInterpreted(FunctionDef node, LocalEnvironment e) {
 		environment = e;
 		argumentNames = convert(node.args);
 		block = node.block;
+		varargs = node.varargs;
+	}
+
+	public LuaFunctionInterpreted(LocalFuncDef node, LocalEnvironment e) {
+		environment = e;
+		argumentNames = convert(node.args);
+		block = node.block;
+		varargs = node.varargs;
 	}
 
 	@Override

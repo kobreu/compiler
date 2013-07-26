@@ -28,7 +28,7 @@ import edu.tum.lua.types.LuaTable;
 
 public class StatementVisitor extends VisitorAdaptor {
 
-	private final LocalEnvironment environment;
+	private LocalEnvironment environment;
 
 	public StatementVisitor(LocalEnvironment e) {
 		this.environment = e;
@@ -101,12 +101,27 @@ public class StatementVisitor extends VisitorAdaptor {
 
 	@Override
 	public void visit(LocalDecl stmt) {
+		environment = new LocalEnvironment(environment);
+		List<String> varlist = LegacyAdapter.convert(stmt.namelist);
 
+		for (String localVar : varlist) {
+			environment.setLocal(localVar, null);
+		}
+
+		List<Exp> explist = LegacyAdapter.convert(stmt.explist);
+		environment.assign(varlist, explist);
 	}
 
 	@Override
 	public void visit(LocalFuncDef stmt) {
+		LocalEnvironment oldLocalEnvironment = environment;
 
+		/* Enable recursive calls */
+		oldLocalEnvironment.setLocal(stmt.ident, null);
+		LuaFunction function = new LuaFunctionInterpreted(stmt, oldLocalEnvironment);
+		oldLocalEnvironment.setLocal(stmt.ident, function);
+
+		environment = new LocalEnvironment(oldLocalEnvironment);
 	}
 
 	@Override
