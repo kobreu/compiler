@@ -19,18 +19,18 @@ import edu.tum.lua.ast.LocalFuncDef;
 import edu.tum.lua.ast.RepeatUntil;
 import edu.tum.lua.ast.VisitorAdaptor;
 import edu.tum.lua.ast.WhileExp;
-import edu.tum.lua.operator.logical.LogicalOperator;
+import edu.tum.lua.operator.logical.LogicalOperatorSupport;
 
 public class StatementVisitor extends VisitorAdaptor {
 
 	private final Environment environment;
 
-	private boolean isTrue(Exp exp) {
-		return LogicalOperator.isTrue(eval(exp, environment));
-	}
-
 	public StatementVisitor(Environment e) {
 		this.environment = e;
+	}
+
+	public Environment getEnvironment() {
+		return environment;
 	}
 
 	@Override
@@ -51,15 +51,24 @@ public class StatementVisitor extends VisitorAdaptor {
 	}
 
 	@Override
-	public void visit(FuncCallStmt stmt) {
-		eval(stmt.call, environment);
+	public void visit(ForExp stmt) {
+
 	}
 
 	@Override
-	public void visit(RepeatUntil stmt) {
-		do {
-			executeBlock(stmt.block);
-		} while (!isTrue(stmt.exp));
+	public void visit(ForIn stmt) {
+
+	}
+
+	@Override
+	public void visit(FuncCallStmt stmt) {
+		ExpVisitor visitor = new ExpVisitor(environment);
+		stmt.accept(visitor);
+	}
+
+	@Override
+	public void visit(FunctionDef stmt) {
+
 	}
 
 	@Override
@@ -72,17 +81,7 @@ public class StatementVisitor extends VisitorAdaptor {
 	}
 
 	@Override
-	public void visit(ForExp stmt) {
-
-	}
-
-	@Override
-	public void visit(ForIn stmt) {
-
-	}
-
-	@Override
-	public void visit(FunctionDef stmt) {
+	public void visit(LocalDecl stmt) {
 
 	}
 
@@ -92,8 +91,10 @@ public class StatementVisitor extends VisitorAdaptor {
 	}
 
 	@Override
-	public void visit(LocalDecl stmt) {
-
+	public void visit(RepeatUntil stmt) {
+		do {
+			executeBlock(stmt.block);
+		} while (!isTrue(stmt.exp));
 	}
 
 	@Override
@@ -108,5 +109,9 @@ public class StatementVisitor extends VisitorAdaptor {
 		LuaInterpreter.eval(block.chunk, blockEnvironment);
 
 		// TODO: handle return / break;
+	}
+
+	private boolean isTrue(Exp exp) {
+		return LogicalOperatorSupport.isTrue(eval(exp, environment));
 	}
 }

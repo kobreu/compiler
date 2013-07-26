@@ -3,6 +3,7 @@ package edu.tum.lua;
 import java.util.Deque;
 import java.util.Enumeration;
 import java.util.LinkedList;
+import java.util.List;
 
 import edu.tum.lua.ast.Binop;
 import edu.tum.lua.ast.BooleanExp;
@@ -31,13 +32,19 @@ import edu.tum.lua.types.LuaType;
 
 public class ExpVisitor extends VisitorAdaptor {
 
-	private final Deque<Object> evaluationStack;
-
 	private final Environment environment;
+
+	private Deque<Object> evaluationStack;
 
 	public ExpVisitor(Environment e) {
 		environment = e;
 		evaluationStack = new LinkedList<>();
+	}
+
+	public List<Object> popAll() {
+		List<Object> stack = new LinkedList<>(evaluationStack);
+		evaluationStack = new LinkedList<>();
+		return stack;
 	}
 
 	public Object popLast() {
@@ -54,46 +61,6 @@ public class ExpVisitor extends VisitorAdaptor {
 	}
 
 	@Override
-	public void visit(Nil exp) {
-		evaluationStack.addLast(null);
-	}
-
-	@Override
-	public void visit(BooleanExp exp) {
-		evaluationStack.addLast(exp.value);
-	}
-
-	@Override
-	public void visit(NumberExp exp) {
-		evaluationStack.addLast(exp.number);
-	}
-
-	@Override
-	public void visit(TextExp exp) {
-		evaluationStack.addLast(exp.text);
-	}
-
-	@Override
-	public void visit(Dots exp) {
-		throw new RuntimeException("Not yet implemented");
-	}
-
-	@Override
-	public void visit(Closure exp) {
-		throw new RuntimeException("Not yet implemented");
-	}
-
-	@Override
-	public void visit(PrefixExp exp) {
-		exp.accept(this);
-	}
-
-	@Override
-	public void visit(TableConstructorExp exp) {
-		throw new RuntimeException("Not yet implemented");
-	}
-
-	@Override
 	public void visit(Binop binop) {
 		binop.leftexp.accept(this);
 		Object op1 = evaluationStack.removeLast();
@@ -106,49 +73,18 @@ public class ExpVisitor extends VisitorAdaptor {
 	}
 
 	@Override
-	public void visit(Unop unop) {
-		unop.exp.accept(this);
-		Object op = evaluationStack.removeLast();
-
-		Operator operator = OperatorRegistry.registry[unop.op];
-		evaluationStack.addLast(operator.apply(op));
+	public void visit(BooleanExp exp) {
+		evaluationStack.addLast(exp.value);
 	}
 
 	@Override
-	public void visit(PrefixExpVar expVar) {
-		expVar.childrenAccept(this);
+	public void visit(Closure exp) {
+		throw new RuntimeException("Not yet implemented");
 	}
 
 	@Override
-	public void visit(Variable variable) {
-		evaluationStack.addLast(environment.get(variable.var));
-	}
-
-	private Deque<Object> findCallHandler(Object object) {
-		Deque<Object> result;
-
-		switch (LuaType.getTypeOf(object)) {
-		case FUNCTION:
-			result = new LinkedList<>();
-			result.add(object);
-			return result;
-
-			/*
-			 * meta.__call(object, ...) - metafunctions take the table as first
-			 * argument!
-			 */
-		case TABLE:
-			LuaTable meta = ((LuaTable) object).getMetatable();
-
-			if (meta != null) {
-				result = findCallHandler(meta.get("__call"));
-				result.add(object);
-				return result;
-			}
-
-		default:
-			throw new LuaRuntimeException("attempt to call a " + LuaType.getTypeOf(object) + " value");
-		}
+	public void visit(Dots exp) {
+		throw new RuntimeException("Not yet implemented");
 	}
 
 	@Override
@@ -187,6 +123,77 @@ public class ExpVisitor extends VisitorAdaptor {
 
 		if (!result.isEmpty()) {
 			evaluationStack.add(result.get(0));
+		}
+	}
+
+	@Override
+	public void visit(Nil exp) {
+		evaluationStack.addLast(null);
+	}
+
+	@Override
+	public void visit(NumberExp exp) {
+		evaluationStack.addLast(exp.number);
+	}
+
+	@Override
+	public void visit(PrefixExp exp) {
+		exp.accept(this);
+	}
+
+	@Override
+	public void visit(PrefixExpVar expVar) {
+		expVar.childrenAccept(this);
+	}
+
+	@Override
+	public void visit(TableConstructorExp exp) {
+		throw new RuntimeException("Not yet implemented");
+	}
+
+	@Override
+	public void visit(TextExp exp) {
+		evaluationStack.addLast(exp.text);
+	}
+
+	@Override
+	public void visit(Unop unop) {
+		unop.exp.accept(this);
+		Object op = evaluationStack.removeLast();
+
+		Operator operator = OperatorRegistry.registry[unop.op];
+		evaluationStack.addLast(operator.apply(op));
+	}
+
+	@Override
+	public void visit(Variable variable) {
+		evaluationStack.addLast(environment.get(variable.var));
+	}
+
+	private Deque<Object> findCallHandler(Object object) {
+		Deque<Object> result;
+
+		switch (LuaType.getTypeOf(object)) {
+		case FUNCTION:
+			result = new LinkedList<>();
+			result.add(object);
+			return result;
+
+			/*
+			 * meta.__call(object, ...) - metafunctions take the table as first
+			 * argument!
+			 */
+		case TABLE:
+			LuaTable meta = ((LuaTable) object).getMetatable();
+
+			if (meta != null) {
+				result = findCallHandler(meta.get("__call"));
+				result.add(object);
+				return result;
+			}
+
+		default:
+			throw new LuaRuntimeException("attempt to call a " + LuaType.getTypeOf(object) + " value");
 		}
 	}
 }
