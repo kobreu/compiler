@@ -123,13 +123,13 @@ block 			::=    statlist:stats laststat:lstat
 
 	
 
-statlist		::=		stat:s optsemi optws
+statlist		::=		optws stat:s optsemi optws
 						{: 	
 							System.out.println("Inside single stat"); 			
 							RESULT = new StatList(s);
 						:}							
 						
-						|  stat:s  optsemi optws statlist:sl 
+						|  optws stat:s  optsemi optws statlist:sl 
 						{:						
 					   		if(sl== null){
 					    	System.out.println("Inside recu stat"); 	
@@ -219,7 +219,7 @@ varlist			::=     var:v optws
 						{: 							
 						RESULT= new VarList(v);
 						:}
-						| var:v COM optws varlist:vl
+						| var:v optws COM optws varlist:vl
 						{: 
 						if(vl==null){
 						vl = new VarList(v);
