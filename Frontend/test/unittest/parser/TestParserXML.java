@@ -119,8 +119,8 @@ public class TestParserXML extends XMLTestCase {
 		xmlFiles.add("testinput/grammar/stat_assignment.xml");
 		luaFiles.add("testinput/grammar/stat_assignment.lua");
 		
-		/*xmlFiles.add("testinput/grammar/if_else_if.xml");
-		luaFiles.add("testinput/grammar/if_else_if.lua");*/
+		xmlFiles.add("testinput/grammar/if_else_if.xml");
+		luaFiles.add("testinput/grammar/if_else_if.lua");
 		
 		/*xmlFiles.add("testinput/grammar/explist_whitespace.xml");
 		luaFiles.add("testinput/grammar/explist_whitespace.lua");*/
