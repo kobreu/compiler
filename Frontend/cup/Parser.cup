@@ -90,7 +90,7 @@ non terminal Field field;
 non terminal fieldsep;
 non terminal Integer binop;
 non terminal Integer unop;
-non terminal optsemi, empty, optws, optasm, optexplist, optdotname, optcolonname, optvarlist;
+non terminal optsemi, empty, optws, optasm,  optdotname, optcolonname, optvarlist;
 
 precedence left ADD, MUL, SUB, DIV, MOD, POW, CONCAT, EQ, LEQ ,NEQ , LE, GR, GEQ, AND, OR;
 precedence left LPAREN, RPAREN;
@@ -117,9 +117,9 @@ statlist		::=		stat:s optsemi optws
 						{: 	
 							System.out.println("Inside single stat"); 			
 							RESULT = new StatList(s);
-						:}	
+						:}							
 						
-						|  stat:s optsemi optws statlist:sl 
+						|  stat:s  optsemi optws statlist:sl 
 						{:						
 					   		if(sl== null){
 					    	System.out.println("Inside recu stat"); 	
@@ -131,19 +131,11 @@ statlist		::=		stat:s optsemi optws
 							RESULT = sl;
 							}
 						:}	
-						
-								
+							
 						;
 					
 						
-laststat		::=		RETURN optexplist:el 
-						{:    
-							System.out.println("Inside laststat");
-							RESULT = new LastReturn( (ExpList) el); 
-						:}		
-						| 	BREAK {: RESULT = new LastBreak(); :}	
-						| 	empty
-						; 	
+
 
 					
 stat        	::=    		varlist:vl ASM explist:el 
@@ -156,7 +148,7 @@ stat        	::=    		varlist:vl ASM explist:el
 						  RESULT = new FuncCallStmt(fc);
 						:}
 						
-						| 	DO WS block:b END 
+						| 	DO optws block:b END 
 						{:    
 								System.out.println("Inside DO END");
 								RESULT = new DoExp(b); 
@@ -180,7 +172,19 @@ stat        	::=    		varlist:vl ASM explist:el
 						{: RESULT = new LocalDecl(nl,el); :}
 						;
 	
-					
+laststat		::=		RETURN optws optsemi
+						{:    
+							System.out.println("Inside laststat");
+							RESULT = new LastReturn(null); 
+						:}
+						|	RETURN optws explist:el optws optsemi	
+						{:    
+							System.out.println("Inside laststat");
+							RESULT = new LastReturn(el); 
+						:}
+						| 	BREAK {: RESULT = new LastBreak(); :}	
+						| empty
+						; 						
 funcname		::=     ID:id
 						| ID:id DOT funcname
 						| DDOT ID:id
@@ -211,11 +215,11 @@ varlist			::=     var:v
 						;
 	
 				
-explist			::=     exp:e 
-							{:
+explist			::=     exp:e  
+							{: 
 							RESULT= new ExpList(e);
 							:}
-						| exp:e COM explist:el
+						| exp:e COM explist:el 
 							{:
 								if(el == null) {
 									el = new ExpList(e);
@@ -225,12 +229,13 @@ explist			::=     exp:e
 								RESULT = el;}
 	
 							:}
+							
 						;
-	
 						
-namelist    	::=    	ID:id optws
+			
+namelist    	::=    	ID:id  
 						{: RESULT = new NameList(new Name(id)); :}  
-						/*| ID:id COM namelist:nl
+						/* | ID:id optws COM namelist:nl
 						{: 	if(nl== null){					    		
 					    	nl =new NameList(new Name(id));
 							RESULT = nl;}
@@ -238,10 +243,12 @@ namelist    	::=    	ID:id optws
 							nl.insertElementAt(new Name(id),0);
 							RESULT = nl;
 							} 
-						:}*/ 
-																	
+						:}
+							*/										
 						;
 					
+					
+
 var				::=		ID:id
 						{:  						
 						RESULT =  new Variable(id);						
@@ -432,3 +439,4 @@ optsemi			::= 	SEMI  | empty ;
 optws			::= 	WS | empty ;
 						
 empty			::=		;
+
