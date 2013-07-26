@@ -176,8 +176,8 @@ stat        	::=    		varlist:vl optws ASM optws explist:el
 						{: 		
 								RESULT = new ForExp(id,e1,e2,e3,b); 
 						:}
-						| FOR optws ID optws IN 
-						{: RESULT = new ForIn(null,null, null); :}
+						| FOR optws namelist:nl optws IN optws explist:el optws DO optws block:b END
+						{: RESULT = new ForIn(nl,el, b); :}
 						| FUNC funcname funcbody  
 		 				| LOCAL FUNC function ID:id funcbody 
 						| LOCAL optws namelist:nl optasmexplist:el
