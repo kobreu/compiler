@@ -7,7 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import util.ParserUtil;
-import edu.tum.lua.Environment;
+import edu.tum.lua.LocalEnvironment;
 import edu.tum.lua.LuaInterpreter;
 import edu.tum.lua.StatementVisitor;
 import edu.tum.lua.ast.Asm;
@@ -26,11 +26,11 @@ import edu.tum.lua.ast.Variable;
 public class StatementVisitorTest {
 
 	private StatementVisitor visitor;
-	private Environment environment;
+	private LocalEnvironment environment;
 
 	@Before
 	public void setUp() throws Exception {
-		environment = new Environment();
+		environment = new LocalEnvironment();
 		visitor = new StatementVisitor(environment);
 	}
 
@@ -68,7 +68,7 @@ public class StatementVisitorTest {
 	@Test
 	public void testVisitIf() throws Exception {
 
-		environment = new Environment();
+		environment = new LocalEnvironment();
 		visitor = new StatementVisitor(environment);
 
 		// > a = 1+1 >> a=2

@@ -6,17 +6,18 @@ import java.util.Arrays;
 import java.util.List;
 
 import edu.tum.lua.Environment;
+import edu.tum.lua.LocalEnvironment;
 import edu.tum.lua.LuaInterpreter;
 import edu.tum.lua.ast.Block;
 import edu.tum.lua.ast.FunctionDef;
 
 public class LuaFunctionInterpreted implements LuaFunction {
 
-	private Environment environment;
+	private final LocalEnvironment environment;
 	private final List<String> argumentNames;
 	private final Block block;
 
-	public LuaFunctionInterpreted(FunctionDef node, Environment e) {
+	public LuaFunctionInterpreted(FunctionDef node, LocalEnvironment e) {
 		environment = e;
 		argumentNames = convert(node.args);
 		block = node.block;
@@ -24,7 +25,7 @@ public class LuaFunctionInterpreted implements LuaFunction {
 
 	@Override
 	public List<Object> apply(List<Object> arguments) {
-		Environment currentEnvironment = new Environment(environment);
+		LocalEnvironment currentEnvironment = new LocalEnvironment(environment);
 
 		for (int i = 0; i < Math.min(argumentNames.size(), arguments.size()); i++) {
 			currentEnvironment.set(argumentNames.get(i), arguments.get(i));
@@ -38,11 +39,11 @@ public class LuaFunctionInterpreted implements LuaFunction {
 		return apply(Arrays.asList(arguments));
 	}
 
-	public Environment getEnvironment() {
-		return environment;
+	public Environment getGlobalEnvironment() {
+		return environment.getGlobalEnvironment();
 	}
 
-	public void setEnvironment(Environment e) {
-		environment = e;
+	public void setGlobalEnvironment(Environment e) {
+		environment.setGlobalEnvironment(e);
 	}
 }

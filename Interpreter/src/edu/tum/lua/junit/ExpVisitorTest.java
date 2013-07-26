@@ -6,8 +6,8 @@ import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.Test;
 
-import edu.tum.lua.Environment;
 import edu.tum.lua.ExpVisitor;
+import edu.tum.lua.LocalEnvironment;
 import edu.tum.lua.ast.FieldExp;
 import edu.tum.lua.ast.FieldLRExp;
 import edu.tum.lua.ast.FieldList;
@@ -21,7 +21,7 @@ import edu.tum.lua.types.LuaTable;
 public class ExpVisitorTest {
 
 	ExpVisitor visitor;
-	Environment e;
+	LocalEnvironment e;
 
 	@Before
 	public void setUp() throws Exception {
@@ -62,7 +62,7 @@ public class ExpVisitorTest {
 
 		// > t = {"one", "two", [3.0] = "three", x4 = "four", "5" = "five"}
 		// > for k,v in pairs(t) do print(k,v) >> 1->"one", 2->"two"
-		e = new Environment();
+		e = new LocalEnvironment();
 		visitor = new ExpVisitor(e);
 
 		FieldList fieldlist = new FieldList(new FieldExp(new TextExp("one")));
@@ -81,7 +81,7 @@ public class ExpVisitorTest {
 
 		// > t = {"one", "two", [1]="im lost"}
 		// > for k,v in pairs(t) do print(k,v) >> 1->"one", 2->"two"
-		e = new Environment();
+		e = new LocalEnvironment();
 		visitor = new ExpVisitor(e);
 
 		fieldlist = new FieldList(new FieldExp(new TextExp("one")));
@@ -94,7 +94,7 @@ public class ExpVisitorTest {
 
 		// > t = {[1]="im lost", "one", "two"}
 		// > for k,v in pairs(t) do print(k,v) >> 1->"one", 2->"two"
-		e = new Environment();
+		e = new LocalEnvironment();
 		visitor = new ExpVisitor(e);
 
 		fieldlist = new FieldList(new FieldLRExp(new NumberExp(2.0), new TextExp("im lost")));

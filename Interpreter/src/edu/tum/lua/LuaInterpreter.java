@@ -16,10 +16,10 @@ import edu.tum.lua.ast.Stat;
 public class LuaInterpreter {
 
 	public static List<Object> eval(Block block) {
-		return eval(block, new Environment());
+		return eval(block, new LocalEnvironment());
 	}
 
-	public static List<Object> eval(Block block, Environment environment) {
+	public static List<Object> eval(Block block, LocalEnvironment environment) {
 		StatementVisitor visitor = new StatementVisitor(environment);
 
 		for (Stat statement : convert(block.stats)) {
@@ -31,21 +31,21 @@ public class LuaInterpreter {
 		}
 
 		/* LastReturn */
-		Environment lastEnvironment = visitor.getEnvironment();
+		LocalEnvironment lastEnvironment = visitor.getEnvironment();
 		return eval(((LastReturn) block.last).explist, lastEnvironment);
 	}
 
-	public static List<Object> eval(ExpList explist, Environment environment) {
+	public static List<Object> eval(ExpList explist, LocalEnvironment environment) {
 		throw new RuntimeException("Missing implementation");
 	}
 
-	public static Object eval(Exp exp, Environment environment) {
+	public static Object eval(Exp exp, LocalEnvironment environment) {
 		ExpVisitor visitor = new ExpVisitor(environment);
 		exp.accept(visitor);
 		return visitor.popLast();
 	}
 
-	public static void eval(FunctionCall call, Environment environment2) {
+	public static void eval(FunctionCall call, LocalEnvironment environment2) {
 		throw new RuntimeException("Missing implementation");
 	}
 

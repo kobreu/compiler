@@ -37,11 +37,11 @@ import edu.tum.lua.types.LuaType;
 
 public class ExpVisitor extends VisitorAdaptor {
 
-	private final Environment environment;
+	private final LocalEnvironment environment;
 
 	private Deque<Object> evaluationStack;
 
-	public ExpVisitor(Environment e) {
+	public ExpVisitor(LocalEnvironment e) {
 		environment = e;
 		evaluationStack = new LinkedList<>();
 	}

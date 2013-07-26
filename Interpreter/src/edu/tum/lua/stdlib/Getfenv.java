@@ -23,7 +23,7 @@ public class Getfenv extends LuaFunctionNative {
 			throw new LuaBadArgumentException(1, "getfenv", "number", LuaType.getTypeOf(f).toString());
 		if (f instanceof LuaFunctionNative)
 			return Arrays.asList((Object) Environment.getGlobalEnvironment());
-		return Arrays.asList((Object) ((LuaFunctionInterpreted) f).getEnvironment());
+		return Arrays.asList((Object) ((LuaFunctionInterpreted) f).getGlobalEnvironment());
 	}
 
 }

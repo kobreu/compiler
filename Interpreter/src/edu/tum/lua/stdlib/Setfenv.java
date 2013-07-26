@@ -22,7 +22,7 @@ public class Setfenv extends LuaFunctionNative {
 			throw new LuaRuntimeException("not supported in this version");
 		if (f instanceof LuaFunctionNative)
 			throw new LuaRuntimeException("not supported in this version");
-		((LuaFunctionInterpreted) f).setEnvironment((Environment) arguments.get(1));
+		((LuaFunctionInterpreted) f).setGlobalEnvironment((Environment) arguments.get(1));
 		return Arrays.asList(f);
 	}
 

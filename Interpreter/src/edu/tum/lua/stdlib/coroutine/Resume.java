@@ -1,6 +1,7 @@
 package edu.tum.lua.stdlib.coroutine;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -24,8 +25,9 @@ public class Resume extends LuaFunctionNative {
 				if (t.isInterrupted() || !t.isAlive()) {
 					LinkedList<Object> l = new LinkedList<Object>();
 					l.add(true);
-					for (Object o : t.getReturnValue()) {
-						l.add(o);
+					Iterator<Object> iter = t.getReturnValue().iterator();
+					while (iter.hasNext()) {
+						l.add(iter.next());
 					}
 					return l;
 				}

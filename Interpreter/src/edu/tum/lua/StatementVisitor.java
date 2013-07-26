@@ -23,13 +23,13 @@ import edu.tum.lua.operator.logical.LogicalOperatorSupport;
 
 public class StatementVisitor extends VisitorAdaptor {
 
-	private final Environment environment;
+	private final LocalEnvironment environment;
 
-	public StatementVisitor(Environment e) {
+	public StatementVisitor(LocalEnvironment e) {
 		this.environment = e;
 	}
 
-	public Environment getEnvironment() {
+	public LocalEnvironment getEnvironment() {
 		return environment;
 	}
 
@@ -105,7 +105,11 @@ public class StatementVisitor extends VisitorAdaptor {
 	}
 
 	private void executeBlock(Block block) {
+
 		LuaInterpreter.eval(block, environment);
+
+		LocalEnvironment blockEnvironment = new LocalEnvironment(environment);
+		LuaInterpreter.eval(block, blockEnvironment);
 
 		// TODO: handle return / break;
 	}
