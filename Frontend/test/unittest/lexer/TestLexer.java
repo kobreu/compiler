@@ -51,7 +51,7 @@ public class TestLexer {
 		symbolsForCase = new Integer[] { sym.ID, sym.ASM, sym.ID, sym.LPAREN, sym.LCURL, sym.NUMBER, sym.COM, sym.NUMBER, sym.RCURL, sym.RPAREN };
 		symbols.put(file, Arrays.asList(symbolsForCase));
 		
-		file = "testinput/grammar/binop_dotdot.lua";
+		file = "testinput/binop/binop_concat.lua";
 		files.add(file);
 		symbolsForCase = new Integer[] { sym.ID, sym.ASM, sym.NUMBER, sym.CONCAT, sym.NUMBER };
 		symbols.put(file, Arrays.asList(symbolsForCase));
@@ -168,7 +168,7 @@ public class TestLexer {
 		
 		file = "testinput/grammar/function_funcbody.lua";
 		files.add(file);
-		symbolsForCase = new Integer[] { sym.ID, sym.ASM, sym.FUNC, sym.WS, sym.LPAREN, sym.RPAREN, sym.WS, sym.END };
+		symbolsForCase = new Integer[] { sym.ID, sym.ASM, sym.FUNC, sym.WS, sym.LPAREN, sym.RPAREN, sym.END };
 		symbols.put(file, Arrays.asList(symbolsForCase));
 		
 		file = "testinput/grammar/functioncall_prefixexp_colon.lua";
@@ -273,7 +273,7 @@ public class TestLexer {
 		
 		file = "testinput/grammar/stat_repeat.lua";
 		files.add(file);
-		symbolsForCase = new Integer[] {sym.REPEAT, sym.WS, sym.ID, sym.ASM, sym.NUMBER, sym.WS, sym.UNTIL, sym.WS, sym.FALSE, sym.WS, sym.END};
+		symbolsForCase = new Integer[] {sym.REPEAT, sym.WS, sym.ID, sym.ASM, sym.NUMBER, sym.WS, sym.UNTIL, sym.WS, sym.FALSE};
 		symbols.put(file, Arrays.asList(symbolsForCase));
 		
 		file = "testinput/grammar/stat_while.lua";
