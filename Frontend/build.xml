@@ -103,7 +103,6 @@
 
 
 	<target name="clean">
-		<delete dir="${java}" />
 		<delete dir="${classes}" />
 		<delete dir="${dist}" />
 	</target>
