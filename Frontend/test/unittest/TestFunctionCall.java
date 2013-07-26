@@ -4,10 +4,9 @@ import static org.junit.Assert.*;
 
 import java.io.IOException;
 
-import main.Main;
-
 import org.junit.Test;
 
+import util.ParserUtil;
 import edu.tum.lua.ast.*;
 
 public class TestFunctionCall {
@@ -17,7 +16,7 @@ public class TestFunctionCall {
 		String[] args = new String[2];
 		args[0] = "testinput/arith/arith_simple.lua";
 		try {
-			Block chunk = (new Main()).run(args);
+			Block chunk = ParserUtil.parse(args[0]);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
