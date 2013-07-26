@@ -182,7 +182,8 @@ laststat		::=		RETURN optws optsemi
 							System.out.println("Inside laststat");
 							RESULT = new LastReturn(el); 
 						:}
-						| 	BREAK {: RESULT = new LastBreak(); :}	
+						| BREAK optws optsemi{: RESULT = new LastBreak(); :}	
+						| BREAK optws optsemi statlist{: RESULT = new LastBreak(); :}
 						| empty
 						; 						
 funcname		::=     ID:id
