@@ -152,8 +152,49 @@ public class StatementVisitorTest {
 	}
 
 	@Test
-	public void testVisitForExp() {
-		fail("Not yet implemented"); // TODO
+	public void testVisitForExp() throws Exception {
+
+		Block block1, block2;
+
+		// Normal iteration
+		setUp();
+		block1 = ParserUtil.loadString("b=0");
+		block2 = ParserUtil.loadString("for a = 1,3,0.5 do b=a end");
+
+		LuaInterpreter.eval(block1, environment);
+		assertEquals(3.0, environment.get("b"));
+
+		// Negative iteration
+
+		// No step given
+
+		// Do not change
+
+		// Do not change "a"
+		// > a = 1
+		// > for a = 1,3 do print(a) end
+		// > print(a) >> 1
+		block1 = ParserUtil.loadString("a=1");
+		block2 = ParserUtil.loadString("for a = 1,3,0.5 do b=a end");
+
+		assertEquals(null, environment.get("a"));
+		LuaInterpreter.eval(block1, environment);
+		LuaInterpreter.eval(block2, environment);
+		assertEquals(1.0, environment.get("a"));
+
+	}
+
+	@Test
+	public void testVisitForExp2() throws Exception {
+
+		Block block1 = ParserUtil.loadString("a=1");
+		Block block2 = ParserUtil.loadString("for a = 1,3,0.5 do print(a) end");
+
+		assertEquals(null, environment.get("a"));
+		LuaInterpreter.eval(block1, environment);
+		LuaInterpreter.eval(block2, environment);
+		assertEquals(1.0, environment.get("a"));
+
 	}
 
 	@Test

@@ -58,6 +58,44 @@ public class StatementVisitor extends VisitorAdaptor {
 	@Override
 	public void visit(ForExp stmt) {
 
+		/*-
+		 * Lua Pseudocode:
+		 * 
+		 * for v = e1, e2, e3 do block end
+		 * 
+		 * is equivalent to the code:
+		 * 
+		 * do
+		 *   local var, limit, step = tonumber(e1), tonumber(e2), tonumber(e3)
+		 *   if not (var and limit and step) then error() end
+		 * 	 while (step > 0 and var <= limit) or (step <= 0 and var >= limit) do
+		 * 	   local v = var block
+		 * 	   var = var + step
+		 * 	 end
+		 * end // @formatter:on
+		 */
+
+		String v = stmt.ident;
+		double var, limit, step;
+		ExpVisitor visitor = new ExpVisitor(environment);
+
+		stmt.start.accept(visitor);
+		var = (double) visitor.popLast();
+		stmt.end.accept(visitor);
+		limit = (double) visitor.popLast();
+		stmt.step.accept(visitor);
+		step = (double) visitor.popLast();
+
+		while ((step > 0.0 && var <= limit) || step <= 0 && var >= limit) {
+
+			System.out.println("Visit: " + var + " ident " + v);
+			// TODO Create a new local environment for v!
+			LocalEnvironment localenv = new LocalEnvironment(environment);
+			localenv.setLocal(v, var);
+			// environment.set(v, var);
+			LuaInterpreter.eval(stmt.block, localenv);
+			var += step;
+		}
 	}
 
 	@Override
