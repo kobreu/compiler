@@ -98,7 +98,8 @@ public class ExpVisitor extends VisitorAdaptor {
 		Enumeration<Exp> iterator = call.explist.elements();
 
 		while (iterator.hasMoreElements()) {
-			iterator.nextElement().accept(this);
+			iterator.nextElement().accept(visitor);
+
 			List<Object> explist = visitor.popAll();
 
 			if (iterator.hasMoreElements()) {
@@ -156,7 +157,7 @@ public class ExpVisitor extends VisitorAdaptor {
 
 	@Override
 	public void visit(PrefixExpVar expVar) {
-		expVar.childrenAccept(this);
+		expVar.var.accept(this);
 	}
 
 	@Override
