@@ -138,7 +138,7 @@ statlist		::=		stat:s optsemi optws
 
 
 					
-stat        	::=    		varlist:vl ASM explist:el 
+stat        	::=    		varlist:vl optws ASM optws explist:el 
 						{: 
 								System.out.println("Inside stat");
 								RESULT = new Asm(vl,el);
