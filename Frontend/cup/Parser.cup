@@ -133,7 +133,7 @@ statlist		::=		stat:s optsemi optws
 						
 								
 						;
-						
+					
 						
 laststat		::=		RETURN optexplist:el 
 						{:    
@@ -143,16 +143,17 @@ laststat		::=		RETURN optexplist:el
 						| 	BREAK {: RESULT = new LastBreak(); :}	
 						| 	empty
 						; 	
+	
 					
 stat        	::=    		varlist:vl ASM explist:el 
 						{: 
 								System.out.println("Inside stat");
 								RESULT = new Asm(vl,el);
 						:}
-						| functioncall:fc
+						/*| functioncall:fc
 						{:
 						  RESULT = new FuncCallStmt(fc);
-						:}
+						:}*/
 						
 						| 	DO WS block:b END 
 						{:    
@@ -172,16 +173,19 @@ stat        	::=    		varlist:vl ASM explist:el
 						:}
 						| FOR optws namelist:nl  IN optws explist:el optws DO optws block:b END
 						{: RESULT = new ForIn(nl,el,b); :}
-						|FUNC funcname funcbody  
-		 				|LOCAL FUNC function ID:id funcbody 
+						| FUNC funcname funcbody  
+		 				| LOCAL FUNC function ID:id funcbody 
 						| LOCAL namelist:nl optasm explist:el
 						{: RESULT = new LocalDecl(nl,el); :}
 						;
-						
+	
+					
 funcname		::=     ID:id
 						| ID:id DOT funcname
 						| DDOT ID:id
 						;
+						
+
 optelse			::= 	ELSE optws block:b {: RESULT = b; :}						
 						| empty
 						;	
@@ -204,7 +208,8 @@ varlist			::=     var:v
 						RESULT = vl; }
 						:}								
 						;
-						
+	
+				
 explist			::=     exp:e 
 							{:
 							RESULT= new ExpList(e);
@@ -220,10 +225,11 @@ explist			::=     exp:e
 	
 							:}
 						;
+	
 						
 namelist    	::=    	ID:id optws
 						{: RESULT = new NameList(new Name(id)); :}  
-						| ID:id COM namelist:nl
+						/*| ID:id COM namelist:nl
 						{: 	if(nl== null){					    		
 					    	nl =new NameList(new Name(id));
 							RESULT = nl;}
@@ -231,10 +237,10 @@ namelist    	::=    	ID:id optws
 							nl.insertElementAt(new Name(id),0);
 							RESULT = nl;
 							} 
-						:} 
+						:}*/ 
 																	
 						;
-						
+					
 var				::=		ID:id
 						{:  						
 						RESULT =  new Variable(id);						
@@ -244,7 +250,8 @@ var				::=		ID:id
 						RESULT =  new VarTabIndex(pe,e);						
 						:}					
 						;
-						
+
+					
 exp				::=		NIL
 							{: RESULT = new Nil(); :}  
 						| FALSE
@@ -255,95 +262,109 @@ exp				::=		NIL
 							{: 					   
 								RESULT = new NumberExp(num); 						
 							:} 
-						| ID:id 
-							{: RESULT = new TextExp(id); :}
+						| TEXT:t 
+							{: RESULT = new TextExp(t); :}
 						| prefixexp:prefixexp
 							{: RESULT = new PreExp(prefixexp); :}
-						 | tableconstructor:tc
+						| tableconstructor:tc
 								{: RESULT = new TableConstructorExp(tc); :} 
 						| exp:e1 binop:op exp:e2
 							{: RESULT = new Binop(e1,op,e2); :}
 						| unop:uop exp:e
 							{: RESULT = new Unop(uop,e); :}
-						
+						| function:f
+							{: RESULT = new FunctionExp(f); :}
 						;	
-						
+	
+					
 prefixexp		::=		var:v
 						{:
-						RESULT = new PrefixExpVar(v);
+							RESULT = new PrefixExpVar(v);
 						:}
 						| functioncall:fc {:
-						RESULT =  new PrefixExpFuncCall(fc);
+							System.out.println("inside prefixexp");
+							RESULT =  new PrefixExpFuncCall(fc);
 						:}
-						| LPAREN exp:e RPAREN
+						/*| LPAREN exp:e RPAREN
 						{:
-						RESULT = new PrefixExpExp(e);
-						:}
+							RESULT = new PrefixExpExp(e);
+						:}*/
 						;
+	
 	
 functioncall	::= 	prefixexp:pexp args:ar
 						{:
-						RESULT = new FuncCall(pexp,ar);
+							System.out.println("inside functioncall");
+							RESULT = new FuncCall(pexp,ar);
 						:}
-						| prefixexp:pexp DDOT TEXT:nam args:ar
+						/*| prefixexp:pexp DDOT TEXT:nam args:ar
 						{:
-						RESULT = new FuncCallSelf(pexp,new Name(nam),ar);
-						:} 
+							RESULT = new FuncCallSelf(pexp,new Name(nam),ar);
+						:} */
 						;
-						
-							
+
+				
 args			::= 	LPAREN explist:el RPAREN
 						{:
 						RESULT = el;
 						:}
-						| LPAREN  RPAREN {: RESULT = new ExpList(null); :}
-						| tableconstructor:tc {: RESULT = new ExpList(tc); :}
+						| LPAREN RPAREN {: RESULT = new ExpList(null); :}
+						| tableconstructor:tc {: RESULT = new ExpList(new TableConstructorExp(tc)); :}
 						| TEXT:txt {: RESULT = new ExpList(new TextExp(txt)); :} 
 						;
-function 		::=     FUNC funcbody:fb
+
+function 		::=     FUNC optws funcbody:fb
 						{:
-						RESULT = new Funct(fb);
+							RESULT = new Function(fb);
 						:}
 						;
+						
+
 funcbody		::= 	LPAREN parlist:pl RPAREN block:bl END
 						{:
-						if (pl==null){ RESULT = new FuncBody(null,bl); }
-						else{
-						RESULT = new FuncBody(pl,bl); }
+								RESULT = new FuncBody(pl,bl);
 						:}
 						;
+					
+
 parlist			::=		namelist:nl
 						{:
-						RESULT ::= new ParList(nl,false);
+							RESULT = new ParList(nl,false);
 						:}
-						| namelist PARAMS
+						| namelist:nl COM PARAMS
 						{:
-						RESULT ::= new ParList(nl,true);
+							RESULT = new ParList(nl,true);
 						:}
 						| PARAMS
 						{:
-						RESULT ::= new ParList(nul,true);
+							RESULT = new ParList(null,true);
 						:}
+						| {:
+							RESULT = new ParList(null, false);
+						  :}
 						;
+	
+
 tableconstructor ::=    LCURL fieldlist:fl RCURL
  						{: RESULT = new TableConstructor(fl); :} 
  						; 
+
  						
-fieldlist		 ::= 	field:f fieldsep
-						{: RESULT = new FieldList(f); :}
-						|
-						field:f fieldlist:fl fieldsep
-						{: if(fl==null) {
-						RESULT = new FieldList(f);
-						}
-						else
-						{
-						fl.insertElementAt(f,0);
-						RESULT = fl;
-						}						
-						:}
-						
+fieldlist		 ::= 	| field:f
+							{: RESULT = new FieldList(f); :}
+						| field:f fieldsep fieldlist:fl
+							{: if(fl==null) {
+									RESULT = new FieldList(f);
+								}
+								else
+								{
+									fl.insertElementAt(f,0);
+									RESULT = fl;
+								}						
+							:}
  						;
+ 						
+ 						
 field			::=		LBRACK exp:e1 RBRACK ASM exp:e2
 						{:
 						RESULT = new FieldLRExp(e1,e2);
@@ -358,8 +379,10 @@ field			::=		LBRACK exp:e1 RBRACK ASM exp:e2
 						:}
 						
 						;
-fieldsep		::=		COM | SEMI | empty 						
-						;			
+						
+
+fieldsep		::=		COM | SEMI						
+						;		
 binop			::=		ADD
 						{: RESULT = Op.ADD; :}
 						| SUB

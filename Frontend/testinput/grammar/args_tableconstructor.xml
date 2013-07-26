@@ -12,8 +12,18 @@
 								<Variable var="b" />
 							</PrefixExpVar>
 							<ExpList>
-								<NumberExp number="1.0" />
-								<NumberExp number="2.0" />
+								<TableConstructorExp>
+									<TableConstructor>
+										<FieldList>
+											<FieldExp>
+												<NumberExp number="1.0" />
+											</FieldExp>
+											<FieldExp>
+												<NumberExp number="2.0" />
+											</FieldExp>
+										</FieldList>
+									</TableConstructor>
+								</TableConstructorExp>
 							</ExpList>
 						</FuncCall>
 					</PrefixExpFuncCall>

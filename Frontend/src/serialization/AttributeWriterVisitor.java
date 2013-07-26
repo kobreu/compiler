@@ -13,6 +13,7 @@ import edu.tum.lua.ast.LocalFuncDef;
 import edu.tum.lua.ast.Name;
 import edu.tum.lua.ast.NumberExp;
 import edu.tum.lua.ast.Op;
+import edu.tum.lua.ast.ParList;
 import edu.tum.lua.ast.TextExp;
 import edu.tum.lua.ast.Unop;
 import edu.tum.lua.ast.Variable;
@@ -111,6 +112,11 @@ public class AttributeWriterVisitor extends VisitorAdaptor {
 	@Override
 	public void visit(TextExp textExp) {
 		addAttr("text", textExp.text);
+	}
+	
+	@Override
+	public void visit(ParList parList) {
+		addAttr("varparlist", String.valueOf(parList.varparlist));
 	}
 
 	@Override

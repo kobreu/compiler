@@ -1,0 +1,25 @@
+<Block>
+	<StatList>
+		<Asm>
+			<VarList>
+				<Variable var="a" />
+			</VarList>
+			<ExpList>
+				<FunctionExp>
+					<Function>
+						<FuncBody>
+							<ParList varparlist="false">
+								<Null />
+							</ParList>
+							<Block>
+								<Null />
+								<Null />
+							</Block>
+						</FuncBody>
+					</Function>
+				</FunctionExp>
+			</ExpList>
+		</Asm>
+	</StatList>
+	<Null />
+</Block>

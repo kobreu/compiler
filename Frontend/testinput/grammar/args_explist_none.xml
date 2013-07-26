@@ -7,12 +7,12 @@
 			<ExpList>
 				<PreExp>
 					<PrefixExpFuncCall>
-						<FunctionCall>
+						<FuncCall>
 							<PrefixExpVar>
 								<Variable var="b" />
 							</PrefixExpVar>
 							<ExpList />
-						</FunctionCall>
+						</FuncCall>
 					</PrefixExpFuncCall>
 				</PreExp>
 			</ExpList>

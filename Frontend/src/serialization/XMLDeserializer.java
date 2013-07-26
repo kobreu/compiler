@@ -26,6 +26,7 @@ import edu.tum.lua.ast.Name;
 import edu.tum.lua.ast.NameList;
 import edu.tum.lua.ast.NumberExp;
 import edu.tum.lua.ast.Op;
+import edu.tum.lua.ast.ParList;
 import edu.tum.lua.ast.TextExp;
 import edu.tum.lua.ast.Unop;
 import edu.tum.lua.ast.Variable;
@@ -100,6 +101,11 @@ public class XMLDeserializer {
 								.booleanValue(), block);
 			} else if (ele.getName().equals("Name")) {
 				return new Name(ele.attributeValue("name"));
+			} else if (ele.getName().equals("ParList")) {
+				NameList args = (NameList) deserialize((Element) ele.elements()
+						.get(0));
+
+				return new ParList(args, Boolean.valueOf(ele.attributeValue("varparlist")).booleanValue());
 			} else if (ele.getName().equals("TextExp")) {
 				return new TextExp(ele.attributeValue("text"));
 			} else if (ele.getName().equals("Variable")) {

@@ -49,6 +49,9 @@ public class TestParserXML extends XMLTestCase {
 		List<String> xmlFiles = new ArrayList<>();
 		List<String> luaFiles = new ArrayList<>();
 		
+		xmlFiles.add("testinput/grammar/function_funcbody.xml");
+		luaFiles.add("testinput/grammar/function_funcbody.lua");
+		
 		/*xmlFiles.add("testinput/grammar/chunk_sequence_without_semicolons.xml");
 		luaFiles.add("testinput/grammar/chunk_sequence_without_semicolons.lua");
 		
@@ -56,13 +59,16 @@ public class TestParserXML extends XMLTestCase {
 		luaFiles.add("testinput/grammar/chunk_sequence_with_semicolons.lua");
 		
 		xmlFiles.add("testinput/grammar/block.xml");
-		luaFiles.add("testinput/grammar/block.lua");*/
+		luaFiles.add("testinput/grammar/block.lua");
+		
+		xmlFiles.add("testinput/grammar/exp_tableconstructor.xml");
+		luaFiles.add("testinput/grammar/exp_tableconstructor.lua");
 
 		xmlFiles.add("testinput/grammar/args_explist_none.xml");
 		luaFiles.add("testinput/grammar/args_explist_none.lua");
 		
 		xmlFiles.add("testinput/grammar/args_explist_some.xml");
-		luaFiles.add("testinput/grammar/args_explist_some.lua");
+		luaFiles.add("testinput/grammar/args_explist_some.lua");*/
 
 		xmlFiles.add("testinput/grammar/args_string.xml");
 		luaFiles.add("testinput/grammar/args_string.lua");
@@ -70,8 +76,8 @@ public class TestParserXML extends XMLTestCase {
 		xmlFiles.add("testinput/grammar/args_tableconstructor.xml");
 		luaFiles.add("testinput/grammar/args_tableconstructor.lua");
 		
-		xmlFiles.add("testinput/grammar/binop_dotdot.xml");
-		luaFiles.add("testinput/grammar/binop_dotdot.lua");
+		xmlFiles.add("testinput/grammar/binop_plus.xml");
+		luaFiles.add("testinput/grammar/binop_plus.lua");
 		
 		xmlFiles.add("testinput/grammar/explist_multiple.xml");
 		luaFiles.add("testinput/grammar/explist_multiple.lua");

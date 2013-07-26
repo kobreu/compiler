@@ -133,12 +133,16 @@ public class TestParser {
 			return "REPEAT";
 		case sym.RPAREN:
 			return "RPAREN";
+		case sym.RCURL:
+			return "RCURL";
 		case sym.UNTIL:
 			return "UNTIL";
 		case sym.OR:
 			return "OR";
 		case sym.SEMI:
 			return "SEMI";
+		case sym.TEXT:
+			return "TEXT";
 		case sym.TRUE:
 			return "TRUE";
 		case sym.WS:

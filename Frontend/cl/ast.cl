@@ -30,6 +30,7 @@ Exp ::=  {Nil}
 		| {TableConstructorExp} TableConstructor:tablecons
 		| {Binop} Exp:leftexp "int":op Exp:rightexp
 		| {Unop} "int":op Exp:exp 
+		| {FunctionExp} Function:function
 
 VarList ::= Var*
 
@@ -49,8 +50,13 @@ PrefixExp ::= 	{PrefixExpVar} Var:var
 FunctionCall ::=  {FuncCall} PrefixExp:preexp  ExpList:explist
 				  | {FuncCallSelf} PrefixExp:preexp  Name:name ExpList:explist
 
-Funct		::= FuncBody:funcbody
+Function		::= FuncBody:funcbody
 FuncBody	::= ParList:parlist Block:block
+
+FuncName	::= {FuncNameVar} Var:var
+				| {FuncNameVarDotFuncName} Var:var FuncName:funcName
+				| {FuncNameDDotVar} Var:var
+				
 ParList		::=  NameList:namelist "Boolean":varparlist
 				
 TableConstructor ::= FieldList:fieldlist
