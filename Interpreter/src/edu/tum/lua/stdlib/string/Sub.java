@@ -18,7 +18,7 @@ public class Sub extends LuaFunctionNative {
 		Preconditions.checkArguments("string.sub", arguments, expectedTypes);
 
 		if (LuaType.getTypeOf(arguments.get(0)) == LuaType.NUMBER) {
-			arguments.set(0, new ToString().apply(arguments.get(0)).get(0));
+			arguments.set(0, ToString.toString(arguments.get(0)));
 		}
 
 		String s = (String) arguments.get(0);

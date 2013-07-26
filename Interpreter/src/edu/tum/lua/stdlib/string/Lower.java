@@ -19,7 +19,7 @@ public class Lower extends LuaFunctionNative {
 		Object o = arguments.get(0);
 
 		if (LuaType.getTypeOf(o) == LuaType.NUMBER) {
-			return apply(new ToString().apply(o));
+			return apply(ToString.toString(o));
 		}
 
 		return Arrays.asList((Object) ((String) o).toLowerCase());
