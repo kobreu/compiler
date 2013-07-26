@@ -147,6 +147,8 @@ public class TestParser {
 			return "SEMI";
 		case sym.TEXT:
 			return "TEXT";
+		case sym.THEN:
+			return "THEN";
 		case sym.TRUE:
 			return "TRUE";
 		case sym.WS:

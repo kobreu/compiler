@@ -49,6 +49,64 @@ public class TestParserXML extends XMLTestCase {
 		List<String> xmlFiles = new ArrayList<>();
 		List<String> luaFiles = new ArrayList<>();
 		
+		/*xmlFiles.add("testinput/grammar/stat_assignment_whitespace_0.xml");
+		luaFiles.add("testinput/grammar/stat_assignment_whitespace_0.lua");*/
+		
+		/*xmlFiles.add("testinput/grammar/stat_assignment_whitespace_1.xml");
+		luaFiles.add("testinput/grammar/stat_assignment_whitespace_1.lua");*/
+
+		xmlFiles.add("testinput/grammar/stat_assignment_whitespace_2.xml");
+		luaFiles.add("testinput/grammar/stat_assignment_whitespace_2.lua");
+
+		xmlFiles.add("testinput/grammar/stat_assignment_whitespace_3.xml");
+		luaFiles.add("testinput/grammar/stat_assignment_whitespace_3.lua");
+
+		xmlFiles.add("testinput/grammar/stat_assignment_whitespace_4.xml");
+		luaFiles.add("testinput/grammar/stat_assignment_whitespace_4.lua");
+
+		/*xmlFiles.add("testinput/grammar/stat_assignment_whitespace_5.xml");
+		luaFiles.add("testinput/grammar/stat_assignment_whitespace_5.lua");*/
+
+		xmlFiles.add("testinput/grammar/stat_assignment_whitespace_6.xml");
+		luaFiles.add("testinput/grammar/stat_assignment_whitespace_6.lua");
+
+		xmlFiles.add("testinput/grammar/stat_assignment_whitespace_7.xml");
+		luaFiles.add("testinput/grammar/stat_assignment_whitespace_7.lua");
+		
+		
+		xmlFiles.add("testinput/grammar/stat_assignment.xml");
+		luaFiles.add("testinput/grammar/stat_assignment.lua");
+		
+		/*xmlFiles.add("testinput/grammar/if_else_if.xml");
+		luaFiles.add("testinput/grammar/if_else_if.lua");*/
+		
+		/*xmlFiles.add("testinput/grammar/explist_whitespace.xml");
+		luaFiles.add("testinput/grammar/explist_whitespace.lua");*/
+		
+		xmlFiles.add("testinput/grammar/ifelse.xml");
+		luaFiles.add("testinput/grammar/ifelse.lua");
+		
+		xmlFiles.add("testinput/grammar/if.xml");
+		luaFiles.add("testinput/grammar/if.lua");
+		
+		xmlFiles.add("testinput/grammar/asm_whitespace_left.xml");
+		luaFiles.add("testinput/grammar/asm_whitespace_left.lua");
+		
+		xmlFiles.add("testinput/grammar/asm_whitespace_right.xml");
+		luaFiles.add("testinput/grammar/asm_whitespace_right.lua");
+		
+		/*xmlFiles.add("testinput/grammar/table_access.xml");
+		luaFiles.add("testinput/grammar/table_access.lua");*/
+		
+		xmlFiles.add("testinput/grammar/exp_nil.xml");
+		luaFiles.add("testinput/grammar/exp_nil.lua");
+		
+		/*xmlFiles.add("testinput/grammar/exp_prefixexp.xml");
+		luaFiles.add("testinput/grammar/exp_prefixexp.lua");*/
+		
+		xmlFiles.add("testinput/grammar/exp_string.xml");
+		luaFiles.add("testinput/grammar/exp_string.lua");
+		
 		xmlFiles.add("testinput/grammar/exp_unop.xml");
 		luaFiles.add("testinput/grammar/exp_unop.lua");
 		
@@ -61,8 +119,8 @@ public class TestParserXML extends XMLTestCase {
 		xmlFiles.add("testinput/grammar/stat_do.xml");
 		luaFiles.add("testinput/grammar/stat_do.lua");
 		
-		xmlFiles.add("testinput/grammar/stat_foreach.xml");
-		luaFiles.add("testinput/grammar/stat_foreach.lua");
+		/*xmlFiles.add("testinput/grammar/stat_foreach.xml");
+		luaFiles.add("testinput/grammar/stat_foreach.lua");*/
 		
 		xmlFiles.add("testinput/grammar/stat_repeat.xml");
 		luaFiles.add("testinput/grammar/stat_repeat.lua");
@@ -112,8 +170,8 @@ public class TestParserXML extends XMLTestCase {
 		xmlFiles.add("testinput/grammar/binop_concat.xml");
 		luaFiles.add("testinput/grammar/binop_concat.lua");
 		
-		xmlFiles.add("testinput/grammar/explist_multiple.xml");
-		luaFiles.add("testinput/grammar/explist_multiple.lua");
+		/*xmlFiles.add("testinput/grammar/explist_multiple.xml");
+		luaFiles.add("testinput/grammar/explist_multiple.lua");*/
 		
 		this.xmlFiles = xmlFiles.toArray(new String[]{});
 		this.luaFiles = luaFiles.toArray(new String[]{});

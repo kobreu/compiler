@@ -1,0 +1,14 @@
+<Block>
+	<StatList>
+		<Asm>
+			<VarList>
+				<Variable var="a" />
+			</VarList>
+			<ExpList>
+				<NumberExp number="1.0" />
+			</ExpList>
+		</Asm>
+	</StatList>
+	<Null />
+</Block>
+b=a[0]
