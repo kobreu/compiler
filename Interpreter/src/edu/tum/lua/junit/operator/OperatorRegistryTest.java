@@ -9,7 +9,7 @@ import edu.tum.lua.operator.Operator;
 import edu.tum.lua.operator.OperatorRegistry;
 import edu.tum.lua.operator.arithmetic.AddOperator;
 
-public class OperatorRegisteryTest {
+public class OperatorRegistryTest {
 
 	@Test
 	public void test() {
