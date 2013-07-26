@@ -66,7 +66,7 @@ terminal String  ID, TEXT;
 
 
  /*NON TERMINALS */
-non terminal Chunk chunk;
+
 non terminal Block block, optelse ;
 non terminal Stat stat;
 non terminal StatList statlist;
@@ -90,25 +90,34 @@ non terminal Field field;
 non terminal fieldsep;
 non terminal Integer binop;
 non terminal Integer unop;
-non terminal optsemi, empty, optws, optasm,  optdotname, optcolonname, optvarlist;
+non terminal optsemi, empty,  optws, optasm;
 
 precedence left ADD, MUL, SUB, DIV, MOD, POW, CONCAT, EQ, LEQ ,NEQ , LE, GR, GEQ, AND, OR;
 precedence left LPAREN, RPAREN;
 /* Grammar */
 
 start with block;
+ 
 
-
-block 			::=     statlist:stats laststat:lstat
+block 			::=    statlist:stats laststat:lstat
                  		{:       
-                 			if(lstat == null)   {   
-                 			System.out.println("Inside block");    	    
-                 			RESULT = new Block(stats,null); 	}
-                 			else	{
-                 			System.out.println("Inside block with laststat");   
-                 			RESULT = new Block(stats,lstat);  }
+                 			   
+                 			 System.out.println("Inside block with laststat");    
+                 			RESULT = new Block(stats,lstat);  
                  		:}
-                 		| empty {: System.out.println("Inside empty block"); RESULT = new Block(null,null);; :}
+                 		| statlist:stats 
+                 		{:       
+                 			System.out.println("Inside block with laststat");     	    
+                 			RESULT = new Block(stats,null); 	
+                 			  
+                 		:}
+                 		| laststat:lstat {:
+                 		 		RESULT = new Block(null,lstat);  :}
+                 		
+                 		| 
+                 		empty {: 
+                 				System.out.println("Inside empty block"); RESULT = new Block(null,null);;
+                 				 :}
                  		;
 
 	
@@ -131,12 +140,13 @@ statlist		::=		stat:s optsemi optws
 							RESULT = sl;
 							}
 						:}	
+					
 							
 						;
 					
 						
 
-
+ 
 					
 stat        	::=    		varlist:vl optws ASM optws explist:el 
 						{: 
@@ -184,7 +194,7 @@ laststat		::=		RETURN optws optsemi
 						:}
 						| BREAK optws optsemi{: RESULT = new LastBreak(); :}	
 						| BREAK optws optsemi statlist{: RESULT = new LastBreak(); :}
-						| empty
+						
 						; 						
 funcname		::=     ID:id
 						| ID:id DOT funcname
@@ -204,7 +214,7 @@ varlist			::=     var:v
 						{: 							
 						RESULT= new VarList(v);
 						:}
-						| var:v COM varlist:vl
+						| var:v COM optws varlist:vl
 						{: 
 						if(vl==null){
 						vl = new VarList(v);
@@ -220,7 +230,7 @@ explist			::=     exp:e
 							{: 
 							RESULT= new ExpList(e);
 							:}
-						| exp:e COM explist:el 
+						| exp:e  COM optws explist:el 
 							{:
 								if(el == null) {
 									el = new ExpList(e);
