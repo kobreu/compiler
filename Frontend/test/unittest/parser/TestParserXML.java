@@ -49,14 +49,14 @@ public class TestParserXML extends XMLTestCase {
 		List<String> xmlFiles = new ArrayList<>();
 		List<String> luaFiles = new ArrayList<>();
 		
+		xmlFiles.add("testinput/grammar/chunk_with_return.xml");
+		luaFiles.add("testinput/grammar/chunk_with_return.lua");
+		
 		xmlFiles.add("testinput/grammar/explist_tableconstructor.xml");
 		luaFiles.add("testinput/grammar/explist_tableconstructor.lua");
 		
 		xmlFiles.add("testinput/grammar/field_name.xml");
 		luaFiles.add("testinput/grammar/field_name.lua");
-		
-		xmlFiles.add("testinput/grammar/chunk_with_return.xml");
-		luaFiles.add("testinput/grammar/chunk_with_return.lua");
 		
 		/*xmlFiles.add("testinput/grammar/exp_function_application.xml");
 		luaFiles.add("testinput/grammar/exp_function_application.lua");*/
@@ -147,8 +147,6 @@ public class TestParserXML extends XMLTestCase {
 				n.detach();
 			}
 
-			
-			
 	        OutputFormat format = OutputFormat.createPrettyPrint();
 	        XMLWriter writer = new XMLWriter( System.out, format );
 	        //writer.write( doc );
