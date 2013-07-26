@@ -1,4 +1,4 @@
-package edu.tum.lua.junit.stdlib;
+package edu.tum.lua.stdlib;
 
 import java.util.Arrays;
 import java.util.List;

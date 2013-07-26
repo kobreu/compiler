@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.tum.lua.ast.Exp;
-import edu.tum.lua.junit.stdlib.Setfenv;
 import edu.tum.lua.stdlib.Assert;
 import edu.tum.lua.stdlib.Error;
 import edu.tum.lua.stdlib.GetMetatable;
@@ -23,6 +22,7 @@ import edu.tum.lua.stdlib.RawGet;
 import edu.tum.lua.stdlib.RawSet;
 import edu.tum.lua.stdlib.Select;
 import edu.tum.lua.stdlib.SetMetatable;
+import edu.tum.lua.stdlib.Setfenv;
 import edu.tum.lua.stdlib.ToNumber;
 import edu.tum.lua.stdlib.ToString;
 import edu.tum.lua.stdlib.Type;
