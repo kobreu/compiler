@@ -1,6 +1,7 @@
 package edu.tum.lua.stdlib.coroutine;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import edu.tum.lua.Preconditions;
@@ -23,7 +24,12 @@ public class Wrap extends LuaFunctionNative {
 		@Override
 		public List<Object> apply(List<Object> arguments) {
 			Resume r = new Resume();
-			return r.apply(thread, arguments);
+			LinkedList<Object> l = new LinkedList<Object>();
+			l.add(thread);
+			for (Object o : arguments) {
+				l.add(o);
+			}
+			return r.apply(l);
 		}
 	}
 

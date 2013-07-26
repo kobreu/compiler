@@ -20,6 +20,7 @@ import edu.tum.lua.ast.Nil;
 import edu.tum.lua.ast.NumberExp;
 import edu.tum.lua.ast.PreExp;
 import edu.tum.lua.ast.PrefixExp;
+import edu.tum.lua.ast.PrefixExpFuncCall;
 import edu.tum.lua.ast.PrefixExpVar;
 import edu.tum.lua.ast.Stat;
 import edu.tum.lua.ast.SyntaxNode;
@@ -102,7 +103,8 @@ public class ExpVisitor extends VisitorAdaptor {
 		Enumeration<Exp> iterator = call.explist.elements();
 
 		while (iterator.hasMoreElements()) {
-			iterator.nextElement().accept(this);
+			iterator.nextElement().accept(visitor);
+
 			List<Object> explist = visitor.popAll();
 
 			if (iterator.hasMoreElements()) {
@@ -160,7 +162,12 @@ public class ExpVisitor extends VisitorAdaptor {
 
 	@Override
 	public void visit(PrefixExpVar expVar) {
-		expVar.childrenAccept(this);
+		expVar.var.accept(this);
+	}
+
+	@Override
+	public void visit(PrefixExpFuncCall exp) {
+		exp.call.accept(this);
 	}
 
 	@Override

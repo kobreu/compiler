@@ -18,24 +18,24 @@ public class FindTest {
 
 		int[] res;
 
-		res = f.getIndexOfPattern("Hello", "%u");
+		res = Find.getIndexOfPattern("Hello", "%u");
 		assertTrue(res[0] == 0 && res[1] == 0);
 
-		res = f.getIndexOfPattern("Hello", "%l");
+		res = Find.getIndexOfPattern("Hello", "%l");
 		assertTrue(res[0] == 1 && res[1] == 1);
 
-		res = f.getIndexOfPattern("Hello", "%l+");
+		res = Find.getIndexOfPattern("Hello", "%l+");
 		assertTrue(res[0] == 1 && res[1] == 4);
 
-		res = f.getIndexOfPattern("Hello", "ll");
+		res = Find.getIndexOfPattern("Hello", "ll");
 		assertTrue(res[0] == 2 && res[1] == 3);
 
 		String s = "Hello my World,\nmy name is ...";
 
-		res = f.getIndexOfPattern(s, "%u[%l ]*%u");
+		res = Find.getIndexOfPattern(s, "%u[%l ]*%u");
 		assertTrue(res[0] == 0 && res[1] == 9);
 
-		res = f.getIndexOfPattern(s, "%u[%l%s]*%u[^%s%p]*%p");
+		res = Find.getIndexOfPattern(s, "%u[%l%s]*%u[^%s%p]*%p");
 		assertTrue(res[0] == 0 && res[1] == 14);
 
 		Object[] back = f.apply(s, "Moon").toArray();
@@ -70,67 +70,65 @@ public class FindTest {
 	}
 
 	private void checkPatternConvertion() {
-		Find f = new Find();
-
-		assertEquals("", f.convertPattern(""));
-		assertEquals("[a-zA-Z]", f.convertPattern("%a"));
-		assertEquals("[a-zA-Z]*", f.convertPattern("%a*"));
-		assertEquals("\\p{Alnum}", f.convertPattern("%w"));
-		assertEquals("[\\p{XDigit}]+", f.convertPattern("[%x]+"));
-		assertEquals("[^\\p{Upper}]?", f.convertPattern("[^%u]?"));
+		assertEquals("", Find.convertPattern(""));
+		assertEquals("[a-zA-Z]", Find.convertPattern("%a"));
+		assertEquals("[a-zA-Z]*", Find.convertPattern("%a*"));
+		assertEquals("\\p{Alnum}", Find.convertPattern("%w"));
+		assertEquals("[\\p{XDigit}]+", Find.convertPattern("[%x]+"));
+		assertEquals("[^\\p{Upper}]?", Find.convertPattern("[^%u]?"));
 
 		try {
-			f.convertPattern("%z");
+			Find.convertPattern("%z");
 			fail();
 		} catch (Exception e) {
 
 		}
 
 		try {
-			System.out.println(f.convertPattern("^[\\w*%z]?"));
+			System.out.println(Find.convertPattern("^[\\w*%z]?"));
 			fail();
 		} catch (Exception e) {
 
 		}
 
 		try {
-			System.out.println(f.convertPattern("%a-"));
+			System.out.println(Find.convertPattern("%a-"));
 			fail();
 		} catch (Exception e) {
 
 		}
 
 		try {
-			System.out.println(f.convertPattern("[^%a]-"));
+			System.out.println(Find.convertPattern("[^%a]-"));
 			fail();
 		} catch (Exception e) {
 
 		}
 
 		try {
-			f.convertPattern("[a-z]([^%a]-)");
+			Find.convertPattern("[a-z]([^%a]-)");
 			fail();
 		} catch (Exception e) {
 
 		}
 
 		try {
-			f.convertPattern("[%a%5]+?");
+			Find.convertPattern("[%a%5]+?");
 			fail("");
 		} catch (Exception e) {
 
 		}
 
 		try {
-			f.convertPattern("[a-zA-Z0-0_\\(\\)]*%b().*");
+			Find.convertPattern("[a-zA-Z0-0_\\(\\)]*%b().*");
 			fail("");
 		} catch (Exception e) {
 
 		}
 
 		try {
-			f.convertPattern("[^z]?");
-			f.convertPattern("[a-z]?");
+			Find.convertPattern("[^z]?");
+			Find.convertPattern("[a-z]?");
 		} catch (Exception e) {
 			fail("");
 		}
