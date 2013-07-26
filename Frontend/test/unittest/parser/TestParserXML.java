@@ -49,8 +49,8 @@ public class TestParserXML extends XMLTestCase {
 		List<String> xmlFiles = new ArrayList<>();
 		List<String> luaFiles = new ArrayList<>();
 		
-		xmlFiles.add("testinput/grammar/function_def.xml");
-		luaFiles.add("testinput/grammar/function_def.lua");
+		/*xmlFiles.add("testinput/grammar/function_def.xml");
+		luaFiles.add("testinput/grammar/function_def.lua");*/
 		
 		xmlFiles.add("testinput/grammar/exp_tableconstructor_empty.xml");
 		luaFiles.add("testinput/grammar/exp_tableconstructor_empty.lua");

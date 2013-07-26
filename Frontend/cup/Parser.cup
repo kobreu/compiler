@@ -375,10 +375,12 @@ parlist			::=		namelist:nl
 
 tableconstructor ::=    LCURL fieldlist:fl RCURL
  						{: RESULT = new TableConstructor(fl); :} 
+ 						| LCURL RCURL
+ 							{: RESULT = new TableConstructor(new FieldList()); :}
  						; 
 
  						
-fieldlist		 ::= 	| field:f
+fieldlist		 ::= 	field:f
 							{: RESULT = new FieldList(f); :}
 						| field:f fieldsep fieldlist:fl
 							{: if(fl==null) {
