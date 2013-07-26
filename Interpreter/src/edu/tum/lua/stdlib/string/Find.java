@@ -70,10 +70,8 @@ public class Find extends LuaFunctionNative {
 		}
 	}
 
-	public int[] getIndexOfPattern(String s, String p) {
+	public static int[] getIndexOfPattern(String s, String p) {
 		p = convertPattern(p);
-
-		System.out.println(p);
 
 		String sub;
 
@@ -105,15 +103,13 @@ public class Find extends LuaFunctionNative {
 			}
 		}
 
-		System.out.println(s.substring(i, j));
-
 		// until here begin and end index is in Java indexing style: {x,x+1} for
 		// a char at position x; Lua index the x-th char as {x,x}
 
 		return new int[] { i, j - 1 };
 	}
 
-	public String convertPattern(String p) {
+	public static String convertPattern(String p) {
 
 		if (p.matches(".*%z.*")) {
 			throw new NotImplementedException();
