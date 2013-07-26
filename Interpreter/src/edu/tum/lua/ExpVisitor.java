@@ -11,6 +11,10 @@ import edu.tum.lua.ast.Closure;
 import edu.tum.lua.ast.Dots;
 import edu.tum.lua.ast.Exp;
 import edu.tum.lua.ast.ExpList;
+import edu.tum.lua.ast.Field;
+import edu.tum.lua.ast.FieldExp;
+import edu.tum.lua.ast.FieldLRExp;
+import edu.tum.lua.ast.FieldNameExp;
 import edu.tum.lua.ast.FuncCall;
 import edu.tum.lua.ast.Nil;
 import edu.tum.lua.ast.NumberExp;
@@ -161,7 +165,51 @@ public class ExpVisitor extends VisitorAdaptor {
 
 	@Override
 	public void visit(TableConstructorExp exp) {
-		throw new RuntimeException("Not yet implemented");
+
+		Enumeration<Field> fieldlist = exp.tablecons.fieldlist.elements();
+
+		double keyindex = 0.0; // Automatic index
+		LuaTable table = new LuaTable();
+
+		while (fieldlist.hasMoreElements()) {
+			Field field = fieldlist.nextElement();
+
+			if (field instanceof FieldExp) {
+
+				keyindex++;
+				((FieldExp) field).fieldexp.accept(this);
+				Object value = evaluationStack.removeLast();
+				table.set(keyindex, value);
+
+			} else if (field instanceof FieldLRExp) {
+
+				((FieldLRExp) field).leftexp.accept(this);
+				Object key = evaluationStack.removeLast();
+
+				((FieldLRExp) field).rightexp.accept(this);
+				Object value = evaluationStack.removeLast();
+
+				// This is nasty!
+				if (key instanceof Double && (double) key <= keyindex) {
+					// This key has been set by automatic keyindex, so do
+					// not do anything.
+				} else {
+					table.set(key, value);
+				}
+
+			} else if (field instanceof FieldNameExp) {
+
+				String key = ((FieldNameExp) field).ident;
+
+				((FieldNameExp) field).exp.accept(this);
+				Object value = evaluationStack.removeLast();
+
+				table.set(key, value);
+			}
+		}
+
+		evaluationStack.addLast(table);
+
 	}
 
 	@Override
