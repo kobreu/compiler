@@ -89,12 +89,14 @@ non terminal Field field;
 non terminal fieldsep;
 non terminal Integer binop;
 non terminal Integer unop;
-non terminal optsemi, empty,  optws, optasm;
+non terminal optsemi, empty,  optws;
 
+
+
+precedence nonassoc LPAREN, RPAREN; 
+precedence nonassoc WS, COM ;
 precedence left ADD, MUL, SUB, DIV, MOD, POW, CONCAT, EQ, LEQ ,NEQ , LE, GR, GEQ, AND, OR;
-precedence left LPAREN, RPAREN;
-//precedence right COM;
-precedence nonassoc WS, COM;
+
 /* Grammar */
 
 start with block;
@@ -172,15 +174,17 @@ stat        	::=    		varlist:vl optws ASM optws explist:el
 						{: 
 							RESULT = new IfThenElse(e, b, elseblock);
 						:}
-						| 	FOR optws ID:id optws ASM optws exp:e1 optws COM optws exp:e2  optforexp:e3 optws DO optws block:b END
+						| 	FOR optws ID:Id optws ASM optws exp:e1 optws COM optws exp:e2  optforexp:e3 optws DO optws block:b END
 						{: 		
-								RESULT = new ForExp(id,e1,e2,e3,b); 
+								RESULT = new ForExp(Id,e1,e2,e3,b); 
 						:}
 						| FOR optws namelist:nl optws IN optws explist:el optws DO optws block:b END
 						{: RESULT = new ForIn(nl,el, b); :}
-						| FUNC funcname funcbody  
-		 				| LOCAL FUNC function ID:id funcbody 
-						| LOCAL optws namelist:nl optasmexplist:el
+						| FUNC optws funcname:fn funcbody:fb  
+						{: RESULT = new FunctionDef(fn,fb); :} 
+		 				| LOCAL optws FUNC optws ID:Id funcbody:fb
+		 				{: RESULT = new LocalFuncDef(new Name(Id), fb); :}
+						| LOCAL optws namelist:nl optasmexplist:el 
 						{: RESULT = new LocalDecl(nl,el); :}
 						;
 	
@@ -198,9 +202,9 @@ laststat		::=		RETURN optws optsemi
 						| BREAK optws optsemi statlist{: RESULT = new LastBreak(); :}
 						
 						; 						
-funcname		::=     ID:id
-						| ID:id DOT funcname
-						| DDOT ID:id
+funcname		::=     ID:Id {: RESULT = new FuncNameVar(new Name(Id)); :}
+						| ID:id DOT funcname:fn {: RESULT = new FuncNameVarDotFuncName(new Name(id),fn); :}
+						| ID:id DDOT ID:id1 {: RESULT = new FuncNameDDotVar(new Name(id),new Name(id1)); :}
 						;
 						
 
@@ -292,6 +296,9 @@ exp				::=		NIL
 							:} 
 						| TEXT:t 
 							{: RESULT = new TextExp(t); :}
+						| PARAMS 
+						   {: RESULT = new Dots(); :}
+						
 						| prefixexp:prefixexp
 							{: RESULT = new PreExp(prefixexp); :}
 						| tableconstructor:tc
@@ -352,6 +359,7 @@ funcbody		::= 	LPAREN parlist:pl RPAREN block:bl END
 						{:
 								RESULT = new FuncBody(pl,bl);
 						:}
+						| LPAREN  RPAREN optws END
 						;
 					
 
@@ -370,6 +378,7 @@ parlist			::=		namelist:nl
 						| {:
 							RESULT = new ParList(null, false);
 						  :}
+						  
 						;
 	
 
@@ -451,7 +460,7 @@ unop			::=		SUB
 						{: RESULT = Op.LEN; :}
 						;
 								
-optasm			::= 	ASM	  | empty;
+
 						
 optsemi			::= 	SEMI  | empty ;
 
