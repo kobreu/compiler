@@ -8,6 +8,15 @@
 				<TableConstructorExp>
 					<TableConstructor>
 						<FieldList>
+							<FieldExp>
+								<NumberExp number="1.0" />
+							</FieldExp>
+							<FieldExp>
+								<NumberExp number="2.0" />
+							</FieldExp>
+							<FieldExp>
+								<NumberExp number="3.0" />
+							</FieldExp>
 						</FieldList>
 					</TableConstructor>
 				</TableConstructorExp>

@@ -49,6 +49,12 @@ public class TestParserXML extends XMLTestCase {
 		List<String> xmlFiles = new ArrayList<>();
 		List<String> luaFiles = new ArrayList<>();
 		
+		xmlFiles.add("testinput/grammar/function_def.xml");
+		luaFiles.add("testinput/grammar/function_def.lua");
+		
+		xmlFiles.add("testinput/grammar/exp_tableconstructor_empty.xml");
+		luaFiles.add("testinput/grammar/exp_tableconstructor_empty.lua");
+		
 		/*xmlFiles.add("testinput/local/local_func.xml");
 		luaFiles.add("testinput/local/local_func.lua");*/
 		
@@ -173,8 +179,8 @@ public class TestParserXML extends XMLTestCase {
 		xmlFiles.add("testinput/grammar/stat_do.xml");
 		luaFiles.add("testinput/grammar/stat_do.lua");
 		
-		/*xmlFiles.add("testinput/grammar/stat_foreach.xml");
-		luaFiles.add("testinput/grammar/stat_foreach.lua");*/
+		xmlFiles.add("testinput/grammar/stat_foreach.xml");
+		luaFiles.add("testinput/grammar/stat_foreach.lua");
 		
 		xmlFiles.add("testinput/grammar/stat_repeat.xml");
 		luaFiles.add("testinput/grammar/stat_repeat.lua");
