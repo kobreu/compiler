@@ -27,7 +27,7 @@ public class Match extends LuaFunctionNative {
 			return apply(arguments);
 		}
 
-		if (((String) arguments.get(0)).isEmpty()) {
+		if (((String) arguments.get(1)).isEmpty()) {
 			return Collections.singletonList(arguments.get(0));
 		}
 
