@@ -31,7 +31,7 @@ Holidays
  
  * Isabel: 23/07/13 until 10.30am, 01/08/13
  * Lisa: 05/08/13, 06/08/13, 07/08/13
- * Johannes: NONE
+ * Johannes: 30/07/13
  * Korbi: 05/08/13, 06/08/13, 07/08/13
  * Matthias: 23/07/13 until 10am, 24/07/13 until 1pm, 29/07/13 until 1pm, 31/07/13 until 2pm
  * Salomon: 1/8/13, 6/8/13
