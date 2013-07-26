@@ -20,7 +20,7 @@ public class Rep extends LuaFunctionNative {
 		Object b = arguments.get(1);
 
 		if (LuaType.getTypeOf(o) == LuaType.NUMBER) {
-			return apply(new ToString().apply(o).get(0), b);
+			return apply(ToString.toString(o), b);
 		}
 
 		String result = "";
