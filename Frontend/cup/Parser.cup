@@ -73,11 +73,10 @@ non terminal StatList statlist;
 non terminal LastStat laststat;
 
 non terminal FuncName funcname;
-non terminal IfThenElse ifthenelse;
 non terminal VarList varlist;
 non terminal Var var;
 non terminal NameList namelist;
-non terminal ExpList explist,args;
+non terminal ExpList explist,args, optasmexplist;
 non terminal Exp exp, optforexp;
 non terminal PrefixExp prefixexp;
 non terminal FunctionCall functioncall;
@@ -94,6 +93,8 @@ non terminal optsemi, empty,  optws, optasm;
 
 precedence left ADD, MUL, SUB, DIV, MOD, POW, CONCAT, EQ, LEQ ,NEQ , LE, GR, GEQ, AND, OR;
 precedence left LPAREN, RPAREN;
+//precedence right COM;
+precedence nonassoc WS, COM;
 /* Grammar */
 
 start with block;
@@ -175,11 +176,11 @@ stat        	::=    		varlist:vl optws ASM optws explist:el
 						{: 		
 								RESULT = new ForExp(id,e1,e2,e3,b); 
 						:}
-						| FOR optws namelist:nl  IN optws explist:el optws DO optws block:b END
-						{: RESULT = new ForIn(nl,el,b); :}
+						| FOR optws ID optws IN 
+						{: RESULT = new ForIn(null,null, null); :}
 						| FUNC funcname funcbody  
 		 				| LOCAL FUNC function ID:id funcbody 
-						| LOCAL namelist:nl optasm explist:el
+						| LOCAL optws namelist:nl optasmexplist:el
 						{: RESULT = new LocalDecl(nl,el); :}
 						;
 	
@@ -204,7 +205,7 @@ funcname		::=     ID:id
 						
 
 optelse			::= 	ELSE optws block:b {: RESULT = b; :}						
-						| ELSEIF optws exp:e optws THEN optws block:bl optelse:elseblock 
+						| ELSEIF WS exp:e WS THEN optws block:bl optelse:elseblock 
 						{: Block tmpbl =new Block(new StatList(new IfThenElse(e,bl,elseblock)),null);
 						RESULT = tmpbl; :}
 						| empty
@@ -214,7 +215,7 @@ optforexp		::=		COM optws exp:e {: RESULT = e; :}
 						| empty {: RESULT = new NumberExp(1.0); :}
 						;
 
-varlist			::=     var:v
+varlist			::=     var:v optws
 						{: 							
 						RESULT= new VarList(v);
 						:}
@@ -230,11 +231,11 @@ varlist			::=     var:v
 						;
 	
 				
-explist			::=     exp:e  
+explist			::=     exp:e  optws
 							{: 
 							RESULT= new ExpList(e);
 							:}
-						| exp:e  COM optws explist:el 
+						| exp:e optws COM  optws explist:el 
 							{:
 								if(el == null) {
 									el = new ExpList(e);
@@ -244,13 +245,17 @@ explist			::=     exp:e
 								RESULT = el;}
 	
 							:}
-							
+						
 						;
 						
-			
-namelist    	::=    	ID:id  
-						{: RESULT = new NameList(new Name(id)); :}  
-						/* | ID:id optws COM namelist:nl
+optasmexplist   ::=   ASM optws explist:el
+					 {: RESULT = el; :}
+					 | empty
+					 ;			
+namelist    	::=    	ID:id  optws
+						{: RESULT = new NameList(new Name(id)); 
+						System.out.println("Inside Namelist"); :}  
+						 | ID:id optws COM optws namelist:nl
 						{: 	if(nl== null){					    		
 					    	nl =new NameList(new Name(id));
 							RESULT = nl;}
@@ -258,8 +263,8 @@ namelist    	::=    	ID:id
 							nl.insertElementAt(new Name(id),0);
 							RESULT = nl;
 							} 
-						:}
-							*/										
+						:} 
+																	
 						;
 					
 					
@@ -451,7 +456,7 @@ optasm			::= 	ASM	  | empty;
 optsemi			::= 	SEMI  | empty ;
 
 
-optws			::= 	WS | empty ;
+optws			::= 	 WS   | empty ;
 						
 empty			::=		;
 
