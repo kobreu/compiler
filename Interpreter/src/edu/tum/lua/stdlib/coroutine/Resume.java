@@ -1,6 +1,7 @@
 package edu.tum.lua.stdlib.coroutine;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import edu.tum.lua.Preconditions;
@@ -20,10 +21,13 @@ public class Resume extends LuaFunctionNative {
 		try {
 			t.run();
 			while (true) {
-				if (t.isInterrupted()) {
-					return Arrays.asList(true, t.getReturnValue());
-				} else if (!t.isAlive()) {
-					return Arrays.asList(true, t.getReturnValue());
+				if (t.isInterrupted() || !t.isAlive()) {
+					LinkedList<Object> l = new LinkedList<Object>();
+					l.add(true);
+					for (Object o : t.getReturnValue()) {
+						l.add(o);
+					}
+					return l;
 				}
 				t.wait(5);
 			}
@@ -31,5 +35,4 @@ public class Resume extends LuaFunctionNative {
 			return Arrays.asList((Object) false, e.getMessage());
 		}
 	}
-
 }
