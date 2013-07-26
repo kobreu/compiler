@@ -58,11 +58,11 @@ public class StatementVisitorTest {
 		LuaInterpreter.eval(block, environment);
 		assertEquals("string", environment.get("b"));
 
-		block = ParserUtil.loadString("c=🐱");
+		block = ParserUtil.loadString("c='a'");
 
 		assertEquals(null, environment.get("c"));
 		LuaInterpreter.eval(block, environment);
-		assertEquals("🐱", environment.get("c"));
+		assertEquals("'a'", environment.get("c"));
 	}
 
 	@Test
