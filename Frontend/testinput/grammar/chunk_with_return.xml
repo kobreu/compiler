@@ -19,6 +19,16 @@
 	</StatList>
 	<LastReturn>
 		<ExpList>
-			<
+			<PreExp>
+				<PrefixExpVar>
+					<Variable var="a" />
+				</PrefixExpVar>
+			</PreExp>
+			<PreExp>
+				<PrefixExpVar>
+					<Variable var="b" />
+				</PrefixExpVar>
+			</PreExp>
+		</ExpList>
 	</LastReturn>
 </Block>

@@ -135,6 +135,8 @@ public class TestParser {
 			return "RPAREN";
 		case sym.RCURL:
 			return "RCURL";
+		case sym.RETURN:
+			return "RETURN";
 		case sym.UNTIL:
 			return "UNTIL";
 		case sym.OR:
