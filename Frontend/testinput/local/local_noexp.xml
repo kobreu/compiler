@@ -1,0 +1,11 @@
+<Block>
+	<StatList>
+		<LocalDecl>
+			<NameList>
+				<Name name="a" />
+			</NameList>
+			<Null />
+		</LocalDecl>
+	</StatList>
+	<Null />
+</Block>

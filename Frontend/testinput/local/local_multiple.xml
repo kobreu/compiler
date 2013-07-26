@@ -1,0 +1,15 @@
+<Block>
+	<StatList>
+		<LocalDecl>
+			<NameList>
+				<Name name="a" />
+				<Name name="b" />
+			</NameList>
+			<ExpList>
+				<NumberExp number="1.0" />
+				<NumberExp number="2.0" />
+			</ExpList>
+		</LocalDecl>
+	</StatList>
+	<Null />
+</Block>

@@ -49,6 +49,18 @@ public class TestParserXML extends XMLTestCase {
 		List<String> xmlFiles = new ArrayList<>();
 		List<String> luaFiles = new ArrayList<>();
 		
+		/*xmlFiles.add("testinput/local/local_func.xml");
+		luaFiles.add("testinput/local/local_func.lua");*/
+		
+		xmlFiles.add("testinput/local/local_noexp.xml");
+		luaFiles.add("testinput/local/local_noexp.lua");
+		
+		xmlFiles.add("testinput/local/local_multiple.xml");
+		luaFiles.add("testinput/local/local_multiple.lua");
+		
+		xmlFiles.add("testinput/local/local_single.xml");
+		luaFiles.add("testinput/local/local_single.lua");
+		
 		xmlFiles.add("testinput/grammar/table_write.xml");
 		luaFiles.add("testinput/grammar/table_write.lua");
 		
@@ -122,8 +134,8 @@ public class TestParserXML extends XMLTestCase {
 		xmlFiles.add("testinput/grammar/if_else_if.xml");
 		luaFiles.add("testinput/grammar/if_else_if.lua");
 		
-		/*xmlFiles.add("testinput/grammar/explist_whitespace.xml");
-		luaFiles.add("testinput/grammar/explist_whitespace.lua");*/
+		xmlFiles.add("testinput/grammar/explist_whitespace.xml");
+		luaFiles.add("testinput/grammar/explist_whitespace.lua");
 		
 		xmlFiles.add("testinput/grammar/ifelse.xml");
 		luaFiles.add("testinput/grammar/ifelse.lua");
