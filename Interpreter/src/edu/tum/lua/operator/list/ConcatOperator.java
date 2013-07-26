@@ -2,11 +2,11 @@ package edu.tum.lua.operator.list;
 
 import javax.naming.OperationNotSupportedException;
 
-import edu.tum.lua.operator.Operator;
+import edu.tum.lua.operator.BinaryOperator;
 import edu.tum.lua.types.LuaFunction;
 import edu.tum.lua.types.LuaType;
 
-public class ConcatOperator extends Operator {
+public class ConcatOperator extends BinaryOperator {
 
 	protected static String convert(Object object) throws OperationNotSupportedException {
 		if (LuaType.getTypeOf(object) == LuaType.STRING) {
@@ -17,6 +17,7 @@ public class ConcatOperator extends Operator {
 		throw new OperationNotSupportedException();
 	}
 
+	@Override
 	public Object apply(Object op1, Object op2) {
 		try {
 			return applyString(convert(op1), convert(op2));
@@ -27,12 +28,7 @@ public class ConcatOperator extends Operator {
 
 	}
 
-	protected String applyString(String op1, String op2) {
+	private String applyString(String op1, String op2) {
 		return op1.concat(op2);
-	}
-
-	@Override
-	public Object apply(Object... operands) {
-		return apply(operands[0], operands[1]);
 	}
 }

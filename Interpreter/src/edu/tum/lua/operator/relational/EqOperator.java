@@ -1,13 +1,14 @@
 package edu.tum.lua.operator.relational;
 
 import edu.tum.lua.LuaRuntimeException;
-import edu.tum.lua.operator.Operator;
-import edu.tum.lua.operator.logical.LogicalOperator;
+import edu.tum.lua.operator.BinaryOperator;
+import edu.tum.lua.operator.logical.LogicalOperatorSupport;
 import edu.tum.lua.types.LuaFunction;
 import edu.tum.lua.types.LuaType;
 
-public class EqOperator extends Operator {
+public class EqOperator extends BinaryOperator {
 
+	@Override
 	public Boolean apply(Object op1, Object op2) {
 		if (LuaType.getTypeOf(op1) != LuaType.getTypeOf(op2)) {
 			return false;
@@ -32,7 +33,7 @@ public class EqOperator extends Operator {
 				LuaFunction handler2 = getHandler(handlerName(), op2);
 
 				if (handler1 == handler2) {
-					return LogicalOperator.isTrue(handler1.apply(op1, op2).get(0));
+					return LogicalOperatorSupport.isTrue(handler1.apply(op1, op2).get(0));
 				}
 			} catch (LuaRuntimeException ex) {
 				return false;
@@ -44,11 +45,6 @@ public class EqOperator extends Operator {
 	}
 
 	protected String handlerName() {
-		return "eq";
-	}
-
-	@Override
-	public Object apply(Object... operands) {
-		return apply(operands[0], operands[1]);
+		return "__eq";
 	}
 }

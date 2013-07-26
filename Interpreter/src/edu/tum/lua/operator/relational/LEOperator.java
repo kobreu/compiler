@@ -1,13 +1,14 @@
 package edu.tum.lua.operator.relational;
 
-import edu.tum.lua.operator.Operator;
-import edu.tum.lua.operator.logical.LogicalOperator;
+import edu.tum.lua.operator.BinaryOperator;
+import edu.tum.lua.operator.logical.LogicalOperatorSupport;
 import edu.tum.lua.types.LuaFunction;
 import edu.tum.lua.types.LuaType;
 
-public class LEOperator extends Operator {
+public class LEOperator extends BinaryOperator {
 
-	public boolean apply(Object o1, Object o2) {
+	@Override
+	public Boolean apply(Object o1, Object o2) {
 
 		// Compare two numbers
 		if (LuaType.getTypeOf(o1) == LuaType.NUMBER && LuaType.getTypeOf(o2) == LuaType.NUMBER) {
@@ -29,16 +30,10 @@ public class LEOperator extends Operator {
 		// For other objects, try to call the "le" metamethod
 		LuaFunction handler;
 		handler = getHandler(handlerName(), o1, o2);
-		return LogicalOperator.isTrue(handler.apply(o1, o2).get(0));
+		return LogicalOperatorSupport.isTrue(handler.apply(o1, o2).get(0));
 	}
 
 	public String handlerName() {
-		return "le";
+		return "__le";
 	}
-
-	@Override
-	public Object apply(Object... operands) {
-		return apply(operands[0], operands[1]);
-	}
-
 }

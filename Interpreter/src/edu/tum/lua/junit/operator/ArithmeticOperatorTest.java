@@ -11,8 +11,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import edu.tum.lua.LuaRuntimeException;
+import edu.tum.lua.operator.BinaryOperator;
+import edu.tum.lua.operator.UnaryOperator;
 import edu.tum.lua.operator.arithmetic.AddOperator;
-import edu.tum.lua.operator.arithmetic.BinaryArithmeticOperator;
 import edu.tum.lua.operator.arithmetic.DivOperator;
 import edu.tum.lua.operator.arithmetic.ModOperator;
 import edu.tum.lua.operator.arithmetic.MulOperator;
@@ -88,7 +89,7 @@ public class ArithmeticOperatorTest {
 		assertEquals((Object) 3.0, (Double) result.getNumber("b"));
 	}
 
-	private void testUnaryOperator(UnmOperator op, double op1, double result) {
+	private void testUnaryOperator(UnaryOperator op, double op1, double result) {
 		assertEquals(result, op.apply(op1));
 		assertEquals(result, op.apply(Double.toString(op1)));
 
@@ -103,7 +104,7 @@ public class ArithmeticOperatorTest {
 		}
 	}
 
-	private void testBinaryOperator(BinaryArithmeticOperator op, double op1, double op2, double result) {
+	private void testBinaryOperator(BinaryOperator op, double op1, double op2, double result) {
 		assertEquals(result, op.apply(op1, op2));
 		assertEquals(result, op.apply(Double.toString(op1), op2));
 		assertEquals(result, op.apply(op1, Double.toString(op2)));

@@ -1,12 +1,13 @@
 package edu.tum.lua.operator.list;
 
-import edu.tum.lua.operator.Operator;
+import edu.tum.lua.operator.UnaryOperator;
 import edu.tum.lua.types.LuaFunction;
 import edu.tum.lua.types.LuaTable;
 import edu.tum.lua.types.LuaType;
 
-public class LengthOperator extends Operator {
+public class LengthOperator extends UnaryOperator {
 
+	@Override
 	public Object apply(Object op) {
 		if (LuaType.getTypeOf(op) == LuaType.STRING) {
 			return op.toString().length();
@@ -24,11 +25,6 @@ public class LengthOperator extends Operator {
 			value++;
 		}
 		return value;
-	}
-
-	@Override
-	public Object apply(Object... operands) {
-		return apply(operands[0]);
 	}
 
 }

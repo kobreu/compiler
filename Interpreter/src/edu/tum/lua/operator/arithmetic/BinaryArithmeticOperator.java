@@ -1,11 +1,15 @@
 package edu.tum.lua.operator.arithmetic;
 
+import static edu.tum.lua.operator.arithmetic.ArithmeticOperatorSupport.convert;
+
 import javax.naming.OperationNotSupportedException;
 
+import edu.tum.lua.operator.BinaryOperator;
 import edu.tum.lua.types.LuaFunction;
 
-public abstract class BinaryArithmeticOperator extends ArithmeticOperator {
+public abstract class BinaryArithmeticOperator extends BinaryOperator {
 
+	@Override
 	public Object apply(Object op1, Object op2) {
 		try {
 			return apply(convert(op1), convert(op2));
@@ -18,10 +22,5 @@ public abstract class BinaryArithmeticOperator extends ArithmeticOperator {
 	protected abstract double apply(double op1, double op2);
 
 	protected abstract String handlerName();
-
-	@Override
-	public Object apply(Object... operands) {
-		return apply(operands[0], operands[1]);
-	}
 
 }
