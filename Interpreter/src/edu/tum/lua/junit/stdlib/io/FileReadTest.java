@@ -10,6 +10,7 @@ import java.io.RandomAccessFile;
 import org.junit.Before;
 import org.junit.Test;
 
+import edu.tum.lua.LuaBadArgumentException;
 import edu.tum.lua.stdlib.io.FileRead;
 
 public class FileReadTest {
@@ -33,6 +34,12 @@ public class FileReadTest {
 		fos.close();
 
 		raf = new RandomAccessFile(file, "r");
+	}
+
+	@Test(expected = LuaBadArgumentException.class)
+	public void testBadArgs() {
+		FileRead fr = new FileRead();
+		fr.apply(raf, "bla");
 	}
 
 	@Test
