@@ -15,6 +15,7 @@ import org.dom4j.io.SAXReader;
 
 import edu.tum.lua.ast.Binop;
 import edu.tum.lua.ast.Block;
+import edu.tum.lua.ast.BooleanExp;
 import edu.tum.lua.ast.Closure;
 import edu.tum.lua.ast.Dots;
 import edu.tum.lua.ast.Exp;
@@ -61,6 +62,9 @@ public class XMLDeserializer {
 				Exp child = (Exp) deserialize((Element) ele.elements().get(0));
 				Unop unop = new Unop(opToInt(ele.attributeValue("op")), child);
 				return unop;
+			} else if (ele.getName().equals("BooleanExp")) {
+				BooleanExp bexp = new BooleanExp(Boolean.valueOf((ele.attributeValue("value"))).booleanValue());
+				return bexp;
 			} else if (ele.getName().equals("Closure")) {
 				NameList args = (NameList) deserialize((Element) ele.elements()
 						.get(0));

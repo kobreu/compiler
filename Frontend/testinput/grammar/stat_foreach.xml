@@ -1,0 +1,26 @@
+<Block>
+	<StatList>
+		<ForIn>
+		  	<NameList>
+		  		<Name name="a" />
+		  	</NameList>
+  			<ExpList>
+				<NumberExp number="5.0" />
+			</ExpList>
+			<Block>
+				<StatList>
+					<Asm>
+						<VarList>
+							<Variable var="b" />
+						</VarList>
+						<ExpList>
+							<NumberExp number="1.0" />
+						</ExpList>
+					</Asm>
+				</StatList>
+				<Null />
+			</Block>
+		</ForIn>
+	</StatList>
+	<Null />
+</Block>

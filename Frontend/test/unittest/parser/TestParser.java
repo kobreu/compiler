@@ -139,6 +139,8 @@ public class TestParser {
 			return "RETURN";
 		case sym.UNTIL:
 			return "UNTIL";
+		case sym.SUB:
+			return "SUB";
 		case sym.OR:
 			return "OR";
 		case sym.SEMI:

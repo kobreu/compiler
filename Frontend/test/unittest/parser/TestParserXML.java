@@ -49,6 +49,27 @@ public class TestParserXML extends XMLTestCase {
 		List<String> xmlFiles = new ArrayList<>();
 		List<String> luaFiles = new ArrayList<>();
 		
+		xmlFiles.add("testinput/grammar/exp_unop.xml");
+		luaFiles.add("testinput/grammar/exp_unop.lua");
+		
+		xmlFiles.add("testinput/grammar/laststat_break.xml");
+		luaFiles.add("testinput/grammar/laststat_break.lua");
+		
+		xmlFiles.add("testinput/grammar/laststat_return_empty.xml");
+		luaFiles.add("testinput/grammar/laststat_return_empty.lua");
+		
+		xmlFiles.add("testinput/grammar/stat_do.xml");
+		luaFiles.add("testinput/grammar/stat_do.lua");
+		
+		xmlFiles.add("testinput/grammar/stat_foreach.xml");
+		luaFiles.add("testinput/grammar/stat_foreach.lua");
+		
+		xmlFiles.add("testinput/grammar/stat_repeat.xml");
+		luaFiles.add("testinput/grammar/stat_repeat.lua");
+		
+		xmlFiles.add("testinput/grammar/stat_while.xml");
+		luaFiles.add("testinput/grammar/stat_while.lua");
+		
 		xmlFiles.add("testinput/grammar/chunk_with_return.xml");
 		luaFiles.add("testinput/grammar/chunk_with_return.lua");
 		
