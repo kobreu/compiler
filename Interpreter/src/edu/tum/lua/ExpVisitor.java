@@ -24,6 +24,7 @@ import edu.tum.lua.ast.PrefixExpFuncCall;
 import edu.tum.lua.ast.PrefixExpVar;
 import edu.tum.lua.ast.Stat;
 import edu.tum.lua.ast.SyntaxNode;
+import edu.tum.lua.ast.TableConstructor;
 import edu.tum.lua.ast.TableConstructorExp;
 import edu.tum.lua.ast.TextExp;
 import edu.tum.lua.ast.Unop;
@@ -172,11 +173,18 @@ public class ExpVisitor extends VisitorAdaptor {
 
 	@Override
 	public void visit(TableConstructorExp exp) {
+		TableConstructor tableConstructor = exp.tablecons;
+
+		LuaTable table = new LuaTable();
+		evaluationStack.addLast(table);
+
+		if (tableConstructor.fieldlist == null) {
+			return;
+		}
 
 		Enumeration<Field> fieldlist = exp.tablecons.fieldlist.elements();
 
 		double keyindex = 0.0; // Automatic index
-		LuaTable table = new LuaTable();
 
 		while (fieldlist.hasMoreElements()) {
 			Field field = fieldlist.nextElement();
@@ -214,8 +222,6 @@ public class ExpVisitor extends VisitorAdaptor {
 				table.set(key, value);
 			}
 		}
-
-		evaluationStack.addLast(table);
 
 	}
 

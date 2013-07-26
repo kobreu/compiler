@@ -2,6 +2,7 @@ package edu.tum.lua;
 
 import static edu.tum.lua.LuaInterpreter.eval;
 
+import java.util.Enumeration;
 import java.util.List;
 
 import edu.tum.lua.ast.Asm;
@@ -16,10 +17,14 @@ import edu.tum.lua.ast.IfThenElse;
 import edu.tum.lua.ast.LegacyAdapter;
 import edu.tum.lua.ast.LocalDecl;
 import edu.tum.lua.ast.LocalFuncDef;
+import edu.tum.lua.ast.NameList;
 import edu.tum.lua.ast.RepeatUntil;
 import edu.tum.lua.ast.VisitorAdaptor;
 import edu.tum.lua.ast.WhileExp;
 import edu.tum.lua.operator.logical.LogicalOperatorSupport;
+import edu.tum.lua.types.LuaFunction;
+import edu.tum.lua.types.LuaFunctionInterpreted;
+import edu.tum.lua.types.LuaTable;
 
 public class StatementVisitor extends VisitorAdaptor {
 
@@ -66,9 +71,23 @@ public class StatementVisitor extends VisitorAdaptor {
 		stmt.call.accept(visitor);
 	}
 
+	private LuaTable getFunctionLocation(NameList list) {
+		Enumeration<String> names = list.elements();
+
+		LuaTable current = (LuaTable) environment.get(names.nextElement());
+
+		while (names.hasMoreElements()) {
+			current = current.getLuaTable(names.nextElement());
+		}
+
+		return current;
+	}
+
 	@Override
 	public void visit(FunctionDef stmt) {
-
+		LuaFunction function = new LuaFunctionInterpreted(stmt, environment);
+		LuaTable target = getFunctionLocation(stmt.members);
+		target.set(stmt.ident, function);
 	}
 
 	@Override
@@ -105,13 +124,8 @@ public class StatementVisitor extends VisitorAdaptor {
 	}
 
 	private void executeBlock(Block block) {
-
-		LuaInterpreter.eval(block, environment);
-
 		LocalEnvironment blockEnvironment = new LocalEnvironment(environment);
 		LuaInterpreter.eval(block, blockEnvironment);
-
-		// TODO: handle return / break;
 	}
 
 	private boolean isTrue(Exp exp) {

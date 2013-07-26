@@ -22,6 +22,8 @@ import edu.tum.lua.ast.PrefixExpVar;
 import edu.tum.lua.ast.StatList;
 import edu.tum.lua.ast.VarList;
 import edu.tum.lua.ast.Variable;
+import edu.tum.lua.types.LuaTable;
+import edu.tum.lua.types.LuaType;
 
 public class StatementVisitorTest {
 
@@ -160,8 +162,17 @@ public class StatementVisitorTest {
 	}
 
 	@Test
-	public void testVisitFunctionDef() {
-		fail("Not yet implemented"); // TODO
+	public void testVisitFunctionDef() throws Exception {
+		Block block = ParserUtil.loadString("a={}");
+
+		assertEquals(null, environment.get("a"));
+		LuaInterpreter.eval(block, environment);
+		assertEquals(LuaType.TABLE, LuaType.getTypeOf(environment.get("a")));
+
+		block = ParserUtil.loadString("function a.foo() end'");
+
+		LuaInterpreter.eval(block, environment);
+		assertEquals(LuaType.FUNCTION, LuaType.getTypeOf(((LuaTable) environment.get("a")).get("foo")));
 	}
 
 	@Test

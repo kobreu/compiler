@@ -192,19 +192,4 @@ public class Environment extends LuaTable {
 	public Environment(Environment forward) {
 		super(forward);
 	}
-
-	/*
-	 * Now we use LocalEnvironment for this function
-	 * 
-	 * public void assign(List<String> identifiers, List<Exp> expressions) {
-	 * List<Object> values = new ArrayList<>(expressions.size());
-	 * 
-	 * for (Exp exp : expressions) { Object value = LuaInterpreter.eval(exp,
-	 * this); values.add(value);
-	 * 
-	 * // TODO Adjust values! }
-	 * 
-	 * for (int i = 0; i < identifiers.size(); i++) { set(identifiers.get(i),
-	 * values.get(i)); } }
-	 */
 }
