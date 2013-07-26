@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import edu.tum.lua.Environment;
+import edu.tum.lua.GlobalEnvironment;
 import edu.tum.lua.LocalEnvironment;
 
 public class LocalEnvironmentTest {
@@ -13,7 +13,7 @@ public class LocalEnvironmentTest {
 	public void test() {
 		LocalEnvironment l = new LocalEnvironment();
 		LocalEnvironment f = new LocalEnvironment(l);
-		Environment.getGlobalEnvironment().set("a", "a");
+		GlobalEnvironment.getGlobalEnvironment().set("a", "a");
 		l.setLocal("b", "b");
 		f.setLocal("a", "c");
 		f.set("b", "a");
