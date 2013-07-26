@@ -6,10 +6,13 @@ import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.Test;
 
+import util.ParserUtil;
 import edu.tum.lua.Environment;
+import edu.tum.lua.LuaInterpreter;
 import edu.tum.lua.StatementVisitor;
 import edu.tum.lua.ast.Asm;
 import edu.tum.lua.ast.Binop;
+import edu.tum.lua.ast.Block;
 import edu.tum.lua.ast.ExpList;
 import edu.tum.lua.ast.NumberExp;
 import edu.tum.lua.ast.Op;
@@ -38,8 +41,15 @@ public class StatementVisitorTest {
 	}
 
 	@Test
-	public void testVisitFuncCallStmt() {
-		fail("Not yet implemented"); // TODO
+	public void testVisitFuncCallStmt() throws Exception {
+		Block block = ParserUtil.loadString("a=1+2");
+
+		assertEquals(null, environment.get("a"));
+		LuaInterpreter.eval(block, environment);
+		assertEquals(3.0, environment.get("a"));
+
+		block = ParserUtil.loadString("print(\"a\")");
+		LuaInterpreter.eval(block, environment);
 	}
 
 	@Test

@@ -63,7 +63,7 @@ public class StatementVisitor extends VisitorAdaptor {
 	@Override
 	public void visit(FuncCallStmt stmt) {
 		ExpVisitor visitor = new ExpVisitor(environment);
-		stmt.accept(visitor);
+		stmt.call.accept(visitor);
 	}
 
 	@Override
