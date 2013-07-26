@@ -1,9 +1,7 @@
 
 package edu.tum.lua.ast;
 
-Chunk ::= StatList:stats LastStat:last
-
-Block ::= Chunk:chunk
+Block ::= StatList:stats LastStat:last
 
 StatList ::= Stat*
 
@@ -32,6 +30,7 @@ Exp ::=  {Nil}
 		| {TableConstructorExp} TableConstructor:tablecons
 		| {Binop} Exp:leftexp "int":op Exp:rightexp
 		| {Unop} "int":op Exp:exp 
+		| {FunctionExp} Function:function
 
 VarList ::= Var*
 
@@ -48,10 +47,18 @@ PrefixExp ::= 	{PrefixExpVar} Var:var
 				| {PrefixExpFuncCall} FunctionCall:call 
 				| {PrefixExpExp} Exp:exp
 
-FunctionCall ::=  PrefixExp:preexp ExpList:explist
-		
+FunctionCall ::=  {FuncCall} PrefixExp:preexp  ExpList:explist
+				  | {FuncCallSelf} PrefixExp:preexp  Name:name ExpList:explist
 
+Function		::= FuncBody:funcbody
+FuncBody	::= ParList:parlist Block:block
 
+FuncName	::= {FuncNameVar} Var:var
+				| {FuncNameVarDotFuncName} Var:var FuncName:funcName
+				| {FuncNameDDotVar} Var:var
+				
+ParList		::=  NameList:namelist "Boolean":varparlist
+				
 TableConstructor ::= FieldList:fieldlist
 
 Field ::= 	{FieldLRExp} Exp:leftexp Exp:rightexp 
@@ -59,6 +66,7 @@ Field ::= 	{FieldLRExp} Exp:leftexp Exp:rightexp
 			| {FieldExp} Exp:fieldexp
 
 FieldList ::= Field*
+
 	
 Op ::= enum
          ADD, SUB, MUL, DIV, POW, MOD, CONCAT, 
