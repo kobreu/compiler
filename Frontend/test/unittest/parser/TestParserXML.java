@@ -49,6 +49,45 @@ public class TestParserXML extends XMLTestCase {
 		List<String> xmlFiles = new ArrayList<>();
 		List<String> luaFiles = new ArrayList<>();
 		
+		xmlFiles.add("testinput/binop/binop_concat.xml");
+		luaFiles.add("testinput/binop/binop_concat.lua");
+		
+		xmlFiles.add("testinput/binop/binop_div.xml");
+		luaFiles.add("testinput/binop/binop_div.lua");
+		
+		xmlFiles.add("testinput/binop/binop_eq.xml");
+		luaFiles.add("testinput/binop/binop_eq.lua");
+		
+		xmlFiles.add("testinput/binop/binop_ge.xml");
+		luaFiles.add("testinput/binop/binop_ge.lua");
+		
+		xmlFiles.add("testinput/binop/binop_gt.xml");
+		luaFiles.add("testinput/binop/binop_gt.lua");
+		
+		xmlFiles.add("testinput/binop/binop_le.xml");
+		luaFiles.add("testinput/binop/binop_le.lua");
+		
+		xmlFiles.add("testinput/binop/binop_lt.xml");
+		luaFiles.add("testinput/binop/binop_lt.lua");
+		
+		xmlFiles.add("testinput/binop/binop_mod.xml");
+		luaFiles.add("testinput/binop/binop_mod.lua");
+		
+		xmlFiles.add("testinput/binop/binop_neq.xml");
+		luaFiles.add("testinput/binop/binop_neq.lua");
+		
+		xmlFiles.add("testinput/binop/binop_plus.xml");
+		luaFiles.add("testinput/binop/binop_plus.lua");
+		
+		xmlFiles.add("testinput/binop/binop_pow.xml");
+		luaFiles.add("testinput/binop/binop_pow.lua");
+		
+		xmlFiles.add("testinput/binop/binop_sub.xml");
+		luaFiles.add("testinput/binop/binop_sub.lua");
+		
+		xmlFiles.add("testinput/binop/binop_times.xml");
+		luaFiles.add("testinput/binop/binop_times.lua");
+		
 		/*xmlFiles.add("testinput/grammar/stat_assignment_whitespace_0.xml");
 		luaFiles.add("testinput/grammar/stat_assignment_whitespace_0.lua");*/
 		
@@ -95,8 +134,8 @@ public class TestParserXML extends XMLTestCase {
 		xmlFiles.add("testinput/grammar/asm_whitespace_right.xml");
 		luaFiles.add("testinput/grammar/asm_whitespace_right.lua");
 		
-		/*xmlFiles.add("testinput/grammar/table_access.xml");
-		luaFiles.add("testinput/grammar/table_access.lua");*/
+		xmlFiles.add("testinput/grammar/table_access.xml");
+		luaFiles.add("testinput/grammar/table_access.lua");
 		
 		xmlFiles.add("testinput/grammar/exp_nil.xml");
 		luaFiles.add("testinput/grammar/exp_nil.lua");
@@ -166,9 +205,6 @@ public class TestParserXML extends XMLTestCase {
 		
 		xmlFiles.add("testinput/grammar/args_tableconstructor.xml");
 		luaFiles.add("testinput/grammar/args_tableconstructor.lua");
-		
-		xmlFiles.add("testinput/grammar/binop_concat.xml");
-		luaFiles.add("testinput/grammar/binop_concat.lua");
 		
 		/*xmlFiles.add("testinput/grammar/explist_multiple.xml");
 		luaFiles.add("testinput/grammar/explist_multiple.lua");*/

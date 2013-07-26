@@ -2,13 +2,21 @@
 	<StatList>
 		<Asm>
 			<VarList>
-				<Variable var="a" />
+				<Variable var="b" />
 			</VarList>
 			<ExpList>
-				<NumberExp number="1.0" />
+				<PreExp>
+					<PrefixExpVar>
+						<VarTabIndex>
+							<PrefixExpVar>
+								<Variable var="a" />
+							</PrefixExpVar>
+							<NumberExp number="0.0" />
+						</VarTabIndex>  
+					</PrefixExpVar>
+				</PreExp>
 			</ExpList>
 		</Asm>
 	</StatList>
 	<Null />
 </Block>
-b=a[0]

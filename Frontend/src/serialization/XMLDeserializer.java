@@ -38,6 +38,41 @@ public class XMLDeserializer {
 	int opToInt(String op) {
 		if (op.equals("UNM"))
 			return Op.UNM;
+		else if(op.equals("ADD")) {
+			return Op.ADD;
+		}else if(op.equals("SUB")) {
+			return Op.SUB;
+		}else if(op.equals("MUL")) {
+			return Op.MUL;
+		}else if(op.equals("DIV")) {
+			return Op.DIV;
+		}else if(op.equals("POW")) {
+			return Op.POW;
+		}else if(op.equals("MOD")) {
+			return Op.MOD;
+		}else if(op.equals("CONCAT")) {
+			return Op.CONCAT;
+		}else if(op.equals("LT")) {
+			return Op.LT;
+		}else if(op.equals("LE")) {
+			return Op.LE;
+		}else if(op.equals("GT")) {
+			return Op.GT;
+		}else if(op.equals("GE")) {
+			return Op.GE;
+		}else if(op.equals("EQ")) {
+			return Op.EQ;
+		}else if(op.equals("NEQ")) {
+			return Op.NEQ;
+		}else if(op.equals("AND")) {
+			return Op.AND;
+		}else if(op.equals("OR")) {
+			return Op.OR;
+		}else if(op.equals("NOT")) {
+			return Op.NOT;
+		}else if(op.equals("LEN")) {
+			return Op.LEN;
+		}
 		return -1;
 	}
 
