@@ -11,6 +11,8 @@ import edu.tum.lua.ast.Closure;
 import edu.tum.lua.ast.Dots;
 import edu.tum.lua.ast.Exp;
 import edu.tum.lua.ast.ExpList;
+import edu.tum.lua.ast.FuncCall;
+import edu.tum.lua.ast.FuncCallSelf;
 import edu.tum.lua.ast.FunctionCall;
 import edu.tum.lua.ast.Nil;
 import edu.tum.lua.ast.NumberExp;
@@ -88,7 +90,12 @@ public class ExpVisitor extends VisitorAdaptor {
 	}
 
 	@Override
-	public void visit(FunctionCall call) {
+	public void visit(FunctionCall callHack) {
+		if (callHack instanceof FuncCallSelf) {
+			throw new RuntimeException("Not yet implemented");
+		}
+
+		FuncCall call = (FuncCall) callHack;
 		call.preexp.accept(this);
 
 		Deque<Object> args = findCallHandler(evaluationStack.removeLast());
@@ -102,7 +109,7 @@ public class ExpVisitor extends VisitorAdaptor {
 			args.addLast(visitor.popLast());
 		}
 
-		java.util.List<Object> result = f.apply(args);
+		List<Object> result = f.apply(args);
 
 		SyntaxNode callParent = call.getParent();
 

@@ -5,7 +5,7 @@ import static edu.tum.lua.ast.LegacyAdapter.convert;
 import java.util.Collections;
 import java.util.List;
 
-import edu.tum.lua.ast.Chunk;
+import edu.tum.lua.ast.Block;
 import edu.tum.lua.ast.Exp;
 import edu.tum.lua.ast.ExpList;
 import edu.tum.lua.ast.FunctionCall;
@@ -15,24 +15,24 @@ import edu.tum.lua.ast.Stat;
 
 public class LuaInterpreter {
 
-	public static List<Object> eval(Chunk chunk) {
-		return eval(chunk, new Environment());
+	public static List<Object> eval(Block block) {
+		return eval(block, new Environment());
 	}
 
-	public static List<Object> eval(Chunk chunk, Environment environment) {
+	public static List<Object> eval(Block block, Environment environment) {
 		StatementVisitor visitor = new StatementVisitor(environment);
 
-		for (Stat statement : convert(chunk.stats)) {
+		for (Stat statement : convert(block.stats)) {
 			statement.accept(visitor);
 		}
 
-		if (chunk.last == null || chunk.last instanceof LastBreak) {
+		if (block.last == null || block.last instanceof LastBreak) {
 			return Collections.emptyList();
 		}
 
 		/* LastReturn */
 		Environment lastEnvironment = visitor.getEnvironment();
-		return eval(((LastReturn) chunk.last).explist, lastEnvironment);
+		return eval(((LastReturn) block.last).explist, lastEnvironment);
 	}
 
 	public static List<Object> eval(ExpList explist, Environment environment) {
