@@ -22,7 +22,7 @@
       <include name="**/*.zip" />
     </fileset>
     <pathelement path="${java.class.path}" />
-  	<pathelement path="../Frontend/bin"/>
+  	<pathelement path="../Frontend/classes"/>
   	<!-- project dependency -->
   </path>
 
