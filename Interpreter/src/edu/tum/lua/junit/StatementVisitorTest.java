@@ -14,8 +14,12 @@ import edu.tum.lua.ast.Asm;
 import edu.tum.lua.ast.Binop;
 import edu.tum.lua.ast.Block;
 import edu.tum.lua.ast.ExpList;
+import edu.tum.lua.ast.IfThenElse;
 import edu.tum.lua.ast.NumberExp;
 import edu.tum.lua.ast.Op;
+import edu.tum.lua.ast.PreExp;
+import edu.tum.lua.ast.PrefixExpVar;
+import edu.tum.lua.ast.StatList;
 import edu.tum.lua.ast.VarList;
 import edu.tum.lua.ast.Variable;
 
@@ -50,6 +54,29 @@ public class StatementVisitorTest {
 
 		block = ParserUtil.loadString("print(\"a\")");
 		LuaInterpreter.eval(block, environment);
+	}
+
+	@Test
+	public void testVisitIf() {
+
+		// > a = 1
+		// > if a == 1 then b=1 else b=0 end
+
+		Asm asm = new Asm(new VarList(new Variable("a")), new ExpList(new Binop(new NumberExp(1.0), Op.ADD,
+				new NumberExp(1.0))));
+
+		assertEquals(null, environment.get("a"));
+		visitor.visit(asm);
+		assertEquals(2.0, environment.get("a"));
+
+		assertEquals(null, environment.get("b"));
+		IfThenElse ifstatement = new IfThenElse(new Binop(new PreExp(new PrefixExpVar(new Variable("a"))), Op.EQ,
+				new NumberExp(5.0)), new Block(new StatList(new Asm(new VarList(new Variable("b")), new ExpList(
+				new NumberExp(1.0)))), null), new Block(new StatList(new Asm(new VarList(new Variable("b")),
+				new ExpList(new NumberExp(0.0)))), null));
+		visitor.visit(ifstatement);
+		assertEquals(1.0, environment.get("b"));
+
 	}
 
 	@Test
