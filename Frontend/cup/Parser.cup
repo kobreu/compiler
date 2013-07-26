@@ -167,8 +167,9 @@ stat        	::=    		varlist:vl optws ASM optws explist:el
 						{: 		RESULT = new WhileExp(e,b); :}
 						|  	REPEAT optws block:b  UNTIL optws exp:e
 						{: 		RESULT = new RepeatUntil(b,e); :}
-						|  	IF optws exp:e optws THEN optws block:b optelse:elseblock END
-						{: 	RESULT = new IfThenElse(e, b, elseblock);
+						|  IF optws exp:e optws THEN optws block:b optelse:elseblock  END
+						{: 
+							RESULT = new IfThenElse(e, b, elseblock);
 						:}
 						| 	FOR optws ID:id optws ASM optws exp:e1 optws COM optws exp:e2  optforexp:e3 optws DO optws block:b END
 						{: 		
@@ -203,6 +204,9 @@ funcname		::=     ID:id
 						
 
 optelse			::= 	ELSE optws block:b {: RESULT = b; :}						
+						| ELSEIF optws exp:e optws THEN optws block:bl optelse:elseblock 
+						{: Block tmpbl =new Block(new StatList(new IfThenElse(e,bl,elseblock)),null);
+						RESULT = tmpbl; :}
 						| empty
 						;	
 												
