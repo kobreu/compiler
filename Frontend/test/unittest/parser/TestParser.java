@@ -117,6 +117,8 @@ public class TestParser {
 			return "LENGTH";
 		case sym.LEQ:
 			return "LEQ";
+		case sym.LOCAL:
+			return "LOCAL";
 		case sym.MOD:
 			return "MOD";
 		case sym.MUL:
