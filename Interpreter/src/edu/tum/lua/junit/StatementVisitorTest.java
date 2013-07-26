@@ -57,6 +57,12 @@ public class StatementVisitorTest {
 		assertEquals(null, environment.get("b"));
 		LuaInterpreter.eval(block, environment);
 		assertEquals("string", environment.get("b"));
+
+		block = ParserUtil.loadString("c=🐱");
+
+		assertEquals(null, environment.get("c"));
+		LuaInterpreter.eval(block, environment);
+		assertEquals("🐱", environment.get("c"));
 	}
 
 	@Test
@@ -104,18 +110,43 @@ public class StatementVisitorTest {
 	}
 
 	@Test
-	public void testVisitWhileExp() {
-		fail("Not yet implemented"); // TODO
+	public void testVisitWhileExp() throws Exception {
+		Block block = ParserUtil.loadString("a=1");
+
+		assertEquals(null, environment.get("a"));
+		LuaInterpreter.eval(block, environment);
+		assertEquals(1.0, environment.get("a"));
+
+		block = ParserUtil.loadString("while a<4 do a=a+1 b=2 end");
+
+		LuaInterpreter.eval(block, environment);
+		assertEquals(4.0, environment.get("a"));
+		assertEquals(2.0, environment.get("b"));
 	}
 
 	@Test
-	public void testVisitRepeatUntil() {
-		fail("Not yet implemented"); // TODO
+	public void testVisitRepeatUntil() throws Exception {
+		Block block = ParserUtil.loadString("a='a'");
+
+		assertEquals(null, environment.get("a"));
+		LuaInterpreter.eval(block, environment);
+		assertEquals("a", environment.get("a"));
+
+		block = ParserUtil.loadString("repeat a=a..'a' b=2 until a=='aaa'");
+
+		LuaInterpreter.eval(block, environment);
+		assertEquals("aaa", environment.get("a"));
+		assertEquals(2.0, environment.get("b"));
 	}
 
 	@Test
-	public void testVisitIfThenElse() {
-		fail("Not yet implemented"); // TODO
+	public void testVisitIfThenElse() throws Exception {
+		Block block = ParserUtil.loadString("local a=true if not a then b=2 elseif not a then b=3 else b=1 end");
+
+		assertEquals(null, environment.get("a"));
+		LuaInterpreter.eval(block, environment);
+		assertEquals(null, environment.get("a"));
+		assertEquals(1.0, environment.get("b"));
 	}
 
 	@Test

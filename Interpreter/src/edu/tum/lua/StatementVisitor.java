@@ -105,8 +105,7 @@ public class StatementVisitor extends VisitorAdaptor {
 	}
 
 	private void executeBlock(Block block) {
-		Environment blockEnvironment = new Environment(environment);
-		LuaInterpreter.eval(block, blockEnvironment);
+		LuaInterpreter.eval(block, environment);
 
 		// TODO: handle return / break;
 	}
