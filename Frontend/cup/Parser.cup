@@ -95,6 +95,7 @@ non terminal optsemi, empty,  optws;
 
 precedence nonassoc LPAREN, RPAREN; 
 precedence nonassoc WS, COM ;
+
 precedence left ADD, MUL, SUB, DIV, MOD, POW, CONCAT, EQ, LEQ ,NEQ , LE, GR, GEQ, AND, OR;
 
 /* Grammar */
@@ -303,7 +304,7 @@ exp				::=		NIL
 							{: RESULT = new PreExp(prefixexp); :}
 						| tableconstructor:tc
 								{: RESULT = new TableConstructorExp(tc); :} 
-						| exp:e1 optws binop:op optws exp:e2
+						| exp:e1 binop:op optws exp:e2
 							{: RESULT = new Binop(e1,op,e2); :}
 						| unop:uop optws exp:e
 							{: RESULT = new Unop(uop,e); :}
