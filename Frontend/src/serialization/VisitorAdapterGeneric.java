@@ -4,7 +4,6 @@ import edu.tum.lua.ast.Asm;
 import edu.tum.lua.ast.Binop;
 import edu.tum.lua.ast.Block;
 import edu.tum.lua.ast.BooleanExp;
-import edu.tum.lua.ast.Closure;
 import edu.tum.lua.ast.DoExp;
 import edu.tum.lua.ast.Dots;
 import edu.tum.lua.ast.Exp;
