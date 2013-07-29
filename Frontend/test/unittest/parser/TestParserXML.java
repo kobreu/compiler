@@ -48,7 +48,15 @@ public class TestParserXML extends XMLTestCase {
 	public void setUp() {
 		List<String> xmlFiles = new ArrayList<>();
 		List<String> luaFiles = new ArrayList<>();
+
+		xmlFiles.add("testinput/grammar/if_and.xml");
+		luaFiles.add("testinput/grammar/if_and.lua");
 		
+		xmlFiles.add("testinput/binop/binop_and.xml");
+		luaFiles.add("testinput/binop/binop_and.lua");
+		
+		xmlFiles.add("testinput/binop/binop_or.xml");
+		luaFiles.add("testinput/binop/binop_or.lua");
 		
 		xmlFiles.add("testinput/grammar/funcname_colon.xml");
 		luaFiles.add("testinput/grammar/funcname_colon.lua");

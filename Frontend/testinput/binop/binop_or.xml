@@ -6,8 +6,16 @@
 			</VarList>
 			<ExpList>
 				<Binop op="OR">
-					<NumberExp number="1.0" />
-					<NumberExp number="2.0" />
+					<PreExp>
+						<PrefixExpVar>
+							<Variable var="b" />
+						</PrefixExpVar>
+					</PreExp>
+					<PreExp>
+						<PrefixExpVar>
+							<Variable var="c" />
+						</PrefixExpVar>
+					</PreExp>
 				</Binop>
 			</ExpList>
 		</Asm>
