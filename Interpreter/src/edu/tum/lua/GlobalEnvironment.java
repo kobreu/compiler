@@ -183,6 +183,18 @@ public class GlobalEnvironment extends LuaTable {
 		LuaTable os = new LuaTable();
 		LuaTable debug = new LuaTable();
 
+		os.set("clock", new NotImplementedFunction());
+		os.set("date", new NotImplementedFunction());
+		os.set("difftime", new NotImplementedFunction());
+		os.set("execute", new NotImplementedFunction());
+		os.set("exit", new NotImplementedFunction());
+		os.set("getenv", new NotImplementedFunction());
+		os.set("remove", new NotImplementedFunction());
+		os.set("rename", new NotImplementedFunction());
+		os.set("setlocale", new NotImplementedFunction());
+		os.set("time", new NotImplementedFunction());
+		os.set("tmpname", new NotImplementedFunction());
+
 		set("coroutine", coroutine);
 		set("package", _package);
 		set("string", string);
