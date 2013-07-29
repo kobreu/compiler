@@ -1,6 +1,5 @@
 package edu.tum.lua.types;
 
-import java.io.RandomAccessFile;
 
 public enum LuaType {
 	BOOLEAN("boolean"), FUNCTION("function"), NIL("nil"), NUMBER("number"), STRING("string"), TABLE("table"), USERDATA(
@@ -31,7 +30,7 @@ public enum LuaType {
 			return TABLE;
 		}
 
-		if (object instanceof RandomAccessFile) {
+		if (object instanceof LuaUserData) {
 			return USERDATA;
 		}
 

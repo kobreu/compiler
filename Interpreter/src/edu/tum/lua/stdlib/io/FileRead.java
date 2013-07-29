@@ -4,26 +4,25 @@ import static edu.tum.lua.Preconditions.checkArguments;
 
 import java.io.EOFException;
 import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.util.Collections;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import edu.tum.lua.LuaBadArgumentException;
 import edu.tum.lua.types.LuaFunctionNative;
 import edu.tum.lua.types.LuaType;
+import edu.tum.lua.types.LuaUserData;
 
 public class FileRead extends LuaFunctionNative {
 
 	private static final LuaType[][] types = { { LuaType.USERDATA }, { LuaType.STRING, LuaType.NUMBER, null } };
-	private RandomAccessFile file;
+	private LuaUserData file;
 
 	@Override
 	public List<Object> apply(List<Object> arguments) {
 		checkArguments("read", arguments, types);
-		file = (RandomAccessFile) arguments.get(0);
+		file = (LuaUserData) arguments.get(0);
 		if (arguments.size() < 2) {
-			return Collections.singletonList((Object) readNextLine());
+			return Collections.singletonList((Object) file.readLine());
 		}
 		Object arg = arguments.get(1);
 		switch (LuaType.getTypeOf(arg)) {
@@ -34,7 +33,7 @@ public class FileRead extends LuaFunctionNative {
 			case "*a":
 				return Collections.singletonList((Object) readAll());
 			case "*l":
-				return Collections.singletonList((Object) readNextLine());
+				return Collections.singletonList((Object) file.readLine());
 			default:
 				throw new LuaBadArgumentException(1, "read", "invalid option");
 			}
@@ -62,46 +61,34 @@ public class FileRead extends LuaFunctionNative {
 	}
 
 	private Double readNumber() {
-		Double value = Double.MIN_VALUE;
-		String number = "";
 		long pos = -1;
 		try {
 			pos = file.getFilePointer();
 		} catch (IOException e) {
 			return null;
 		}
-		String next = readNChars(1.0);
-		if (!Pattern.matches("[0-9]", next)) {
+
+		String s = "", n = "";
+		do {
+			s += n;
+			n = readNChars(1.0);
+		} while ((s + n).matches("[0-9]*(\\.[0-9]*)?"));
+
+		if (!s.isEmpty()) {
+			pos = pos + s.length();
+		}
+
 			try {
 				file.seek(pos);
 			} catch (IOException e) {
 				return null;
 			}
-			return null;
-		}
-		while (Pattern.matches("[0-9]", next)) {
-			number += next;
-			next = readNChars(1.0);
-		}
-		if (Pattern.matches("\\.", next)) {
-			next = readNChars(1.0);
-			number += ".";
-			while (Pattern.matches("[0-9]", next)) {
-				number += next;
-				next = readNChars(1.0);
-			}
-		}
 
-		pos = pos + number.length();
-		try {
-			file.seek(pos);
-		} catch (IOException e) {
+		if (s.isEmpty()) {
 			return null;
 		}
 
-		value = Double.parseDouble(number);
-
-		return value;
+		return new Double(Double.parseDouble(s));
 	}
 
 	private String readNChars(double n) {
@@ -120,17 +107,4 @@ public class FileRead extends LuaFunctionNative {
 		}
 		return chars;
 	}
-
-	private String readNextLine() {
-		String line = "";
-		try {
-			line = file.readLine();
-		} catch (EOFException eof) {
-			return null;
-		} catch (IOException e) {
-			return null;
 		}
-		return line;
-	}
-
-}
