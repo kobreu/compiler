@@ -8,7 +8,6 @@ import java.util.List;
 import edu.tum.lua.ast.Block;
 import edu.tum.lua.ast.Exp;
 import edu.tum.lua.ast.ExpList;
-import edu.tum.lua.ast.FunctionCall;
 import edu.tum.lua.ast.LastBreak;
 import edu.tum.lua.ast.LastReturn;
 import edu.tum.lua.ast.Stat;
@@ -44,9 +43,4 @@ public class LuaInterpreter {
 		exp.accept(visitor);
 		return visitor.popLast();
 	}
-
-	public static void eval(FunctionCall call, LocalEnvironment environment2) {
-		throw new RuntimeException("Missing implementation");
-	}
-
 }
