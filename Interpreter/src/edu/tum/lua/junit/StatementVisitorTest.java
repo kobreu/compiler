@@ -20,6 +20,7 @@ import edu.tum.lua.ast.FunctionDef;
 import edu.tum.lua.ast.IfThenElse;
 import edu.tum.lua.ast.LastBreak;
 import edu.tum.lua.ast.LocalDecl;
+import edu.tum.lua.ast.LocalFuncDef;
 import edu.tum.lua.ast.Name;
 import edu.tum.lua.ast.NameList;
 import edu.tum.lua.ast.NumberExp;
@@ -254,11 +255,12 @@ public class StatementVisitorTest {
 		assertEquals(null, environment.get("x"));
 		LuaInterpreter.eval(block, environment);
 		assertEquals(0.0, environment.get("x"));
-		Asm code = new Asm(new VarList(new Variable("x")), new ExpList(new NumberExp(1.0)));
-		Block body = new Block(new StatList(code), new LastBreak());
+		Block body = ParserUtil.loadString("x=1");
+		LocalFuncDef foo = new LocalFuncDef("foo", new NameList(), false, body);
+		block = new Block(new StatList(foo), new LastBreak());
 
-		fail("Not yet implemented");
-		// TODO
+		LuaInterpreter.eval(block, environment);
+		// TODO call the function when it will be implemented in the parser
 	}
 
 	@Test
