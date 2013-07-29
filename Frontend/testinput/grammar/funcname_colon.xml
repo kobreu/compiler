@@ -1,0 +1,23 @@
+<Block>
+	<StatList>
+		<FunctionDef>
+				<FuncNameVarDotFuncName>
+					<Name name="bla" />
+					<FuncNameDDotVar>
+						<Name name="func" />
+						<Name name="colon" />
+					</FuncNameDDotVar>
+				</FuncNameVarDotFuncName>
+			<FuncBody>
+				<ParList varparlist="false">
+					<Null />
+			 	</ParList>
+			 	<Block>
+			 		<Null />
+			 		<Null />
+			 	</Block>
+			</FuncBody>
+		</FunctionDef>
+	</StatList>
+	<Null />
+</Block>

@@ -49,11 +49,6 @@ public class TestParserXML extends XMLTestCase {
 		List<String> xmlFiles = new ArrayList<>();
 		List<String> luaFiles = new ArrayList<>();
 		
-		xmlFiles.add("testinput/unop/unop_length.xml");
-		luaFiles.add("testinput/unop/unop_length.lua");
-
-		xmlFiles.add("testinput/unop/unop_not.xml");
-		luaFiles.add("testinput/unop/unop_not.lua");
 		
 		xmlFiles.add("testinput/grammar/funcname_colon.xml");
 		luaFiles.add("testinput/grammar/funcname_colon.lua");
@@ -61,8 +56,27 @@ public class TestParserXML extends XMLTestCase {
 		xmlFiles.add("testinput/grammar/function_def.xml");
 		luaFiles.add("testinput/grammar/function_def.lua");
 		
+		xmlFiles.add("testinput/grammar/function_def.xml");
+		luaFiles.add("testinput/grammar/function_def_whitespace_1.lua");
+		
 		xmlFiles.add("testinput/grammar/function_funcbody.xml");
 		luaFiles.add("testinput/grammar/function_funcbody.lua");
+		
+		xmlFiles.add("testinput/grammar/function_funcbody.xml");
+		luaFiles.add("testinput/grammar/function_funcbody_whitespace_1.lua");
+		
+		xmlFiles.add("testinput/grammar/function_funcbody.xml");
+		luaFiles.add("testinput/grammar/function_funcbody_whitespace_2.lua");
+		
+		xmlFiles.add("testinput/grammar/function_funcbody.xml");
+		luaFiles.add("testinput/grammar/function_funcbody_whitespace_3.lua");
+		
+		xmlFiles.add("testinput/unop/unop_length.xml");
+		luaFiles.add("testinput/unop/unop_length.lua");
+
+		xmlFiles.add("testinput/unop/unop_not.xml");
+		luaFiles.add("testinput/unop/unop_not.lua");
+
 		
 		
 		xmlFiles.add("testinput/grammar/stat_assignment_whitespace_5.xml");
@@ -80,8 +94,11 @@ public class TestParserXML extends XMLTestCase {
 		xmlFiles.add("testinput/grammar/exp_tableconstructor_empty.xml");
 		luaFiles.add("testinput/grammar/exp_tableconstructor_empty.lua");
 		
+		xmlFiles.add("testinput/local/local_func.xml");
+		luaFiles.add("testinput/local/local_func.lua");
+		
 		/*xmlFiles.add("testinput/local/local_func.xml");
-		luaFiles.add("testinput/local/local_func.lua");*/
+		luaFiles.add("testinput/local/local_func_whitespace_1.lua");*/
 		
 		xmlFiles.add("testinput/local/local_noexp.xml");
 		luaFiles.add("testinput/local/local_noexp.lua");

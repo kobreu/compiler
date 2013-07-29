@@ -1,1 +1,1 @@
-function bla.func:colon() end
+function bla.func:colon () end

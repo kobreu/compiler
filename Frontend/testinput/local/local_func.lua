@@ -1,1 +1,1 @@
-local function a () end
+local function a() end
