@@ -16,6 +16,7 @@ import edu.tum.lua.ast.FieldExp;
 import edu.tum.lua.ast.FieldLRExp;
 import edu.tum.lua.ast.FieldNameExp;
 import edu.tum.lua.ast.FuncCall;
+import edu.tum.lua.ast.LegacyAdapter;
 import edu.tum.lua.ast.Nil;
 import edu.tum.lua.ast.NumberExp;
 import edu.tum.lua.ast.PreExp;
@@ -91,6 +92,13 @@ public class ExpVisitor extends VisitorAdaptor {
 	@Override
 	public void visit(Dots exp) {
 		throw new RuntimeException("Not yet implemented");
+	}
+
+	@Override
+	public void visit(ExpList expl) {
+		for (Exp e : LegacyAdapter.convert(expl)) {
+			e.accept(this);
+		}
 	}
 
 	@Override
@@ -267,7 +275,8 @@ public class ExpVisitor extends VisitorAdaptor {
 			}
 
 		default:
-			throw new LuaRuntimeException("attempt to call a " + LuaType.getTypeOf(object) + " value");
+			throw new LuaRuntimeException("attempt to call a "
+					+ LuaType.getTypeOf(object) + " value");
 		}
 	}
 }
