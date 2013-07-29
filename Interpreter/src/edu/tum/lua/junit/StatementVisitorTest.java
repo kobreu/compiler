@@ -2,7 +2,6 @@ package edu.tum.lua.junit;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.fail;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -225,8 +224,29 @@ public class StatementVisitorTest {
 	}
 
 	@Test
-	public void testVisitForIn() {
-		fail("Not yet implemented"); // TODO
+	public void testVisitForIn() throws Exception {
+
+		Block block = ParserUtil.loadString("a='a'");
+
+		assertEquals(null, environment.get("a"));
+		LuaInterpreter.eval(block, environment);
+		assertEquals("a", environment.get("a"));
+
+		LuaTable table = new LuaTable();
+		table.set("one", 1.0);
+		table.set("two", 2.0);
+		table.set("three", 3.0);
+
+		environment.set("t", table);
+		LuaTable t = (LuaTable) environment.get("t");
+		assertEquals((Object) 1.0, t.get("one"));
+		assertEquals((Object) 2.0, t.get("two"));
+		assertEquals((Object) 3.0, t.get("three"));
+
+		block = ParserUtil.loadString("for k in pairs(t) do a=a..k print(a) end");
+		LuaInterpreter.eval(block, environment);
+		assertEquals("atwoonethree,", environment.get("a"));
+
 	}
 
 	@Test

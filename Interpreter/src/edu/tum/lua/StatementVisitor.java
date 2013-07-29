@@ -1,5 +1,6 @@
 package edu.tum.lua;
 
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
@@ -26,6 +27,7 @@ import edu.tum.lua.operator.logical.LogicalOperatorSupport;
 import edu.tum.lua.types.LuaFunction;
 import edu.tum.lua.types.LuaFunctionInterpreted;
 import edu.tum.lua.types.LuaTable;
+import edu.tum.lua.types.LuaType;
 
 public class StatementVisitor extends VisitorAdaptor {
 
@@ -124,7 +126,39 @@ public class StatementVisitor extends VisitorAdaptor {
 
 	@Override
 	public void visit(ForIn stmt) {
+		ExpVisitor visitor = new ExpVisitor(environment, vararg);
+		List<String> nl = LegacyAdapter.convert(stmt.namelist);
+		stmt.explist.accept(visitor);
+		List<Object> expl = visitor.popAll();
+		System.out.println("size ExpList: " + expl.size());
+		LuaFunction func = (LuaFunction) expl.get(0);
+		Object state = expl.get(1);
+		Object var = expl.get(2);
+		System.out.println("f: " + func.toString() + ", s: " + state + ", v: " + var);
 
+		while (true) {
+			LocalEnvironment localEnvironment = new LocalEnvironment(environment);
+
+			List<Object> results = ExpVisitor.call(func, Arrays.asList(state, var));
+			System.out.println("result: " + results);
+			int lastExpIndex = results.size() - 1;
+			Object resultValue = null;
+
+			for (int i = 0; i < nl.size(); i++) {
+				resultValue = (i <= lastExpIndex) ? results.get(i) : null;
+				System.out.println(resultValue);
+				System.out.println(nl.get(i));
+				localEnvironment.setLocal(nl.get(i), resultValue);
+			}
+
+			var = localEnvironment.get(nl.get(0));
+			System.out.println("var: " + var);
+			if (LuaType.getTypeOf(var) == LuaType.NIL) {
+				break;
+			}
+
+			LuaInterpreter.eval(stmt.block, localEnvironment);
+		}
 	}
 
 	@Override
