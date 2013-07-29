@@ -19,6 +19,10 @@ import edu.tum.lua.ast.ForIn;
 import edu.tum.lua.ast.FuncBody;
 import edu.tum.lua.ast.FuncCall;
 import edu.tum.lua.ast.FuncCallStmt;
+import edu.tum.lua.ast.FuncName;
+import edu.tum.lua.ast.FuncNameDDotVar;
+import edu.tum.lua.ast.FuncNameVar;
+import edu.tum.lua.ast.FuncNameVarDotFuncName;
 import edu.tum.lua.ast.Function;
 import edu.tum.lua.ast.FunctionCall;
 import edu.tum.lua.ast.FunctionDef;
@@ -100,15 +104,20 @@ public abstract class VisitorAdapterGeneric extends VisitorAdaptor {
 	  @Override public void visit(ForExp forExp) { visitGeneric(forExp); }
 	  @Override public void visit(ForIn forIn) { visitGeneric(forIn); }
 	  @Override public void visit(FunctionDef functionDef) { visitGeneric(functionDef); }
+	  @Override	public void visit(FuncName funcName) { visitGeneric(funcName);	}
+	  @Override	public void visit(FuncNameVar funcNameVar) {visitGeneric(funcNameVar);}
+	  @Override	public void visit(FuncNameDDotVar funcNameVar) {visitGeneric(funcNameVar);}
+	  @Override	public void visit(FuncNameVarDotFuncName funcNameVar) {visitGeneric(funcNameVar);}
+
 	  @Override public void visit(LocalFuncDef localFuncDef) { visitGeneric(localFuncDef); }
 	  @Override public void visit(LocalDecl localDecl) { visitGeneric(localDecl); }
 	  @Override public void visit(Exp exp) { visitGeneric(exp);}
 	  @Override public void visit(Nil nil) { visitGeneric(nil); }
 	  @Override public void visit(BooleanExp booleanExp) { visitGeneric(booleanExp); }
+	  
 	  @Override public void visit(NumberExp numberExp) { visitGeneric(numberExp); }
 	  @Override public void visit(TextExp textExp) { visitGeneric(textExp); }
 	  @Override public void visit(Dots dots) { visitGeneric(dots); }
-	  @Override public void visit(Closure closure) { visitGeneric(closure); }
 	  @Override public void visit(PreExp preExp) { visitGeneric(preExp); }
 	  @Override public void visit(TableConstructorExp tableConstructorExp) { visitGeneric(tableConstructorExp); }
 	  @Override public void visit(Binop binop) { visitGeneric(binop); }

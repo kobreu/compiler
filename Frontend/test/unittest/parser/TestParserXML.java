@@ -48,6 +48,16 @@ public class TestParserXML extends XMLTestCase {
 	public void setUp() {
 		List<String> xmlFiles = new ArrayList<>();
 		List<String> luaFiles = new ArrayList<>();
+
+		xmlFiles.add("testinput/grammar/funcname_colon.xml");
+		luaFiles.add("testinput/grammar/funcname_colon.lua");
+		
+		xmlFiles.add("testinput/grammar/function_def.xml");
+		luaFiles.add("testinput/grammar/function_def.lua");
+		
+		xmlFiles.add("testinput/grammar/function_funcbody.xml");
+		luaFiles.add("testinput/grammar/function_funcbody.lua");
+		
 		
 		xmlFiles.add("testinput/grammar/stat_assignment_whitespace_5.xml");
 		luaFiles.add("testinput/grammar/stat_assignment_whitespace_5.lua");
@@ -200,9 +210,6 @@ public class TestParserXML extends XMLTestCase {
 		
 		/*xmlFiles.add("testinput/grammar/exp_function_application.xml");
 		luaFiles.add("testinput/grammar/exp_function_application.lua");*/
-		
-		xmlFiles.add("testinput/grammar/function_funcbody.xml");
-		luaFiles.add("testinput/grammar/function_funcbody.lua");
 		
 		xmlFiles.add("testinput/grammar/chunk_sequence_without_semicolons.xml");
 		luaFiles.add("testinput/grammar/chunk_sequence_without_semicolons.lua");

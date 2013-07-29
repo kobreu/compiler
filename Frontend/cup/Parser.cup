@@ -359,9 +359,7 @@ funcbody		::= 	LPAREN parlist:pl RPAREN block:bl END
 						{:
 								RESULT = new FuncBody(pl,bl);
 						:}
-						| LPAREN  RPAREN optws END
-						;
-					
+						;					
 
 parlist			::=		namelist:nl
 						{:
@@ -375,7 +373,7 @@ parlist			::=		namelist:nl
 						{:
 							RESULT = new ParList(null,true);
 						:}
-						| {:
+						| optws {:
 							RESULT = new ParList(null, false);
 						  :}
 						  

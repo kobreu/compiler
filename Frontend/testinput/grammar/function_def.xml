@@ -1,6 +1,19 @@
 <Block>
 	<StatList>
-		<!-- does not yet exist -->
+		<FunctionDef>
+			<FuncNameVar>
+					<Name name="a" />
+			</FuncNameVar>
+			<FuncBody>
+				<ParList varparlist="false">
+					<Null />
+			 	</ParList>
+			 	<Block>
+			 		<Null />
+			 		<Null />
+			 	</Block>
+			</FuncBody>
+		</FunctionDef>
 	</StatList>
 	<Null />
 </Block>
