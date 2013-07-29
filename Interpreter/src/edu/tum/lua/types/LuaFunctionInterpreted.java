@@ -3,44 +3,40 @@ package edu.tum.lua.types;
 import static edu.tum.lua.ast.LegacyAdapter.convert;
 
 import java.util.Arrays;
-import java.util.LinkedList;
+import java.util.Collections;
 import java.util.List;
 
+import edu.tum.lua.ExpVisitor;
 import edu.tum.lua.GlobalEnvironment;
 import edu.tum.lua.LocalEnvironment;
-import edu.tum.lua.LuaInterpreter;
+import edu.tum.lua.StatementVisitor;
 import edu.tum.lua.ast.Block;
 import edu.tum.lua.ast.FunctionDef;
+import edu.tum.lua.ast.LastBreak;
+import edu.tum.lua.ast.LastReturn;
+import edu.tum.lua.ast.LegacyAdapter;
 import edu.tum.lua.ast.LocalFuncDef;
-import edu.tum.lua.ast.Name;
+import edu.tum.lua.ast.Stat;
 
 public class LuaFunctionInterpreted implements LuaFunction {
 
 	private final LocalEnvironment environment;
 	private final List<String> argumentNames;
 	private final Block block;
-	private final boolean varargs;
+	private final boolean vararg;
 
 	public LuaFunctionInterpreted(FunctionDef node, LocalEnvironment e) {
 		environment = e;
-		argumentNames = new LinkedList<String>();
-		List<Name> l = convert(node.args);
-		for (Name argName : l) {
-			argumentNames.add(argName.name);
-		}
+		argumentNames = LegacyAdapter.convert(node.args);
 		block = node.block;
-		varargs = node.varargs;
+		vararg = node.varargs;
 	}
 
 	public LuaFunctionInterpreted(LocalFuncDef node, LocalEnvironment e) {
 		environment = e;
-		argumentNames = new LinkedList<String>();
-		List<Name> l = convert(node.args);
-		for (Name argName : l) {
-			argumentNames.add(argName.name);
-		}
+		argumentNames = LegacyAdapter.convert(node.args);
 		block = node.block;
-		varargs = node.varargs;
+		vararg = node.varargs;
 	}
 
 	@Override
@@ -48,10 +44,37 @@ public class LuaFunctionInterpreted implements LuaFunction {
 		LocalEnvironment currentEnvironment = new LocalEnvironment(environment);
 
 		for (int i = 0; i < Math.min(argumentNames.size(), arguments.size()); i++) {
-			currentEnvironment.set(argumentNames.get(i), arguments.get(i));
+			currentEnvironment.setLocal(argumentNames.get(i), arguments.get(i));
 		}
 
-		return LuaInterpreter.eval(block, currentEnvironment);
+		StatementVisitor visitor;
+
+		if (vararg && arguments.size() > argumentNames.size()) {
+			visitor = new StatementVisitor(currentEnvironment, arguments.subList(arguments.size(), arguments.size()));
+		} else {
+			visitor = new StatementVisitor(currentEnvironment);
+		}
+
+		for (Stat statement : convert(block.stats)) {
+			statement.accept(visitor);
+		}
+
+		if (block.last == null || block.last instanceof LastBreak) {
+			return Collections.emptyList();
+		}
+
+		/* LastReturn */
+		LocalEnvironment lastEnvironment = visitor.getEnvironment();
+		ExpVisitor visitor2;
+		if (vararg && arguments.size() > argumentNames.size()) {
+			visitor2 = new ExpVisitor(lastEnvironment, arguments.subList(arguments.size(), arguments.size()));
+		} else {
+			visitor2 = new ExpVisitor(lastEnvironment, null);
+		}
+
+		((LastReturn) block.last).accept(visitor2);
+
+		return visitor2.popAll();
 	}
 
 	@Override

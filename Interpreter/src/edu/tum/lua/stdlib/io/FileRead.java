@@ -15,8 +15,7 @@ import edu.tum.lua.types.LuaType;
 
 public class FileRead extends LuaFunctionNative {
 
-	private static final LuaType[][] types = { { LuaType.USERDATA },
-			{ LuaType.STRING, LuaType.NUMBER, null } };
+	private static final LuaType[][] types = { { LuaType.USERDATA }, { LuaType.STRING, LuaType.NUMBER, null } };
 	private RandomAccessFile file;
 
 	@Override

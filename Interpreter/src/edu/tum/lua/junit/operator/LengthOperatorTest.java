@@ -34,7 +34,7 @@ public class LengthOperatorTest {
 		op3.set(d2, d2);
 		op3.set("key", d3);
 
-		assertEquals(op1.length(), op.apply(op1));
+		assertEquals((double) op1.length(), op.apply(op1));
 		assertEquals(d1, op.apply(op2));
 		assertEquals(d2, op.apply(op3));
 

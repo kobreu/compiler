@@ -40,11 +40,13 @@ import edu.tum.lua.types.LuaType;
 public class ExpVisitor extends VisitorAdaptor {
 
 	private final LocalEnvironment environment;
+	private final List<Object> vararg;
 
 	private Deque<Object> evaluationStack;
 
-	public ExpVisitor(LocalEnvironment e) {
+	public ExpVisitor(LocalEnvironment e, List<Object> v) {
 		environment = e;
+		vararg = v;
 		evaluationStack = new LinkedList<>();
 	}
 
@@ -91,7 +93,26 @@ public class ExpVisitor extends VisitorAdaptor {
 
 	@Override
 	public void visit(Dots exp) {
-		throw new RuntimeException("Not yet implemented");
+		if (vararg == null) {
+			throw new LuaRuntimeException("cannot use '...' outside a vararg function");
+		}
+
+		// Adjust vararg
+
+		if (vararg.isEmpty()) {
+			evaluationStack.addLast(null);
+			return;
+		}
+
+		if (exp.getParent() instanceof ExpList) {
+			ExpList list = (ExpList) exp.getParent();
+			if (list.elementAt(list.size() - 1) == exp) {
+				evaluationStack.addAll(vararg);
+				return;
+			}
+		}
+
+		evaluationStack.addLast(vararg.get(0));
 	}
 
 	@Override
@@ -109,7 +130,7 @@ public class ExpVisitor extends VisitorAdaptor {
 	}
 
 	private List<Object> call(Object object, ExpList args) {
-		ExpVisitor visitor = new ExpVisitor(environment);
+		ExpVisitor visitor = new ExpVisitor(environment, vararg);
 		args.accept(visitor);
 		return call(object, visitor.popAll());
 	}

@@ -1,15 +1,14 @@
 package edu.tum.lua;
 
-import static edu.tum.lua.LuaInterpreter.eval;
-
 import java.util.Enumeration;
-import java.util.LinkedList;
+import java.util.Iterator;
 import java.util.List;
 
 import edu.tum.lua.ast.Asm;
 import edu.tum.lua.ast.Block;
 import edu.tum.lua.ast.DoExp;
 import edu.tum.lua.ast.Exp;
+import edu.tum.lua.ast.ExpList;
 import edu.tum.lua.ast.ForExp;
 import edu.tum.lua.ast.ForIn;
 import edu.tum.lua.ast.FuncCallStmt;
@@ -18,7 +17,6 @@ import edu.tum.lua.ast.IfThenElse;
 import edu.tum.lua.ast.LegacyAdapter;
 import edu.tum.lua.ast.LocalDecl;
 import edu.tum.lua.ast.LocalFuncDef;
-import edu.tum.lua.ast.Name;
 import edu.tum.lua.ast.NameList;
 import edu.tum.lua.ast.RepeatUntil;
 import edu.tum.lua.ast.VisitorAdaptor;
@@ -31,9 +29,15 @@ import edu.tum.lua.types.LuaTable;
 public class StatementVisitor extends VisitorAdaptor {
 
 	private LocalEnvironment environment;
+	private final List<Object> vararg;
 
 	public StatementVisitor(LocalEnvironment e) {
+		this(e, null);
+	}
+
+	public StatementVisitor(LocalEnvironment e, List<Object> v) {
 		this.environment = e;
+		vararg = v;
 	}
 
 	public LocalEnvironment getEnvironment() {
@@ -45,11 +49,28 @@ public class StatementVisitor extends VisitorAdaptor {
 		throw new RuntimeException("Unsupported Statement");
 	}
 
+	public void assign(boolean local, List<String> identifiers, ExpList expList) {
+		ExpVisitor visitor = new ExpVisitor(environment, vararg);
+		expList.accept(visitor);
+
+		Iterator<String> identifierIterator = identifiers.iterator();
+		Iterator<Object> valuesIterator = visitor.popAll().iterator();
+
+		while (identifierIterator.hasNext()) {
+			String identifier = identifierIterator.next();
+			Object value = valuesIterator.hasNext() ? valuesIterator.next() : null;
+
+			if (local) {
+				environment.setLocal(identifier, value);
+			} else {
+				environment.set(identifier, value);
+			}
+		}
+	}
+
 	@Override
 	public void visit(Asm stmt) {
-		List<String> varlist = LegacyAdapter.convert(stmt.varlist);
-		List<Exp> explist = LegacyAdapter.convert(stmt.explist);
-		environment.assign(varlist, explist);
+		assign(false, LegacyAdapter.convert(stmt.varlist), stmt.explist);
 	}
 
 	@Override
@@ -79,7 +100,7 @@ public class StatementVisitor extends VisitorAdaptor {
 
 		String v = stmt.ident;
 		double var, limit, step;
-		ExpVisitor visitor = new ExpVisitor(environment);
+		ExpVisitor visitor = new ExpVisitor(environment, vararg);
 
 		stmt.start.accept(visitor);
 		var = (double) visitor.popLast();
@@ -107,7 +128,7 @@ public class StatementVisitor extends VisitorAdaptor {
 
 	@Override
 	public void visit(FuncCallStmt stmt) {
-		ExpVisitor visitor = new ExpVisitor(environment);
+		ExpVisitor visitor = new ExpVisitor(environment, vararg);
 		stmt.call.accept(visitor);
 	}
 
@@ -142,16 +163,7 @@ public class StatementVisitor extends VisitorAdaptor {
 	@Override
 	public void visit(LocalDecl stmt) {
 		environment = new LocalEnvironment(environment);
-		List<Name> varlist = LegacyAdapter.convert(stmt.namelist);
-		LinkedList<String> varliststring = new LinkedList<String>();
-		for (Name localVar : varlist) {
-			environment.setLocal(localVar.name, null);
-			varliststring.add(localVar.name);
-		}
-
-		List<Exp> explist = LegacyAdapter.convert(stmt.explist);
-
-		environment.assign(varliststring, explist);
+		assign(true, LegacyAdapter.convert(stmt.namelist), stmt.explist);
 	}
 
 	@Override
@@ -186,6 +198,8 @@ public class StatementVisitor extends VisitorAdaptor {
 	}
 
 	private boolean isTrue(Exp exp) {
-		return LogicalOperatorSupport.isTrue(eval(exp, environment));
+		ExpVisitor visitor = new ExpVisitor(environment, vararg);
+		exp.accept(visitor);
+		return LogicalOperatorSupport.isTrue(visitor.popLast());
 	}
 }

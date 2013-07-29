@@ -1,11 +1,7 @@
 package edu.tum.lua;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import edu.tum.lua.ast.Exp;
 
 public class LocalEnvironment {
 
@@ -65,21 +61,6 @@ public class LocalEnvironment {
 
 	public GlobalEnvironment getGlobalEnvironment() {
 		return global;
-	}
-
-	public void assign(List<String> identifiers, List<Exp> expressions) {
-		List<Object> values = new ArrayList<>(expressions.size());
-
-		for (Exp exp : expressions) {
-			Object value = LuaInterpreter.eval(exp, this);
-			values.add(value);
-
-			// TODO Adjust values!
-		}
-
-		for (int i = 0; i < identifiers.size(); i++) {
-			set(identifiers.get(i), values.get(i));
-		}
 	}
 
 }

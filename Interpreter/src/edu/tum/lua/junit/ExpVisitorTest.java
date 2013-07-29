@@ -3,6 +3,8 @@ package edu.tum.lua.junit;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import java.util.Arrays;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -10,7 +12,9 @@ import edu.tum.lua.ExpVisitor;
 import edu.tum.lua.LocalEnvironment;
 import edu.tum.lua.ast.Binop;
 import edu.tum.lua.ast.BooleanExp;
+import edu.tum.lua.ast.Dots;
 import edu.tum.lua.ast.Exp;
+import edu.tum.lua.ast.ExpList;
 import edu.tum.lua.ast.FieldExp;
 import edu.tum.lua.ast.FieldLRExp;
 import edu.tum.lua.ast.FieldList;
@@ -35,7 +39,7 @@ public class ExpVisitorTest {
 	@Before
 	public void setUp() throws Exception {
 		environment = new LocalEnvironment();
-		visitor = new ExpVisitor(environment);
+		visitor = new ExpVisitor(environment, null);
 	}
 
 	@Test
@@ -61,14 +65,23 @@ public class ExpVisitorTest {
 
 	@Test
 	public void testVisitTextExp() {
-		Exp exp = new TextExp("🐵:💣");
+		Exp exp = new TextExp("a:b");
 		exp.accept(visitor);
-		assertEquals("🐵:💣", visitor.popLast());
+		assertEquals("a:b", visitor.popLast());
 	}
 
 	@Test
 	public void testVisitDots() {
-		fail("Not yet implemented"); // TODO
+		LuaTable t = new LuaTable();
+		visitor = new ExpVisitor(environment, Arrays.asList("a", 1.0, t));
+		ExpList exp = new ExpList(new Dots("..."));
+
+		exp.accept(visitor);
+		assertEquals(Arrays.asList("a", 1.0, t), visitor.popAll());
+
+		exp.append(new TextExp("1.0"));
+		exp.accept(visitor);
+		assertEquals(Arrays.asList("a", "1.0"), visitor.popAll());
 	}
 
 	@Test
@@ -99,7 +112,7 @@ public class ExpVisitorTest {
 		// > t = {"one", "two", [1]="im lost"}
 		// > for k,v in pairs(t) do print(k,v) >> 1->"one", 2->"two"
 		environment = new LocalEnvironment();
-		visitor = new ExpVisitor(environment);
+		visitor = new ExpVisitor(environment, null);
 
 		fieldlist = new FieldList(new FieldExp(new TextExp("one")));
 		fieldlist.append(new FieldExp(new TextExp("two")));
@@ -112,7 +125,7 @@ public class ExpVisitorTest {
 		// > t = {[1]="im lost", "one", "two"}
 		// > for k,v in pairs(t) do print(k,v) >> 1->"one", 2->"two"
 		environment = new LocalEnvironment();
-		visitor = new ExpVisitor(environment);
+		visitor = new ExpVisitor(environment, null);
 
 		fieldlist = new FieldList(new FieldLRExp(new NumberExp(2.0), new TextExp("im lost")));
 		fieldlist.append(new FieldExp(new TextExp("two")));
@@ -126,9 +139,9 @@ public class ExpVisitorTest {
 
 	@Test
 	public void testVisitBinop() {
-		Exp exp = new Binop(new TextExp("🐵"), Op.CONCAT, new TextExp("💣"));
+		Exp exp = new Binop(new TextExp("a"), Op.CONCAT, new TextExp("b"));
 		exp.accept(visitor);
-		assertEquals("🐵💣", visitor.popLast());
+		assertEquals("ab", visitor.popLast());
 	}
 
 	@Test
