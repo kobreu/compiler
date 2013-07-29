@@ -305,6 +305,10 @@ exp				::=		NIL
 							RESULT = new PreExp(prefixexp); :}
 						| tableconstructor:tc
 								{: RESULT = new TableConstructorExp(tc); :} 
+						| exp:e1 binop:op optws exp:e2 optws
+							{: 
+								System.out.println("Inside AND expression operator");
+								RESULT = new Binop(e1,op,e2); :}
 						| exp:e1 WS binop:op optws exp:e2 optws
 							{: 
 								System.out.println("Inside AND expression operator");
