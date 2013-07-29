@@ -6,7 +6,7 @@
 			</FuncNameVar>
 			<FuncBody>
 				<ParList varparlist="false">
-					<Null />
+					<NameList />
 			 	</ParList>
 			 	<Block>
 			 		<Null />

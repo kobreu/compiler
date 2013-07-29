@@ -88,17 +88,14 @@ public class TestParserXML extends XMLTestCase {
 		xmlFiles.add("testinput/grammar/stat_assignment_whitespace_0.xml");
 		luaFiles.add("testinput/grammar/stat_assignment_whitespace_0.lua");
 		
-		/*xmlFiles.add("testinput/grammar/function_def.xml");
-		luaFiles.add("testinput/grammar/function_def.lua");*/
-		
 		xmlFiles.add("testinput/grammar/exp_tableconstructor_empty.xml");
 		luaFiles.add("testinput/grammar/exp_tableconstructor_empty.lua");
 		
 		xmlFiles.add("testinput/local/local_func.xml");
 		luaFiles.add("testinput/local/local_func.lua");
 		
-		/*xmlFiles.add("testinput/local/local_func.xml");
-		luaFiles.add("testinput/local/local_func_whitespace_1.lua");*/
+		xmlFiles.add("testinput/local/local_func.xml");
+		luaFiles.add("testinput/local/local_func_whitespace_1.lua");
 		
 		xmlFiles.add("testinput/local/local_noexp.xml");
 		luaFiles.add("testinput/local/local_noexp.lua");
@@ -258,8 +255,8 @@ public class TestParserXML extends XMLTestCase {
 		xmlFiles.add("testinput/grammar/args_tableconstructor.xml");
 		luaFiles.add("testinput/grammar/args_tableconstructor.lua");
 		
-		/*xmlFiles.add("testinput/grammar/explist_multiple.xml");
-		luaFiles.add("testinput/grammar/explist_multiple.lua");*/
+		xmlFiles.add("testinput/grammar/explist_multiple.xml");
+		luaFiles.add("testinput/grammar/explist_multiple.lua");
 		
 		this.xmlFiles = xmlFiles.toArray(new String[]{});
 		this.luaFiles = luaFiles.toArray(new String[]{});

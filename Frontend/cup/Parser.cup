@@ -183,7 +183,7 @@ stat        	::=    		varlist:vl optws ASM optws explist:el
 						{: RESULT = new ForIn(nl,el, b); :}
 						| FUNC optws funcname:fn optws funcbody:fb  
 						{: RESULT = new FunctionDef(fn,fb); :} 
-		 				| LOCAL optws FUNC optws ID:Id funcbody:fb
+		 				| LOCAL optws FUNC optws ID:Id optws funcbody:fb
 		 				{: RESULT = new LocalFuncDef(new Name(Id), fb); :}
 						| LOCAL optws namelist:nl optasmexplist:el 
 						{: RESULT = new LocalDecl(nl,el); :}
@@ -375,10 +375,10 @@ parlist			::=		namelist:nl
 						:}
 						| PARAMS
 						{:
-							RESULT = new ParList(null,true);
+							RESULT = new ParList(new NameList(),true); /* empty namelist */
 						:}
 						| {:
-							RESULT = new ParList(null, false);
+							RESULT = new ParList(new NameList(), false); /* empty namelist */
 						  :}
 						  
 						;
