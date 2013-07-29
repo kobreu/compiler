@@ -356,7 +356,7 @@ function 		::=     FUNC optws funcbody:fb
 						;
 						
 
-funcbody		::= 	LPAREN parlist:pl RPAREN optws block:bl optws END
+funcbody		::= 	LPAREN optws parlist:pl optws RPAREN optws block:bl optws END
 						{:
 								
 								RESULT = new FuncBody(pl,bl);
