@@ -1,4 +1,4 @@
-<project name="Compiler" default="jflex" basedir=".">
+<project name="Compiler" default="test" basedir=".">
 	<property name="cl" location="cl" />
 	<property name="cup" location="cup" />
 	<property name="flex" location="flex" />
@@ -46,7 +46,6 @@
 	<target name="init">
 		<mkdir dir="${testoutput}" />
 		<mkdir dir="${classes}" />
-		<mkdir dir="${java}" />
 		<mkdir dir="${dist}" />
 	</target>
 
