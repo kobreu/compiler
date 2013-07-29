@@ -89,12 +89,15 @@ non terminal Field field;
 non terminal fieldsep;
 non terminal Integer binop;
 non terminal Integer unop;
-non terminal optsemi, empty,  optws, optasm;
+non terminal optsemi, empty,  optws;
+
+
+
+precedence nonassoc LPAREN, RPAREN; 
+precedence nonassoc WS, COM ;
 
 precedence left ADD, MUL, SUB, DIV, MOD, POW, CONCAT, EQ, LEQ ,NEQ , LE, GR, GEQ, AND, OR;
-precedence left LPAREN, RPAREN;
-//precedence right COM;
-precedence nonassoc WS, COM;
+
 /* Grammar */
 
 start with block;
@@ -172,15 +175,17 @@ stat        	::=    		varlist:vl optws ASM optws explist:el
 						{: 
 							RESULT = new IfThenElse(e, b, elseblock);
 						:}
-						| 	FOR optws ID:id optws ASM optws exp:e1 optws COM optws exp:e2  optforexp:e3 optws DO optws block:b END
+						| 	FOR optws ID:Id optws ASM optws exp:e1 optws COM optws exp:e2  optforexp:e3 optws DO optws block:b END
 						{: 		
-								RESULT = new ForExp(id,e1,e2,e3,b); 
+								RESULT = new ForExp(Id,e1,e2,e3,b); 
 						:}
 						| FOR optws namelist:nl optws IN optws explist:el optws DO optws block:b END
 						{: RESULT = new ForIn(nl,el, b); :}
-						| FUNC funcname funcbody  
-		 				| LOCAL FUNC function ID:id funcbody 
-						| LOCAL optws namelist:nl optasmexplist:el
+						| FUNC optws funcname:fn optws funcbody:fb  
+						{: RESULT = new FunctionDef(fn,fb); :} 
+		 				| LOCAL optws FUNC optws ID:Id optws funcbody:fb
+		 				{: RESULT = new LocalFuncDef(new Name(Id), fb); :}
+						| LOCAL optws namelist:nl optasmexplist:el 
 						{: RESULT = new LocalDecl(nl,el); :}
 						;
 	
@@ -198,9 +203,9 @@ laststat		::=		RETURN optws optsemi
 						| BREAK optws optsemi statlist{: RESULT = new LastBreak(); :}
 						
 						; 						
-funcname		::=     ID:id
-						| ID:id DOT funcname
-						| DDOT ID:id
+funcname		::=     ID:Id {: RESULT = new FuncNameVar(new Name(Id)); :}
+						| ID:id DOT funcname:fn {: RESULT = new FuncNameVarDotFuncName(new Name(id),fn); :}
+						| ID:id DDOT ID:id1 {: RESULT = new FuncNameDDotVar(new Name(id),new Name(id1)); :}
 						;
 						
 
@@ -287,18 +292,28 @@ exp				::=		NIL
 						| TRUE
 							{: RESULT = new BooleanExp(true); :} 
 						| NUMBER:num
-							{: 					   
+							{: 	System.out.println("Inside Number expression");				   
 								RESULT = new NumberExp(num); 						
 							:} 
 						| TEXT:t 
 							{: RESULT = new TextExp(t); :}
+						| PARAMS 
+						   {: RESULT = new Dots(); :}
+						
 						| prefixexp:prefixexp
-							{: RESULT = new PreExp(prefixexp); :}
+							{: System.out.println("Inside prefixexp expression operator");
+							RESULT = new PreExp(prefixexp); :}
 						| tableconstructor:tc
 								{: RESULT = new TableConstructorExp(tc); :} 
-						| exp:e1 binop:op exp:e2
-							{: RESULT = new Binop(e1,op,e2); :}
-						| unop:uop exp:e
+						| exp:e1 binop:op optws exp:e2 optws
+							{: 
+								System.out.println("Inside AND expression operator");
+								RESULT = new Binop(e1,op,e2); :}
+						| exp:e1 WS binop:op optws exp:e2 optws
+							{: 
+								System.out.println("Inside AND expression operator");
+								RESULT = new Binop(e1,op,e2); :}
+						| unop:uop optws exp:e
 							{: RESULT = new Unop(uop,e); :}
 						| function:f
 							{: RESULT = new FunctionExp(f); :}
@@ -348,10 +363,12 @@ function 		::=     FUNC optws funcbody:fb
 						;
 						
 
-funcbody		::= 	LPAREN parlist:pl RPAREN block:bl END
+funcbody		::= 	LPAREN optws parlist:pl optws RPAREN optws block:bl optws END
 						{:
+								
 								RESULT = new FuncBody(pl,bl);
 						:}
+						
 						;
 					
 
@@ -365,11 +382,12 @@ parlist			::=		namelist:nl
 						:}
 						| PARAMS
 						{:
-							RESULT = new ParList(null,true);
+							RESULT = new ParList(new NameList(),true); /* empty namelist */
 						:}
 						| {:
-							RESULT = new ParList(null, false);
+							RESULT = new ParList(new NameList(), false); /* empty namelist */
 						  :}
+						  
 						;
 	
 
@@ -453,7 +471,7 @@ unop			::=		SUB
 						{: RESULT = Op.LEN; :}
 						;
 								
-optasm			::= 	ASM	  | empty;
+
 						
 optsemi			::= 	SEMI  | empty ;
 
