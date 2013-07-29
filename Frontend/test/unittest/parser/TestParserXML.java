@@ -48,7 +48,13 @@ public class TestParserXML extends XMLTestCase {
 	public void setUp() {
 		List<String> xmlFiles = new ArrayList<>();
 		List<String> luaFiles = new ArrayList<>();
+		
+		xmlFiles.add("testinput/unop/unop_length.xml");
+		luaFiles.add("testinput/unop/unop_length.lua");
 
+		xmlFiles.add("testinput/unop/unop_not.xml");
+		luaFiles.add("testinput/unop/unop_not.lua");
+		
 		xmlFiles.add("testinput/grammar/funcname_colon.xml");
 		luaFiles.add("testinput/grammar/funcname_colon.lua");
 		

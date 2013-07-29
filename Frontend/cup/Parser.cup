@@ -181,7 +181,7 @@ stat        	::=    		varlist:vl optws ASM optws explist:el
 						:}
 						| FOR optws namelist:nl optws IN optws explist:el optws DO optws block:b END
 						{: RESULT = new ForIn(nl,el, b); :}
-						| FUNC optws funcname:fn funcbody:fb  
+						| FUNC optws funcname:fn optws funcbody:fb  
 						{: RESULT = new FunctionDef(fn,fb); :} 
 		 				| LOCAL optws FUNC optws ID:Id funcbody:fb
 		 				{: RESULT = new LocalFuncDef(new Name(Id), fb); :}
@@ -356,11 +356,14 @@ function 		::=     FUNC optws funcbody:fb
 						;
 						
 
-funcbody		::= 	LPAREN parlist:pl RPAREN block:bl END
+funcbody		::= 	LPAREN parlist:pl RPAREN optws block:bl optws END
 						{:
+								
 								RESULT = new FuncBody(pl,bl);
 						:}
-						;					
+						
+						;
+					
 
 parlist			::=		namelist:nl
 						{:
@@ -374,7 +377,7 @@ parlist			::=		namelist:nl
 						{:
 							RESULT = new ParList(null,true);
 						:}
-						| optws {:
+						| {:
 							RESULT = new ParList(null, false);
 						  :}
 						  
