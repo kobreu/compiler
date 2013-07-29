@@ -8,43 +8,62 @@ import org.junit.Test;
 
 import edu.tum.lua.ExpVisitor;
 import edu.tum.lua.LocalEnvironment;
+import edu.tum.lua.ast.Binop;
+import edu.tum.lua.ast.BooleanExp;
+import edu.tum.lua.ast.Exp;
 import edu.tum.lua.ast.FieldExp;
 import edu.tum.lua.ast.FieldLRExp;
 import edu.tum.lua.ast.FieldList;
 import edu.tum.lua.ast.FieldNameExp;
+import edu.tum.lua.ast.Nil;
 import edu.tum.lua.ast.NumberExp;
+import edu.tum.lua.ast.Op;
+import edu.tum.lua.ast.PreExp;
+import edu.tum.lua.ast.PrefixExpVar;
 import edu.tum.lua.ast.TableConstructor;
 import edu.tum.lua.ast.TableConstructorExp;
 import edu.tum.lua.ast.TextExp;
+import edu.tum.lua.ast.Unop;
+import edu.tum.lua.ast.Variable;
 import edu.tum.lua.types.LuaTable;
 
 public class ExpVisitorTest {
 
-	ExpVisitor visitor;
-	LocalEnvironment e;
+	private ExpVisitor visitor;
+	private LocalEnvironment environment;
 
 	@Before
 	public void setUp() throws Exception {
+		environment = new LocalEnvironment();
+		visitor = new ExpVisitor(environment);
 	}
 
 	@Test
 	public void testVisitNil() {
-		fail("Not yet implemented"); // TODO
+		Exp exp = new Nil();
+		exp.accept(visitor);
+		assertEquals(null, visitor.popLast());
 	}
 
 	@Test
 	public void testVisitBooleanExp() {
-		fail("Not yet implemented"); // TODO
+		Exp exp = new BooleanExp(true);
+		exp.accept(visitor);
+		assertEquals(true, visitor.popLast());
 	}
 
 	@Test
 	public void testVisitNumberExp() {
-		fail("Not yet implemented"); // TODO
+		Exp exp = new NumberExp(-1.0);
+		exp.accept(visitor);
+		assertEquals(-1.0, visitor.popLast());
 	}
 
 	@Test
 	public void testVisitTextExp() {
-		fail("Not yet implemented"); // TODO
+		Exp exp = new TextExp("🐵:💣");
+		exp.accept(visitor);
+		assertEquals("🐵:💣", visitor.popLast());
 	}
 
 	@Test
@@ -62,8 +81,6 @@ public class ExpVisitorTest {
 
 		// > t = {"one", "two", [3.0] = "three", x4 = "four", "5" = "five"}
 		// > for k,v in pairs(t) do print(k,v) >> 1->"one", 2->"two"
-		e = new LocalEnvironment();
-		visitor = new ExpVisitor(e);
 
 		FieldList fieldlist = new FieldList(new FieldExp(new TextExp("one")));
 		fieldlist.append(new FieldExp(new TextExp("two")));
@@ -81,8 +98,8 @@ public class ExpVisitorTest {
 
 		// > t = {"one", "two", [1]="im lost"}
 		// > for k,v in pairs(t) do print(k,v) >> 1->"one", 2->"two"
-		e = new LocalEnvironment();
-		visitor = new ExpVisitor(e);
+		environment = new LocalEnvironment();
+		visitor = new ExpVisitor(environment);
 
 		fieldlist = new FieldList(new FieldExp(new TextExp("one")));
 		fieldlist.append(new FieldExp(new TextExp("two")));
@@ -94,8 +111,8 @@ public class ExpVisitorTest {
 
 		// > t = {[1]="im lost", "one", "two"}
 		// > for k,v in pairs(t) do print(k,v) >> 1->"one", 2->"two"
-		e = new LocalEnvironment();
-		visitor = new ExpVisitor(e);
+		environment = new LocalEnvironment();
+		visitor = new ExpVisitor(environment);
 
 		fieldlist = new FieldList(new FieldLRExp(new NumberExp(2.0), new TextExp("im lost")));
 		fieldlist.append(new FieldExp(new TextExp("two")));
@@ -109,37 +126,23 @@ public class ExpVisitorTest {
 
 	@Test
 	public void testVisitBinop() {
-		fail("Not yet implemented"); // TODO
+		Exp exp = new Binop(new TextExp("🐵"), Op.CONCAT, new TextExp("💣"));
+		exp.accept(visitor);
+		assertEquals("🐵💣", visitor.popLast());
 	}
 
 	@Test
 	public void testVisitUnop() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	@Test
-	public void testVisitPrefixExp() {
-		fail("Not yet implemented"); // TODO
+		Exp exp = new Unop(Op.LEN, new TextExp("a"));
+		exp.accept(visitor);
+		assertEquals(1.0, visitor.popLast());
 	}
 
 	@Test
 	public void testVisitPrefixExpVar() {
-		fail("Not yet implemented"); // TODO
+		environment.setLocal("abc", "123");
+		Exp exp = new PreExp(new PrefixExpVar(new Variable("abc")));
+		exp.accept(visitor);
+		assertEquals("123", visitor.popLast());
 	}
-
-	@Test
-	public void testVisit() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	@Test
-	public void testExpVisitor() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	@Test
-	public void testGetReturn() {
-		fail("Not yet implemented"); // TODO
-	}
-
 }
