@@ -4,6 +4,8 @@
 */
 package edu.tum.lua.parser;
 import java_cup.runtime.Symbol;
+import java.util.regex.Pattern;
+
 
 
 %%
@@ -52,6 +54,7 @@ CommentContent = ([^("]""="*"]")])*
 
 %state STRINGDOUBLE
 %state STRINGSINGLE
+%state MULTILINE
 
 %%
 
@@ -141,12 +144,19 @@ CommentContent = ([^("]""="*"]")])*
 					  return symbol(TEXT,
 					  string.toString()); }
 	[^\n\r\"\\]+ 	{ string.append( yytext() ); }
+	
 	"\\t" 			{ string.append("\t"); }
 	"\\n" 			{ string.append("\n"); }
 	"\\r" 			{ string.append("\r"); }
-	\\\\            { string.append("\\"); }
+	/* Every other escape sequence is not valid */
+	/*"\\." 			{ string.append(yytext()); }*/
 	\\\"			{ string.append("\""); }
+	"\n"			{ string.append("\n"); } // Multiline Strings
+	\\\\            { string.append("\\"); }
+	"\\"			{ string.append("");   }
+	
 }
+
 
 <STRINGSINGLE> {
 	"'" 			{ yybegin(YYINITIAL);
@@ -156,12 +166,14 @@ CommentContent = ([^("]""="*"]")])*
 	\\t 			{ string.append("\t"); }
 	\\n 			{ string.append("\n"); }
 	\\r 			{ string.append("\r"); }
+	/*"\\."			{ string.append(yytext()); }*/
 	\\\\            { string.append("\\"); }
+	"\\\n"			{ string.append("\n"); } // Multiline Strings
 	\\\'			{ string.append("\'"); }
 
 }
 
 /* error fallback */
 .|\n              {  /* throw new Error("Illegal character <"+ yytext()+">");*/
-		    error("Illegal character <"+ yytext()+">");
+		    error("Illegal character <"+ Pattern.quote(yytext())+">");
                   }

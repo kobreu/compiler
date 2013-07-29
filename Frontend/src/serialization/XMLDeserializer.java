@@ -13,6 +13,7 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
+import asttweaks.ParList;
 import edu.tum.lua.ast.Binop;
 import edu.tum.lua.ast.Block;
 import edu.tum.lua.ast.BooleanExp;
@@ -20,14 +21,14 @@ import edu.tum.lua.ast.Dots;
 import edu.tum.lua.ast.Exp;
 import edu.tum.lua.ast.FieldNameExp;
 import edu.tum.lua.ast.ForExp;
-import edu.tum.lua.ast.FuncBody;
+import edu.tum.lua.ast.FuncName;
 import edu.tum.lua.ast.FunctionDef;
+import edu.tum.lua.ast.FunctionExp;
 import edu.tum.lua.ast.LocalFuncDef;
 import edu.tum.lua.ast.Name;
 import edu.tum.lua.ast.NameList;
 import edu.tum.lua.ast.NumberExp;
 import edu.tum.lua.ast.Op;
-import edu.tum.lua.ast.ParList;
 import edu.tum.lua.ast.TextExp;
 import edu.tum.lua.ast.Unop;
 import edu.tum.lua.ast.Variable;
@@ -113,11 +114,22 @@ public class XMLDeserializer {
 						block);
 			} else if (ele.getName().equals("Name")) {
 				return new Name(ele.attributeValue("name"));
-			} else if (ele.getName().equals("ParList")) {
+			} else if (ele.getName().equals("FunctionDef")) {
+				FuncName funcName = (FuncName) deserialize((Element) ele.elements().get(0));
+				NameList args = (NameList) deserialize((Element) ele.elements()
+						.get(1));
+				Block block = (Block) deserialize((Element) ele.elements().get(2));
+				return new FunctionDef(funcName, args, Boolean.valueOf(ele.attributeValue("varargs")), block);
+			}else if (ele.getName().equals("LocalFuncDef")) {
 				NameList args = (NameList) deserialize((Element) ele.elements()
 						.get(0));
-
-				return new ParList(args, Boolean.valueOf(ele.attributeValue("varparlist")).booleanValue());
+				Block block = (Block) deserialize((Element) ele.elements().get(1));
+				return new LocalFuncDef(ele.attributeValue("name"), args, Boolean.valueOf(ele.attributeValue("varargs")), block);
+			} else if (ele.getName().equals("FunctionExp")) {
+				NameList args = (NameList) deserialize((Element) ele.elements()
+						.get(0));
+				Block block = (Block) deserialize((Element) ele.elements().get(1));
+				return new FunctionExp(args, Boolean.valueOf(ele.attributeValue("varargs")), block);
 			} else if (ele.getName().equals("TextExp")) {
 				return new TextExp(ele.attributeValue("text"));
 			} else if (ele.getName().equals("Variable")) {

@@ -1,6 +1,6 @@
 <Block>
 	<StatList>
-		<FunctionDef>
+		<FunctionDef varargs="false">
 				<FuncNameVarDotFuncName>
 					<Name name="bla" />
 					<FuncNameDDotVar>
@@ -8,15 +8,11 @@
 						<Name name="colon" />
 					</FuncNameDDotVar>
 				</FuncNameVarDotFuncName>
-			<FuncBody>
-				<ParList varparlist="false">
-					<NameList />
-			 	</ParList>
+				<NameList />
 			 	<Block>
 			 		<Null />
 			 		<Null />
 			 	</Block>
-			</FuncBody>
 		</FunctionDef>
 	</StatList>
 	<Null />

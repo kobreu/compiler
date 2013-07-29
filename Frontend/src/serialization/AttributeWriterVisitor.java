@@ -4,6 +4,7 @@ package serialization;
 import org.dom4j.Document;
 import org.dom4j.Element;
 
+import asttweaks.ParList;
 import edu.tum.lua.ast.Binop;
 import edu.tum.lua.ast.BooleanExp;
 import edu.tum.lua.ast.Dots;
@@ -11,11 +12,11 @@ import edu.tum.lua.ast.FieldNameExp;
 import edu.tum.lua.ast.FuncName;
 import edu.tum.lua.ast.FuncNameVar;
 import edu.tum.lua.ast.FunctionDef;
+import edu.tum.lua.ast.FunctionExp;
 import edu.tum.lua.ast.LocalFuncDef;
 import edu.tum.lua.ast.Name;
 import edu.tum.lua.ast.NumberExp;
 import edu.tum.lua.ast.Op;
-import edu.tum.lua.ast.ParList;
 import edu.tum.lua.ast.TextExp;
 import edu.tum.lua.ast.Unop;
 import edu.tum.lua.ast.Variable;
@@ -84,8 +85,25 @@ public class AttributeWriterVisitor extends VisitorAdaptor {
 	}
 	
 	@Override
+	public void visit(LocalFuncDef localFuncDef) {
+		addAttr("name", localFuncDef.name);
+		addAttr("varargs", String.valueOf(localFuncDef.varargs));
+	}
+	
+	@Override
 	public void visit(FieldNameExp fieldNameExp) {
 		addAttr("ident", fieldNameExp.ident);
+	}
+	
+	@Override
+	public void visit(FunctionDef functionDef) {
+		addAttr("varargs", String.valueOf(functionDef.varargs));
+	}
+	
+	@Override
+	public void visit(FunctionExp functionExp) {
+		addAttr("varargs", String.valueOf(functionExp.varargs));
+
 	}
 	
 	
@@ -97,11 +115,6 @@ public class AttributeWriterVisitor extends VisitorAdaptor {
 	@Override
 	public void visit(TextExp textExp) {
 		addAttr("text", textExp.text);
-	}
-	
-	@Override
-	public void visit(ParList parList) {
-		addAttr("varparlist", String.valueOf(parList.varparlist));
 	}
 	
 	@Override

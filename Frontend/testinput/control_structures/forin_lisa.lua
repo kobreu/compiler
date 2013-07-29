@@ -1,0 +1,1 @@
+for k in pairs(t) do a=a..k print(a) end
