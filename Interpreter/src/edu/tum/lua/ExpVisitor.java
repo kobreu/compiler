@@ -101,31 +101,24 @@ public class ExpVisitor extends VisitorAdaptor {
 		}
 	}
 
+	private List<Object> call(Object object, List<Object> args) {
+		Deque<Object> argsPrefix = findCallHandler(object);
+		LuaFunction f = (LuaFunction) argsPrefix.removeFirst();
+		argsPrefix.addAll(args);
+		return f.apply(argsPrefix);
+	}
+
+	private List<Object> call(Object object, ExpList args) {
+		ExpVisitor visitor = new ExpVisitor(environment);
+		args.accept(visitor);
+		return call(object, visitor.popAll());
+	}
+
 	@Override
 	public void visit(FuncCall call) {
 		call.preexp.accept(this);
 
-		Deque<Object> args = findCallHandler(evaluationStack.removeLast());
-		LuaFunction f = (LuaFunction) args.removeFirst();
-
-		ExpVisitor visitor = new ExpVisitor(environment);
-		Enumeration<Exp> iterator = call.explist.elements();
-
-		while (iterator.hasMoreElements()) {
-			iterator.nextElement().accept(visitor);
-
-			List<Object> explist = visitor.popAll();
-
-			if (iterator.hasMoreElements()) {
-				if (!explist.isEmpty()) {
-					args.addLast(explist.get(0));
-				}
-			} else {
-				args.addAll(explist);
-			}
-		}
-
-		List<Object> result = f.apply(args);
+		List<Object> result = call(evaluationStack.removeLast(), call.explist);
 
 		SyntaxNode callParent = call.getParent();
 
@@ -139,7 +132,7 @@ public class ExpVisitor extends VisitorAdaptor {
 			ExpList list = (ExpList) preExp.getParent();
 
 			if (list.elementAt(list.size() - 1) == preExp) {
-				evaluationStack.addAll(f.apply(args));
+				evaluationStack.addAll(result);
 				return;
 			}
 		}
@@ -275,8 +268,7 @@ public class ExpVisitor extends VisitorAdaptor {
 			}
 
 		default:
-			throw new LuaRuntimeException("attempt to call a "
-					+ LuaType.getTypeOf(object) + " value");
+			throw new LuaRuntimeException("attempt to call a " + LuaType.getTypeOf(object) + " value");
 		}
 	}
 }
