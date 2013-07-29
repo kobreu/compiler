@@ -16,11 +16,11 @@ import org.dom4j.io.SAXReader;
 import edu.tum.lua.ast.Binop;
 import edu.tum.lua.ast.Block;
 import edu.tum.lua.ast.BooleanExp;
-import edu.tum.lua.ast.Closure;
 import edu.tum.lua.ast.Dots;
 import edu.tum.lua.ast.Exp;
 import edu.tum.lua.ast.FieldNameExp;
 import edu.tum.lua.ast.ForExp;
+import edu.tum.lua.ast.FuncBody;
 import edu.tum.lua.ast.FunctionDef;
 import edu.tum.lua.ast.LocalFuncDef;
 import edu.tum.lua.ast.Name;
@@ -100,28 +100,9 @@ public class XMLDeserializer {
 			} else if (ele.getName().equals("BooleanExp")) {
 				BooleanExp bexp = new BooleanExp(Boolean.valueOf((ele.attributeValue("value"))).booleanValue());
 				return bexp;
-			} else if (ele.getName().equals("Closure")) {
-				NameList args = (NameList) deserialize((Element) ele.elements()
-						.get(0));
-				Block block = (Block) deserialize((Element) ele.elements().get(
-						1));
-				return new Closure(args, Boolean.valueOf(
-						ele.attributeValue("varargs")).booleanValue(), block);
-			} else if (ele.getName().equals("Dots")) {
-				return new Dots(ele.attributeValue("dots"));
 			} else if (ele.getName().equals("FieldNameExp")) {
 				Exp exp = (Exp) deserialize((Element) ele.elements().get(0));
 				return new FieldNameExp(ele.attributeValue("ident"), exp);
-			} else if (ele.getName().equals("FunctionDef")) {
-				NameList members = (NameList) deserialize((Element) ele
-						.elements().get(0));
-				NameList args = (NameList) deserialize((Element) ele.elements()
-						.get(1));
-				Block block = (Block) deserialize((Element) ele.elements().get(
-						2));
-				return new FunctionDef(ele.attributeValue("ident"), members,
-						args, Boolean.valueOf(ele.attributeValue("varargs"))
-								.booleanValue(), block);
 			} else if (ele.getName().equals("ForExp")) {
 				Exp ex1 = (Exp) deserialize((Element) ele.elements().get(0));
 				Exp ex2 = (Exp) deserialize((Element) ele.elements().get(1));
@@ -130,14 +111,6 @@ public class XMLDeserializer {
 						3));
 				return new ForExp(ele.attributeValue("ident"), ex1, ex2, ex3,
 						block);
-			} else if (ele.getName().equals("LocalFuncDef")) {
-				NameList args = (NameList) deserialize((Element) ele.elements()
-						.get(0));
-				Block block = (Block) deserialize((Element) ele.elements().get(
-						1));
-				return new LocalFuncDef(ele.attributeValue("ident"), args,
-						Boolean.valueOf(ele.attributeValue("varargs"))
-								.booleanValue(), block);
 			} else if (ele.getName().equals("Name")) {
 				return new Name(ele.attributeValue("name"));
 			} else if (ele.getName().equals("ParList")) {

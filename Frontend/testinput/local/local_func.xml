@@ -1,16 +1,18 @@
 <Block>
 	<StatList>
-		<!-- does not yet exist -->
-		<LocalDecl>
-			<NameList>
-				<Name name="a" />
-				<Name name="b" />
-			</NameList>
-			<ExpList>
-				<NumberExp number="1.0" />
-				<NumberExp number="2.0" />
-			</ExpList>
-		</LocalDecl>
+		<LocalFuncDef>
+			<Name name="a" />
+			<FuncBody>
+				<ParList varparlist="false">
+					<NameList />
+				</ParList>
+				<Block>
+			 		<Null />
+			 		<Null />
+			 	</Block>
+			</FuncBody>
+			
+		</LocalFuncDef>
 	</StatList>
 	<Null />
 </Block>

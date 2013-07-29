@@ -1,9 +1,13 @@
 <Block>
 	<StatList>
 		<FunctionDef>
-			<FuncNameVar>
-					<Name name="a" />
-			</FuncNameVar>
+				<FuncNameVarDotFuncName>
+					<Name name="bla" />
+					<FuncNameDDotVar>
+						<Name name="func" />
+						<Name name="colon" />
+					</FuncNameDDotVar>
+				</FuncNameVarDotFuncName>
 			<FuncBody>
 				<ParList varparlist="false">
 					<NameList />

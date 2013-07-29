@@ -1,1 +1,1 @@
-a=function ()end
+a=function()end
