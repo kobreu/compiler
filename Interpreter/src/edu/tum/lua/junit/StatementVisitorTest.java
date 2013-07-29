@@ -16,6 +16,7 @@ import edu.tum.lua.ast.Binop;
 import edu.tum.lua.ast.Block;
 import edu.tum.lua.ast.DoExp;
 import edu.tum.lua.ast.ExpList;
+import edu.tum.lua.ast.FunctionDef;
 import edu.tum.lua.ast.IfThenElse;
 import edu.tum.lua.ast.LastBreak;
 import edu.tum.lua.ast.LocalDecl;
@@ -79,15 +80,13 @@ public class StatementVisitorTest {
 		environment = new LocalEnvironment();
 		visitor = new StatementVisitor(environment);
 
-		// > a = 1+1 >> a=2
-		// > if a == 2 then b=1 else b=0 end >> b=1
-		// > if b != 1 then c=1 else c=0 end >> c=0
+		// > a = 1+1 >> a=2 // > if a == 2 then b=1 else b=0 end >> b=1
+		// > if b!= 1 then c=1 else c=0 end >> c=0
 
 		Asm asm = new Asm(new VarList(new Variable("a")), new ExpList(new Binop(new NumberExp(1.0), Op.ADD,
 				new NumberExp(1.0))));
 
-		// > a = 1+1
-		assertEquals(null, environment.get("a"));
+		// > a = 1+1 assertEquals(null, environment.get("a"));
 		visitor.visit(asm);
 		assertEquals(2.0, environment.get("a"));
 
@@ -166,8 +165,7 @@ public class StatementVisitorTest {
 
 		Block block1, block2;
 
-		// Normal iteration
-		setUp();
+		// Normal iteration setUp();
 		block1 = ParserUtil.loadString("b=0");
 		block2 = ParserUtil.loadString("for a = 1,3,0.5 do b=a end");
 
@@ -200,9 +198,7 @@ public class StatementVisitorTest {
 
 		// Do not change
 
-		// Do not change "a"
-		// > a = 1
-		// > for a = 1,3 do print(a) end
+		// Do not change "a" // > a = 1 // > for a = 1,3 do print(a) end
 		// > print(a) >> 1
 		block1 = ParserUtil.loadString("a=1");
 		block2 = ParserUtil.loadString("for a = 1,3,0.5 do b=a end");
@@ -240,15 +236,29 @@ public class StatementVisitorTest {
 		LuaInterpreter.eval(block, environment);
 		assertEquals(LuaType.TABLE, LuaType.getTypeOf(environment.get("a")));
 
-		block = ParserUtil.loadString("function a.foo() end'");
+		// block = ParserUtil.loadString("function a.foo() end'");
 
+		FunctionDef foo = new FunctionDef("foo", new NameList(new Name("a")), new NameList(), false, new Block(
+				new StatList(), new LastBreak()));
+		block = new Block(new StatList(foo), new LastBreak());
 		LuaInterpreter.eval(block, environment);
+
 		assertEquals(LuaType.FUNCTION, LuaType.getTypeOf(((LuaTable) environment.get("a")).get("foo")));
 	}
 
 	@Test
-	public void testVisitLocalFuncDef() {
-		fail("Not yet implemented"); // TODO
+	public void testVisitLocalFuncDef() throws Exception {
+		// Block block =
+		// ParserUtil.loadString("x=0 local function foo() x=1 end foo()");
+		Block block = ParserUtil.loadString("x=0");
+		assertEquals(null, environment.get("x"));
+		LuaInterpreter.eval(block, environment);
+		assertEquals(0.0, environment.get("x"));
+		Asm code = new Asm(new VarList(new Variable("x")), new ExpList(new NumberExp(1.0)));
+		Block body = new Block(new StatList(code), new LastBreak());
+
+		fail("Not yet implemented");
+		// TODO
 	}
 
 	@Test

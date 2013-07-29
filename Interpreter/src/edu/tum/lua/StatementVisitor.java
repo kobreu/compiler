@@ -17,6 +17,7 @@ import edu.tum.lua.ast.IfThenElse;
 import edu.tum.lua.ast.LegacyAdapter;
 import edu.tum.lua.ast.LocalDecl;
 import edu.tum.lua.ast.LocalFuncDef;
+import edu.tum.lua.ast.Name;
 import edu.tum.lua.ast.NameList;
 import edu.tum.lua.ast.RepeatUntil;
 import edu.tum.lua.ast.VisitorAdaptor;
@@ -133,12 +134,15 @@ public class StatementVisitor extends VisitorAdaptor {
 	}
 
 	private LuaTable getFunctionLocation(NameList list) {
-		Enumeration<String> names = list.elements();
+		Enumeration<Name> names = list.elements();
+		if (!names.hasMoreElements()) {
+			return environment.getGlobalEnvironment();
+		}
 
-		LuaTable current = (LuaTable) environment.get(names.nextElement());
+		LuaTable current = (LuaTable) environment.get(names.nextElement().name);
 
 		while (names.hasMoreElements()) {
-			current = current.getLuaTable(names.nextElement());
+			current = current.getLuaTable(names.nextElement().name);
 		}
 
 		return current;
