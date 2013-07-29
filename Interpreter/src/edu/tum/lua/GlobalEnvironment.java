@@ -53,6 +53,11 @@ import edu.tum.lua.stdlib.math.Sinh;
 import edu.tum.lua.stdlib.math.Sqrt;
 import edu.tum.lua.stdlib.math.Tan;
 import edu.tum.lua.stdlib.math.Tanh;
+import edu.tum.lua.stdlib.os.Clock;
+import edu.tum.lua.stdlib.os.Date;
+import edu.tum.lua.stdlib.os.Difftime;
+import edu.tum.lua.stdlib.os.Rename;
+import edu.tum.lua.stdlib.os.Time;
 import edu.tum.lua.stdlib.string.Byte;
 import edu.tum.lua.stdlib.string.Char;
 import edu.tum.lua.stdlib.string.Find;
@@ -183,16 +188,16 @@ public class GlobalEnvironment extends LuaTable {
 		LuaTable os = new LuaTable();
 		LuaTable debug = new LuaTable();
 
-		os.set("clock", new NotImplementedFunction());
-		os.set("date", new NotImplementedFunction());
-		os.set("difftime", new NotImplementedFunction());
+		os.set("clock", new Clock());
+		os.set("date", new Date());
+		os.set("difftime", new Difftime());
 		os.set("execute", new NotImplementedFunction());
 		os.set("exit", new NotImplementedFunction());
 		os.set("getenv", new NotImplementedFunction());
-		os.set("remove", new NotImplementedFunction());
-		os.set("rename", new NotImplementedFunction());
+		os.set("remove", new edu.tum.lua.stdlib.os.Remove());
+		os.set("rename", new Rename());
 		os.set("setlocale", new NotImplementedFunction());
-		os.set("time", new NotImplementedFunction());
+		os.set("time", new Time());
 		os.set("tmpname", new NotImplementedFunction());
 
 		set("coroutine", coroutine);
