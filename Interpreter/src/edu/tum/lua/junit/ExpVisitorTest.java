@@ -1,7 +1,6 @@
 package edu.tum.lua.junit;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 import java.util.Arrays;
 
@@ -11,7 +10,9 @@ import org.junit.Test;
 import edu.tum.lua.ExpVisitor;
 import edu.tum.lua.LocalEnvironment;
 import edu.tum.lua.ast.Binop;
+import edu.tum.lua.ast.Block;
 import edu.tum.lua.ast.BooleanExp;
+import edu.tum.lua.ast.Closure;
 import edu.tum.lua.ast.Dots;
 import edu.tum.lua.ast.Exp;
 import edu.tum.lua.ast.ExpList;
@@ -19,16 +20,20 @@ import edu.tum.lua.ast.FieldExp;
 import edu.tum.lua.ast.FieldLRExp;
 import edu.tum.lua.ast.FieldList;
 import edu.tum.lua.ast.FieldNameExp;
+import edu.tum.lua.ast.LastReturn;
+import edu.tum.lua.ast.NameList;
 import edu.tum.lua.ast.Nil;
 import edu.tum.lua.ast.NumberExp;
 import edu.tum.lua.ast.Op;
 import edu.tum.lua.ast.PreExp;
 import edu.tum.lua.ast.PrefixExpVar;
+import edu.tum.lua.ast.StatList;
 import edu.tum.lua.ast.TableConstructor;
 import edu.tum.lua.ast.TableConstructorExp;
 import edu.tum.lua.ast.TextExp;
 import edu.tum.lua.ast.Unop;
 import edu.tum.lua.ast.Variable;
+import edu.tum.lua.types.LuaFunction;
 import edu.tum.lua.types.LuaTable;
 
 public class ExpVisitorTest {
@@ -86,7 +91,14 @@ public class ExpVisitorTest {
 
 	@Test
 	public void testVisitClosure() {
-		fail("Not yet implemented"); // TODO
+		Exp exp = new Closure(new NameList(), true, new Block(new StatList(), new LastReturn(new ExpList(
+				new Dots("...")))));
+
+		exp.accept(visitor);
+		LuaFunction function = (LuaFunction) visitor.popLast();
+
+		assertEquals(java.util.Collections.singletonList("1.0"), function.apply("1.0"));
+
 	}
 
 	@Test

@@ -25,6 +25,13 @@ public class LuaFunctionInterpreted implements LuaFunction {
 	private final Block block;
 	private final boolean vararg;
 
+	public LuaFunctionInterpreted(List<String> args, boolean vararg, Block block, LocalEnvironment e) {
+		this.argumentNames = args;
+		this.vararg = vararg;
+		this.block = block;
+		this.environment = e;
+	}
+
 	public LuaFunctionInterpreted(FunctionDef node, LocalEnvironment e) {
 		environment = e;
 		argumentNames = LegacyAdapter.convert(node.args);
@@ -49,8 +56,9 @@ public class LuaFunctionInterpreted implements LuaFunction {
 
 		StatementVisitor visitor;
 
-		if (vararg && arguments.size() > argumentNames.size()) {
-			visitor = new StatementVisitor(currentEnvironment, arguments.subList(arguments.size(), arguments.size()));
+		if (vararg) {
+			visitor = new StatementVisitor(currentEnvironment,
+					arguments.subList(argumentNames.size(), arguments.size()));
 		} else {
 			visitor = new StatementVisitor(currentEnvironment);
 		}
@@ -66,13 +74,13 @@ public class LuaFunctionInterpreted implements LuaFunction {
 		/* LastReturn */
 		LocalEnvironment lastEnvironment = visitor.getEnvironment();
 		ExpVisitor visitor2;
-		if (vararg && arguments.size() > argumentNames.size()) {
-			visitor2 = new ExpVisitor(lastEnvironment, arguments.subList(arguments.size(), arguments.size()));
+		if (vararg) {
+			visitor2 = new ExpVisitor(lastEnvironment, arguments.subList(argumentNames.size(), arguments.size()));
 		} else {
 			visitor2 = new ExpVisitor(lastEnvironment, null);
 		}
 
-		((LastReturn) block.last).accept(visitor2);
+		((LastReturn) block.last).explist.accept(visitor2);
 
 		return visitor2.popAll();
 	}

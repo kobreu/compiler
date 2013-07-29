@@ -34,6 +34,7 @@ import edu.tum.lua.ast.VisitorAdaptor;
 import edu.tum.lua.operator.Operator;
 import edu.tum.lua.operator.OperatorRegistry;
 import edu.tum.lua.types.LuaFunction;
+import edu.tum.lua.types.LuaFunctionInterpreted;
 import edu.tum.lua.types.LuaTable;
 import edu.tum.lua.types.LuaType;
 
@@ -88,7 +89,9 @@ public class ExpVisitor extends VisitorAdaptor {
 
 	@Override
 	public void visit(Closure exp) {
-		throw new RuntimeException("Not yet implemented");
+		LuaFunction function = new LuaFunctionInterpreted(LegacyAdapter.convert(exp.args), exp.varargs, exp.block,
+				environment);
+		evaluationStack.add(function);
 	}
 
 	@Override
