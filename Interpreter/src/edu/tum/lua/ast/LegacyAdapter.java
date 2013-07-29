@@ -11,8 +11,8 @@ public final class LegacyAdapter {
 		return convert(Enum);
 	}
 
-	public static List<String> convert(NameList nameList) {
-		Enumeration<String> Enum = nameList.elements();
+	public static List<Name> convert(NameList nameList) {
+		Enumeration<Name> Enum = nameList.elements();
 		return convert(Enum);
 	}
 

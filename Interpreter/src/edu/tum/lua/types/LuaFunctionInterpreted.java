@@ -3,6 +3,7 @@ package edu.tum.lua.types;
 import static edu.tum.lua.ast.LegacyAdapter.convert;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import edu.tum.lua.GlobalEnvironment;
@@ -11,6 +12,7 @@ import edu.tum.lua.LuaInterpreter;
 import edu.tum.lua.ast.Block;
 import edu.tum.lua.ast.FunctionDef;
 import edu.tum.lua.ast.LocalFuncDef;
+import edu.tum.lua.ast.Name;
 
 public class LuaFunctionInterpreted implements LuaFunction {
 
@@ -21,14 +23,22 @@ public class LuaFunctionInterpreted implements LuaFunction {
 
 	public LuaFunctionInterpreted(FunctionDef node, LocalEnvironment e) {
 		environment = e;
-		argumentNames = convert(node.args);
+		argumentNames = new LinkedList<String>();
+		List<Name> l = convert(node.args);
+		for (Name argName : l) {
+			argumentNames.add(argName.name);
+		}
 		block = node.block;
 		varargs = node.varargs;
 	}
 
 	public LuaFunctionInterpreted(LocalFuncDef node, LocalEnvironment e) {
 		environment = e;
-		argumentNames = convert(node.args);
+		argumentNames = new LinkedList<String>();
+		List<Name> l = convert(node.args);
+		for (Name argName : l) {
+			argumentNames.add(argName.name);
+		}
 		block = node.block;
 		varargs = node.varargs;
 	}

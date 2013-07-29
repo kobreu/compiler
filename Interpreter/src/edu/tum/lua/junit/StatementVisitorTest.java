@@ -1,6 +1,7 @@
 package edu.tum.lua.junit;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
 
 import org.junit.Before;
@@ -13,8 +14,13 @@ import edu.tum.lua.StatementVisitor;
 import edu.tum.lua.ast.Asm;
 import edu.tum.lua.ast.Binop;
 import edu.tum.lua.ast.Block;
+import edu.tum.lua.ast.DoExp;
 import edu.tum.lua.ast.ExpList;
 import edu.tum.lua.ast.IfThenElse;
+import edu.tum.lua.ast.LastBreak;
+import edu.tum.lua.ast.LocalDecl;
+import edu.tum.lua.ast.Name;
+import edu.tum.lua.ast.NameList;
 import edu.tum.lua.ast.NumberExp;
 import edu.tum.lua.ast.Op;
 import edu.tum.lua.ast.PreExp;
@@ -98,7 +104,7 @@ public class StatementVisitorTest {
 
 		// > if a == 2 then b=1 else b=0 end >> b=1
 
-		Block block2 = ParserUtil.loadString("if b!=1 then c=1 else c=0 end");
+		Block block2 = ParserUtil.loadString("if b~=1 then c=1 else c=0 end");
 
 		assertEquals(null, environment.get("c"));
 		LuaInterpreter.eval(block2, environment);
@@ -107,8 +113,13 @@ public class StatementVisitorTest {
 	}
 
 	@Test
-	public void testVisitDoExp() {
-		fail("Not yet implemented"); // TODO
+	public void testVisitDoExp() throws Exception {
+		Block block = ParserUtil.loadString("a=1");
+		DoExp doExp = new DoExp(block);
+
+		assertEquals(null, environment.get("a"));
+		visitor.visit(doExp);
+		assertEquals(1.0, environment.get("a"));
 	}
 
 	@Test
@@ -143,11 +154,10 @@ public class StatementVisitorTest {
 
 	@Test
 	public void testVisitIfThenElse() throws Exception {
-		Block block = ParserUtil.loadString("local a=true if not a then b=2 elseif not a then b=3 else b=1 end");
-
+		Block block = ParserUtil.loadString("a=false if a then b=2 elseif a then b=3 else b=1 end");
 		assertEquals(null, environment.get("a"));
 		LuaInterpreter.eval(block, environment);
-		assertEquals(null, environment.get("a"));
+		assertFalse((boolean) environment.get("a"));
 		assertEquals(1.0, environment.get("b"));
 	}
 
@@ -162,11 +172,31 @@ public class StatementVisitorTest {
 		block2 = ParserUtil.loadString("for a = 1,3,0.5 do b=a end");
 
 		LuaInterpreter.eval(block1, environment);
+		assertEquals(0.0, environment.get("b"));
+		LuaInterpreter.eval(block2, environment);
 		assertEquals(3.0, environment.get("b"));
 
 		// Negative iteration
 
+		setUp();
+		block1 = ParserUtil.loadString("b=0");
+		block2 = ParserUtil.loadString("for a = 3,1,-0.5 do b=a end");
+
+		LuaInterpreter.eval(block1, environment);
+		assertEquals(0.0, environment.get("b"));
+		LuaInterpreter.eval(block2, environment);
+		assertEquals(1.0, environment.get("b"));
+
 		// No step given
+
+		setUp();
+		block1 = ParserUtil.loadString("b=0");
+		block2 = ParserUtil.loadString("for a = 1,3 do b=b+1 end");
+
+		LuaInterpreter.eval(block1, environment);
+		assertEquals(0.0, environment.get("b"));
+		LuaInterpreter.eval(block2, environment);
+		assertEquals(3.0, environment.get("b"));
 
 		// Do not change
 
@@ -222,8 +252,19 @@ public class StatementVisitorTest {
 	}
 
 	@Test
-	public void testVisitLocalDecl() {
-		fail("Not yet implemented"); // TODO
+	public void testVisitLocalDecl() throws Exception {
+		// Block block =ParserUtil.loadString("local a = 1 x = a+1");
+		LocalDecl l = new LocalDecl(new NameList(new Name("a")), new ExpList(new NumberExp(1.0)));
+		Asm asm = new Asm(new VarList(new Variable("x")), new ExpList(new Binop(new NumberExp(1.0), Op.ADD, new PreExp(
+				new PrefixExpVar(new Variable("a"))))));
+		StatList statList = new StatList(l);
+		statList.append(asm);
+		Block block = new Block(statList, new LastBreak());
+		assertEquals(null, environment.get("a"));
+		LuaInterpreter.eval(block, environment);
+		assertEquals(null, environment.get("a"));
+		assertEquals(2.0, environment.get("x"));
+
 	}
 
 }

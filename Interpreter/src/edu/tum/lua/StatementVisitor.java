@@ -3,6 +3,7 @@ package edu.tum.lua;
 import static edu.tum.lua.LuaInterpreter.eval;
 
 import java.util.Enumeration;
+import java.util.LinkedList;
 import java.util.List;
 
 import edu.tum.lua.ast.Asm;
@@ -17,6 +18,7 @@ import edu.tum.lua.ast.IfThenElse;
 import edu.tum.lua.ast.LegacyAdapter;
 import edu.tum.lua.ast.LocalDecl;
 import edu.tum.lua.ast.LocalFuncDef;
+import edu.tum.lua.ast.Name;
 import edu.tum.lua.ast.NameList;
 import edu.tum.lua.ast.RepeatUntil;
 import edu.tum.lua.ast.VisitorAdaptor;
@@ -140,14 +142,16 @@ public class StatementVisitor extends VisitorAdaptor {
 	@Override
 	public void visit(LocalDecl stmt) {
 		environment = new LocalEnvironment(environment);
-		List<String> varlist = LegacyAdapter.convert(stmt.namelist);
-
-		for (String localVar : varlist) {
-			environment.setLocal(localVar, null);
+		List<Name> varlist = LegacyAdapter.convert(stmt.namelist);
+		LinkedList<String> varliststring = new LinkedList<String>();
+		for (Name localVar : varlist) {
+			environment.setLocal(localVar.name, null);
+			varliststring.add(localVar.name);
 		}
 
 		List<Exp> explist = LegacyAdapter.convert(stmt.explist);
-		environment.assign(varlist, explist);
+
+		environment.assign(varliststring, explist);
 	}
 
 	@Override
