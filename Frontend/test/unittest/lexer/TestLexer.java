@@ -163,12 +163,12 @@ public class TestLexer {
 		
 		file = "testinput/grammar/funcname_colon.lua";
 		files.add(file);
-		symbolsForCase = new Integer[] { sym.FUNC, sym.WS, sym.ID, sym.WS, sym.DDOT, sym.WS, sym.ID, sym.WS, sym.LPAREN, sym.RPAREN, sym.WS, sym.END };
+		symbolsForCase = new Integer[] { sym.FUNC, sym.WS, sym.ID, sym.DOT, sym.ID, sym.DDOT, sym.ID, sym.WS, sym.LPAREN, sym.RPAREN, sym.WS, sym.END };
 		symbols.put(file, Arrays.asList(symbolsForCase));
 		
 		file = "testinput/grammar/function_funcbody.lua";
 		files.add(file);
-		symbolsForCase = new Integer[] { sym.ID, sym.ASM, sym.FUNC, sym.WS, sym.LPAREN, sym.RPAREN, sym.END };
+		symbolsForCase = new Integer[] { sym.ID, sym.ASM, sym.FUNC, sym.LPAREN, sym.RPAREN, sym.END };
 		symbols.put(file, Arrays.asList(symbolsForCase));
 		
 		file = "testinput/grammar/functioncall_prefixexp_colon.lua";
