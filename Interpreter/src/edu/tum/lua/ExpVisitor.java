@@ -125,7 +125,7 @@ public class ExpVisitor extends VisitorAdaptor {
 		}
 	}
 
-	private List<Object> call(Object object, List<Object> args) {
+	public static List<Object> call(Object object, List<Object> args) {
 		Deque<Object> argsPrefix = findCallHandler(object);
 		LuaFunction f = (LuaFunction) argsPrefix.removeFirst();
 		argsPrefix.addAll(args);
@@ -269,7 +269,7 @@ public class ExpVisitor extends VisitorAdaptor {
 		evaluationStack.addLast(environment.get(variable.var));
 	}
 
-	private Deque<Object> findCallHandler(Object object) {
+	static private Deque<Object> findCallHandler(Object object) {
 		Deque<Object> result;
 
 		switch (LuaType.getTypeOf(object)) {
@@ -292,7 +292,8 @@ public class ExpVisitor extends VisitorAdaptor {
 			}
 
 		default:
-			throw new LuaRuntimeException("attempt to call a " + LuaType.getTypeOf(object) + " value");
+			throw new LuaRuntimeException("attempt to call a "
+					+ LuaType.getTypeOf(object) + " value");
 		}
 	}
 }

@@ -3,6 +3,7 @@ package edu.tum.lua.stdlib;
 import static edu.tum.lua.Preconditions.checkArguments;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
@@ -42,7 +43,7 @@ public class Next extends LuaFunctionNative {
 
 			// With nil in an empty table, next returns nil.
 			if (!iter.hasNext()) {
-				return null;
+				return Collections.singletonList(null);
 			}
 			nextEntry = iter.next();
 			return Arrays.asList(nextEntry.getKey(), nextEntry.getValue());
@@ -56,7 +57,7 @@ public class Next extends LuaFunctionNative {
 			if (nextEntry.getKey().equals(index)) {
 				// When called with the last index, next returns nil.
 				if (!iter.hasNext()) {
-					return null;
+					return Collections.singletonList(null);
 				}
 				nextEntry = iter.next();
 				return Arrays.asList(nextEntry.getKey(), nextEntry.getValue());

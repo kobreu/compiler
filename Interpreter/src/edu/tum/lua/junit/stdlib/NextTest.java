@@ -3,6 +3,7 @@ package edu.tum.lua.junit.stdlib;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 import org.junit.Test;
 
@@ -24,7 +25,7 @@ public class NextTest {
 		next = new Next();
 
 		// > next({}) >> nil
-		assertEquals(null, next.apply(new LuaTable()));
+		assertEquals(Collections.singletonList(null), next.apply(new LuaTable()));
 
 		// > next({[1] = 4}) >> 1, 4
 		testTable = new LuaTable();
@@ -35,7 +36,7 @@ public class NextTest {
 		assertEquals(Arrays.asList(1.0, 4.0), next.apply(testTable, null));
 
 		// > next({[1] = 4}, 1) >> nil
-		assertEquals(null, next.apply(testTable, 1.0));
+		assertEquals(Collections.singletonList(null), next.apply(testTable, 1.0));
 
 		// > next({[1] = 4, [2] = 5}, nil) >> 1,4 or 2,5
 		// TODO
