@@ -4,6 +4,7 @@ import static edu.tum.lua.Preconditions.checkArguments;
 
 import java.io.EOFException;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -21,8 +22,13 @@ public class FileRead extends LuaFunctionNative {
 	public List<Object> apply(List<Object> arguments) {
 		checkArguments("read", arguments, types);
 		file = (LuaUserData) arguments.get(0);
+
+		if (file.fm.equals("a") || file.fm.equals("w")) {
+			return Arrays.asList((Object) null, "Bad file descriptor");
+		}
+
 		if (arguments.size() < 2) {
-			return Collections.singletonList((Object) file.readLine());
+			return Collections.singletonList((Object) readNextLine());
 		}
 		Object arg = arguments.get(1);
 		switch (LuaType.getTypeOf(arg)) {
@@ -33,7 +39,7 @@ public class FileRead extends LuaFunctionNative {
 			case "*a":
 				return Collections.singletonList((Object) readAll());
 			case "*l":
-				return Collections.singletonList((Object) file.readLine());
+				return Collections.singletonList((Object) readNextLine());
 			default:
 				throw new LuaBadArgumentException(1, "read", "invalid option");
 			}
@@ -48,9 +54,9 @@ public class FileRead extends LuaFunctionNative {
 		long fileLength = -1;
 		String fileContent = null;
 		try {
-			fileLength = file.length();
+			fileLength = file.raf.length();
 			byte[] fileBytes = new byte[(int) fileLength];
-			file.read(fileBytes);
+			file.raf.read(fileBytes);
 			fileContent = new String(fileBytes);
 		} catch (EOFException eof) {
 			return "";
@@ -63,7 +69,7 @@ public class FileRead extends LuaFunctionNative {
 	private Double readNumber() {
 		long pos = -1;
 		try {
-			pos = file.getFilePointer();
+			pos = file.raf.getFilePointer();
 		} catch (IOException e) {
 			return null;
 		}
@@ -78,11 +84,11 @@ public class FileRead extends LuaFunctionNative {
 			pos = pos + s.length();
 		}
 
-			try {
-				file.seek(pos);
-			} catch (IOException e) {
-				return null;
-			}
+		try {
+			file.raf.seek(pos);
+		} catch (IOException e) {
+			return null;
+		}
 
 		if (s.isEmpty()) {
 			return null;
@@ -96,7 +102,7 @@ public class FileRead extends LuaFunctionNative {
 		String chars = "";
 		for (int i = 0; i < numOfChars; i++) {
 			try {
-				int next = file.read();
+				int next = file.raf.read();
 				if (next == -1) {
 					return null;
 				}
@@ -107,4 +113,16 @@ public class FileRead extends LuaFunctionNative {
 		}
 		return chars;
 	}
+
+	private String readNextLine() {
+		String line = "";
+		try {
+			line = file.raf.readLine();
+		} catch (EOFException eof) {
+			return null;
+		} catch (IOException e) {
+			return null;
 		}
+		return line;
+	}
+}
