@@ -7,7 +7,6 @@ import java.util.List;
 
 import edu.tum.lua.ast.Binop;
 import edu.tum.lua.ast.BooleanExp;
-import edu.tum.lua.ast.Closure;
 import edu.tum.lua.ast.Dots;
 import edu.tum.lua.ast.Exp;
 import edu.tum.lua.ast.ExpList;
@@ -16,6 +15,7 @@ import edu.tum.lua.ast.FieldExp;
 import edu.tum.lua.ast.FieldLRExp;
 import edu.tum.lua.ast.FieldNameExp;
 import edu.tum.lua.ast.FuncCall;
+import edu.tum.lua.ast.FunctionExp;
 import edu.tum.lua.ast.LegacyAdapter;
 import edu.tum.lua.ast.Nil;
 import edu.tum.lua.ast.NumberExp;
@@ -88,7 +88,7 @@ public class ExpVisitor extends VisitorAdaptor {
 	}
 
 	@Override
-	public void visit(Closure exp) {
+	public void visit(FunctionExp exp) {
 		LuaFunction function = new LuaFunctionInterpreted(LegacyAdapter.convert(exp.args), exp.varargs, exp.block,
 				environment);
 		evaluationStack.add(function);
@@ -292,8 +292,7 @@ public class ExpVisitor extends VisitorAdaptor {
 			}
 
 		default:
-			throw new LuaRuntimeException("attempt to call a "
-					+ LuaType.getTypeOf(object) + " value");
+			throw new LuaRuntimeException("attempt to call a " + LuaType.getTypeOf(object) + " value");
 		}
 	}
 }

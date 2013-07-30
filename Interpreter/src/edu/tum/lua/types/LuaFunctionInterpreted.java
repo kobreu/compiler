@@ -8,7 +8,6 @@ import edu.tum.lua.GlobalEnvironment;
 import edu.tum.lua.LocalEnvironment;
 import edu.tum.lua.LuaRuntimeException;
 import edu.tum.lua.ast.Block;
-import edu.tum.lua.ast.FunctionDef;
 import edu.tum.lua.ast.LegacyAdapter;
 import edu.tum.lua.ast.LocalFuncDef;
 
@@ -24,13 +23,6 @@ public class LuaFunctionInterpreted implements LuaFunction {
 		this.vararg = vararg;
 		this.block = block;
 		this.environment = e;
-	}
-
-	public LuaFunctionInterpreted(FunctionDef node, LocalEnvironment e) {
-		environment = e;
-		argumentNames = LegacyAdapter.convert(node.args);
-		block = node.block;
-		vararg = node.varargs;
 	}
 
 	public LuaFunctionInterpreted(LocalFuncDef node, LocalEnvironment e) {

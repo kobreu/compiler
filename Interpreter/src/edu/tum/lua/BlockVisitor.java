@@ -15,7 +15,6 @@ import edu.tum.lua.ast.ExpList;
 import edu.tum.lua.ast.ForExp;
 import edu.tum.lua.ast.ForIn;
 import edu.tum.lua.ast.FuncCallStmt;
-import edu.tum.lua.ast.FunctionDef;
 import edu.tum.lua.ast.IfThenElse;
 import edu.tum.lua.ast.LastBreak;
 import edu.tum.lua.ast.LastReturn;
@@ -71,6 +70,8 @@ public class BlockVisitor extends VisitorAdaptor {
 		while (identifierIterator.hasNext()) {
 			String identifier = identifierIterator.next();
 			Object value = valuesIterator.hasNext() ? valuesIterator.next() : null;
+
+			// TODO: VAR TAB INDEX
 
 			if (local) {
 				environment.setLocal(identifier, value);
@@ -220,7 +221,6 @@ public class BlockVisitor extends VisitorAdaptor {
 	}
 
 	private LuaTable getFunctionLocation(NameList list) {
-		@SuppressWarnings("unchecked")
 		Enumeration<Name> names = list.elements();
 		if (!names.hasMoreElements()) {
 			return environment.getGlobalEnvironment();
@@ -233,13 +233,6 @@ public class BlockVisitor extends VisitorAdaptor {
 		}
 
 		return current;
-	}
-
-	@Override
-	public void visit(FunctionDef stmt) {
-		LuaFunction function = new LuaFunctionInterpreted(stmt, environment);
-		LuaTable target = getFunctionLocation(stmt.members);
-		target.set(stmt.ident, function);
 	}
 
 	@Override
@@ -262,9 +255,9 @@ public class BlockVisitor extends VisitorAdaptor {
 		LocalEnvironment oldLocalEnvironment = environment;
 
 		/* Enable recursive calls */
-		oldLocalEnvironment.setLocal(stmt.ident, null);
+		oldLocalEnvironment.setLocal(stmt.name, null);
 		LuaFunction function = new LuaFunctionInterpreted(stmt, oldLocalEnvironment);
-		oldLocalEnvironment.setLocal(stmt.ident, function);
+		oldLocalEnvironment.setLocal(stmt.name, function);
 
 		environment = new LocalEnvironment(oldLocalEnvironment);
 	}

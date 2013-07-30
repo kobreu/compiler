@@ -15,7 +15,7 @@ import edu.tum.lua.ast.Binop;
 import edu.tum.lua.ast.Block;
 import edu.tum.lua.ast.DoExp;
 import edu.tum.lua.ast.ExpList;
-import edu.tum.lua.ast.FunctionDef;
+import edu.tum.lua.ast.FunctionExp;
 import edu.tum.lua.ast.IfThenElse;
 import edu.tum.lua.ast.LastBreak;
 import edu.tum.lua.ast.LocalDecl;
@@ -270,9 +270,9 @@ public class BlockVisitorTest {
 
 		// block = ParserUtil.loadString("function a.foo() end'");
 
-		FunctionDef foo = new FunctionDef("foo", new NameList(new Name("a")), new NameList(), false, new Block(
-				new StatList(), new LastBreak()));
-		block = new Block(new StatList(foo), new LastBreak());
+		FunctionExp foo = new FunctionExp(new NameList(new Name("a")), false,
+				new Block(new StatList(), new LastBreak()));
+		block = new Block(new StatList(new Asm(new VarList(new Variable("a.foo")), new ExpList(foo))), new LastBreak());
 		LuaInterpreter.eval(block, environment);
 
 		assertEquals(LuaType.FUNCTION, LuaType.getTypeOf(((LuaTable) environment.get("a")).get("foo")));

@@ -6,8 +6,6 @@ import java.util.List;
 import edu.tum.lua.LocalEnvironment;
 import edu.tum.lua.LuaRuntimeException;
 import edu.tum.lua.Preconditions;
-import edu.tum.lua.ast.FunctionDef;
-import edu.tum.lua.ast.Parser;
 import edu.tum.lua.types.LuaFunctionInterpreted;
 import edu.tum.lua.types.LuaFunctionNative;
 import edu.tum.lua.types.LuaType;
@@ -20,10 +18,7 @@ public class LoadString extends LuaFunctionNative {
 	public List<Object> apply(List<Object> arguments) {
 		Preconditions.checkArguments("loadstring", arguments, expectedTypes);
 		try {
-			FunctionDef node = Parser.parseString(arguments.get(0).toString());
-			// TODO verify the behaviour, maybe need to chain the current local
-			// environment
-			LuaFunctionInterpreted function = new LuaFunctionInterpreted(node, new LocalEnvironment());
+			LuaFunctionInterpreted function = new LuaFunctionInterpreted(null, new LocalEnvironment());
 			return Collections.singletonList((Object) function);
 		} catch (LuaRuntimeException e) {
 			return Collections.singletonList(null);

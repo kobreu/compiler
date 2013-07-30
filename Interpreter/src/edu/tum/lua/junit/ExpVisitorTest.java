@@ -12,7 +12,6 @@ import edu.tum.lua.LocalEnvironment;
 import edu.tum.lua.ast.Binop;
 import edu.tum.lua.ast.Block;
 import edu.tum.lua.ast.BooleanExp;
-import edu.tum.lua.ast.Closure;
 import edu.tum.lua.ast.Dots;
 import edu.tum.lua.ast.Exp;
 import edu.tum.lua.ast.ExpList;
@@ -20,6 +19,7 @@ import edu.tum.lua.ast.FieldExp;
 import edu.tum.lua.ast.FieldLRExp;
 import edu.tum.lua.ast.FieldList;
 import edu.tum.lua.ast.FieldNameExp;
+import edu.tum.lua.ast.FunctionExp;
 import edu.tum.lua.ast.LastReturn;
 import edu.tum.lua.ast.NameList;
 import edu.tum.lua.ast.Nil;
@@ -79,7 +79,7 @@ public class ExpVisitorTest {
 	public void testVisitDots() {
 		LuaTable t = new LuaTable();
 		visitor = new ExpVisitor(environment, Arrays.asList("a", 1.0, t));
-		ExpList exp = new ExpList(new Dots("..."));
+		ExpList exp = new ExpList(new Dots());
 
 		exp.accept(visitor);
 		assertEquals(Arrays.asList("a", 1.0, t), visitor.popAll());
@@ -90,9 +90,9 @@ public class ExpVisitorTest {
 	}
 
 	@Test
-	public void testVisitClosure() {
-		Exp exp = new Closure(new NameList(), true, new Block(new StatList(), new LastReturn(new ExpList(
-				new Dots("...")))));
+	public void testVisitFunctionExp() {
+		Exp exp = new FunctionExp(new NameList(), true, new Block(new StatList(), new LastReturn(
+				new ExpList(new Dots()))));
 
 		exp.accept(visitor);
 		LuaFunction function = (LuaFunction) visitor.popLast();
