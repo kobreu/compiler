@@ -31,27 +31,27 @@ public class TestLexerWhiteSpace {
 		
 		file = "testinput/lexer/assignment_with_spaces.lua";
 		files.add(file);
-		symbolsForCase = new Integer[] { sym.ID, sym.WS, sym.ASM, sym.WS, sym.ID };
+		symbolsForCase = new Integer[] { sym.ID,  sym.ASM,  sym.ID };
 		symbols.put(file, Arrays.asList(symbolsForCase));
 		
 		file = "testinput/lexer/multiple_spaces";
 		files.add(file);
-		symbolsForCase = new Integer[] { sym.WS };
+		symbolsForCase = new Integer[] {  };
 		symbols.put(file, Arrays.asList(symbolsForCase));
 		
 		file = "testinput/lexer/multiple_spaces_with_breaks";
 		files.add(file);
-		symbolsForCase = new Integer[] { sym.WS, sym.ID, sym.WS, sym.ID, sym.WS, sym.ID, sym.WS, sym.ID, sym.WS };
+		symbolsForCase = new Integer[] {  sym.ID,  sym.ID,  sym.ID,  sym.ID };
 		symbols.put(file, Arrays.asList(symbolsForCase));
 		
 		file = "testinput/lexer/multiple_spaces_with_strings";
 		files.add(file);
-		symbolsForCase = new Integer[] { sym.WS, sym.TEXT, sym.WS, sym.TEXT, sym.TEXT, sym.WS, sym.TEXT};
+		symbolsForCase = new Integer[] {  sym.TEXT,  sym.TEXT, sym.TEXT,  sym.TEXT};
 		symbols.put(file, Arrays.asList(symbolsForCase));
 		
 		file = "testinput/lexer/escaping";
 		files.add(file);
-		symbolsForCase = new Integer[] { sym.TEXT, sym.WS, sym.TEXT, sym.WS, sym.TEXT, sym.WS, sym.TEXT};
+		symbolsForCase = new Integer[] { sym.TEXT,  sym.TEXT,  sym.TEXT,  sym.TEXT};
 		symbols.put(file, Arrays.asList(symbolsForCase));
 	}
 	@Test

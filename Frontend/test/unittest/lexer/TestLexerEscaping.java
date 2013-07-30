@@ -23,7 +23,7 @@ public class TestLexerEscaping {
 		file = "testinput/lexer/escaping_2";
 		lexer = new Lexer(new FileReader(file));
 		
-		Integer[] symbolsForCase = { sym.TEXT, sym.WS, sym.TEXT, sym.WS, sym.TEXT, sym.WS, sym.TEXT, sym.WS, sym.TEXT, sym.WS, sym.TEXT};
+		Integer[] symbolsForCase = { sym.TEXT,  sym.TEXT,  sym.TEXT,  sym.TEXT,  sym.TEXT,  sym.TEXT};
 		String[] strings =  { "\n\r\t", "\\", "\"", "\n\r\t", "\\", "'"};
 		
 		int j = 0;

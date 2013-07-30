@@ -63,7 +63,7 @@ public class TestLexer {
 		
 		file = "testinput/grammar/chunk_incorrect_multiple_returns.lua";
 		files.add(file);
-		symbolsForCase = new Integer[] { sym.ID, sym.ASM, sym.NUMBER, sym.WS, sym.ID, sym.ASM, sym.NUMBER, sym.WS, sym.RETURN, sym.WS, sym.ID, sym.COM, sym.ID, sym.WS, sym.RETURN, sym.WS, sym.ID, sym.COM, sym.ID };
+		symbolsForCase = new Integer[] { sym.ID, sym.ASM, sym.NUMBER,  sym.ID, sym.ASM, sym.NUMBER,  sym.RETURN,  sym.ID, sym.COM, sym.ID,  sym.RETURN,  sym.ID, sym.COM, sym.ID };
 		symbols.put(file, Arrays.asList(symbolsForCase));
 		
 		file = "testinput/grammar/chunk_sequence_with_semicolons.lua";
@@ -73,12 +73,12 @@ public class TestLexer {
 		
 		file = "testinput/grammar/chunk_sequence_without_semicolons.lua";
 		files.add(file);
-		symbolsForCase = new Integer[] { sym.ID, sym.ASM, sym.NUMBER, sym.WS, sym.ID, sym.ASM, sym.NUMBER, sym.WS, sym.ID, sym.ASM, sym.NUMBER};
+		symbolsForCase = new Integer[] { sym.ID, sym.ASM, sym.NUMBER,  sym.ID, sym.ASM, sym.NUMBER,  sym.ID, sym.ASM, sym.NUMBER};
 		symbols.put(file, Arrays.asList(symbolsForCase));
 		
 		file = "testinput/grammar/chunk_with_return.lua";
 		files.add(file);
-		symbolsForCase = new Integer[] { sym.ID, sym.ASM, sym.NUMBER, sym.WS, sym.ID, sym.ASM, sym.NUMBER, sym.WS, sym.RETURN, sym.WS, sym.ID, sym.COM, sym.ID };
+		symbolsForCase = new Integer[] { sym.ID, sym.ASM, sym.NUMBER,  sym.ID, sym.ASM, sym.NUMBER,  sym.RETURN,  sym.ID, sym.COM, sym.ID };
 		symbols.put(file, Arrays.asList(symbolsForCase));
 		
 		file = "testinput/grammar/exp_binop.lua";
@@ -98,7 +98,7 @@ public class TestLexer {
 		
 		file = "testinput/grammar/exp_function.lua";
 		files.add(file);
-		symbolsForCase = new Integer[] { sym.ID, sym.ASM, sym.FUNC, sym.WS, sym.LPAREN, sym.RPAREN, sym.WS, sym.END };
+		symbolsForCase = new Integer[] { sym.ID, sym.ASM, sym.FUNC,  sym.LPAREN, sym.RPAREN,  sym.END };
 		symbols.put(file, Arrays.asList(symbolsForCase));
 		
 		file = "testinput/grammar/exp_nil.lua";
@@ -138,7 +138,7 @@ public class TestLexer {
 		
 		file = "testinput/grammar/explist_multiple.lua";
 		files.add(file);
-		symbolsForCase = new Integer[] { sym.FOR, sym.WS, sym.ID, sym.WS, sym.IN, sym.WS, sym.NUMBER, sym.COM, sym.NUMBER, sym.COM, sym.NUMBER, sym.WS, sym.DO, sym.WS, sym.END };
+		symbolsForCase = new Integer[] { sym.FOR,  sym.ID,  sym.IN,  sym.NUMBER, sym.COM, sym.NUMBER, sym.COM, sym.NUMBER,  sym.DO,  sym.END };
 		symbols.put(file, Arrays.asList(symbolsForCase));
 		
 		file = "testinput/grammar/field_exp.lua";
@@ -158,12 +158,12 @@ public class TestLexer {
 		
 		file = "testinput/grammar/funcname_add_to_table.lua";
 		files.add(file);
-		symbolsForCase = new Integer[] { sym.FUNC, sym.WS, sym.ID, sym.DOT, sym.ID, sym.DOT, sym.ID, sym.WS, sym.LPAREN, sym.RPAREN, sym.WS, sym.END };
+		symbolsForCase = new Integer[] { sym.FUNC,  sym.ID, sym.DOT, sym.ID, sym.DOT, sym.ID,  sym.LPAREN, sym.RPAREN,  sym.END };
 		symbols.put(file, Arrays.asList(symbolsForCase));
 		
 		file = "testinput/grammar/funcname_colon.lua";
 		files.add(file);
-		symbolsForCase = new Integer[] { sym.FUNC, sym.WS, sym.ID, sym.DOT, sym.ID, sym.DDOT, sym.ID, sym.WS, sym.LPAREN, sym.RPAREN, sym.WS, sym.END };
+		symbolsForCase = new Integer[] { sym.FUNC,  sym.ID, sym.DOT, sym.ID, sym.DDOT, sym.ID,  sym.LPAREN, sym.RPAREN,  sym.END };
 		symbols.put(file, Arrays.asList(symbolsForCase));
 		
 		file = "testinput/grammar/function_funcbody.lua";
@@ -193,22 +193,22 @@ public class TestLexer {
 		
 		file = "testinput/grammar/laststat_return.lua";
 		files.add(file);
-		symbolsForCase = new Integer[] { sym.RETURN , sym.WS, sym.ID, sym.COM, sym.ID};
+		symbolsForCase = new Integer[] { sym.RETURN ,  sym.ID, sym.COM, sym.ID};
 		symbols.put(file, Arrays.asList(symbolsForCase));
 		
 		file = "testinput/grammar/namelist_multiple.lua";
 		files.add(file);
-		symbolsForCase = new Integer[] {sym.FOR, sym.WS, sym.ID, sym.COM, sym.ID, sym.COM, sym.ID, sym.WS, sym.IN, sym.WS, sym.NUMBER, sym.WS, sym.DO, sym.WS, sym.END};
+		symbolsForCase = new Integer[] {sym.FOR,  sym.ID, sym.COM, sym.ID, sym.COM, sym.ID,  sym.IN,  sym.NUMBER,  sym.DO,  sym.END};
 		symbols.put(file, Arrays.asList(symbolsForCase));
 		
 		file = "testinput/grammar/namelist_single.lua";
 		files.add(file);
-		symbolsForCase = new Integer[] {sym.FOR, sym.WS, sym.ID, sym.WS, sym.IN, sym.WS, sym.NUMBER, sym.WS, sym.DO, sym.WS, sym.END};
+		symbolsForCase = new Integer[] {sym.FOR,  sym.ID,  sym.IN,  sym.NUMBER,  sym.DO,  sym.END};
 		symbols.put(file, Arrays.asList(symbolsForCase));
 		
 		file = "testinput/grammar/parlist_dotdotdot.lua";
 		files.add(file);
-		symbolsForCase = new Integer[] {sym.FUNC, sym.WS, sym.ID, sym.LPAREN, sym.ID, sym.COM, sym.PARAMS, sym.RPAREN, sym.WS, sym.END};
+		symbolsForCase = new Integer[] {sym.FUNC,  sym.ID, sym.LPAREN, sym.ID, sym.COM, sym.PARAMS, sym.RPAREN,  sym.END};
 		symbols.put(file, Arrays.asList(symbolsForCase));
 		
 		file = "testinput/grammar/prefixexp_brackets.lua";
@@ -233,27 +233,27 @@ public class TestLexer {
 		
 		file = "testinput/grammar/stat_do.lua";
 		files.add(file);
-		symbolsForCase = new Integer[] {sym.DO, sym.WS, sym.ID, sym.ASM, sym.NUMBER, sym.WS, sym.END};
+		symbolsForCase = new Integer[] {sym.DO,  sym.ID, sym.ASM, sym.NUMBER,  sym.END};
 		symbols.put(file, Arrays.asList(symbolsForCase));
 		
 		file = "testinput/grammar/stat_for_without_last_expression.lua";
 		files.add(file);
-		symbolsForCase = new Integer[] {sym.FOR, sym.WS, sym.ID, sym.WS, sym.ASM, sym.WS, sym.NUMBER, sym.COM, sym.WS, sym.NUMBER, sym.WS, sym.DO, sym.WS, sym.ID, sym.ASM, sym.NUMBER, sym.WS, sym.END};
+		symbolsForCase = new Integer[] {sym.FOR,  sym.ID,  sym.ASM,  sym.NUMBER, sym.COM,  sym.NUMBER,  sym.DO,  sym.ID, sym.ASM, sym.NUMBER,  sym.END};
 		symbols.put(file, Arrays.asList(symbolsForCase));
 		
 		file = "testinput/grammar/stat_for.lua";
 		files.add(file);
-		symbolsForCase = new Integer[] {sym.FOR, sym.WS, sym.ID, sym.WS, sym.ASM, sym.WS, sym.NUMBER, sym.COM, sym.WS, sym.NUMBER, sym.WS, sym.COM, sym.WS, sym.NUMBER, sym.WS, sym.DO, sym.WS, sym.ID, sym.ASM, sym.NUMBER, sym.WS, sym.END};
+		symbolsForCase = new Integer[] {sym.FOR,  sym.ID,  sym.ASM,  sym.NUMBER, sym.COM,  sym.NUMBER,  sym.COM,  sym.NUMBER,  sym.DO,  sym.ID, sym.ASM, sym.NUMBER,  sym.END};
 		symbols.put(file, Arrays.asList(symbolsForCase));
 
 		file = "testinput/grammar/stat_foreach.lua";
 		files.add(file);
-		symbolsForCase = new Integer[] {sym.FOR, sym.WS, sym.ID, sym.WS, sym.IN, sym.WS, sym.NUMBER, sym.WS, sym.DO, sym.WS, sym.ID, sym.ASM, sym.NUMBER, sym.WS, sym.END};
+		symbolsForCase = new Integer[] {sym.FOR,  sym.ID,  sym.IN,  sym.NUMBER,  sym.DO,  sym.ID, sym.ASM, sym.NUMBER,  sym.END};
 		symbols.put(file, Arrays.asList(symbolsForCase));
 		
 		file = "testinput/grammar/stat_function.lua";
 		files.add(file);
-		symbolsForCase = new Integer[] {sym.FUNC, sym.WS, sym.ID, sym.WS, sym.LPAREN, sym.RPAREN, sym.WS, sym.END};
+		symbolsForCase = new Integer[] {sym.FUNC,  sym.ID,  sym.LPAREN, sym.RPAREN,  sym.END};
 		symbols.put(file, Arrays.asList(symbolsForCase));
 		
 		file = "testinput/grammar/stat_functioncall.lua";
@@ -263,22 +263,22 @@ public class TestLexer {
 		
 		file = "testinput/grammar/stat_local_assignment.lua";
 		files.add(file);
-		symbolsForCase = new Integer[] {sym.LOCAL, sym.WS, sym.ID, sym.COM, sym.ID, sym.WS, sym.ASM, sym.WS, sym.NUMBER, sym.COM, sym.NUMBER};
+		symbolsForCase = new Integer[] {sym.LOCAL,  sym.ID, sym.COM, sym.ID,  sym.ASM,  sym.NUMBER, sym.COM, sym.NUMBER};
 		symbols.put(file, Arrays.asList(symbolsForCase));
 		
 		file = "testinput/grammar/stat_local_function.lua";
 		files.add(file);
-		symbolsForCase = new Integer[] {sym.LOCAL, sym.WS, sym.FUNC, sym.WS, sym.ID, sym.WS, sym.LPAREN,sym.RPAREN, sym.WS, sym.END};
+		symbolsForCase = new Integer[] {sym.LOCAL,  sym.FUNC,  sym.ID,  sym.LPAREN,sym.RPAREN,  sym.END};
 		symbols.put(file, Arrays.asList(symbolsForCase));
 		
 		file = "testinput/grammar/stat_repeat.lua";
 		files.add(file);
-		symbolsForCase = new Integer[] {sym.REPEAT, sym.WS, sym.ID, sym.ASM, sym.NUMBER, sym.WS, sym.UNTIL, sym.WS, sym.FALSE};
+		symbolsForCase = new Integer[] {sym.REPEAT,  sym.ID, sym.ASM, sym.NUMBER,  sym.UNTIL,  sym.FALSE};
 		symbols.put(file, Arrays.asList(symbolsForCase));
 		
 		file = "testinput/grammar/stat_while.lua";
 		files.add(file);
-		symbolsForCase = new Integer[] { sym.WHILE, sym.WS, sym.TRUE, sym.WS, sym.DO, sym.WS, sym.ID, sym.ASM, sym.NUMBER, sym.WS, sym.END};
+		symbolsForCase = new Integer[] { sym.WHILE,  sym.TRUE,  sym.DO,  sym.ID, sym.ASM, sym.NUMBER,  sym.END};
 		symbols.put(file, Arrays.asList(symbolsForCase));
 		
 		file = "testinput/grammar/unop_hash.lua";
