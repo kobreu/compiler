@@ -207,7 +207,7 @@ stat        	::=    		varlist:vl optws ASM optws explist:el
 						:} 
 		 				| LOCAL optws FUNC optws ID:id optws funcbody:fb
 		 				{: RESULT = new LocalFuncDef(id, fb.getArgs(), fb.getVarArgs(), fb.getBlock()); :}
-						| LOCAL optws namelist:nl optasmexplist:el 
+						| LOCAL optws namelist:nl optws optasmexplist:el 
 						{: RESULT = new LocalDecl(nl,el); :}
 						;
 					
