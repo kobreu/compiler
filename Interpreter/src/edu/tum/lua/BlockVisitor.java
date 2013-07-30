@@ -125,8 +125,7 @@ public class BlockVisitor extends VisitorAdaptor {
 				Object object = visitor.popLast();
 
 				if (LuaType.getTypeOf(object) != LuaType.TABLE) {
-					throw new LuaRuntimeException(varTabIndex, "attempt to index a "
-							+ LuaType.getTypeOf(LuaType.getTypeOf(object)));
+					throw new LuaRuntimeException(varTabIndex, "attempt to index a " + LuaType.getTypeOf(object));
 				}
 
 				LuaTable table = (LuaTable) object;
