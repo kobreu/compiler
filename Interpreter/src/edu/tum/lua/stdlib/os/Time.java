@@ -23,19 +23,22 @@ public class Time extends LuaFunctionNative {
 			if (table.get("year") == null)
 				throw new LuaRuntimeException("field 'year' missing in date table");
 			else
-				c.set(Calendar.YEAR, (int) table.get("year"));
+				c.set(Calendar.YEAR, new Double((double) table.get("year")).intValue());
+
 			if (table.get("month") == null)
 				throw new LuaRuntimeException("field 'month' missing in date table");
 			else
-				c.set(Calendar.MONTH, (int) table.get("month"));
+				c.set(Calendar.MONTH, new Double((double) table.get("month")).intValue());
 			if (table.get("day") == null)
 				throw new LuaRuntimeException("field 'day' missing in date table");
+			else
+				c.set(Calendar.DAY_OF_MONTH, new Double((double) table.get("day")).intValue());
 			if (table.get("hour") != null)
-				c.set(Calendar.HOUR, (int) table.get("hour"));
+				c.set(Calendar.HOUR, new Double((double) table.get("hour")).intValue());
 			if (table.get("min") != null)
-				c.set(Calendar.MINUTE, (int) table.get("min"));
+				c.set(Calendar.MINUTE, new Double((double) table.get("min")).intValue());
 			if (table.get("sec") != null)
-				c.set(Calendar.SECOND, (int) table.get("sec"));
+				c.set(Calendar.SECOND, new Double((double) table.get("sec")).intValue());
 		}
 		java.util.Date d = c.getTime();
 		double time = d.getTime();
