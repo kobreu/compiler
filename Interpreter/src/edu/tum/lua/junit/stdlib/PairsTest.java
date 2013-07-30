@@ -2,6 +2,7 @@ package edu.tum.lua.junit.stdlib;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.Before;
@@ -43,7 +44,7 @@ public class PairsTest {
 		LuaFunction returnFunction = (LuaFunction) returnList.get(0);
 		LuaTable returnTable = (LuaTable) returnList.get(1);
 		Object returnObject = returnList.get(2);
-		assertEquals(null, returnFunction.apply(returnTable, returnObject));
+		assertEquals(Collections.singletonList(null), returnFunction.apply(returnTable, returnObject));
 
 	}
 }

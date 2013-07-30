@@ -19,7 +19,7 @@ public class TimeTest {
 	public void emptyArgumentTest() throws Exception {
 		Time t = new Time();
 		Calendar c = Calendar.getInstance();
-		assertEquals((double) c.getTime().getTime(), t.apply(Collections.emptyList()).get(0));
+		assertTrue(c.getTime().getTime() - (double) t.apply(Collections.emptyList()).get(0) < 0.0001);
 	}
 
 	@Test
