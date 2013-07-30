@@ -6,11 +6,8 @@
 					<PrefixExpVar>
 						<Variable var="a" />
 					</PrefixExpVar>
-					<PreExp>
-						<PrefixExpVar>
-							<Variable var="b" />
-						</PrefixExpVar>
-					</PreExp>
+					<TextExp text="b">
+					</TextExp>
 				</VarTabIndex>
 			</VarList>
 			<ExpList>

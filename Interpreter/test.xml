@@ -22,7 +22,11 @@
       <include name="**/*.zip" />
     </fileset>
     <pathelement path="${java.class.path}" />
+<<<<<<< HEAD
   	<pathelement path="../Frontend/bin"/>
+=======
+  	<pathelement path="../Frontend/classes"/>
+>>>>>>> Parser
   	<!-- project dependency -->
   </path>
 
@@ -41,9 +45,18 @@
   </target>
 	
   <target name="compiledependencies" depends="init">
+<<<<<<< HEAD
   	 <subant antfile="build.xml" buildpath="../Frontend" target="compile">
         <property name="build.dir" value="subant1.build"/>
   	 </subant>
+=======
+  	 <subant antfile="build.xml" buildpath="../Frontend" target="clean">
+        <property name="build.dir" value="subant1.build"/>
+  	 </subant>
+  	<subant antfile="build.xml" buildpath="../Frontend" target="compile">
+  	        <property name="build.dir" value="subant1.build"/>
+  	</subant>
+>>>>>>> Parser
   </target>
 
   <target name="compile" depends="compiledependencies">

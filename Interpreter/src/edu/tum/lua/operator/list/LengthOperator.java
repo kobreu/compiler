@@ -1,5 +1,6 @@
 package edu.tum.lua.operator.list;
 
+<<<<<<< HEAD
 import edu.tum.lua.operator.Operator;
 import edu.tum.lua.types.LuaType;
 import edu.tum.lua.types.LuaTable;
@@ -27,5 +28,32 @@ public class LengthOperator extends Operator{
 		}
 		return value;
 	}
+=======
+import edu.tum.lua.operator.UnaryOperator;
+import edu.tum.lua.types.LuaFunction;
+import edu.tum.lua.types.LuaTable;
+import edu.tum.lua.types.LuaType;
+
+public class LengthOperator extends UnaryOperator {
+
+	@Override
+	public Object apply(Object op) {
+		switch (LuaType.getTypeOf(op)) {
+		case STRING:
+			return new Double(((String) op).length());
+
+		case TABLE:
+			double value = 0;
+			while (((LuaTable) op).get(value + 1) != null) {
+				value++;
+			}
+			return value;
+
+		default:
+			LuaFunction handler = getHandler("__len", op);
+			return handler.apply(op);
+		}
+	}
+>>>>>>> Parser
 
 }

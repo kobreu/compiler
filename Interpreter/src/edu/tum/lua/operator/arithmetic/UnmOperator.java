@@ -1,11 +1,16 @@
 package edu.tum.lua.operator.arithmetic;
 
+import static edu.tum.lua.operator.arithmetic.ArithmeticOperatorSupport.convert;
+
 import javax.naming.OperationNotSupportedException;
 
+import edu.tum.lua.operator.UnaryOperator;
 import edu.tum.lua.types.LuaFunction;
 
-public final class UnmOperator extends ArithmeticOperator {
-	public Object apply(Object op1) throws NoSuchMethodException {
+public final class UnmOperator extends UnaryOperator {
+
+	@Override
+	public Object apply(Object op1) {
 		try {
 			return -convert(op1);
 		} catch (NumberFormatException | OperationNotSupportedException e) {

@@ -1,40 +1,73 @@
 package edu.tum.lua.types;
 
-import static edu.tum.lua.ast.LegacyAdapter.convert;
-
 import java.util.Arrays;
 import java.util.List;
 
-import edu.tum.lua.Environment;
-import edu.tum.lua.LuaInterpreter;
-import edu.tum.lua.ast.Chunk;
-import edu.tum.lua.ast.Function;
+import edu.tum.lua.BlockVisitor;
+import edu.tum.lua.GlobalEnvironment;
+import edu.tum.lua.LocalEnvironment;
+import edu.tum.lua.LuaRuntimeException;
+import edu.tum.lua.ast.Block;
+import edu.tum.lua.ast.LegacyAdapter;
+import edu.tum.lua.ast.LocalFuncDef;
 
 public class LuaFunctionInterpreted implements LuaFunction {
 
-	private final Environment environment;
+	private final LocalEnvironment environment;
 	private final List<String> argumentNames;
-	private final Chunk chunk;
+	private final Block block;
+	private final boolean vararg;
 
-	public LuaFunctionInterpreted(Function node, Environment e) {
+	public LuaFunctionInterpreted(List<String> args, boolean vararg, Block block, LocalEnvironment e) {
+		this.argumentNames = args;
+		this.vararg = vararg;
+		this.block = block;
+		this.environment = e;
+	}
+
+	public LuaFunctionInterpreted(LocalFuncDef node, LocalEnvironment e) {
 		environment = e;
-		argumentNames = convert(node.body.parlist.namelist);
-		chunk = node.body.block.chunk;
+		argumentNames = LegacyAdapter.convert(node.args);
+		block = node.block;
+		vararg = node.varargs;
 	}
 
 	@Override
 	public List<Object> apply(List<Object> arguments) {
-		Environment currentEnvironment = new Environment(environment);
+		LocalEnvironment currentEnvironment = new LocalEnvironment(environment);
 
 		for (int i = 0; i < Math.min(argumentNames.size(), arguments.size()); i++) {
-			currentEnvironment.set(argumentNames.get(i), arguments.get(i));
+			currentEnvironment.setLocal(argumentNames.get(i), arguments.get(i));
 		}
 
-		return LuaInterpreter.eval(chunk, currentEnvironment);
+		BlockVisitor blockVisitor;
+
+		if (vararg) {
+			blockVisitor = new BlockVisitor(currentEnvironment, arguments.subList(argumentNames.size(),
+					arguments.size()));
+		} else {
+			blockVisitor = new BlockVisitor(currentEnvironment);
+		}
+
+		block.accept(blockVisitor);
+
+		if (blockVisitor.getBreak()) {
+			throw new LuaRuntimeException("No loop to break");
+		}
+
+		return blockVisitor.getReturn();
 	}
 
 	@Override
 	public List<Object> apply(Object... arguments) {
 		return apply(Arrays.asList(arguments));
+	}
+
+	public GlobalEnvironment getGlobalEnvironment() {
+		return environment.getGlobalEnvironment();
+	}
+
+	public void setGlobalEnvironment(GlobalEnvironment e) {
+		environment.setGlobalEnvironment(e);
 	}
 }

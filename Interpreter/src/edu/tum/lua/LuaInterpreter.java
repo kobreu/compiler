@@ -4,6 +4,7 @@ import static edu.tum.lua.ast.LegacyAdapter.convert;
 
 import java.util.List;
 
+<<<<<<< HEAD
 import edu.tum.lua.ast.Chunk;
 import edu.tum.lua.ast.Exp;
 import edu.tum.lua.ast.Stat;
@@ -29,4 +30,16 @@ public class LuaInterpreter {
 		return false;
 	}
 
+=======
+import edu.tum.lua.ast.Block;
+
+public class LuaInterpreter {
+
+	public static List<Object> eval(Block block, LocalEnvironment environment) {
+		BlockVisitor blockVisitor = new BlockVisitor(environment);
+		blockVisitor.visit(block);
+		return blockVisitor.getReturn();
+	}
+
+>>>>>>> Parser
 }
