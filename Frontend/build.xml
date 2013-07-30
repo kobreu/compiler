@@ -49,7 +49,6 @@
 		<mkdir dir="${dist}" />
 	</target>
 
-
 	<target name="compile" depends="init">
 		<javac destdir="${classes}" debug="on">
             <src path="${src}"/>  
@@ -100,6 +99,7 @@
 			<arg value="input.test" />
 		</java>
 	</target>
+
 
 	<target name="clean">
 		<delete dir="${classes}" />

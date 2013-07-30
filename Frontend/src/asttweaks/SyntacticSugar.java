@@ -23,7 +23,7 @@ public class SyntacticSugar {
 
 	private static final class FuncNameToPrefixExpVisitor extends
 			VisitorAdaptor {
-		public VarTabIndex var;
+		public Var var;
 
 		@Override
 		public void visit(FuncNameDDotVar funcNameDDotVar) {
@@ -36,7 +36,7 @@ public class SyntacticSugar {
 
 		@Override
 		public void visit(FuncNameVar funcNameVar) {
-			throw new RuntimeException("Should not be here!!!! FuncNameToPrefixExpVisitor");
+			var = new Variable(funcNameVar.name.name);
 		}
 		
 		@Override
