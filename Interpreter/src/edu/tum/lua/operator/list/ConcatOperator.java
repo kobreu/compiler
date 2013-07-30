@@ -2,6 +2,7 @@ package edu.tum.lua.operator.list;
 
 import javax.naming.OperationNotSupportedException;
 
+import edu.tum.lua.exceptions.LuaArithmeticOperationNotSupportedException;
 import edu.tum.lua.operator.BinaryOperator;
 import edu.tum.lua.types.LuaFunction;
 import edu.tum.lua.types.LuaType;
@@ -14,7 +15,7 @@ public class ConcatOperator extends BinaryOperator {
 		} else if (LuaType.getTypeOf(object) == LuaType.NUMBER) {
 			return ((Double) object).toString();
 		}
-		throw new OperationNotSupportedException();
+		throw new LuaArithmeticOperationNotSupportedException(LuaType.getTypeOf(object).toString());
 	}
 
 	@Override

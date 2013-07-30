@@ -1,6 +1,6 @@
 package edu.tum.lua.operator;
 
-import edu.tum.lua.exceptions.LuaRuntimeException;
+import edu.tum.lua.exceptions.LuaMissingMetaMethodException;
 import edu.tum.lua.types.LuaFunction;
 import edu.tum.lua.types.LuaTable;
 import edu.tum.lua.types.LuaType;
@@ -23,7 +23,7 @@ public abstract class Operator {
 			}
 		}
 
-		throw new LuaRuntimeException("missing metamethod");
+		throw new LuaMissingMetaMethodException();
 	}
 
 	public abstract Object apply(Object... operands);

@@ -54,7 +54,7 @@ public class Concat extends LuaFunctionNative {
 			return r;
 		}
 		if (table.get(begin) == null)
-			throw new LuaRuntimeException("invalid value at index " + begin + " in table or concat");
+			throw new LuaRuntimeException("invalid value at index " + begin + " in table for concat");
 		result = table.get(begin).toString();
 		for (double i = begin + 1; i <= end; i = i + 1) {
 			if (LuaType.getTypeOf(table.get(i)) != LuaType.NUMBER && LuaType.getTypeOf(table.get(i)) != LuaType.STRING)

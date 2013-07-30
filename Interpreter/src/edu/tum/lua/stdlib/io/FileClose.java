@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
-import edu.tum.lua.exceptions.LuaRuntimeException;
+import edu.tum.lua.exceptions.LuaIOException;
 import edu.tum.lua.types.LuaFunctionNative;
 import edu.tum.lua.types.LuaType;
 import edu.tum.lua.types.LuaUserData;
@@ -22,7 +22,7 @@ public class FileClose extends LuaFunctionNative {
 		try {
 			file.getRaf().close();
 		} catch (IOException e) {
-			throw new LuaRuntimeException("attemp to use a closed file");
+			throw new LuaIOException("attemp to use a closed file");
 		}
 
 		file.setRaf(null);

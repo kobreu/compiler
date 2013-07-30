@@ -4,8 +4,8 @@ import static edu.tum.lua.Preconditions.checkArguments;
 
 import java.util.List;
 
+import edu.tum.lua.exceptions.LuaAssertionException;
 import edu.tum.lua.exceptions.LuaBadArgumentException;
-import edu.tum.lua.exceptions.LuaRuntimeException;
 import edu.tum.lua.types.LuaFunctionNative;
 import edu.tum.lua.types.LuaType;
 
@@ -35,7 +35,7 @@ public class Assert extends LuaFunctionNative {
 				message = arguments.get(1).toString();
 			}
 
-			throw new LuaRuntimeException(message);
+			throw new LuaAssertionException(message);
 		}
 
 		return arguments;

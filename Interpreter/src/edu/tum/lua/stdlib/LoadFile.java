@@ -9,7 +9,7 @@ import java.io.InputStreamReader;
 import java.util.List;
 
 import edu.tum.lua.exceptions.LuaBadArgumentException;
-import edu.tum.lua.exceptions.LuaRuntimeException;
+import edu.tum.lua.exceptions.LuaIOException;
 import edu.tum.lua.types.LuaFunctionNative;
 import edu.tum.lua.types.LuaType;
 
@@ -25,7 +25,7 @@ public class LoadFile extends LuaFunctionNative {
 			try {
 				input = new FileInputStream(arguments.get(0).toString());
 			} catch (FileNotFoundException e) {
-				throw new LuaRuntimeException("File not found");
+				throw new LuaIOException("File not found");
 			}
 		}
 		String result = "";

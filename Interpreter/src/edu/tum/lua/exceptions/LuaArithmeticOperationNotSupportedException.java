@@ -4,7 +4,7 @@ public class LuaArithmeticOperationNotSupportedException extends LuaRuntimeExcep
 
 	private static final long serialVersionUID = 1L;
 
-	public LuaArithmeticOperationNotSupportedException() {
-		super("");
+	public LuaArithmeticOperationNotSupportedException(String type) {
+		super("attempt to perform arithmetic on a " + type + " value");
 	}
 }

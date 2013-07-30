@@ -8,7 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 
-import edu.tum.lua.exceptions.LuaRuntimeException;
+import edu.tum.lua.exceptions.LuaInvalidKeyException;
 import edu.tum.lua.types.LuaFunctionNative;
 import edu.tum.lua.types.LuaTable;
 import edu.tum.lua.types.LuaType;
@@ -35,7 +35,7 @@ public class Next extends LuaFunctionNative {
 		// If the second argument is absent, then it is interpreted as nil.
 		index = (arguments.size() == 2) ? arguments.get(1) : null;
 
-		iter = table.getIterator();
+		iter = table.iterator();
 
 		// When called with nil as its second argument, next returns an initial
 		// index and its associated value
@@ -65,6 +65,6 @@ public class Next extends LuaFunctionNative {
 
 		}
 		// If index is not valid throw error
-		throw new LuaRuntimeException("Invalid key for next");
+		throw new LuaInvalidKeyException("next");
 	}
 }

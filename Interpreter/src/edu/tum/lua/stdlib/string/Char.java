@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import edu.tum.lua.exceptions.LuaBadArgumentException;
-import edu.tum.lua.exceptions.LuaRuntimeException;
+import edu.tum.lua.exceptions.LuaIndexOutOfRangeException;
 import edu.tum.lua.types.LuaFunctionNative;
 import edu.tum.lua.types.LuaType;
 
@@ -26,7 +26,7 @@ public class Char extends LuaFunctionNative {
 		for (Object o : arguments) {
 			i++;
 			if (((Double) o).intValue() < 0 || ((Double) o).intValue() > 255) {
-				throw new LuaRuntimeException("value out of range");
+				throw new LuaIndexOutOfRangeException("string.char");
 			}
 			s += String.valueOf((char) Math.rint(((Double) o).doubleValue()));
 		}
