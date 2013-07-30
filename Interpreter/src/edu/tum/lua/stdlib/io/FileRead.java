@@ -51,6 +51,19 @@ public class FileRead extends LuaFunctionNative {
 	}
 
 	private String readAll() {
+		long pos = 0;
+		try {
+			pos = file.getRaf().getFilePointer();
+		} catch (Exception e) {
+			return null;
+		}
+
+		try {
+			file.getRaf().seek(0);
+		} catch (IOException e1) {
+			return null;
+		}
+
 		long fileLength = -1;
 		String fileContent = null;
 		try {
@@ -63,6 +76,13 @@ public class FileRead extends LuaFunctionNative {
 		} catch (IOException e) {
 			return null;
 		}
+
+		try {
+			file.getRaf().seek(pos);
+		} catch (Exception e) {
+			return null;
+		}
+
 		return fileContent;
 	}
 

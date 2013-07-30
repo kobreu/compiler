@@ -31,6 +31,12 @@ import edu.tum.lua.stdlib.coroutine.Running;
 import edu.tum.lua.stdlib.coroutine.Status;
 import edu.tum.lua.stdlib.coroutine.Wrap;
 import edu.tum.lua.stdlib.coroutine.Yield;
+import edu.tum.lua.stdlib.io.FileClose;
+import edu.tum.lua.stdlib.io.FileFlush;
+import edu.tum.lua.stdlib.io.FileOpen;
+import edu.tum.lua.stdlib.io.FileRead;
+import edu.tum.lua.stdlib.io.FileSeek;
+import edu.tum.lua.stdlib.io.FileWrite;
 import edu.tum.lua.stdlib.math.Abs;
 import edu.tum.lua.stdlib.math.Acos;
 import edu.tum.lua.stdlib.math.Asin;
@@ -85,9 +91,7 @@ public class GlobalEnvironment extends LuaTable {
 		return _G;
 	}
 
-	/**
-	 * Create a new global environment.
-	 */
+	/** Create a new global environment. */
 	public GlobalEnvironment() {
 		set("assert", new Assert());
 		set("collectgarbage", new VoidFunction());
@@ -185,6 +189,14 @@ public class GlobalEnvironment extends LuaTable {
 		coroutine.set("yield", new Yield());
 
 		LuaTable io = new LuaTable();
+
+		io.set("open", new FileOpen());
+		io.set("flush", new FileFlush());
+		io.set("close", new FileClose());
+		io.set("read", new FileRead());
+		io.set("write", new FileWrite());
+		io.set("seek", new FileSeek());
+
 		LuaTable os = new LuaTable();
 		LuaTable debug = new LuaTable();
 

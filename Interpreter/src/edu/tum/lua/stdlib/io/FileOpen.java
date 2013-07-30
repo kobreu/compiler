@@ -14,7 +14,7 @@ import edu.tum.lua.types.LuaFunctionNative;
 import edu.tum.lua.types.LuaType;
 import edu.tum.lua.types.LuaUserData;
 
-public class Open extends LuaFunctionNative {
+public class FileOpen extends LuaFunctionNative {
 
 	private static final LuaType[][] types = { { LuaType.STRING }, { null, LuaType.STRING } };
 
@@ -42,6 +42,7 @@ public class Open extends LuaFunctionNative {
 				try {
 					PrintWriter writer = new PrintWriter(file);
 					writer.print("");
+					writer.flush();
 					writer.close();
 				} catch (IOException e) {
 					return Arrays.asList((Object) null, "expected file does not existst");

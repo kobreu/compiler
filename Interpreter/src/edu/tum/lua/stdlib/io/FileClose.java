@@ -11,14 +11,13 @@ import edu.tum.lua.types.LuaFunctionNative;
 import edu.tum.lua.types.LuaType;
 import edu.tum.lua.types.LuaUserData;
 
-public class Close extends LuaFunctionNative {
-	private static final LuaType[][] types = { { LuaType.USERDATA }, { LuaType.STRING, LuaType.NUMBER, null } };
-	private LuaUserData file;
+public class FileClose extends LuaFunctionNative {
+	private static final LuaType[][] types = { { LuaType.USERDATA } };
 
 	@Override
 	public List<Object> apply(List<Object> arguments) {
 		checkArguments("read", arguments, types);
-		file = (LuaUserData) arguments.get(0);
+		LuaUserData file = (LuaUserData) arguments.get(0);
 
 		try {
 			file.getRaf().close();
