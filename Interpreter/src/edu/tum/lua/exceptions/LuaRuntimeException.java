@@ -9,13 +9,13 @@ public class LuaRuntimeException extends RuntimeException {
 
 	private static final long serialVersionUID = -1964316201991351991L;
 
-	private final Location location;
+	private Location location;
 
 	Deque<LuaStackTraceElement> stacktrace;
 
-	public LuaRuntimeException(String message, Location location) {
+	public LuaRuntimeException(String message) {
 		super(message);
-		this.location = location;
+		this.location = null;
 		stacktrace = new LinkedList<>();
 	}
 
@@ -25,5 +25,9 @@ public class LuaRuntimeException extends RuntimeException {
 
 	public void addLuaStackTraceElement(LuaStackTraceElement e) {
 		stacktrace.addLast(e);
+	}
+
+	public void setLocation(Location l) {
+		location = l;
 	}
 }
