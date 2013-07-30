@@ -151,6 +151,20 @@ statlist		::=		optws stat:s optsemi optws
 					
 						
 
+prefixexp		::=		var:v
+						{:
+							RESULT = new PrefixExpVar(v);
+						:}
+						| functioncall:fc {:
+							System.out.println("inside prefixexp");
+							RESULT =  new PrefixExpFuncCall(fc);
+						:}
+						| LPAREN exp:e RPAREN
+						{:
+							RESULT = new PrefixExpExp(e);
+						:}
+						;
+
  
 					
 stat        	::=    		varlist:vl optws ASM optws explist:el 
@@ -201,9 +215,8 @@ laststat		::=		RETURN optws optsemi
 							RESULT = new LastReturn(el); 
 						:}
 						| BREAK optws optsemi{: RESULT = new LastBreak(); :}	
-						| BREAK optws optsemi statlist{: RESULT = new LastBreak(); :}
-						
 						; 						
+
 funcname		::=     ID:Id {: RESULT = new FuncNameVar(new Name(Id)); :}
 						| ID:id DOT funcname:fn {: RESULT = new FuncNameVarDotFuncName(new Name(id),fn); :}
 						| ID:id DDOT ID:id1 {: RESULT = new FuncNameDDotVar(new Name(id),new Name(id1)); :}
@@ -321,19 +334,6 @@ exp				::=		NIL
 						;	
 	
 					
-prefixexp		::=		var:v
-						{:
-							RESULT = new PrefixExpVar(v);
-						:}
-						| functioncall:fc {:
-							System.out.println("inside prefixexp");
-							RESULT =  new PrefixExpFuncCall(fc);
-						:}
-						/*| LPAREN exp:e RPAREN
-						{:
-							RESULT = new PrefixExpExp(e);
-						:}*/
-						;
 	
 	
 functioncall	::= 	prefixexp:pexp args:ar
