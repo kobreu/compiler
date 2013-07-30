@@ -46,7 +46,7 @@ PrefixExp ::= 	{PrefixExpVar} Var:var
 				| {PrefixExpExp} Exp:exp
 
 FunctionCall ::=  {FuncCall} PrefixExp:preexp  ExpList:explist
-				  | {FuncCallSelf} PrefixExp:preexp  Name:name ExpList:explist
+				  | {FuncCallSelf} PrefixExp:preexp "String":name ExpList:explist
 
 FuncName	::= {FuncNameVar} Name:name
 				| {FuncNameVarDotFuncName} Name:name FuncName:funcnamelist

@@ -1,40 +1,42 @@
 package edu.tum.lua.types;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 
-public class LuaTable {
+import edu.tum.lua.LuaRuntimeException;
 
-	private LuaFunction forwardFunction = null;
-	private LuaTable forwardTable = null;
-	private final Map<Object, Object> pairs;
+public class LuaTable implements Iterable<Map.Entry<Object, Object>> {
+
 	private LuaTable metatable;
-	
+	private final Map<Object, Object> pairs;
+
 	public LuaTable() {
 		pairs = new HashMap<>();
-	}
-
-	public LuaTable(LuaTable table) {
-		this();
-		forwardTable = table;
+		metatable = null;
 	}
 
 	public Object get(Object key) {
-		Object value = pairs.get(key);
+		Object value = rawget(key);
 
 		if (value != null) {
 			return value;
 		}
 
-		if (forwardTable != null) {
-			return forwardTable.get(key);
+		Object h = metatable != null ? metatable.get("__index") : null;
+
+		if (h == null) {
+			return null;
 		}
 
-		if (forwardFunction != null) {
-			return forwardFunction.apply(key).get(0);
+		/* call handler */
+		if (LuaType.getTypeOf(h) == LuaType.FUNCTION) {
+			return ((LuaFunction) h).apply(this, key).get(0);
 		}
 
-		return null;
+		LuaTable t = (LuaTable) h;
+		return t.get(key);
 	}
 
 	public boolean getBoolean(Object key) {
@@ -45,6 +47,11 @@ public class LuaTable {
 		}
 
 		return ((Boolean) value).booleanValue();
+	}
+
+	public Iterator<Entry<Object, Object>> getIterator() {
+		Iterator<Entry<Object, Object>> iter = pairs.entrySet().iterator();
+		return iter;
 	}
 
 	public LuaFunction getLuaFunction(Object key) {
@@ -67,6 +74,14 @@ public class LuaTable {
 		return (LuaTable) value;
 	}
 
+	public LuaTable getMetatable() {
+		if (metatable != null && metatable.get("__metatable") != null) {
+			return (LuaTable) metatable.get("__metatable");
+		}
+
+		return metatable;
+	}
+
 	public double getNumber(Object key) {
 		Object value = get(key);
 
@@ -87,33 +102,82 @@ public class LuaTable {
 		return (String) value;
 	}
 
-	public void set(Object key, Object value) {
-		if (key == null || LuaType.getTypeOf(key) == null) {
-			throw new IllegalArgumentException();
+	public boolean isEmpty() {
+		return pairs.isEmpty();
+	}
+
+	public Object rawget(Object key) {
+		return pairs.get(key);
+	}
+
+	public void rawset(Object key, Object value) {
+		if (key == null) {
+			throw new LuaRuntimeException("table index is nil");
 		}
-		
+
+		if (value == null) {
+			pairs.remove(key);
+			return;
+		}
+
 		pairs.put(key, value);
 	}
 
-	public void setIndex(LuaFunction function) {
-		forwardFunction = function;
-		forwardTable = null;
+	public void set(Object key, Object value) {
+		Object h;
+
+		/* key is already present in the table */
+		if (rawget(key) != null) {
+			rawset(key, value);
+			return;
+		}
+
+		h = metatable != null ? metatable.get("__newindex") : null;
+
+		/* there is no __newindex event handler */
+		if (h == null) {
+			rawset(key, value);
+			return;
+		}
+
+		/* call handler */
+		if (LuaType.getTypeOf(h) == LuaType.FUNCTION) {
+			((LuaFunction) h).apply(this, key, value);
+			return;
+		}
+
+		LuaTable t = (LuaTable) h;
+		t.set(key, value);
 	}
 
-	public void setIndex(LuaTable table) {
-		forwardFunction = null;
-		forwardTable = table;
+	public void setMetaIndex(LuaFunction function) {
+		if (metatable == null) {
+			throw new IllegalStateException();
+		}
+
+		metatable.set("__index", function);
 	}
 
-	public void unset(Object key) {
-		pairs.remove(key);
-	}
+	public void setMetaIndex(LuaTable table) {
 
-	public LuaTable getMetatable() {
-		return metatable;
+		if (metatable == null) {
+			throw new IllegalStateException();
+		}
+
+		metatable.set("__index", table);
 	}
 
 	public void setMetatable(LuaTable metatable) {
+		if (metatable != null && metatable.get("__metatable") != null) {
+			throw new LuaRuntimeException("cannot change a protected metatable");
+		}
+
 		this.metatable = metatable;
 	}
+
+	@Override
+	public Iterator<Entry<Object, Object>> iterator() {
+		return pairs.entrySet().iterator();
+	}
+
 }

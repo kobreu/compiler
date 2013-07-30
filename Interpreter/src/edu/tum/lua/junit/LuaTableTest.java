@@ -1,188 +1,142 @@
 package edu.tum.lua.junit;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Collections;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import edu.tum.lua.ast.FunctionNode;
+import edu.tum.lua.LuaRuntimeException;
+import edu.tum.lua.stdlib.VoidFunction;
 import edu.tum.lua.types.LuaFunction;
+import edu.tum.lua.types.LuaFunctionNative;
 import edu.tum.lua.types.LuaTable;
-import edu.tum.lua.types.LuaType;
 
 public class LuaTableTest {
 
-	private LuaTable table;
-	private LuaTable table_unset;
-	
+	LuaTable table;
+
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		table = new LuaTable();
-		table_unset = new LuaTable();
 	}
 
 	@Test
 	public void testGet() {
-		
-		table = new LuaTable();
-		
+		LuaTable table = new LuaTable();
+		LuaTable emptyTable = new LuaTable();
+
 		// Nil
 		assertEquals(null, table.get(null));
-		
+
 		// Boolean
 		table.set(true, "value1");
 		table.set(false, "value2");
 		assertEquals("value1", table.get(true));
 		assertEquals("value2", table.get(false));
-		assertEquals(null, table_unset.get(true));
-		assertEquals(null, table_unset.get(false));
-		
+		assertEquals(null, emptyTable.get(true));
+		assertEquals(null, emptyTable.get(false));
+
 		// Number
-		table.set(1.0, "value3");
-		assertEquals("value3", table.get(1.0));
-		assertEquals(null, table_unset.get(1.0));
-		
+		table.set(1.2, "value3");
+		assertEquals("value3", table.get(1.2));
+		assertEquals(null, emptyTable.get(1.2));
+
 		// String
 		table.set("string", "value4");
 		assertEquals("value4", table.get("string"));
-		assertEquals(null, table_unset.get("string"));
-		
-		// Function as index
-		LuaTable env = new LuaTable();
-		FunctionNode funnode = new FunctionNode();
-		LuaFunction f1 = new LuaFunction(env, funnode);
-		table.set(f1, "value5");
-		assertEquals("value5", table.get(f1));
-		assertEquals(null, table_unset.get(f1));
-		
-		// Table as index
-		LuaTable table2 = new LuaTable();
-		table.set(table2, "value6");
-		assertEquals("value6", table.get(table2));
-		assertEquals(null, table_unset.get(table2));
-		
-		/*
-		 *  Forward Table search
-		 */
-		
-		// Nil
-		
-		// Booleans
-		table = new LuaTable();
-		LuaTable fwdtable = new LuaTable();
-		fwdtable.set(true, "value_forward");
-		table.setIndex(fwdtable);
-		assertEquals("value_forward", table.get(true));
-		table.set(true, "value_normal");
-		assertEquals("value_normal", table.get(true));
-		
-		/* 
-		 * Forward Method search
-		 */
-		
-		// Booleans
-		table = new LuaTable();
+		assertEquals(null, emptyTable.get("string"));
 
-		LuaTable fTable = new LuaTable();
-		FunctionNode fNode = new FunctionNode();
-		LuaFunction f2 = new LuaFunction(fTable, fNode);
-		table.setIndex(f2);
-		
-		// TODO
-		assertEquals(f2.apply(true), table.get(true) );
-		
-	}
-	
+		// Table
+		LuaTable tmpTable = new LuaTable();
+		table.set(tmpTable, "value6");
+		assertEquals("value6", table.get(tmpTable));
+		assertEquals(null, emptyTable.get(tmpTable));
 
-	@Test
-	public void testGetLuaTable() {
-		fail("Not yet implemented"); // TODO
+		// Function
+		LuaFunction tmpFunction = new VoidFunction();
+		table.set(tmpFunction, "value5");
+		assertEquals("value5", table.get(tmpFunction));
+		assertEquals(null, emptyTable.get(tmpFunction));
 	}
 
 	@Test
-	public void testGetString() {
-		
-		table = new LuaTable();
-		
-		// Defined String
-		table.set("definedstring", "value1");
-		assertEquals("value1", table.get("definedstring"));
-		
-		// Undefined String should be nil
-		assertEquals(null, table.get("undefinedstring"));
-	
+	public void testSetGetBoolean() {
+		table.set("a", true);
+		assertTrue(table.getBoolean("a"));
 	}
 
 	@Test
-	public void testGetNumber() {
-		
-		table = new LuaTable();
-		
-		// Defined Number
-		table.set(6.0, "value1");
-		assertEquals("value1", table.get(6.0));
-		
-		// Undefined Number should be nil
-		assertEquals(null, table.get(10.0));
-		
+	public void testSetGetLuaFunction() {
+		LuaFunction f = new VoidFunction();
+		table.set("a", f);
+		assertEquals(f, table.getLuaFunction("a"));
 	}
 
 	@Test
-	public void testGetLuaFunction() {
-		
-		table = new LuaTable();
-		
-		// Defined Function
-		LuaTable env = new LuaTable();
-		FunctionNode funnode = new FunctionNode();
-		LuaFunction f = new LuaFunction(env, funnode);
-		table.set(f, "value1");
-		assertEquals("value1", table.get(f));
-		
-		// Undefined Function should be nil
-		LuaFunction g = new LuaFunction(env, funnode);
-		assertEquals(null, table.get(g));
-		
+	public void testSetGetLuaTable() {
+		LuaTable t = new LuaTable();
+		table.set("a", t);
+		assertEquals(t, table.getLuaTable("a"));
 	}
 
 	@Test
-	public void testGetBoolean() {
-		
-		table = new LuaTable();
-		
-		table.set(false, "value1");
-		assertEquals("value1", table.get(false));
-		table.set(true, "value2");
-		assertEquals("value2", table.get(true));
-		
+	public void testSetGetNumber() {
+		table.set("a", 1.0);
+		assertTrue(1.0 == table.getNumber("a"));
 	}
 
-	@Test(expected=IllegalArgumentException.class)
-	public void testGetNil() {
-		table.get(null);
-	}
-	
-	public void testSet() {
-		
-		// TODO
-		
+	@Test
+	public void testSetGetString() {
+		table.set("a", "b");
+		assertEquals("b", table.getString("a"));
 	}
 
+	protected static class TestFunction extends LuaFunctionNative {
+		@Override
+		public List<Object> apply(List<Object> arguments) {
+			assertEquals(2, arguments.size());
+			String key = (String) arguments.get(1);
+			return Collections.singletonList((Object) (key + "value"));
+		}
+	}
+
+	@Test
 	public void testSetIndex() {
+		LuaTable t1 = new LuaTable();
+		LuaTable t2 = new LuaTable();
 
-		// TODO
-		
+		t1.setMetatable(new LuaTable());
+		t1.setMetaIndex(t2);
+
+		t1.set("t1", 1.0);
+		t2.set("t2", 2.0);
+
+		assertEquals(1.0, t1.get("t1"));
+		assertEquals(2.0, t1.get("t2"));
+
+		t1.setMetaIndex((LuaTable) null);
+		assertEquals(null, t1.get("t2"));
+
+		t1.setMetaIndex(new TestFunction());
+		assertEquals(1.0, t1.get("t1"));
+		assertEquals("t2value", t1.get("t2"));
 	}
-	
-	@Test(expected=IllegalArgumentException.class)
+
+	@Test(expected = LuaRuntimeException.class)
 	public void testSetNil() {
-		// Test Indexes 
-		table.set(null, "string_value");
+		table.set(null, "a");
 	}
 
 	@Test
 	public void testUnset() {
-		fail("Not yet implemented"); // TODO
+		table.set("a", "a");
+		assertTrue(null != table.get("a"));
+		table.set("a", null);
+		assertTrue(null == table.get("a"));
 	}
 
 }

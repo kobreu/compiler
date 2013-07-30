@@ -357,9 +357,9 @@ functioncall	::= 	prefixexp:pexp args:ar
 							System.out.println("inside functioncall");
 							RESULT = new FuncCall(pexp,ar);
 						:}
-						| prefixexp:pexp DDOT TEXT:nam args:ar
+						| prefixexp:pexp DDOT ID:id args:ar
 						{:
-							RESULT = new FuncCallSelf(pexp,new Name(nam),ar);
+							RESULT = new FuncCallSelf(pexp,id,ar);
 						:} 
 						;
 
