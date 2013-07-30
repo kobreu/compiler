@@ -1,17 +1,11 @@
 <Block>
 	<StatList>
-		<LocalFuncDef>
-			<Name name="a" />
-			<FuncBody>
-				<ParList varparlist="false">
+		<LocalFuncDef name="a" varargs="false">
 					<NameList />
-				</ParList>
 				<Block>
 			 		<Null />
 			 		<Null />
 			 	</Block>
-			</FuncBody>
-			
 		</LocalFuncDef>
 	</StatList>
 	<Null />

@@ -8,6 +8,8 @@ import java_cup.runtime.Symbol;
 import java_cup.runtime.*;
 import edu.tum.lua.ast.*;
 
+import asttweaks.*;
+
 
 /* Preliminaries to use the scanner.  */
 scan with {: return lexer.next_token(); :};
@@ -80,7 +82,6 @@ non terminal ExpList explist,args, optasmexplist;
 non terminal Exp exp, optforexp;
 non terminal PrefixExp prefixexp;
 non terminal FunctionCall functioncall;
-non terminal Function function;
 non terminal FuncBody funcbody;
 non terminal ParList parlist;
 non terminal TableConstructor tableconstructor;
@@ -150,6 +151,20 @@ statlist		::=		optws stat:s optsemi optws
 					
 						
 
+prefixexp		::=		var:v
+						{:
+							RESULT = new PrefixExpVar(v);
+						:}
+						| functioncall:fc {:
+							System.out.println("inside prefixexp");
+							RESULT =  new PrefixExpFuncCall(fc);
+						:}
+						| LPAREN exp:e RPAREN
+						{:
+							RESULT = new PrefixExpExp(e);
+						:}
+						;
+
  
 					
 stat        	::=    		varlist:vl optws ASM optws explist:el 
@@ -182,13 +197,20 @@ stat        	::=    		varlist:vl optws ASM optws explist:el
 						| FOR optws namelist:nl optws IN optws explist:el optws DO optws block:b END
 						{: RESULT = new ForIn(nl,el, b); :}
 						| FUNC optws funcname:fn optws funcbody:fb  
-						{: RESULT = new FunctionDef(fn,fb); :} 
-		 				| LOCAL optws FUNC optws ID:Id optws funcbody:fb
-		 				{: RESULT = new LocalFuncDef(new Name(Id), fb); :}
-						| LOCAL optws namelist:nl optasmexplist:el 
+						{:
+							VarList vl = SyntacticSugar.funcNameToVarList(fn);
+							ExpList args = SyntacticSugar.methodDefinitionToExpression(fn, fb);
+							
+							Asm asm = new Asm(vl, args);
+						
+							RESULT = asm;
+						:} 
+		 				| LOCAL optws FUNC optws ID:id optws funcbody:fb
+		 				{: RESULT = new LocalFuncDef(id, fb.getArgs(), fb.getVarArgs(), fb.getBlock()); :}
+						| LOCAL optws namelist:nl optws optasmexplist:el 
 						{: RESULT = new LocalDecl(nl,el); :}
 						;
-	
+					
 laststat		::=		RETURN optws optsemi
 						{:    
 							System.out.println("Inside laststat");
@@ -200,9 +222,8 @@ laststat		::=		RETURN optws optsemi
 							RESULT = new LastReturn(el); 
 						:}
 						| BREAK optws optsemi{: RESULT = new LastBreak(); :}	
-						| BREAK optws optsemi statlist{: RESULT = new LastBreak(); :}
-						
 						; 						
+
 funcname		::=     ID:Id {: RESULT = new FuncNameVar(new Name(Id)); :}
 						| ID:id DOT funcname:fn {: RESULT = new FuncNameVarDotFuncName(new Name(id),fn); :}
 						| ID:id DDOT ID:id1 {: RESULT = new FuncNameDDotVar(new Name(id),new Name(id1)); :}
@@ -256,24 +277,25 @@ explist			::=     exp:e  optws
 optasmexplist   ::=   ASM optws explist:el
 					 {: RESULT = el; :}
 					 | empty
-					 ;			
+					 ;	
+					   
+						
+				 
+					 		
 namelist    	::=    	ID:id  optws
 						{: RESULT = new NameList(new Name(id)); 
 						System.out.println("Inside Namelist"); :}  
-						 | ID:id optws COM optws namelist:nl
-						{: 	if(nl== null){					    		
-					    	nl =new NameList(new Name(id));
-							RESULT = nl;}
-							else{		
-							nl.insertElementAt(new Name(id),0);
+						 | namelist:nl optws COM optws ID:id
+						{: 	System.out.println("Inside Namelist COM"); 
+							
+							nl.append(new Name(id));
 							RESULT = nl;
-							} 
+						
 						:} 
-																	
+						
+						 						
 						;
 					
-					
-
 var				::=		ID:id
 						{:  						
 						RESULT =  new Variable(id);						
@@ -281,7 +303,11 @@ var				::=		ID:id
 						| prefixexp:pe LBRACK exp:e RBRACK	
 						{:  						
 						RESULT =  new VarTabIndex(pe,e);						
-						:}					
+						:}	
+						| prefixexp:pe DOT exp:e
+						{:
+							RESULT = new VarTabIndex(pe, e);
+						:}
 						;
 
 					
@@ -315,24 +341,11 @@ exp				::=		NIL
 								RESULT = new Binop(e1,op,e2); :}
 						| unop:uop optws exp:e
 							{: RESULT = new Unop(uop,e); :}
-						| function:f
-							{: RESULT = new FunctionExp(f); :}
+						| FUNC optws funcbody:fb 
+							{: RESULT = new FunctionExp(fb.getArgs(), fb.getVarArgs(), fb.getBlock()); :}
 						;	
 	
 					
-prefixexp		::=		var:v
-						{:
-							RESULT = new PrefixExpVar(v);
-						:}
-						| functioncall:fc {:
-							System.out.println("inside prefixexp");
-							RESULT =  new PrefixExpFuncCall(fc);
-						:}
-						/*| LPAREN exp:e RPAREN
-						{:
-							RESULT = new PrefixExpExp(e);
-						:}*/
-						;
 	
 	
 functioncall	::= 	prefixexp:pexp args:ar
@@ -356,13 +369,6 @@ args			::= 	LPAREN explist:el RPAREN
 						| TEXT:txt {: RESULT = new ExpList(new TextExp(txt)); :} 
 						;
 
-function 		::=     FUNC optws funcbody:fb
-						{:
-							RESULT = new Function(fb);
-						:}
-						;
-						
-
 funcbody		::= 	LPAREN optws parlist:pl optws RPAREN optws block:bl optws END
 						{:
 								
@@ -375,11 +381,16 @@ funcbody		::= 	LPAREN optws parlist:pl optws RPAREN optws block:bl optws END
 parlist			::=		namelist:nl
 						{:
 							RESULT = new ParList(nl,false);
-						:}
-						| namelist:nl COM PARAMS
+						:} 
+						|
+						namelist:nl optws COM optws PARAMS
 						{:
+							
+							System.out.println("Inside namelist comma params"); 
 							RESULT = new ParList(nl,true);
-						:}
+						:}	
+								
+						
 						| PARAMS
 						{:
 							RESULT = new ParList(new NameList(),true); /* empty namelist */
@@ -388,7 +399,7 @@ parlist			::=		namelist:nl
 							RESULT = new ParList(new NameList(), false); /* empty namelist */
 						  :}
 						  
-						;
+						;	
 	
 
 tableconstructor ::=    LCURL fieldlist:fl RCURL

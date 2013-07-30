@@ -16,8 +16,8 @@ Stat ::= {Asm} 				VarList:varlist ExpList:explist
 		| {IfThenElse} 		Exp:ifexp Block:thenblock Block:elseblock
 		| {ForExp} 			"String":ident Exp:start Exp:end Exp:step Block:block
 		| {ForIn} 			NameList:namelist ExpList:explist Block:block
-		| {FunctionDef} 	FuncName:funcname FuncBody:funcbody
-		| {LocalFuncDef} 	Name:name FuncBody:funcbody
+		/*| {FunctionDef} 	FuncName:funcname NameList:args "boolean":varargs Block:block*/
+		| {LocalFuncDef} 	"String":name NameList:args "boolean":varargs Block:block
 		| {LocalDecl} 		NameList:namelist ExpList:explist
 
 Exp ::=  {Nil} 
@@ -29,12 +29,12 @@ Exp ::=  {Nil}
 		| {TableConstructorExp} TableConstructor:tablecons
 		| {Binop} Exp:leftexp "int":op Exp:rightexp
 		| {Unop} "int":op Exp:exp 
-		| {FunctionExp} Function:function
+		| {FunctionExp} NameList:args "boolean":varargs Block:block
 
 VarList ::= Var*
 
 Var ::=  {Variable} "String":var 
-		| {VarTabIndex} PrefixExp:preexp Exp:indexexp 
+		| {VarTabIndex} PrefixExp:preexp Exp:indexexp
 
 NameList ::= Name*
 
@@ -49,14 +49,9 @@ PrefixExp ::= 	{PrefixExpVar} Var:var
 FunctionCall ::=  {FuncCall} PrefixExp:preexp  ExpList:explist
 				  | {FuncCallSelf} PrefixExp:preexp  Name:name ExpList:explist
 
-Function		::= FuncBody:funcbody
-FuncBody	::= ParList:parlist Block:block
-
 FuncName	::= {FuncNameVar} Name:name
 				| {FuncNameVarDotFuncName} Name:name FuncName:funcnamelist
 				| {FuncNameDDotVar} Name:selffuncname Name:funcname
-				
-ParList		::=  NameList:namelist "Boolean":varparlist
 				
 TableConstructor ::= FieldList:fieldlist
 

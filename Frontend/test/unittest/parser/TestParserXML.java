@@ -48,6 +48,15 @@ public class TestParserXML extends XMLTestCase {
 	public void setUp() {
 		List<String> xmlFiles = new ArrayList<>();
 		List<String> luaFiles = new ArrayList<>();
+		
+		xmlFiles.add("testinput/grammar/func_varargs.xml");
+		luaFiles.add("testinput/grammar/func_varargs.lua");
+		
+		xmlFiles.add("testinput/grammar/funcname_colon.xml");
+		luaFiles.add("testinput/grammar/funcname_colon.lua");
+		
+		xmlFiles.add("testinput/grammar/var_prefix_dot.xml");
+		luaFiles.add("testinput/grammar/var_prefix_dot.lua");
 
 		xmlFiles.add("testinput/grammar/if_and.xml");
 		luaFiles.add("testinput/grammar/if_and.lua");
@@ -57,10 +66,7 @@ public class TestParserXML extends XMLTestCase {
 		
 		xmlFiles.add("testinput/binop/binop_or.xml");
 		luaFiles.add("testinput/binop/binop_or.lua");
-		
-		xmlFiles.add("testinput/grammar/funcname_colon.xml");
-		luaFiles.add("testinput/grammar/funcname_colon.lua");
-		
+
 		xmlFiles.add("testinput/grammar/function_def.xml");
 		luaFiles.add("testinput/grammar/function_def.lua");
 		
@@ -200,8 +206,8 @@ public class TestParserXML extends XMLTestCase {
 		xmlFiles.add("testinput/grammar/exp_nil.xml");
 		luaFiles.add("testinput/grammar/exp_nil.lua");
 		
-		/*xmlFiles.add("testinput/grammar/exp_prefixexp.xml");
-		luaFiles.add("testinput/grammar/exp_prefixexp.lua");*/
+		xmlFiles.add("testinput/grammar/exp_prefixexp.xml");
+		luaFiles.add("testinput/grammar/exp_prefixexp.lua");
 		
 		xmlFiles.add("testinput/grammar/exp_string.xml");
 		luaFiles.add("testinput/grammar/exp_string.lua");
@@ -236,8 +242,8 @@ public class TestParserXML extends XMLTestCase {
 		xmlFiles.add("testinput/grammar/field_name.xml");
 		luaFiles.add("testinput/grammar/field_name.lua");
 		
-		/*xmlFiles.add("testinput/grammar/exp_function_application.xml");
-		luaFiles.add("testinput/grammar/exp_function_application.lua");*/
+		xmlFiles.add("testinput/grammar/exp_function_application.xml");
+		luaFiles.add("testinput/grammar/exp_function_application.lua");
 		
 		xmlFiles.add("testinput/grammar/chunk_sequence_without_semicolons.xml");
 		luaFiles.add("testinput/grammar/chunk_sequence_without_semicolons.lua");
@@ -321,7 +327,7 @@ public class TestParserXML extends XMLTestCase {
 
 	        OutputFormat format = OutputFormat.createPrettyPrint();
 	        XMLWriter writer = new XMLWriter( System.out, format );
-	        //writer.write( doc );
+	        writer.write( doc );
 
 	        //writer.write( document);
 	        

@@ -1,23 +1,39 @@
 <Block>
 	<StatList>
-		<FunctionDef>
-				<FuncNameVarDotFuncName>
-					<Name name="bla" />
-					<FuncNameDDotVar>
-						<Name name="func" />
-						<Name name="colon" />
-					</FuncNameDDotVar>
-				</FuncNameVarDotFuncName>
-			<FuncBody>
-				<ParList varparlist="false">
-					<NameList />
-			 	</ParList>
-			 	<Block>
-			 		<Null />
-			 		<Null />
-			 	</Block>
-			</FuncBody>
-		</FunctionDef>
+		<Asm>
+			<VarList>
+				<VarTabIndex>
+					<PrefixExpVar>
+						<Variable var="bla" />
+					</PrefixExpVar>
+					<PreExp>
+			            <PrefixExpVar>
+			              <VarTabIndex>
+			                <PrefixExpVar>
+			                  <Variable var="colon"/>
+			                </PrefixExpVar>
+			                <PreExp>
+			                  <PrefixExpVar>
+			                    <Variable var="func"/>
+			                  </PrefixExpVar>
+			                </PreExp>
+			              </VarTabIndex>
+			            </PrefixExpVar>
+          			</PreExp>
+				</VarTabIndex>
+			</VarList>
+			<ExpList>
+				<FunctionExp varargs="false">
+				<NameList>
+            		<Name name="self"/>
+          		</NameList>
+				<Block>
+					<Null />
+					<Null />
+				</Block>
+				</FunctionExp>
+			</ExpList>
+		</Asm>
 	</StatList>
 	<Null />
 </Block>
