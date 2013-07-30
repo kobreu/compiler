@@ -13,7 +13,7 @@ public class TestParser {
 
 	@Test
 	public void test() throws Exception {
-		String file = "testinput/lua5.1-tests/api.lua";
+		String file = "testinput/homework/korbinian_sorting.lua";
 
 		Lexer scanner = null;
 		Lexer outputScanner = null;
@@ -139,6 +139,8 @@ public class TestParser {
 			return "RPAREN";
 		case sym.RCURL:
 			return "RCURL";
+		case sym.RBRACK:
+			return "RBRACK";
 		case sym.RETURN:
 			return "RETURN";
 		case sym.UNTIL:

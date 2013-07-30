@@ -22,11 +22,13 @@ import java.util.regex.Pattern;
   StringBuffer string = new StringBuffer();
 
   private Symbol symbol(int sym) {
-    return new Symbol(sym, yyline+1, yycolumn+1);
+    Symbol symb = new Symbol(sym, yyline+1, yycolumn+1);
+    return symb;
   }
   
   private Symbol symbol(int sym, Object val) {
-    return new Symbol(sym, yyline+1, yycolumn+1, val);
+    Symbol symb = new Symbol(sym, yyline+1, yycolumn+1, val);
+    return symb;
   }
   
   private void error(String message) {
@@ -132,7 +134,7 @@ CommentContent = ([^("]""="*"]")])*
 "="				{ return symbol(ASM); }
 
 /* white space */
-{white_space}    { return symbol(WS); }
+{white_space}    {  }
 
 /* comments */
 {Comment} { /* ignore */ }

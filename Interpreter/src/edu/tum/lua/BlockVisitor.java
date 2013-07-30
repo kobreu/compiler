@@ -3,15 +3,16 @@ package edu.tum.lua;
 import static edu.tum.lua.ast.LegacyAdapter.convert;
 
 import java.util.Arrays;
+import java.util.Deque;
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import edu.tum.lua.ast.Asm;
 import edu.tum.lua.ast.Block;
 import edu.tum.lua.ast.DoExp;
 import edu.tum.lua.ast.Exp;
-import edu.tum.lua.ast.ExpList;
 import edu.tum.lua.ast.ForExp;
 import edu.tum.lua.ast.ForIn;
 import edu.tum.lua.ast.FuncCallStmt;
@@ -21,12 +22,14 @@ import edu.tum.lua.ast.LastReturn;
 import edu.tum.lua.ast.LegacyAdapter;
 import edu.tum.lua.ast.LocalDecl;
 import edu.tum.lua.ast.LocalFuncDef;
-import edu.tum.lua.ast.Name;
-import edu.tum.lua.ast.NameList;
 import edu.tum.lua.ast.RepeatUntil;
 import edu.tum.lua.ast.Stat;
+import edu.tum.lua.ast.Var;
+import edu.tum.lua.ast.VarTabIndex;
+import edu.tum.lua.ast.Variable;
 import edu.tum.lua.ast.VisitorAdaptor;
 import edu.tum.lua.ast.WhileExp;
+import edu.tum.lua.exceptions.LuaRuntimeException;
 import edu.tum.lua.operator.logical.LogicalOperatorSupport;
 import edu.tum.lua.types.LuaFunction;
 import edu.tum.lua.types.LuaFunctionInterpreted;
@@ -60,30 +63,82 @@ public class BlockVisitor extends VisitorAdaptor {
 		throw new RuntimeException("Unsupported Statement");
 	}
 
-	public void assign(boolean local, List<String> identifiers, ExpList expList) {
-		ExpVisitor visitor = new ExpVisitor(environment, vararg);
-		expList.accept(visitor);
+	private interface StoreLocation {
+		void store(Object object);
+	}
 
-		Iterator<String> identifierIterator = identifiers.iterator();
-		Iterator<Object> valuesIterator = visitor.popAll().iterator();
+	private static class EnvironmentLocation implements StoreLocation {
 
-		while (identifierIterator.hasNext()) {
-			String identifier = identifierIterator.next();
-			Object value = valuesIterator.hasNext() ? valuesIterator.next() : null;
+		private final LocalEnvironment environment;
+		private final String ident;
 
-			// TODO: VAR TAB INDEX
+		protected EnvironmentLocation(LocalEnvironment e, String i) {
+			environment = e;
+			ident = i;
+		}
 
-			if (local) {
-				environment.setLocal(identifier, value);
-			} else {
-				environment.set(identifier, value);
+		@Override
+		public void store(Object object) {
+			environment.set(ident, object);
+		}
+	}
+
+	private static class TableLocation implements StoreLocation {
+		private final LuaTable environment;
+		private final Object key;
+
+		protected TableLocation(LuaTable e, Object k) {
+			if (k == null) {
+				throw new IllegalArgumentException();
 			}
+
+			environment = e;
+
+			key = k;
+		}
+
+		@Override
+		public void store(Object object) {
+			environment.set(key, object);
 		}
 	}
 
 	@Override
 	public void visit(Asm stmt) {
-		assign(false, LegacyAdapter.convert(stmt.varlist), stmt.explist);
+		ExpVisitor visitor = new ExpVisitor(environment, vararg);
+		stmt.explist.accept(visitor);
+
+		Enumeration<Var> identifierIterator = stmt.varlist.elements();
+		Iterator<Object> valuesIterator = visitor.popAll().iterator();
+
+		Deque<StoreLocation> locations = new LinkedList<>();
+
+		while (identifierIterator.hasMoreElements()) {
+			Var identifier = identifierIterator.nextElement();
+
+			if (identifier instanceof Variable) {
+				locations.addLast(new EnvironmentLocation(environment, ((Variable) identifier).var));
+			} else /* VarTabIndex */{
+				VarTabIndex varTabIndex = (VarTabIndex) identifier;
+				varTabIndex.preexp.accept(visitor);
+
+				Object object = visitor.popLast();
+
+				if (LuaType.getTypeOf(object) != LuaType.TABLE) {
+					throw new LuaRuntimeException(varTabIndex, "attempt to index a " + LuaType.getTypeOf(object));
+				}
+
+				LuaTable table = (LuaTable) object;
+				varTabIndex.indexexp.accept(visitor);
+				Object key = visitor.popLast();
+				locations.addLast(new TableLocation(table, key));
+			}
+		}
+
+		for (StoreLocation location : locations) {
+			Object value = valuesIterator.hasNext() ? valuesIterator.next() : null;
+			location.store(value);
+		}
 	}
 
 	@Override
@@ -220,21 +275,6 @@ public class BlockVisitor extends VisitorAdaptor {
 		stmt.call.accept(visitor);
 	}
 
-	private LuaTable getFunctionLocation(NameList list) {
-		Enumeration<Name> names = list.elements();
-		if (!names.hasMoreElements()) {
-			return environment.getGlobalEnvironment();
-		}
-
-		LuaTable current = (LuaTable) environment.get(names.nextElement().name);
-
-		while (names.hasMoreElements()) {
-			current = current.getLuaTable(names.nextElement().name);
-		}
-
-		return current;
-	}
-
 	@Override
 	public void visit(IfThenElse stmt) {
 		if (isTrue(stmt.ifexp)) {
@@ -247,7 +287,18 @@ public class BlockVisitor extends VisitorAdaptor {
 	@Override
 	public void visit(LocalDecl stmt) {
 		environment = new LocalEnvironment(environment);
-		assign(true, LegacyAdapter.convert(stmt.namelist), stmt.explist);
+
+		ExpVisitor visitor = new ExpVisitor(environment, vararg);
+		stmt.explist.accept(visitor);
+
+		Iterator<String> identifierIterator = LegacyAdapter.convert(stmt.namelist).iterator();
+		Iterator<Object> valuesIterator = visitor.popAll().iterator();
+
+		while (identifierIterator.hasNext()) {
+			String identifier = identifierIterator.next();
+			Object value = valuesIterator.hasNext() ? valuesIterator.next() : null;
+			environment.setLocal(identifier, value);
+		}
 	}
 
 	@Override
@@ -268,6 +319,7 @@ public class BlockVisitor extends VisitorAdaptor {
 			stmt.block.accept(this);
 
 			if (Break) {
+				Break = false;
 				break;
 			}
 
@@ -283,6 +335,7 @@ public class BlockVisitor extends VisitorAdaptor {
 			stmt.block.accept(this);
 
 			if (Break) {
+				Break = false;
 				break;
 			}
 

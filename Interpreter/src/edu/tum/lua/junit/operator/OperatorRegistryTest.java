@@ -14,6 +14,7 @@ public class OperatorRegistryTest {
 	@Test
 	public void test() {
 		try {
+			@SuppressWarnings("unused")
 			Operator op = OperatorRegistry.registry[20];
 			fail();
 		} catch (ArrayIndexOutOfBoundsException e) {
