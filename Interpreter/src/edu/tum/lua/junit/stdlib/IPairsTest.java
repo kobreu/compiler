@@ -36,8 +36,11 @@ public class IPairsTest {
 		// > f, t, v = pairs({})
 		// > print(f(t,v)) >> nil
 		List<Object> returnList = ipairs.apply(table);
+		@SuppressWarnings("unused")
 		LuaFunction returnFunction = (LuaFunction) returnList.get(0);
+		@SuppressWarnings("unused")
 		LuaTable returnTable = (LuaTable) returnList.get(1);
+		@SuppressWarnings("unused")
 		Object returnObject = returnList.get(2);
 
 		// TODO write some more testcases
