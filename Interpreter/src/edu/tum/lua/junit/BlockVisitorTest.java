@@ -7,16 +7,14 @@ import org.junit.Before;
 import org.junit.Test;
 
 import util.ParserUtil;
+import edu.tum.lua.BlockVisitor;
 import edu.tum.lua.LocalEnvironment;
 import edu.tum.lua.LuaInterpreter;
-import edu.tum.lua.StatementVisitor;
 import edu.tum.lua.ast.Asm;
 import edu.tum.lua.ast.Binop;
 import edu.tum.lua.ast.Block;
 import edu.tum.lua.ast.DoExp;
 import edu.tum.lua.ast.ExpList;
-import edu.tum.lua.ast.ForIn;
-import edu.tum.lua.ast.FunctionCall;
 import edu.tum.lua.ast.FunctionDef;
 import edu.tum.lua.ast.IfThenElse;
 import edu.tum.lua.ast.LastBreak;
@@ -27,25 +25,22 @@ import edu.tum.lua.ast.NameList;
 import edu.tum.lua.ast.NumberExp;
 import edu.tum.lua.ast.Op;
 import edu.tum.lua.ast.PreExp;
-import edu.tum.lua.ast.PrefixExp;
-import edu.tum.lua.ast.PrefixExpFuncCall;
 import edu.tum.lua.ast.PrefixExpVar;
 import edu.tum.lua.ast.StatList;
-import edu.tum.lua.ast.Var;
 import edu.tum.lua.ast.VarList;
 import edu.tum.lua.ast.Variable;
 import edu.tum.lua.types.LuaTable;
 import edu.tum.lua.types.LuaType;
 
-public class StatementVisitorTest {
+public class BlockVisitorTest {
 
-	private StatementVisitor visitor;
+	private BlockVisitor visitor;
 	private LocalEnvironment environment;
 
 	@Before
 	public void setUp() throws Exception {
 		environment = new LocalEnvironment();
-		visitor = new StatementVisitor(environment);
+		visitor = new BlockVisitor(environment);
 	}
 
 	@Test
@@ -83,7 +78,7 @@ public class StatementVisitorTest {
 	public void testVisitIf() throws Exception {
 
 		environment = new LocalEnvironment();
-		visitor = new StatementVisitor(environment);
+		visitor = new BlockVisitor(environment);
 
 		// > a = 1+1 >> a=2 // > if a == 2 then b=1 else b=0 end >> b=1
 		// > if b!= 1 then c=1 else c=0 end >> c=0
@@ -102,7 +97,7 @@ public class StatementVisitorTest {
 				new NumberExp(1.0)))), null), new Block(new StatList(new Asm(new VarList(new Variable("b")),
 				new ExpList(new NumberExp(2.0)))), null));
 
-		visitor = new StatementVisitor(environment);
+		visitor = new BlockVisitor(environment);
 		visitor.visit(ifstatement);
 		assertEquals(1.0, environment.get("b"));
 
@@ -244,15 +239,22 @@ public class StatementVisitorTest {
 
 		environment.set("t", table);
 		LuaTable t = (LuaTable) environment.get("t");
-		assertEquals((Object) 1.0, t.get("one"));
-		assertEquals((Object) 2.0, t.get("two"));
-		assertEquals((Object) 3.0, t.get("three"));
+		assertEquals(1.0, t.get("one"));
+		assertEquals(2.0, t.get("two"));
+		assertEquals(3.0, t.get("three"));
 
-	/*	Asm asm = new Asm(new VarList(new Variable("a")), new ExpList(new Binop(new PreExp(new PrefixExpVar(new Variable("a"))), Op.CONCAT, new PreExp(new PrefixExpVar(new Variable("k"))))));
-		PrefixExpFuncCall pefc = new PrefixExpFuncCall(new FunctionCall(new PrefixExpVar(new Variable("pairs")), new ExpList(new PreExp(new PrefixExpVar(new Variable("t"))))));
-		block = new Block(new StatList(new ForIn(new NameList(new Name("k")), new ExpList(new PreExp(pefc)), new Block(new StatList(asm), null))), null); */
+		/*
+		 * Asm asm = new Asm(new VarList(new Variable("a")), new ExpList(new
+		 * Binop(new PreExp(new PrefixExpVar(new Variable("a"))), Op.CONCAT, new
+		 * PreExp(new PrefixExpVar(new Variable("k")))))); PrefixExpFuncCall
+		 * pefc = new PrefixExpFuncCall(new FunctionCall(new PrefixExpVar(new
+		 * Variable("pairs")), new ExpList(new PreExp(new PrefixExpVar(new
+		 * Variable("t")))))); block = new Block(new StatList(new ForIn(new
+		 * NameList(new Name("k")), new ExpList(new PreExp(pefc)), new Block(new
+		 * StatList(asm), null))), null);
+		 */
 		// TODO: Read statement
-		
+
 		LuaInterpreter.eval(block, environment);
 		// assertEquals("atwoonethree,", environment.get("a"));
 

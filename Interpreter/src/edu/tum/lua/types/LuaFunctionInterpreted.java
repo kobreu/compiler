@@ -1,22 +1,16 @@
 package edu.tum.lua.types;
 
-import static edu.tum.lua.ast.LegacyAdapter.convert;
-
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
-import edu.tum.lua.ExpVisitor;
+import edu.tum.lua.BlockVisitor;
 import edu.tum.lua.GlobalEnvironment;
 import edu.tum.lua.LocalEnvironment;
-import edu.tum.lua.StatementVisitor;
+import edu.tum.lua.LuaRuntimeException;
 import edu.tum.lua.ast.Block;
 import edu.tum.lua.ast.FunctionDef;
-import edu.tum.lua.ast.LastBreak;
-import edu.tum.lua.ast.LastReturn;
 import edu.tum.lua.ast.LegacyAdapter;
 import edu.tum.lua.ast.LocalFuncDef;
-import edu.tum.lua.ast.Stat;
 
 public class LuaFunctionInterpreted implements LuaFunction {
 
@@ -54,35 +48,22 @@ public class LuaFunctionInterpreted implements LuaFunction {
 			currentEnvironment.setLocal(argumentNames.get(i), arguments.get(i));
 		}
 
-		StatementVisitor visitor;
+		BlockVisitor blockVisitor;
 
 		if (vararg) {
-			visitor = new StatementVisitor(currentEnvironment,
-					arguments.subList(argumentNames.size(), arguments.size()));
+			blockVisitor = new BlockVisitor(currentEnvironment, arguments.subList(argumentNames.size(),
+					arguments.size()));
 		} else {
-			visitor = new StatementVisitor(currentEnvironment);
+			blockVisitor = new BlockVisitor(currentEnvironment);
 		}
 
-		for (Stat statement : convert(block.stats)) {
-			statement.accept(visitor);
+		block.accept(blockVisitor);
+
+		if (blockVisitor.getBreak()) {
+			throw new LuaRuntimeException("No loop to break");
 		}
 
-		if (block.last == null || block.last instanceof LastBreak) {
-			return Collections.emptyList();
-		}
-
-		/* LastReturn */
-		LocalEnvironment lastEnvironment = visitor.getEnvironment();
-		ExpVisitor visitor2;
-		if (vararg) {
-			visitor2 = new ExpVisitor(lastEnvironment, arguments.subList(argumentNames.size(), arguments.size()));
-		} else {
-			visitor2 = new ExpVisitor(lastEnvironment, null);
-		}
-
-		((LastReturn) block.last).explist.accept(visitor2);
-
-		return visitor2.popAll();
+		return blockVisitor.getReturn();
 	}
 
 	@Override
