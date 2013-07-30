@@ -23,7 +23,6 @@ import edu.tum.lua.ast.FuncNameDDotVar;
 import edu.tum.lua.ast.FuncNameVar;
 import edu.tum.lua.ast.FuncNameVarDotFuncName;
 import edu.tum.lua.ast.FunctionCall;
-import edu.tum.lua.ast.FunctionDef;
 import edu.tum.lua.ast.FunctionExp;
 import edu.tum.lua.ast.IfThenElse;
 import edu.tum.lua.ast.LastBreak;
@@ -96,7 +95,6 @@ public abstract class VisitorAdapterGeneric extends VisitorAdaptor {
 	  @Override public void visit(IfThenElse ifThenElse) { visitGeneric(ifThenElse); }
 	  @Override public void visit(ForExp forExp) { visitGeneric(forExp); }
 	  @Override public void visit(ForIn forIn) { visitGeneric(forIn); }
-	  @Override public void visit(FunctionDef functionDef) { visitGeneric(functionDef); }
 	  @Override	public void visit(FuncName funcName) { visitGeneric(funcName);	}
 	  @Override	public void visit(FuncNameVar funcNameVar) {visitGeneric(funcNameVar);}
 	  @Override	public void visit(FuncNameDDotVar funcNameVar) {visitGeneric(funcNameVar);}

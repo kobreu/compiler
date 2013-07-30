@@ -11,7 +11,6 @@ import edu.tum.lua.ast.Dots;
 import edu.tum.lua.ast.FieldNameExp;
 import edu.tum.lua.ast.FuncName;
 import edu.tum.lua.ast.FuncNameVar;
-import edu.tum.lua.ast.FunctionDef;
 import edu.tum.lua.ast.FunctionExp;
 import edu.tum.lua.ast.LocalFuncDef;
 import edu.tum.lua.ast.Name;
@@ -93,11 +92,6 @@ public class AttributeWriterVisitor extends VisitorAdaptor {
 	@Override
 	public void visit(FieldNameExp fieldNameExp) {
 		addAttr("ident", fieldNameExp.ident);
-	}
-	
-	@Override
-	public void visit(FunctionDef functionDef) {
-		addAttr("varargs", String.valueOf(functionDef.varargs));
 	}
 	
 	@Override

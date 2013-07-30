@@ -56,7 +56,7 @@
 
 	<target name="cup" depends="classgen">
 		<cup srcfile="${cup}/Parser.cup" destdir="${java}/edu/tum/lua/parser" interface="true" package="edu.tum.lua.parser"
-parser="Parser" expect="3" />
+parser="Parser" expect="8" />
 	</target>
 
 	<target name="jflex" depends="cup">

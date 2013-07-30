@@ -197,7 +197,14 @@ stat        	::=    		varlist:vl optws ASM optws explist:el
 						| FOR optws namelist:nl optws IN optws explist:el optws DO optws block:b END
 						{: RESULT = new ForIn(nl,el, b); :}
 						| FUNC optws funcname:fn optws funcbody:fb  
-						{: RESULT = new FunctionDef(fn,fb.getArgs(), fb.getVarArgs(), fb.getBlock()); :} 
+						{:
+							VarList vl = SyntacticSugar.funcNameToVarList(fn);
+							ExpList args = SyntacticSugar.methodDefinitionToExpression(fn, fb);
+							
+							Asm asm = new Asm(vl, args);
+						
+							RESULT = asm;
+						:} 
 		 				| LOCAL optws FUNC optws ID:id optws funcbody:fb
 		 				{: RESULT = new LocalFuncDef(id, fb.getArgs(), fb.getVarArgs(), fb.getBlock()); :}
 						| LOCAL optws namelist:nl optasmexplist:el 
@@ -286,8 +293,6 @@ namelist    	::=    	ID:id  optws
 																	
 						;
 					
-					
-
 var				::=		ID:id
 						{:  						
 						RESULT =  new Variable(id);						
@@ -295,7 +300,11 @@ var				::=		ID:id
 						| prefixexp:pe LBRACK exp:e RBRACK	
 						{:  						
 						RESULT =  new VarTabIndex(pe,e);						
-						:}					
+						:}	
+						| prefixexp:pe DOT exp:e
+						{:
+							RESULT = new VarTabIndex(pe, e);
+						:}
 						;
 
 					

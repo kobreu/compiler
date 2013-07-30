@@ -16,7 +16,7 @@ Stat ::= {Asm} 				VarList:varlist ExpList:explist
 		| {IfThenElse} 		Exp:ifexp Block:thenblock Block:elseblock
 		| {ForExp} 			"String":ident Exp:start Exp:end Exp:step Block:block
 		| {ForIn} 			NameList:namelist ExpList:explist Block:block
-		| {FunctionDef} 	FuncName:funcname NameList:args "boolean":varargs Block:block
+		/*| {FunctionDef} 	FuncName:funcname NameList:args "boolean":varargs Block:block*/
 		| {LocalFuncDef} 	"String":name NameList:args "boolean":varargs Block:block
 		| {LocalDecl} 		NameList:namelist ExpList:explist
 
@@ -34,7 +34,7 @@ Exp ::=  {Nil}
 VarList ::= Var*
 
 Var ::=  {Variable} "String":var 
-		| {VarTabIndex} PrefixExp:preexp Exp:indexexp 
+		| {VarTabIndex} PrefixExp:preexp Exp:indexexp
 
 NameList ::= Name*
 

@@ -1,15 +1,20 @@
 <Block>
 	<StatList>
-		<FunctionDef varargs="false">
-			<FuncNameVar>
-					<Name name="a" />
-			</FuncNameVar>
-			<NameList />
-			 	<Block>
-			 		<Null />
-			 		<Null />
-			 	</Block>
-		</FunctionDef>
+		<Asm>
+			<VarList>
+				<Variable var="a" />
+			</VarList>
+			<ExpList>
+				<FunctionExp varargs="false">
+				<NameList>
+          		</NameList>
+				<Block>
+					<Null />
+					<Null />
+				</Block>
+				</FunctionExp>
+			</ExpList>
+		</Asm>
 	</StatList>
 	<Null />
 </Block>
