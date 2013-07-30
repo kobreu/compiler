@@ -1,5 +1,6 @@
 package edu.tum.lua.exceptions;
 
+
 public class LuaBadArgumentException extends LuaRuntimeException {
 
 	private static final long serialVersionUID = 7358323281432067832L;

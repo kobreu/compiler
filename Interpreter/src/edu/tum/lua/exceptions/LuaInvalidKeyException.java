@@ -2,9 +2,10 @@ package edu.tum.lua.exceptions;
 
 public class LuaInvalidKeyException extends LuaRuntimeException {
 
-	public LuaInvalidKeyException(String message) {
-		super(message);
-		// TODO Auto-generated constructor stub
+	private static final long serialVersionUID = 7054064368518675302L;
+
+	public LuaInvalidKeyException(String name) {
+		super("invalid key for " + name);
 	}
 
 }

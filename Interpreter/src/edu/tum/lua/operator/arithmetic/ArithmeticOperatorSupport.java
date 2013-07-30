@@ -2,6 +2,7 @@ package edu.tum.lua.operator.arithmetic;
 
 import javax.naming.OperationNotSupportedException;
 
+import edu.tum.lua.exceptions.LuaArithmeticOperationNotSupportedException;
 import edu.tum.lua.types.LuaType;
 
 public final class ArithmeticOperatorSupport {
@@ -13,7 +14,7 @@ public final class ArithmeticOperatorSupport {
 			return new Double((String) object);
 		}
 
-		throw new OperationNotSupportedException();
+		throw new LuaArithmeticOperationNotSupportedException(LuaType.getTypeOf(object).toString());
 	}
 
 }

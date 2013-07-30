@@ -5,7 +5,7 @@ import java.util.List;
 
 import edu.tum.lua.Preconditions;
 import edu.tum.lua.exceptions.LuaBadArgumentException;
-import edu.tum.lua.exceptions.LuaRuntimeException;
+import edu.tum.lua.exceptions.LuaIndexOutOfRangeException;
 import edu.tum.lua.types.LuaFunctionNative;
 import edu.tum.lua.types.LuaType;
 
@@ -21,7 +21,7 @@ public class Select extends LuaFunctionNative {
 		if (LuaType.getTypeOf(firstArgument) == LuaType.NUMBER) {
 			double index = (double) firstArgument;
 			if (index < 1)
-				throw new LuaRuntimeException("bad argument : index out of range");
+				throw new LuaIndexOutOfRangeException(1, "select");
 			for (int i = 0; i < index; i++) {
 				arguments.remove(0);
 			}

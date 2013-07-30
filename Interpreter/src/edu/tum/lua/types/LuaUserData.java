@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.RandomAccessFile;
 
-import edu.tum.lua.exceptions.LuaRuntimeException;
+import edu.tum.lua.exceptions.LuaIOException;
 
 public class LuaUserData {
 	private RandomAccessFile raf;
@@ -26,7 +26,7 @@ public class LuaUserData {
 
 	public RandomAccessFile getRaf() {
 		if (raf == null) {
-			throw new LuaRuntimeException("attemp to handle with closed file");
+			throw new LuaIOException("attemp to handle with closed file");
 		}
 
 		return raf;
@@ -34,7 +34,7 @@ public class LuaUserData {
 
 	public String getFm() {
 		if (raf == null) {
-			throw new LuaRuntimeException("attemp to handle with closed file");
+			throw new LuaIOException("attemp to handle with closed file");
 		}
 
 		return fm;

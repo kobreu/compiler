@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.List;
 
 import edu.tum.lua.Preconditions;
-import edu.tum.lua.exceptions.LuaRuntimeException;
+import edu.tum.lua.exceptions.LuaIOException;
 import edu.tum.lua.types.LuaFunction;
 import edu.tum.lua.types.LuaFunctionNative;
 import edu.tum.lua.types.LuaType;
@@ -22,7 +22,7 @@ public class Load extends LuaFunctionNative {
 
 		while (iter != null && !iter.isEmpty()) {
 			if (LuaType.getTypeOf(iter.get(0)) != LuaType.STRING)
-				throw new LuaRuntimeException("The function doesn't return a string");
+				throw new LuaIOException("The function doesn't return a string");
 			if (iter.get(0).toString().length() == 0)
 				break;
 			result = result.concat(iter.get(0).toString());

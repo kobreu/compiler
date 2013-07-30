@@ -5,7 +5,7 @@ import java.util.List;
 
 import edu.tum.lua.GlobalEnvironment;
 import edu.tum.lua.Preconditions;
-import edu.tum.lua.exceptions.LuaRuntimeException;
+import edu.tum.lua.exceptions.LuaNotSupportedException;
 import edu.tum.lua.types.LuaFunctionInterpreted;
 import edu.tum.lua.types.LuaFunctionNative;
 import edu.tum.lua.types.LuaType;
@@ -19,9 +19,9 @@ public class Setfenv extends LuaFunctionNative {
 		Preconditions.checkArguments("setfenv", arguments, expectedTypes);
 		Object f = arguments.get(0);
 		if (LuaType.getTypeOf(f) == LuaType.NUMBER)
-			throw new LuaRuntimeException("not supported in this version");
+			throw new LuaNotSupportedException();
 		if (f instanceof LuaFunctionNative)
-			throw new LuaRuntimeException("not supported in this version");
+			throw new LuaNotSupportedException();
 		((LuaFunctionInterpreted) f).setGlobalEnvironment((GlobalEnvironment) arguments.get(1));
 		return Arrays.asList(f);
 	}
