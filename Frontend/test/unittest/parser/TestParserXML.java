@@ -49,6 +49,15 @@ public class TestParserXML extends XMLTestCase {
 		List<String> xmlFiles = new ArrayList<>();
 		List<String> luaFiles = new ArrayList<>();
 		
+		xmlFiles.add("testinput/grammar/for_2_exps.xml");
+		luaFiles.add("testinput/grammar/for_2_exps.lua");
+		
+		xmlFiles.add("testinput/grammar/for.xml");
+		luaFiles.add("testinput/grammar/for.lua");
+		
+		xmlFiles.add("testinput/grammar/explist_multiple.xml");
+		luaFiles.add("testinput/grammar/explist_multiple.lua");
+		
 		xmlFiles.add("testinput/grammar/func_varargs.xml");
 		luaFiles.add("testinput/grammar/func_varargs.lua");
 		
@@ -268,9 +277,6 @@ public class TestParserXML extends XMLTestCase {
 		
 		xmlFiles.add("testinput/grammar/args_tableconstructor.xml");
 		luaFiles.add("testinput/grammar/args_tableconstructor.lua");
-		
-		xmlFiles.add("testinput/grammar/explist_multiple.xml");
-		luaFiles.add("testinput/grammar/explist_multiple.lua");
 		
 		this.xmlFiles = xmlFiles.toArray(new String[]{});
 		this.luaFiles = luaFiles.toArray(new String[]{});
