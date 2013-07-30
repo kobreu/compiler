@@ -7,8 +7,11 @@ import jline.ConsoleReader;
 public class Main {
 
 	public static void main(String... args) throws IOException {
-		ConsoleReader reader = new ConsoleReader();
 
-		System.out.println("Hello");
+		while (true) {
+			ConsoleReader reader = new ConsoleReader();
+
+			System.out.println(reader.readLine());
+		}
 	}
 }
