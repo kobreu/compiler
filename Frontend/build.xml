@@ -49,7 +49,6 @@
 		<mkdir dir="${dist}" />
 	</target>
 
-
 	<target name="compile" depends="init">
 		<javac destdir="${classes}" debug="on">
             <src path="${src}"/>  

@@ -48,6 +48,12 @@ public class TestParserXML extends XMLTestCase {
 	public void setUp() {
 		List<String> xmlFiles = new ArrayList<>();
 		List<String> luaFiles = new ArrayList<>();
+
+		xmlFiles.add("testinput/grammar/var_prefix_dot.xml");
+		luaFiles.add("testinput/grammar/var_prefix_dot_whitespace.lua");
+		
+		xmlFiles.add("testinput/grammar/var_prefix_dot.xml");
+		luaFiles.add("testinput/grammar/var_prefix_dot.lua");
 		
 		xmlFiles.add("testinput/grammar/for_2_exps.xml");
 		luaFiles.add("testinput/grammar/for_2_exps.lua");
@@ -64,8 +70,7 @@ public class TestParserXML extends XMLTestCase {
 		xmlFiles.add("testinput/grammar/funcname_colon.xml");
 		luaFiles.add("testinput/grammar/funcname_colon.lua");
 		
-		xmlFiles.add("testinput/grammar/var_prefix_dot.xml");
-		luaFiles.add("testinput/grammar/var_prefix_dot.lua");
+
 
 		xmlFiles.add("testinput/grammar/if_and.xml");
 		luaFiles.add("testinput/grammar/if_and.lua");
