@@ -320,6 +320,7 @@ public class BlockVisitor extends VisitorAdaptor {
 			stmt.block.accept(this);
 
 			if (Break) {
+				Break = false;
 				break;
 			}
 
@@ -335,6 +336,7 @@ public class BlockVisitor extends VisitorAdaptor {
 			stmt.block.accept(this);
 
 			if (Break) {
+				Break = false;
 				break;
 			}
 
