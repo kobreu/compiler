@@ -190,7 +190,7 @@ stat        	::=    		varlist:vl optws ASM optws explist:el
 						{: 
 							RESULT = new IfThenElse(e, b, elseblock);
 						:}
-						| 	FOR optws ID:Id optws ASM optws exp:e1 optws COM optws exp:e2  optforexp:e3 optws DO optws block:b END
+						| 	FOR optws ID:Id optws ASM optws exp:e1 optws COM optws exp:e2 optws optforexp:e3 optws DO optws block:b END
 						{: 		
 								RESULT = new ForExp(Id,e1,e2,e3,b); 
 						:}
@@ -237,7 +237,7 @@ optelse			::= 	ELSE optws block:b {: RESULT = b; :}
 						| empty
 						;	
 												
-optforexp		::=		COM optws exp:e {: RESULT = e; :}				
+optforexp		::=		COM optws exp:e optws {: RESULT = e; :}				
 						| empty {: RESULT = new NumberExp(1.0); :}
 						;
 
