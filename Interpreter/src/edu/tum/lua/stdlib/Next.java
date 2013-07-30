@@ -35,7 +35,7 @@ public class Next extends LuaFunctionNative {
 		// If the second argument is absent, then it is interpreted as nil.
 		index = (arguments.size() == 2) ? arguments.get(1) : null;
 
-		iter = table.getIterator();
+		iter = table.iterator();
 
 		// When called with nil as its second argument, next returns an initial
 		// index and its associated value
