@@ -12,7 +12,6 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import util.ParserUtil;
-import edu.tum.lua.ExpVisitor;
 import edu.tum.lua.GlobalEnvironment;
 import edu.tum.lua.LocalEnvironment;
 import edu.tum.lua.LuaInterpreter;
@@ -24,14 +23,12 @@ public class RequireTest {
 	@Rule
 	public TemporaryFolder folder = new TemporaryFolder();
 
-	private ExpVisitor visitor;
 	private LocalEnvironment environment;
 	private GlobalEnvironment g;
 
 	@Before
 	public void setUp() throws Exception {
 		environment = new LocalEnvironment();
-		visitor = new ExpVisitor(environment, null);
 		g = GlobalEnvironment.getGlobalEnvironment();
 
 	}
@@ -60,6 +57,15 @@ public class RequireTest {
 		LuaInterpreter.eval(block2, environment);
 		assertEquals(LuaTable.class, environment.get("m").getClass());
 		assertEquals(LuaTable.class, g.getLuaTable("package").getLuaTable("loaded").get("mymodule").getClass());
+
+	}
+
+	@Test
+	public void testRequire2() throws Exception {
+
+		// TODO add (expected=FileNotFound) to test definition!
+		Block block1 = ParserUtil.loadString("m=require(\"mymodule22\")");
+		LuaInterpreter.eval(block1, environment);
 
 	}
 }
