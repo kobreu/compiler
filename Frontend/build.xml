@@ -37,11 +37,11 @@
 	</path>
 
 	<!-- This is JFlex -->
-	<taskdef name="jflex" classname="JFlex.anttask.JFlexTask" classpath="${bin}/JFlex.jar" />
+	<taskdef name="jflex" classname="JFlex.anttask.JFlexTask" classpath="${bin}/JFlex.jar"  />
 	<!-- We have Classgen 1.5pre -->
 	<taskdef name="classgen" classname="classgen.AntTask" classpath="${bin}/classgen.jar" />
 	<!-- We also use CUP-TUM -->
-	<taskdef name="cup" classname="java_cup.anttask.CUPTask" classpath="${bin}/java-cup-11a.jar" />
+	<taskdef name="cup" classname="java_cup.anttask.CUPTask" classpath="${bin}/java-cup-11a.jar"   />
 
 	<target name="init">
 		<mkdir dir="${testoutput}" />
@@ -56,7 +56,7 @@
 
 	<target name="cup" depends="classgen">
 		<cup srcfile="${cup}/Parser.cup" destdir="${java}/edu/tum/lua/parser" interface="true" package="edu.tum.lua.parser"
-parser="Parser" />
+parser="Parser" expect="3" />
 	</target>
 
 	<target name="jflex" depends="cup">

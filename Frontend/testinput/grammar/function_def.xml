@@ -1,18 +1,14 @@
 <Block>
 	<StatList>
-		<FunctionDef>
+		<FunctionDef varargs="false">
 			<FuncNameVar>
 					<Name name="a" />
 			</FuncNameVar>
-			<FuncBody>
-				<ParList varparlist="false">
-					<NameList />
-			 	</ParList>
+			<NameList />
 			 	<Block>
 			 		<Null />
 			 		<Null />
 			 	</Block>
-			</FuncBody>
 		</FunctionDef>
 	</StatList>
 	<Null />

@@ -8,6 +8,8 @@ import java_cup.runtime.Symbol;
 import java_cup.runtime.*;
 import edu.tum.lua.ast.*;
 
+import asttweaks.*;
+
 
 /* Preliminaries to use the scanner.  */
 scan with {: return lexer.next_token(); :};
@@ -80,7 +82,6 @@ non terminal ExpList explist,args, optasmexplist;
 non terminal Exp exp, optforexp;
 non terminal PrefixExp prefixexp;
 non terminal FunctionCall functioncall;
-non terminal Function function;
 non terminal FuncBody funcbody;
 non terminal ParList parlist;
 non terminal TableConstructor tableconstructor;
@@ -150,6 +151,20 @@ statlist		::=		optws stat:s optsemi optws
 					
 						
 
+prefixexp		::=		var:v
+						{:
+							RESULT = new PrefixExpVar(v);
+						:}
+						| functioncall:fc {:
+							System.out.println("inside prefixexp");
+							RESULT =  new PrefixExpFuncCall(fc);
+						:}
+						| LPAREN exp:e RPAREN
+						{:
+							RESULT = new PrefixExpExp(e);
+						:}
+						;
+
  
 					
 stat        	::=    		varlist:vl optws ASM optws explist:el 
@@ -182,13 +197,13 @@ stat        	::=    		varlist:vl optws ASM optws explist:el
 						| FOR optws namelist:nl optws IN optws explist:el optws DO optws block:b END
 						{: RESULT = new ForIn(nl,el, b); :}
 						| FUNC optws funcname:fn optws funcbody:fb  
-						{: RESULT = new FunctionDef(fn,fb); :} 
-		 				| LOCAL optws FUNC optws ID:Id optws funcbody:fb
-		 				{: RESULT = new LocalFuncDef(new Name(Id), fb); :}
+						{: RESULT = new FunctionDef(fn,fb.getArgs(), fb.getVarArgs(), fb.getBlock()); :} 
+		 				| LOCAL optws FUNC optws ID:id optws funcbody:fb
+		 				{: RESULT = new LocalFuncDef(id, fb.getArgs(), fb.getVarArgs(), fb.getBlock()); :}
 						| LOCAL optws namelist:nl optasmexplist:el 
 						{: RESULT = new LocalDecl(nl,el); :}
 						;
-	
+					
 laststat		::=		RETURN optws optsemi
 						{:    
 							System.out.println("Inside laststat");
@@ -200,9 +215,8 @@ laststat		::=		RETURN optws optsemi
 							RESULT = new LastReturn(el); 
 						:}
 						| BREAK optws optsemi{: RESULT = new LastBreak(); :}	
-						| BREAK optws optsemi statlist{: RESULT = new LastBreak(); :}
-						
 						; 						
+
 funcname		::=     ID:Id {: RESULT = new FuncNameVar(new Name(Id)); :}
 						| ID:id DOT funcname:fn {: RESULT = new FuncNameVarDotFuncName(new Name(id),fn); :}
 						| ID:id DDOT ID:id1 {: RESULT = new FuncNameDDotVar(new Name(id),new Name(id1)); :}
@@ -320,24 +334,11 @@ exp				::=		NIL
 								RESULT = new Binop(e1,op,e2); :}
 						| unop:uop optws exp:e
 							{: RESULT = new Unop(uop,e); :}
-						| function:f
-							{: RESULT = new FunctionExp(f); :}
+						| FUNC optws funcbody:fb 
+							{: RESULT = new FunctionExp(fb.getArgs(), fb.getVarArgs(), fb.getBlock()); :}
 						;	
 	
 					
-prefixexp		::=		var:v
-						{:
-							RESULT = new PrefixExpVar(v);
-						:}
-						| functioncall:fc {:
-							System.out.println("inside prefixexp");
-							RESULT =  new PrefixExpFuncCall(fc);
-						:}
-						/*| LPAREN exp:e RPAREN
-						{:
-							RESULT = new PrefixExpExp(e);
-						:}*/
-						;
 	
 	
 functioncall	::= 	prefixexp:pexp args:ar
@@ -360,13 +361,6 @@ args			::= 	LPAREN explist:el RPAREN
 						| tableconstructor:tc {: RESULT = new ExpList(new TableConstructorExp(tc)); :}
 						| TEXT:txt {: RESULT = new ExpList(new TextExp(txt)); :} 
 						;
-
-function 		::=     FUNC optws funcbody:fb
-						{:
-							RESULT = new Function(fb);
-						:}
-						;
-						
 
 funcbody		::= 	LPAREN optws parlist:pl optws RPAREN optws block:bl optws END
 						{:

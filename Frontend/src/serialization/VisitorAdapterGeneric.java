@@ -1,5 +1,6 @@
 package serialization;
 
+import asttweaks.ParList;
 import edu.tum.lua.ast.Asm;
 import edu.tum.lua.ast.Binop;
 import edu.tum.lua.ast.Block;
@@ -15,14 +16,12 @@ import edu.tum.lua.ast.FieldList;
 import edu.tum.lua.ast.FieldNameExp;
 import edu.tum.lua.ast.ForExp;
 import edu.tum.lua.ast.ForIn;
-import edu.tum.lua.ast.FuncBody;
 import edu.tum.lua.ast.FuncCall;
 import edu.tum.lua.ast.FuncCallStmt;
 import edu.tum.lua.ast.FuncName;
 import edu.tum.lua.ast.FuncNameDDotVar;
 import edu.tum.lua.ast.FuncNameVar;
 import edu.tum.lua.ast.FuncNameVarDotFuncName;
-import edu.tum.lua.ast.Function;
 import edu.tum.lua.ast.FunctionCall;
 import edu.tum.lua.ast.FunctionDef;
 import edu.tum.lua.ast.FunctionExp;
@@ -37,7 +36,6 @@ import edu.tum.lua.ast.NameList;
 import edu.tum.lua.ast.Nil;
 import edu.tum.lua.ast.NumberExp;
 import edu.tum.lua.ast.Op;
-import edu.tum.lua.ast.ParList;
 import edu.tum.lua.ast.PreExp;
 import edu.tum.lua.ast.PrefixExp;
 import edu.tum.lua.ast.PrefixExpExp;
@@ -76,10 +74,6 @@ public abstract class VisitorAdapterGeneric extends VisitorAdaptor {
 	  public void visit(Name name) { visitGeneric(name); }
 	  @Override
 	  public void visit(FunctionCall functionCall) { visitGeneric(functionCall); }
-	  @Override
-	  public void visit(FuncBody body) { visitGeneric(body); }
-	  @Override
-	  public void visit(Function function) { visitGeneric(function); }
 	  @Override
 	  public void visit(FunctionExp functionExp) { visitGeneric(functionExp); }
 
@@ -124,7 +118,6 @@ public abstract class VisitorAdapterGeneric extends VisitorAdaptor {
 	  @Override public void visit(Var var) { visitGeneric(var); }
 	  @Override public void visit(Variable variable) { visitGeneric(variable); }
 	  @Override public void visit(VarTabIndex varTabIndex) { visitGeneric(varTabIndex);}
-	  @Override public void visit(ParList parlist) { visitGeneric(parlist);}
 
 	  @Override public void visit(PrefixExp prefixExp) { visitGeneric(prefixExp); }
 	  @Override public void visit(PrefixExpVar prefixExpVar) { visitGeneric(prefixExpVar); }
