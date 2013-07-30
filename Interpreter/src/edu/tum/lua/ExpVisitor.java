@@ -1,5 +1,6 @@
 package edu.tum.lua;
 
+import java.util.Collections;
 import java.util.Deque;
 import java.util.Enumeration;
 import java.util.LinkedList;
@@ -15,6 +16,7 @@ import edu.tum.lua.ast.FieldExp;
 import edu.tum.lua.ast.FieldLRExp;
 import edu.tum.lua.ast.FieldNameExp;
 import edu.tum.lua.ast.FuncCall;
+import edu.tum.lua.ast.FuncCallSelf;
 import edu.tum.lua.ast.FunctionExp;
 import edu.tum.lua.ast.LegacyAdapter;
 import edu.tum.lua.ast.Nil;
@@ -32,6 +34,7 @@ import edu.tum.lua.ast.Unop;
 import edu.tum.lua.ast.Variable;
 import edu.tum.lua.ast.VisitorAdaptor;
 import edu.tum.lua.exceptions.LuaRuntimeException;
+import edu.tum.lua.exceptions.LuaStackTraceElement;
 import edu.tum.lua.operator.Operator;
 import edu.tum.lua.operator.OperatorRegistry;
 import edu.tum.lua.types.LuaFunction;
@@ -98,7 +101,7 @@ public class ExpVisitor extends VisitorAdaptor {
 	@Override
 	public void visit(Dots exp) {
 		if (vararg == null) {
-			throw new LuaRuntimeException("cannot use '...' outside a vararg function");
+			throw new LuaRuntimeException(exp, "cannot use '...' outside a vararg function");
 		}
 
 		// Adjust vararg
@@ -143,28 +146,53 @@ public class ExpVisitor extends VisitorAdaptor {
 	public void visit(FuncCall call) {
 		call.preexp.accept(this);
 
-		List<Object> result = call(evaluationStack.removeLast(), call.explist);
+		try {
+			List<Object> result = call(evaluationStack.removeLast(), call.explist);
 
-		SyntaxNode callParent = call.getParent();
+			SyntaxNode callParent = call.getParent();
 
-		// Discard everything
-		if (callParent instanceof Stat) {
-			return;
-		}
-
-		if (callParent.getParent().getParent() instanceof ExpList) {
-			PreExp preExp = (PreExp) callParent.getParent();
-			ExpList list = (ExpList) preExp.getParent();
-
-			if (list.elementAt(list.size() - 1) == preExp) {
-				evaluationStack.addAll(result);
+			// Discard everything
+			if (callParent instanceof Stat) {
 				return;
 			}
-		}
 
-		if (!result.isEmpty()) {
-			evaluationStack.add(result.get(0));
+			if (callParent.getParent().getParent() instanceof ExpList) {
+				PreExp preExp = (PreExp) callParent.getParent();
+				ExpList list = (ExpList) preExp.getParent();
+
+				if (list.elementAt(list.size() - 1) == preExp) {
+					evaluationStack.addAll(result);
+					return;
+				}
+			}
+
+			if (!result.isEmpty()) {
+				evaluationStack.add(result.get(0));
+			}
+		} catch (LuaRuntimeException ex) {
+			if (ex.getLocation() == null) {
+				ex.setLocation(call);
+				throw ex;
+			}
+
+			String name = "?";
+
+			if (call.preexp instanceof PrefixExpVar) {
+				PrefixExpVar var = (PrefixExpVar) call.preexp;
+
+				if (var.var instanceof Variable) {
+					name = ((Variable) var.var).var;
+				}
+			}
+
+			ex.addLuaStackTraceElement(new LuaStackTraceElement(call, name, Collections.emptyList()));
+			throw ex;
 		}
+	}
+
+	@Override
+	public void visit(FuncCallSelf call) {
+
 	}
 
 	@Override
