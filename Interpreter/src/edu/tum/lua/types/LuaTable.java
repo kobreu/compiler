@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import edu.tum.lua.exceptions.LuaRuntimeException;
 
@@ -47,11 +48,6 @@ public class LuaTable implements Iterable<Map.Entry<Object, Object>> {
 		}
 
 		return ((Boolean) value).booleanValue();
-	}
-
-	public Iterator<Entry<Object, Object>> getIterator() {
-		Iterator<Entry<Object, Object>> iter = pairs.entrySet().iterator();
-		return iter;
 	}
 
 	public LuaFunction getLuaFunction(Object key) {
@@ -104,6 +100,15 @@ public class LuaTable implements Iterable<Map.Entry<Object, Object>> {
 
 	public boolean isEmpty() {
 		return pairs.isEmpty();
+	}
+
+	@Override
+	public Iterator<Entry<Object, Object>> iterator() {
+		return pairs.entrySet().iterator();
+	}
+
+	public Set<Object> keySet() {
+		return pairs.keySet();
 	}
 
 	public Object rawget(Object key) {
@@ -173,11 +178,6 @@ public class LuaTable implements Iterable<Map.Entry<Object, Object>> {
 		}
 
 		this.metatable = metatable;
-	}
-
-	@Override
-	public Iterator<Entry<Object, Object>> iterator() {
-		return pairs.entrySet().iterator();
 	}
 
 }
