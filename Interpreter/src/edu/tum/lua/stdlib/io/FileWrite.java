@@ -37,13 +37,13 @@ public class FileWrite extends LuaFunctionNative {
 			}
 		}
 
-		if (file.fm.equals("r")) {
+		if (file.getFm().equals("r")) {
 			return Arrays.asList((Object) null, "bad file descriptor");
 		}
 
-		if (file.fm.equals("a+") || file.fm.equals("a")) {
+		if (file.getFm().equals("a+") || file.getFm().equals("a")) {
 			try {
-				file.raf.seek(file.raf.length());
+				file.getRaf().seek(file.getRaf().length());
 			} catch (IOException ioe) {
 				return Arrays.asList((Object) null, "bad file descriptor");
 			}
@@ -51,7 +51,7 @@ public class FileWrite extends LuaFunctionNative {
 
 		for (Object o : arguments) {
 			try {
-				file.raf.writeBytes((String) o);
+				file.getRaf().writeBytes((String) o);
 			} catch (IOException ioe) {
 				return Arrays.asList((Object) null, "error");
 			}

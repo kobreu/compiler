@@ -23,7 +23,7 @@ public class FileRead extends LuaFunctionNative {
 		checkArguments("read", arguments, types);
 		file = (LuaUserData) arguments.get(0);
 
-		if (file.fm.equals("a") || file.fm.equals("w")) {
+		if (file.getFm().equals("a") || file.getFm().equals("w")) {
 			return Arrays.asList((Object) null, "Bad file descriptor");
 		}
 
@@ -54,9 +54,9 @@ public class FileRead extends LuaFunctionNative {
 		long fileLength = -1;
 		String fileContent = null;
 		try {
-			fileLength = file.raf.length();
+			fileLength = file.getRaf().length();
 			byte[] fileBytes = new byte[(int) fileLength];
-			file.raf.read(fileBytes);
+			file.getRaf().read(fileBytes);
 			fileContent = new String(fileBytes);
 		} catch (EOFException eof) {
 			return "";
@@ -69,7 +69,7 @@ public class FileRead extends LuaFunctionNative {
 	private Double readNumber() {
 		long pos = -1;
 		try {
-			pos = file.raf.getFilePointer();
+			pos = file.getRaf().getFilePointer();
 		} catch (IOException e) {
 			return null;
 		}
@@ -85,7 +85,7 @@ public class FileRead extends LuaFunctionNative {
 		}
 
 		try {
-			file.raf.seek(pos);
+			file.getRaf().seek(pos);
 		} catch (IOException e) {
 			return null;
 		}
@@ -102,7 +102,7 @@ public class FileRead extends LuaFunctionNative {
 		String chars = "";
 		for (int i = 0; i < numOfChars; i++) {
 			try {
-				int next = file.raf.read();
+				int next = file.getRaf().read();
 				if (next == -1) {
 					return null;
 				}
@@ -117,7 +117,7 @@ public class FileRead extends LuaFunctionNative {
 	private String readNextLine() {
 		String line = "";
 		try {
-			line = file.raf.readLine();
+			line = file.getRaf().readLine();
 		} catch (EOFException eof) {
 			return null;
 		} catch (IOException e) {
