@@ -13,7 +13,7 @@ public class TestParser {
 
 	@Test
 	public void test() throws Exception {
-		String file = "testinput/grammar/chunk_sequence_with_semicolons.lua";
+		String file = "testinput/lua5.1-tests/api.lua";
 
 		Lexer scanner = null;
 		Lexer outputScanner = null;
@@ -117,6 +117,8 @@ public class TestParser {
 			return "LENGTH";
 		case sym.LEQ:
 			return "LEQ";
+		case sym.LOCAL:
+			return "LOCAL";
 		case sym.MOD:
 			return "MOD";
 		case sym.MUL:
@@ -129,6 +131,8 @@ public class TestParser {
 			return "NOT";
 		case sym.NUMBER:
 			return "NUMBER";
+		case sym.PARAMS:
+			return "PARAMS";
 		case sym.REPEAT:
 			return "REPEAT";
 		case sym.RPAREN:

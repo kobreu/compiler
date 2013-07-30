@@ -1,0 +1,12 @@
+<Block>
+	<StatList>
+		<LocalFuncDef name="a" varargs="false">
+					<NameList />
+				<Block>
+			 		<Null />
+			 		<Null />
+			 	</Block>
+		</LocalFuncDef>
+	</StatList>
+	<Null />
+</Block>

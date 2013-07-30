@@ -5,18 +5,12 @@
 				<Variable var="a" />
 			</VarList>
 			<ExpList>
-				<FunctionExp>
-					<Function>
-						<FuncBody>
-							<ParList varparlist="false">
-								<Null />
-							</ParList>
+				<FunctionExp varargs="false">
+								<NameList />
 							<Block>
 								<Null />
 								<Null />
 							</Block>
-						</FuncBody>
-					</Function>
 				</FunctionExp>
 			</ExpList>
 		</Asm>
