@@ -93,6 +93,14 @@ public class GlobalEnvironment extends LuaTable {
 
 	/** Create a new global environment. */
 	public GlobalEnvironment() {
+
+		LuaTable _package = new LuaTable();
+		LuaTable _package_loaded = new LuaTable();
+		_package_loaded.set("math", new LuaTable());
+		_package.set("loaded", _package_loaded);
+		_package.set("path", "./?.lua;./");
+		set("package", _package);
+
 		set("assert", new Assert());
 		set("collectgarbage", new VoidFunction());
 		set("dofile", new NotImplementedFunction());
@@ -122,7 +130,6 @@ public class GlobalEnvironment extends LuaTable {
 		set("xpcall", new Xpcall());
 
 		LuaTable coroutine = new LuaTable();
-		LuaTable _package = new LuaTable();
 		LuaTable string = new LuaTable();
 
 		string.set("byte", new Byte());
@@ -213,7 +220,7 @@ public class GlobalEnvironment extends LuaTable {
 		os.set("tmpname", new NotImplementedFunction());
 
 		set("coroutine", coroutine);
-		set("package", _package);
+
 		set("string", string);
 		set("table", table);
 		set("math", math);
