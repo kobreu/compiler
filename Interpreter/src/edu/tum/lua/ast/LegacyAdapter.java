@@ -1,5 +1,6 @@
 package edu.tum.lua.ast;
 
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
@@ -7,6 +8,10 @@ import java.util.List;
 public final class LegacyAdapter {
 
 	public static List<Stat> convert(StatList statList) {
+		if (statList == null) {
+			return Collections.emptyList();
+		}
+
 		Enumeration<Stat> Enum = statList.elements();
 		return convert(Enum);
 	}
