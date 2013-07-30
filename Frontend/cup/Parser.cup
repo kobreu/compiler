@@ -278,17 +278,15 @@ optasmexplist   ::=   ASM optws explist:el
 namelist    	::=    	ID:id  optws
 						{: RESULT = new NameList(new Name(id)); 
 						System.out.println("Inside Namelist"); :}  
-						 | ID:id optws COM optws namelist:nl
+						 | namelist:nl optws COM optws ID:id
 						{: 	System.out.println("Inside Namelist COM"); 
-							if(nl== null){					    		
-					    	nl =new NameList(new Name(id));
-							RESULT = nl;}
-							else{		
-							nl.insertElementAt(new Name(id),0);
+							
+							nl.append(new Name(id));
 							RESULT = nl;
-							} 
+						
 						:} 
-														
+						
+						 						
 						;
 					
 					
@@ -378,7 +376,7 @@ parlist			::=		namelist:nl
 						|
 						namelist:nl optws COM optws PARAMS
 						{:
-							NameList nl = new NameList(new Name(id));
+							
 							System.out.println("Inside namelist comma params"); 
 							RESULT = new ParList(nl,true);
 						:}	
