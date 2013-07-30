@@ -92,8 +92,6 @@ non terminal Integer binop;
 non terminal Integer unop;
 non terminal optsemi, empty;
 
-
-
 precedence nonassoc LPAREN, RPAREN; 
 precedence nonassoc WS, COM ;
 
@@ -106,19 +104,16 @@ start with block;
 
 block 			::=    statlist:stats laststat:lstat
                  		{:       
-                 			   
-                 			 System.out.println("Inside block with laststat");    
-                 			RESULT = new Block(stats,lstat);  
+                 			System.out.println("Inside block with laststat");    
+                 			RESULT = new Block(stats,lstat); 
                  		:}
                  		| statlist:stats 
                  		{:       
                  			System.out.println("Inside block with laststat");     	    
                  			RESULT = new Block(stats,null); 	
-                 			  
                  		:}
                  		| laststat:lstat {:
                  		 		RESULT = new Block(null,lstat);  :}
-                 		
                  		| 
                  		empty {: 
                  				System.out.println("Inside empty block"); RESULT = new Block(null,null);;
@@ -309,8 +304,8 @@ var				::=		ID:id
 						| prefixexp:pe  DOT ID:id
 						{:
 							System.out.println("DOTvar");
-							PreExp exp = new PreExp(new PrefixExpVar(new Variable(id)));
-							RESULT = new VarTabIndex(pe, exp);
+							TextExp textExp = new TextExp(id);
+							RESULT = new VarTabIndex(pe, textExp);
 						:}
 						;
 
