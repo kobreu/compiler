@@ -1,9 +1,9 @@
 package location;
 
-import java_cup.runtime.Symbol;
+import edu.tum.lua.ast.SyntaxNode;
 
 public interface LocationProvider {
-	
-	public Location getLocation(Symbol symbol);
+
+	public Location getLocation(SyntaxNode symbol);
 
 }
