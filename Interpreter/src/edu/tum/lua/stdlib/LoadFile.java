@@ -8,8 +8,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 
-import edu.tum.lua.LuaBadArgumentException;
-import edu.tum.lua.LuaRuntimeException;
+import edu.tum.lua.exceptions.LuaBadArgumentException;
+import edu.tum.lua.exceptions.LuaRuntimeException;
 import edu.tum.lua.types.LuaFunctionNative;
 import edu.tum.lua.types.LuaType;
 

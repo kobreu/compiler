@@ -9,8 +9,8 @@ import java.util.Collections;
 import org.junit.Test;
 
 import edu.tum.lua.GlobalEnvironment;
-import edu.tum.lua.LuaBadArgumentException;
-import edu.tum.lua.LuaRuntimeException;
+import edu.tum.lua.exceptions.LuaBadArgumentException;
+import edu.tum.lua.exceptions.LuaRuntimeException;
 import edu.tum.lua.stdlib.Getfenv;
 
 public class GetfenvTest {

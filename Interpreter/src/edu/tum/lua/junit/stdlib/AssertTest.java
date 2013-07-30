@@ -9,8 +9,8 @@ import java.util.List;
 
 import org.junit.Test;
 
-import edu.tum.lua.LuaBadArgumentException;
-import edu.tum.lua.LuaRuntimeException;
+import edu.tum.lua.exceptions.LuaBadArgumentException;
+import edu.tum.lua.exceptions.LuaRuntimeException;
 import edu.tum.lua.stdlib.Assert;
 import edu.tum.lua.types.LuaTable;
 

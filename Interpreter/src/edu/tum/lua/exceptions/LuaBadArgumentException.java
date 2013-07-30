@@ -1,4 +1,4 @@
-package edu.tum.lua;
+package edu.tum.lua.exceptions;
 
 public class LuaBadArgumentException extends LuaRuntimeException {
 

@@ -5,9 +5,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import edu.tum.lua.LuaBadArgumentException;
-import edu.tum.lua.LuaRuntimeException;
 import edu.tum.lua.Preconditions;
+import edu.tum.lua.exceptions.LuaBadArgumentException;
+import edu.tum.lua.exceptions.LuaRuntimeException;
 import edu.tum.lua.operator.list.LengthOperator;
 import edu.tum.lua.types.LuaFunction;
 import edu.tum.lua.types.LuaFunctionNative;

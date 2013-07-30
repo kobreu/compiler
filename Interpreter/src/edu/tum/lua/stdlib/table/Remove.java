@@ -3,8 +3,8 @@ package edu.tum.lua.stdlib.table;
 import java.util.Collections;
 import java.util.List;
 
-import edu.tum.lua.LuaBadArgumentException;
 import edu.tum.lua.Preconditions;
+import edu.tum.lua.exceptions.LuaBadArgumentException;
 import edu.tum.lua.types.LuaFunctionNative;
 import edu.tum.lua.types.LuaTable;
 import edu.tum.lua.types.LuaType;

@@ -8,7 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 
-import edu.tum.lua.LuaRuntimeException;
+import edu.tum.lua.exceptions.LuaRuntimeException;
 import edu.tum.lua.types.LuaFunctionNative;
 import edu.tum.lua.types.LuaTable;
 import edu.tum.lua.types.LuaType;

@@ -5,7 +5,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
-import edu.tum.lua.LuaBadArgumentException;
+import edu.tum.lua.exceptions.LuaBadArgumentException;
 import edu.tum.lua.stdlib.table.MaxN;
 import edu.tum.lua.types.LuaTable;
 

@@ -31,6 +31,7 @@ import edu.tum.lua.ast.TextExp;
 import edu.tum.lua.ast.Unop;
 import edu.tum.lua.ast.Variable;
 import edu.tum.lua.ast.VisitorAdaptor;
+import edu.tum.lua.exceptions.LuaRuntimeException;
 import edu.tum.lua.operator.Operator;
 import edu.tum.lua.operator.OperatorRegistry;
 import edu.tum.lua.types.LuaFunction;

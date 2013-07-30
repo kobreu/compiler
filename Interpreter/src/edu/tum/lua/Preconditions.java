@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ListIterator;
 
+import edu.tum.lua.exceptions.LuaBadArgumentException;
 import edu.tum.lua.types.LuaType;
 
 public final class Preconditions {

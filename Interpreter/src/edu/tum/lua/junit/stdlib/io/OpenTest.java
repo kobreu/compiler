@@ -9,7 +9,7 @@ import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
 
-import edu.tum.lua.LuaBadArgumentException;
+import edu.tum.lua.exceptions.LuaBadArgumentException;
 import edu.tum.lua.stdlib.io.FileRead;
 import edu.tum.lua.types.LuaUserData;
 

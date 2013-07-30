@@ -5,7 +5,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
-import edu.tum.lua.LuaBadArgumentException;
+import edu.tum.lua.exceptions.LuaBadArgumentException;
 import edu.tum.lua.stdlib.SetMetatable;
 import edu.tum.lua.types.LuaTable;
 
