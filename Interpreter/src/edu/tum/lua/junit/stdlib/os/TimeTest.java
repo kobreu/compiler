@@ -1,6 +1,5 @@
 package edu.tum.lua.junit.stdlib.os;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -81,7 +80,7 @@ public class TimeTest {
 		c.set(Calendar.MINUTE, 30);
 		table.set("sec", 20.0);
 		c.set(Calendar.SECOND, 20);
-		assertEquals((double) c.getTime().getTime(), t.apply(table).get(0));
+		assertTrue(c.getTime().getTime() - (double) t.apply(table).get(0) < 0.0001);
 	}
 
 }
