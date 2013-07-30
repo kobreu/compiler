@@ -13,7 +13,7 @@ public class TestParser {
 
 	@Test
 	public void test() throws Exception {
-		String file = "testinput/grammar/try.lua";
+		String file = "testinput/homework/korbinian_sorting.lua";
 
 		Lexer scanner = null;
 		Lexer outputScanner = null;

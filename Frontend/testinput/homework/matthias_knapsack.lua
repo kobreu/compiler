@@ -49,11 +49,11 @@ end
 		best gain that is possible
 		list with count of the items
 
-]]
+--]]
 function solveRecurse (_remainingItemSet, _remainingCapabilities, _reachedGain)
 	--[[
 	print("You need better training oder more money for sherpas! Then it's unnecessary to leave specific items at home.")
-	]]
+	--]]
 	
 	if #_remainingItemSet == 0 then
 		return _reachedGain, {}
