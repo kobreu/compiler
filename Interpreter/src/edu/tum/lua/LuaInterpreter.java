@@ -1,7 +1,9 @@
 package edu.tum.lua;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 
+import util.ParserUtil;
 import edu.tum.lua.ast.Block;
 import edu.tum.lua.exceptions.LuaRuntimeException;
 import edu.tum.lua.exceptions.PrettyPrinter;
@@ -34,4 +36,8 @@ public class LuaInterpreter {
 		return null;
 	}
 
+	public static void main(String[] args) throws FileNotFoundException, Exception {
+		Block block = ParserUtil.loadFile("../Frontend/testinput/homework/matthias_knapsack.lua");
+		eval(block, new GlobalEnvironment());
+	}
 }

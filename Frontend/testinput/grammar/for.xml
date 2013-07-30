@@ -1,0 +1,14 @@
+<Block>
+	<StatList>
+		<ForExp ident="a">
+				<NumberExp number="1.0" />
+				<NumberExp number="2.0" />
+				<NumberExp number="3.0"/>
+			<Block>
+				<Null />
+				<Null />
+			</Block>
+		</ForExp>
+	</StatList>
+	<Null />
+</Block>

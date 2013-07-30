@@ -132,7 +132,7 @@ CommentContent = ([^("]""="*"]")])*
 "="				{ return symbol(ASM); }
 
 /* white space */
-{white_space}    { return symbol(WS); }
+{white_space}    {  }
 
 /* comments */
 {Comment} { /* ignore */ }

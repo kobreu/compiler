@@ -9,6 +9,7 @@ import edu.tum.lua.ast.Binop;
 import edu.tum.lua.ast.BooleanExp;
 import edu.tum.lua.ast.Dots;
 import edu.tum.lua.ast.FieldNameExp;
+import edu.tum.lua.ast.ForExp;
 import edu.tum.lua.ast.FuncName;
 import edu.tum.lua.ast.FuncNameVar;
 import edu.tum.lua.ast.FunctionExp;
@@ -100,6 +101,10 @@ public class AttributeWriterVisitor extends VisitorAdaptor {
 
 	}
 	
+	@Override
+	public void visit(ForExp forExp) {
+		addAttr("ident", forExp.ident);
+	}
 	
 	@Override
 	public void visit(Name name) {

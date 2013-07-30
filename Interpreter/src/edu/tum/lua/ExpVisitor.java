@@ -16,7 +16,6 @@ import edu.tum.lua.ast.FieldExp;
 import edu.tum.lua.ast.FieldLRExp;
 import edu.tum.lua.ast.FieldNameExp;
 import edu.tum.lua.ast.FuncCall;
-import edu.tum.lua.ast.FuncCallSelf;
 import edu.tum.lua.ast.FunctionExp;
 import edu.tum.lua.ast.LegacyAdapter;
 import edu.tum.lua.ast.Nil;
@@ -31,6 +30,7 @@ import edu.tum.lua.ast.TableConstructor;
 import edu.tum.lua.ast.TableConstructorExp;
 import edu.tum.lua.ast.TextExp;
 import edu.tum.lua.ast.Unop;
+import edu.tum.lua.ast.VarTabIndex;
 import edu.tum.lua.ast.Variable;
 import edu.tum.lua.ast.VisitorAdaptor;
 import edu.tum.lua.exceptions.LuaRuntimeException;
@@ -191,11 +191,6 @@ public class ExpVisitor extends VisitorAdaptor {
 	}
 
 	@Override
-	public void visit(FuncCallSelf call) {
-
-	}
-
-	@Override
 	public void visit(Nil exp) {
 		evaluationStack.addLast(null);
 	}
@@ -291,6 +286,21 @@ public class ExpVisitor extends VisitorAdaptor {
 
 		Operator operator = OperatorRegistry.registry[unop.op];
 		evaluationStack.addLast(operator.apply(op));
+	}
+
+	@Override
+	public void visit(VarTabIndex varTabIndex) {
+		varTabIndex.preexp.accept(this);
+
+		if (LuaType.getTypeOf(evaluationStack.peekLast()) != LuaType.TABLE) {
+			throw new LuaRuntimeException(varTabIndex, "attempt to index a "
+					+ LuaType.getTypeOf(LuaType.getTypeOf(evaluationStack.peekLast())));
+		}
+
+		LuaTable table = (LuaTable) evaluationStack.removeLast();
+		varTabIndex.indexexp.accept(this);
+		Object key = evaluationStack.removeLast();
+		evaluationStack.addLast(table.get(key));
 	}
 
 	@Override

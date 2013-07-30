@@ -22,23 +22,6 @@ public final class LegacyAdapter {
 		return list;
 	}
 
-	public static List<String> convert(VarList varlist) {
-		Enumeration<Var> iterator = varlist.elements();
-		List<String> list = new LinkedList<>();
-
-		if (iterator.hasMoreElements()) {
-			Var var = iterator.nextElement();
-
-			if (var instanceof Variable) {
-				list.add(((Variable) var).var);
-			} else {
-				throw new RuntimeException("Not yet implemented");
-			}
-		}
-
-		return list;
-	}
-
 	@SuppressWarnings("unchecked")
 	public static List<Exp> convert(ExpList explist) {
 		return convert(explist.elements());
