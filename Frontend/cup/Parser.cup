@@ -277,20 +277,23 @@ explist			::=     exp:e  optws
 optasmexplist   ::=   ASM optws explist:el
 					 {: RESULT = el; :}
 					 | empty
-					 ;			
+					 ;	
+					   
+						
+				 
+					 		
 namelist    	::=    	ID:id  optws
 						{: RESULT = new NameList(new Name(id)); 
 						System.out.println("Inside Namelist"); :}  
-						 | ID:id optws COM optws namelist:nl
-						{: 	if(nl== null){					    		
-					    	nl =new NameList(new Name(id));
-							RESULT = nl;}
-							else{		
-							nl.insertElementAt(new Name(id),0);
+						 | namelist:nl optws COM optws ID:id
+						{: 	System.out.println("Inside Namelist COM"); 
+							
+							nl.append(new Name(id));
 							RESULT = nl;
-							} 
+						
 						:} 
-																	
+						
+						 						
 						;
 					
 var				::=		ID:id
@@ -378,11 +381,16 @@ funcbody		::= 	LPAREN optws parlist:pl optws RPAREN optws block:bl optws END
 parlist			::=		namelist:nl
 						{:
 							RESULT = new ParList(nl,false);
-						:}
-						| namelist:nl COM PARAMS
+						:} 
+						|
+						namelist:nl optws COM optws PARAMS
 						{:
+							
+							System.out.println("Inside namelist comma params"); 
 							RESULT = new ParList(nl,true);
-						:}
+						:}	
+								
+						
 						| PARAMS
 						{:
 							RESULT = new ParList(new NameList(),true); /* empty namelist */
@@ -391,7 +399,7 @@ parlist			::=		namelist:nl
 							RESULT = new ParList(new NameList(), false); /* empty namelist */
 						  :}
 						  
-						;
+						;	
 	
 
 tableconstructor ::=    LCURL fieldlist:fl RCURL
