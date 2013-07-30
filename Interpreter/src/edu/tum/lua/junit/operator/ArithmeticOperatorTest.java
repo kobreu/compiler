@@ -10,7 +10,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import edu.tum.lua.LuaRuntimeException;
+import edu.tum.lua.exceptions.LuaRuntimeException;
 import edu.tum.lua.operator.BinaryOperator;
 import edu.tum.lua.operator.UnaryOperator;
 import edu.tum.lua.operator.arithmetic.AddOperator;

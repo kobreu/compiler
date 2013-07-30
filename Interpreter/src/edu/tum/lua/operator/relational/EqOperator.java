@@ -1,6 +1,6 @@
 package edu.tum.lua.operator.relational;
 
-import edu.tum.lua.LuaRuntimeException;
+import edu.tum.lua.exceptions.LuaRuntimeException;
 import edu.tum.lua.operator.BinaryOperator;
 import edu.tum.lua.operator.logical.LogicalOperatorSupport;
 import edu.tum.lua.types.LuaFunction;

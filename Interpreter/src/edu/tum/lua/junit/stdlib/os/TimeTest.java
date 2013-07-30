@@ -9,7 +9,7 @@ import java.util.Collections;
 
 import org.junit.Test;
 
-import edu.tum.lua.LuaRuntimeException;
+import edu.tum.lua.exceptions.LuaRuntimeException;
 import edu.tum.lua.stdlib.os.Time;
 import edu.tum.lua.types.LuaTable;
 

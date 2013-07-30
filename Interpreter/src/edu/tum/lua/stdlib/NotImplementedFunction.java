@@ -2,7 +2,7 @@ package edu.tum.lua.stdlib;
 
 import java.util.List;
 
-import edu.tum.lua.LuaRuntimeException;
+import edu.tum.lua.exceptions.LuaRuntimeException;
 import edu.tum.lua.types.LuaFunctionNative;
 
 public class NotImplementedFunction extends LuaFunctionNative {

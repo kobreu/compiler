@@ -6,7 +6,7 @@ import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.Test;
 
-import edu.tum.lua.LuaBadArgumentException;
+import edu.tum.lua.exceptions.LuaBadArgumentException;
 import edu.tum.lua.stdlib.math.Abs;
 import edu.tum.lua.stdlib.math.Acos;
 import edu.tum.lua.stdlib.math.Max;

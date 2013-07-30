@@ -4,8 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import edu.tum.lua.GlobalEnvironment;
-import edu.tum.lua.LuaRuntimeException;
 import edu.tum.lua.Preconditions;
+import edu.tum.lua.exceptions.LuaRuntimeException;
 import edu.tum.lua.types.LuaFunctionInterpreted;
 import edu.tum.lua.types.LuaFunctionNative;
 import edu.tum.lua.types.LuaType;

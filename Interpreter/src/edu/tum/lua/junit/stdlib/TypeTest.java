@@ -9,7 +9,7 @@ import java.util.LinkedList;
 
 import org.junit.Test;
 
-import edu.tum.lua.LuaRuntimeException;
+import edu.tum.lua.exceptions.LuaRuntimeException;
 import edu.tum.lua.stdlib.Select;
 import edu.tum.lua.stdlib.Type;
 import edu.tum.lua.types.LuaTable;

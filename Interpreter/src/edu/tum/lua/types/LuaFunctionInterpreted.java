@@ -6,10 +6,10 @@ import java.util.List;
 import edu.tum.lua.BlockVisitor;
 import edu.tum.lua.GlobalEnvironment;
 import edu.tum.lua.LocalEnvironment;
-import edu.tum.lua.LuaRuntimeException;
 import edu.tum.lua.ast.Block;
 import edu.tum.lua.ast.LegacyAdapter;
 import edu.tum.lua.ast.LocalFuncDef;
+import edu.tum.lua.exceptions.LuaRuntimeException;
 
 public class LuaFunctionInterpreted implements LuaFunction {
 
