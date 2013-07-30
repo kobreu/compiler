@@ -27,7 +27,9 @@ import edu.tum.lua.ast.Op;
 import edu.tum.lua.ast.PreExp;
 import edu.tum.lua.ast.PrefixExpVar;
 import edu.tum.lua.ast.StatList;
+import edu.tum.lua.ast.TextExp;
 import edu.tum.lua.ast.VarList;
+import edu.tum.lua.ast.VarTabIndex;
 import edu.tum.lua.ast.Variable;
 import edu.tum.lua.types.LuaTable;
 import edu.tum.lua.types.LuaType;
@@ -257,7 +259,6 @@ public class BlockVisitorTest {
 
 		LuaInterpreter.eval(block, environment);
 		// assertEquals("atwoonethree,", environment.get("a"));
-
 	}
 
 	@Test
@@ -270,9 +271,9 @@ public class BlockVisitorTest {
 
 		// block = ParserUtil.loadString("function a.foo() end'");
 
-		FunctionExp foo = new FunctionExp(new NameList(new Name("a")), false,
-				new Block(new StatList(), new LastBreak()));
-		block = new Block(new StatList(new Asm(new VarList(new Variable("a.foo")), new ExpList(foo))), new LastBreak());
+		FunctionExp foo = new FunctionExp(new NameList(), false, new Block(new StatList(), null));
+		VarTabIndex location = new VarTabIndex(new PrefixExpVar(new Variable("a")), new TextExp("foo"));
+		block = new Block(new StatList(new Asm(new VarList(location), new ExpList(foo))), null);
 		LuaInterpreter.eval(block, environment);
 
 		assertEquals(LuaType.FUNCTION, LuaType.getTypeOf(((LuaTable) environment.get("a")).get("foo")));
