@@ -16,6 +16,7 @@ import edu.tum.lua.stdlib.Print;
 import edu.tum.lua.stdlib.RawEqual;
 import edu.tum.lua.stdlib.RawGet;
 import edu.tum.lua.stdlib.RawSet;
+import edu.tum.lua.stdlib.Require;
 import edu.tum.lua.stdlib.Select;
 import edu.tum.lua.stdlib.SetMetatable;
 import edu.tum.lua.stdlib.Setfenv;
@@ -96,9 +97,8 @@ public class GlobalEnvironment extends LuaTable {
 
 		LuaTable _package = new LuaTable();
 		LuaTable _package_loaded = new LuaTable();
-		_package_loaded.set("math", new LuaTable());
 		_package.set("loaded", _package_loaded);
-		_package.set("path", "./?.lua;./");
+		_package.set("path", "./?.lua");
 		set("package", _package);
 
 		set("assert", new Assert());
@@ -116,6 +116,7 @@ public class GlobalEnvironment extends LuaTable {
 		set("pairs", new Pairs());
 		set("pcall", new PCall());
 		set("print", new Print());
+		set("require", new Require());
 		set("rawequal", new RawEqual());
 		set("rawget", new RawGet());
 		set("rawset", new RawSet());
