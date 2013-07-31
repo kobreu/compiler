@@ -73,30 +73,27 @@ public class Main {
 					line = line.replaceFirst("=", "return ");
 				}
 
-				manageKeys(line);
+				// manageKeys(line);
 				chunk.append(line);
 
-				if (keysStack.isEmpty()) {
-
-					try {
-						block = ParserUtil.loadStringInteractive(chunk.toString());
-						results = LuaInterpreter.eval(block, environment);
-					} catch (StatementNotFinishedException snfe) {
-						System.out.println("not finished");
-					} catch (SyntaxError se) {
-						System.out.println("Syntax error");
-					}
+				try {
+					block = ParserUtil.loadStringInteractive(chunk.toString());
+					System.out.println("parsed correctly: " + chunk.toString());
+					results = LuaInterpreter.eval(block, environment);
 
 					completer.setCandidates(getStringSubset(environment.keySet()));
 					chunk = new StringBuilder();
 
 					printResult(results, result);
-
-				} else if (keysStack.peek() == Keyword.QUOTATION) {
-					keysStack.pop();
-				} else {
+				} catch (StatementNotFinishedException snfe) {
 					reader.setDefaultPrompt(">> ");
+					chunk.append(" ");
+					// System.out.println("not finished");
+				} catch (SyntaxError se) {
+					chunk = new StringBuilder();
+					System.out.println("Syntax error while parsing");
 				}
+
 			}
 
 		}
