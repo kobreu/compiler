@@ -1,8 +1,7 @@
 package grammarlistener;
 
-import java.util.Observable;
 
-public interface ProductionRuleBroadcaster extends Obser {
+public interface ProductionRuleBroadcaster {
 	
 	// internal public void reportProductionRule(ProductionRule rule);
 	
