@@ -18,7 +18,6 @@ import edu.tum.lua.ast.ExpList;
 import edu.tum.lua.ast.IfThenElse;
 import edu.tum.lua.ast.LastBreak;
 import edu.tum.lua.ast.LocalDecl;
-import edu.tum.lua.ast.LocalFuncDef;
 import edu.tum.lua.ast.Name;
 import edu.tum.lua.ast.NameList;
 import edu.tum.lua.ast.NumberExp;
@@ -280,18 +279,15 @@ public class BlockVisitorTest {
 
 	@Test
 	public void testVisitLocalFuncDef() throws Exception {
-		// Block block =
-		// ParserUtil.loadString("x=0 local function foo() x=1 end foo()");
 		Block block = ParserUtil.loadString("x=0");
 		assertEquals(null, environment.get("x"));
 		LuaInterpreter.eval(block, environment);
 		assertEquals(0.0, environment.get("x"));
-		Block body = ParserUtil.loadString("x=1");
-		LocalFuncDef foo = new LocalFuncDef("foo", new NameList(), false, body);
-		block = new Block(new StatList(foo), new LastBreak());
+
+		block = ParserUtil.loadString("local function foo() x=1 end foo()");
 
 		LuaInterpreter.eval(block, environment);
-		// TODO call the function when it will be implemented in the parser
+		assertEquals(1.0, environment.get("x"));
 	}
 
 	@Test

@@ -16,6 +16,7 @@ import edu.tum.lua.ast.FieldExp;
 import edu.tum.lua.ast.FieldLRExp;
 import edu.tum.lua.ast.FieldNameExp;
 import edu.tum.lua.ast.FuncCall;
+import edu.tum.lua.ast.FuncCallSelf;
 import edu.tum.lua.ast.FunctionExp;
 import edu.tum.lua.ast.LegacyAdapter;
 import edu.tum.lua.ast.Nil;
@@ -142,6 +143,20 @@ public class ExpVisitor extends VisitorAdaptor {
 		return call(object, visitor.popAll());
 	}
 
+	private List<Object> call(Object object, String name, List<Object> args) {
+		Deque<Object> argsPrefix = findCallHandler(object, name);
+		LuaFunction f = (LuaFunction) argsPrefix.removeFirst();
+		argsPrefix.add(object);
+		argsPrefix.addAll(args);
+		return f.apply(argsPrefix);
+	}
+
+	private List<Object> call(Object object, String name, ExpList args) {
+		ExpVisitor visitor = new ExpVisitor(environment, vararg);
+		args.accept(visitor);
+		return call(object, name, visitor.popAll());
+	}
+
 	@Override
 	public void visit(FuncCall call) {
 		call.preexp.accept(this);
@@ -186,6 +201,44 @@ public class ExpVisitor extends VisitorAdaptor {
 			}
 
 			ex.addLuaStackTraceElement(new LuaStackTraceElement(call, name, Collections.emptyList()));
+			throw ex;
+		}
+	}
+
+	@Override
+	public void visit(FuncCallSelf call) {
+		call.preexp.accept(this);
+
+		try {
+			List<Object> result = call(evaluationStack.removeLast(), call.name, call.explist);
+
+			SyntaxNode callParent = call.getParent();
+
+			if (callParent instanceof Stat) {
+				return;
+			}
+
+			if (callParent.getParent().getParent() instanceof ExpList) {
+				PreExp preExp = (PreExp) callParent.getParent();
+				ExpList list = (ExpList) preExp.getParent();
+
+				if (list.elementAt(list.size() - 1) == preExp) {
+					evaluationStack.addAll(result);
+					return;
+				}
+			}
+
+			if (!result.isEmpty()) {
+				evaluationStack.add(result.get(0));
+			}
+
+		} catch (LuaRuntimeException ex) {
+			if (ex.getLocation() == null) {
+				ex.setLocation(call);
+				throw ex;
+			}
+
+			ex.addLuaStackTraceElement(new LuaStackTraceElement(call, call.name, Collections.emptyList()));
 			throw ex;
 		}
 	}
@@ -332,6 +385,24 @@ public class ExpVisitor extends VisitorAdaptor {
 
 		default:
 			throw new LuaRuntimeException("attempt to call a " + LuaType.getTypeOf(object) + " value");
+		}
+	}
+
+	static private Deque<Object> findCallHandler(Object object, String name) {
+		Deque<Object> result;
+		switch (LuaType.getTypeOf(object)) {
+		case TABLE:
+			Object res = ((LuaTable) object).get(name);
+			if (!(res instanceof LuaFunction)) {
+				throw new LuaRuntimeException("attempt to call method " + name + " (a" + LuaType.getTypeOf(res)
+						+ " value)");
+			}
+			result = new LinkedList<Object>();
+			result.add(res);
+			return result;
+
+		default:
+			throw new LuaRuntimeException("attempt to index a " + LuaType.getTypeOf(object) + " value");
 		}
 	}
 }
