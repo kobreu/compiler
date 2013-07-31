@@ -9,16 +9,38 @@ import location.Location;
 import edu.tum.lua.ast.VisitorNode;
 
 public abstract class SyntaxNode implements VisitorNode {
-	
-  private Location location;
-  
-  public Location getLocation() {
-	  return location;
-  }
-  public void setLocation(Location location) {
-	  this.location = location;
-  }
-	
-  public abstract SyntaxNode getParent();
-  public abstract void setParent(SyntaxNode parent);
+
+	private Location marker;
+
+	private Location start;
+
+	private Location end;
+
+	public Location getMarker() {
+		return marker;
+	}
+
+	public void setMarker(Location location) {
+		this.marker = location;
+	}
+
+	public Location getEnd() {
+		return end;
+	}
+
+	public Location getStart() {
+		return start;
+	}
+
+	public void setEnd(Location end) {
+		this.end = end;
+	}
+
+	public void setStart(Location start) {
+		this.start = start;
+	}
+
+	public abstract SyntaxNode getParent();
+
+	public abstract void setParent(SyntaxNode parent);
 }

@@ -26,23 +26,15 @@ parser code {:
 
   Lexer lexer;
   
-  DefaultLocationTable locationTable;
 
   public Parser(Lexer lex) {
       super(lex);
 
   	  productionRuleBroadcaster = new DefaultProductionRuleBroadcaster();
   	  
-  	  locationTable = new DefaultLocationTable();
   	  
-  	  productionRuleBroadcaster.registerListener(locationTable);
-	
       lexer = lex;
      
-  }
-  
-  public LocationTable getLocationTable() {
-  		return locationTable;
   }
   
   
@@ -193,6 +185,7 @@ stat        	::=    		varlist:vl  ASM:a  explist:el
 						{: 
 								//System.out.println("Inside stat");
 								RESULT = new Asm(vl,el);
+								RESULT.setMarker(LocationFactory.fromSymbol((Symbol)a));
 						:}
 						| functioncall:fc
 						{:
@@ -216,14 +209,17 @@ stat        	::=    		varlist:vl  ASM:a  explist:el
 						{: 		
 								RESULT = new ForExp(Id,e1,e2,e3,b); 
 						:}
-						| FOR  namelist:nl  IN  explist:el  DO  block:b END
-						{: RESULT = new ForIn(nl,el, b); :}
-						| FUNC  funcname:fn  funcbody:fb  
+						| FOR:fo  namelist:nl  IN  explist:el  DO  block:b END
+						{: RESULT = new ForIn(nl,el, b);
+							RESULT.setMarker(LocationFactory.fromSymbol((Symbol) fo));
+						 :}
+						| FUNC:f  funcname:fn  funcbody:fb  
 						{:
 							VarList vl = SyntacticSugar.funcNameToVarList(fn);
 							ExpList args = SyntacticSugar.methodDefinitionToExpression(fn, fb);
 							
 							Asm asm = new Asm(vl, args);
+							asm.setMarker(LocationFactory.fromSymbol((Symbol) f));
 						
 							RESULT = asm;
 						:} 
@@ -336,12 +332,24 @@ var				::=		ID:id
 						;
 
 					
-exp				::=		NIL
-							{: RESULT = new Nil(); :}  
-						| FALSE
-							{: RESULT = new BooleanExp(false); :}  
-						| TRUE
-							{: RESULT = new BooleanExp(true); :} 
+exp				::=		NIL:f
+							{: RESULT = new Nil(); 
+								RESULT.setStart(LocationFactory.fromSymbol((Symbol) f));
+								RESULT.setMarker(LocationFactory.fromSymbol((Symbol) f));
+								RESULT.setEnd(LocationFactory.fromSymbol((Symbol) f));
+							:}  
+						| FALSE:f
+							{: RESULT = new BooleanExp(false);
+								RESULT.setStart(LocationFactory.fromSymbol((Symbol) f));
+								RESULT.setMarker(LocationFactory.fromSymbol((Symbol) f));
+								RESULT.setEnd(LocationFactory.fromSymbol((Symbol) f));
+							:}							  
+						| TRUE:f
+							{: RESULT = new BooleanExp(true);
+								RESULT.setStart(LocationFactory.fromSymbol((Symbol) f));
+								RESULT.setMarker(LocationFactory.fromSymbol((Symbol) f));
+								RESULT.setEnd(LocationFactory.fromSymbol((Symbol) f));
+							 :} 
 						| NUMBER:num
 							{: 	//System.out.println("Inside Number expression");				   
 								RESULT = new NumberExp(num); 						
@@ -359,11 +367,8 @@ exp				::=		NIL
 						| exp:e1 binop:op  exp:e2 
 							{: 
 								//System.out.println("Inside AND expression operator");
-								RESULT = new Binop(e1,op,e2); :}
-						| exp:e1 WS binop:op  exp:e2 
-							{: 
-								//System.out.println("Inside AND expression operator");
-								RESULT = new Binop(e1,op,e2); :}
+								RESULT = new Binop(e1,op,e2);
+							 :}
 						| unop:uop  exp:e
 							{: RESULT = new Unop(uop,e); :}
 						| FUNC  funcbody:fb 

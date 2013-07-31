@@ -4,6 +4,8 @@
  */
 package edu.tum.lua.ast;
 
+import location.Location;
+
 public class Binop extends Exp {
 
   public Exp leftexp;
@@ -21,7 +23,23 @@ public class Binop extends Exp {
   public void accept(Visitor visitor) {
     visitor.visit(this);
   }
-
+  
+  @Override
+	public Location getStart() {
+		return leftexp.getStart();
+	}
+  
+  @Override
+	public Location getEnd() {
+		return rightexp.getEnd();
+	}
+  
+  @Override
+	public Location getMarker() {
+		// TODO fix that
+		return leftexp.getEnd();
+	}
+  
   public void childrenAccept(Visitor visitor) {
     if (leftexp != null) leftexp.accept(visitor);
     if (rightexp != null) rightexp.accept(visitor);

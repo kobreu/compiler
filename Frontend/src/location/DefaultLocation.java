@@ -25,5 +25,5 @@ public class DefaultLocation implements Location {
 	public int getColumn() {
 		return column;
 	}
-
+	
 }
