@@ -70,6 +70,11 @@ public class BlockVisitorTest {
 		assertEquals(null, environment.get("c"));
 		LuaInterpreter.eval(block, environment);
 		assertEquals("a", environment.get("c"));
+
+		block = ParserUtil.loadString("x=0 a={} a.foo=function() x=1 end a:foo()");
+		setUp();
+		LuaInterpreter.eval(block, environment);
+		assertEquals(1.0, environment.get("x"));
 	}
 
 	@Test
@@ -240,20 +245,9 @@ public class BlockVisitorTest {
 		assertEquals(2.0, t.get("two"));
 		assertEquals(3.0, t.get("three"));
 
-		/*
-		 * Asm asm = new Asm(new VarList(new Variable("a")), new ExpList(new
-		 * Binop(new PreExp(new PrefixExpVar(new Variable("a"))), Op.CONCAT, new
-		 * PreExp(new PrefixExpVar(new Variable("k")))))); PrefixExpFuncCall
-		 * pefc = new PrefixExpFuncCall(new FunctionCall(new PrefixExpVar(new
-		 * Variable("pairs")), new ExpList(new PreExp(new PrefixExpVar(new
-		 * Variable("t")))))); block = new Block(new StatList(new ForIn(new
-		 * NameList(new Name("k")), new ExpList(new PreExp(pefc)), new Block(new
-		 * StatList(asm), null))), null);
-		 */
-		// TODO: Read statement
-
+		block = ParserUtil.loadString("for k,v in pairs(t) do a=a..k end");
 		LuaInterpreter.eval(block, environment);
-		// assertEquals("atwoonethree,", environment.get("a"));
+		assertEquals("atwoonethree", environment.get("a"));
 	}
 
 	@Test
@@ -264,14 +258,7 @@ public class BlockVisitorTest {
 		LuaInterpreter.eval(block, environment);
 		assertEquals(LuaType.TABLE, LuaType.getTypeOf(environment.get("a")));
 
-		block = ParserUtil.loadString("function a.foo() end");
-
-		// FunctionExp foo = new FunctionExp(new NameList(), false, new
-		// Block(new StatList(), null));
-		// VarTabIndex location = new VarTabIndex(new PrefixExpVar(new
-		// Variable("a")), new TextExp("foo"));
-		// block = new Block(new StatList(new Asm(new VarList(location), new
-		// ExpList(foo))), null);
+		block = ParserUtil.loadString("a.foo= function() end");
 		LuaInterpreter.eval(block, environment);
 
 		assertEquals(LuaType.FUNCTION, LuaType.getTypeOf(((LuaTable) environment.get("a")).get("foo")));

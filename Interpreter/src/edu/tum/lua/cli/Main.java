@@ -1,5 +1,7 @@
 package edu.tum.lua.cli;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
@@ -16,13 +18,15 @@ import util.ParserUtil;
 import edu.tum.lua.GlobalEnvironment;
 import edu.tum.lua.LuaInterpreter;
 import edu.tum.lua.ast.Block;
+import edu.tum.lua.parser.exception.StatementNotFinishedException;
+import edu.tum.lua.parser.exception.SyntaxError;
 
 public class Main {
 
 	private static GlobalEnvironment environment = new GlobalEnvironment();
 	private static Deque<Keyword> keysStack = new LinkedList<>();
 
-	public static void main(String... args) throws Exception {
+	public static void main(String... args) throws IOException {
 
 		ConsoleReader reader = new ConsoleReader();
 		reader.setBellEnabled(false);
@@ -41,41 +45,58 @@ public class Main {
 		while ((line = reader.readLine()) != null) {
 			history.addToHistory(line);
 
-			// allows "= 5" input in interactive mode
-			if (line.startsWith("=")) {
-				line = line.replaceFirst("=", "return ");
-			}
+			reader.setDefaultPrompt("> ");
+			Block block;
 
-			manageKeys(line);
-			chunk.append(line);
+			// load lua files
+			if (line.startsWith("dofile ")) {
+				line = line.substring(6);
 
-			if (keysStack.isEmpty()) {
-
-				reader.setDefaultPrompt("> ");
-				Block block = ParserUtil.loadString(chunk.toString());
-				results = LuaInterpreter.eval(block, environment);
-
-				completer.setCandidates(getStringSubset(environment.keySet()));
-				chunk = new StringBuilder();
-
-				if (results != null && !results.isEmpty()) {
-					for (Object r : results) {
-						if (r instanceof String) {
-							result.append((String) r);
-						} else {
-							result.append(r);
-						}
-						result.append(", ");
-					}
-					result.setLength(result.length() - 2);
-					System.out.println(result);
+				try {
+					block = ParserUtil.loadFile(line);
+					results = LuaInterpreter.eval(block, environment);
+					printResult(results, result);
+				} catch (FileNotFoundException e) {
+					System.out.println("cannot open " + line + ": No such file or directory");
+				} catch (SyntaxError se) {
+					System.out.println("Syntax error");
+					se.printStackTrace();
+				} catch (Exception e) {
+					System.out.println("Error while parsing file");
+					e.printStackTrace();
 				}
 
-				result = new StringBuilder();
-			} else if (keysStack.peek() == Keyword.QUOTATION) {
-				keysStack.pop();
 			} else {
-				reader.setDefaultPrompt(">> ");
+
+				// allows "= 5" input in interactive mode
+				if (line.startsWith("=")) {
+					line = line.replaceFirst("=", "return ");
+				}
+
+				manageKeys(line);
+				chunk.append(line);
+
+				if (keysStack.isEmpty()) {
+
+					try {
+						block = ParserUtil.loadStringInteractive(chunk.toString());
+						results = LuaInterpreter.eval(block, environment);
+					} catch (StatementNotFinishedException snfe) {
+						System.out.println("not finished");
+					} catch (SyntaxError se) {
+						System.out.println("Syntax error");
+					}
+
+					completer.setCandidates(getStringSubset(environment.keySet()));
+					chunk = new StringBuilder();
+
+					printResult(results, result);
+
+				} else if (keysStack.peek() == Keyword.QUOTATION) {
+					keysStack.pop();
+				} else {
+					reader.setDefaultPrompt(">> ");
+				}
 			}
 
 		}
@@ -166,5 +187,22 @@ public class Main {
 				break;
 			}
 		}
+	}
+
+	private static void printResult(List<Object> results, StringBuilder result) {
+		if (results != null && !results.isEmpty()) {
+			for (Object r : results) {
+				if (r instanceof String) {
+					result.append((String) r);
+				} else {
+					result.append(r);
+				}
+				result.append(", ");
+			}
+			result.setLength(result.length() - 2);
+			System.out.println(result);
+		}
+		result = new StringBuilder();
+		results = null;
 	}
 }
