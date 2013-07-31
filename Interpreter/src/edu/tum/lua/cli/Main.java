@@ -86,33 +86,32 @@ public class Main {
 
 			chunk.append(line);
 
-			interprete(chunk);
+			chunk = interprete(chunk);
 		}
 		System.out.println("end");
 	}
 
-	private static void interprete(StringBuilder chunk) {
+	private static StringBuilder interprete(StringBuilder chunk) {
 		List<Object> results;
-			try {
-				Block block = ParserUtil.loadStringInteractive(chunk.toString());
-				results = LuaInterpreter.eval(block, environment);
+		try {
+			Block block = ParserUtil.loadStringInteractive(chunk.toString());
+			results = LuaInterpreter.eval(block, environment);
 
 			completor.setCandidates(getStringSubset(environment.keySet()));
-			chunk.setLength(0);
+			chunk = new StringBuilder();
 
-				printResult(results);
-			} catch (StatementNotFinishedException snfe) {
-				reader.setDefaultPrompt(">> ");
-				chunk.append(" ");
-			} catch (SyntaxError se) {
-				chunk = new StringBuilder();
-				System.out.println("Syntax error while parsing");
-			}
+			printResult(results);
+		} catch (StatementNotFinishedException snfe) {
+			reader.setDefaultPrompt(">> ");
+			chunk.append(" ");
+		} catch (SyntaxError se) {
+			chunk = new StringBuilder();
+			System.out.println("Syntax error while parsing");
 		}
 
-	private static String dofile(String line) {
-		line = line.substring(6);
-		Block block;
+		return chunk;
+	}
+
 	private static void dofile(String file) {
 		try {
 			Block block = ParserUtil.loadFile(file);
