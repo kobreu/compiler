@@ -1,4 +1,4 @@
-<project name="Compiler" default="test" basedir=".">
+<project name="Compiler" default="jflex" basedir=".">
 	<property name="cl" location="cl" />
 	<property name="cup" location="cup" />
 	<property name="flex" location="flex" />
@@ -46,10 +46,24 @@
 	<target name="init">
 		<mkdir dir="${testoutput}" />
 		<mkdir dir="${classes}" />
+		<mkdir dir="${java}" />
 		<mkdir dir="${dist}" />
 	</target>
 
-	<target name="compile" depends="init">
+	<target name="classgen" depends="init">
+		<classgen file="${cl}/ast.cl" destdir="${java}" visitor="true" public="true" />
+	</target>
+
+	<target name="cup" depends="classgen">
+		<cup srcfile="${cup}/Parser.cup" destdir="${java}/edu/tum/lua/parser" interface="true" package="edu.tum.lua.parser"
+parser="Parser" expect="19" />
+	</target>
+
+	<target name="jflex" depends="cup">
+		<jflex file="${flex}/Scanner.jflex" destdir="${java}" />
+	</target>
+
+	<target name="compile" depends="jflex">
 		<javac destdir="${classes}" debug="on">
             <src path="${src}"/>  
             <src path="${java}"/>  
@@ -102,6 +116,7 @@
 
 
 	<target name="clean">
+		<delete dir="${java}" />
 		<delete dir="${classes}" />
 		<delete dir="${dist}" />
 	</target>
