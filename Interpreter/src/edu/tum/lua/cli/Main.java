@@ -19,33 +19,64 @@ import edu.tum.lua.parser.exception.SyntaxError;
 
 public class Main {
 
-	private static GlobalEnvironment environment = new GlobalEnvironment();
+	private final static GlobalEnvironment environment = new GlobalEnvironment();
+	private static ConsoleReader reader;
+	private static SimpleCompletor completor;
+	private static History history;
 
 	public static void main(String... args) throws IOException {
-
-		ConsoleReader reader = new ConsoleReader();
+		reader = new ConsoleReader();
 		reader.setBellEnabled(false);
 		reader.setDefaultPrompt("> ");
 
-		SimpleCompletor completer = new SimpleCompletor(new String[] {});
-		completer.setCandidates(getStringSubset(environment.keySet()));
-		reader.addCompletor(completer);
+		if (args.length > 0) {
+			switch (args[0]) {
+			case "-h":
+			case "-?":
+			case "-help":
+				System.out.println("Not implemented yet");
+				return;
+			case "-i":
+				if (args.length >= 2) {
+					dofile(args[1]);
+				}
+				break;
+			case "-f":
+				if (args.length < 2) {
+					System.out.println("with -f you need to specify a second argument. See -h for help");
+					return;
+				}
+				dofile(args[1]);
+				return;
+			default:
+				dofile(args[0]);
+				return;
+			}
+		}
 
-		History history = new History();
-		List<Object> results = null;
+		completor = new SimpleCompletor(new String[] {});
+		completor.setCandidates(getStringSubset(environment.keySet()));
+		reader.addCompletor(completor);
 
-		String line;
+		history = new History();
+
 		StringBuilder chunk = new StringBuilder();
+		String line;
 
-		while ((line = reader.readLine()) != null) {
+		LOOP: while ((line = reader.readLine()) != null) {
 			history.addToHistory(line);
-
 			reader.setDefaultPrompt("> ");
 
-			if (line.startsWith("dofile ")) { // load lua files
-				String todo = line;
-				dofile(todo);
-
+			switch (line.split(" ")[0]) {
+			case "dofile":
+				dofile(line.split("\"")[1]);
+				line = line.replaceAll("^(dofile )\".*\" ", "");
+				return;
+			case "--end":
+			case "--exit":
+				break LOOP;
+			default:
+				break;
 			}
 
 			// allows e.g. "= 5" input in interactive mode
@@ -55,12 +86,19 @@ public class Main {
 
 			chunk.append(line);
 
+			interprete(chunk);
+		}
+		System.out.println("end");
+	}
+
+	private static void interprete(StringBuilder chunk) {
+		List<Object> results;
 			try {
 				Block block = ParserUtil.loadStringInteractive(chunk.toString());
 				results = LuaInterpreter.eval(block, environment);
 
-				completer.setCandidates(getStringSubset(environment.keySet()));
-				chunk = new StringBuilder();
+			completor.setCandidates(getStringSubset(environment.keySet()));
+			chunk.setLength(0);
 
 				printResult(results);
 			} catch (StatementNotFinishedException snfe) {
@@ -70,11 +108,11 @@ public class Main {
 				chunk = new StringBuilder();
 				System.out.println("Syntax error while parsing");
 			}
-
 		}
 
-	}
-
+	private static String dofile(String line) {
+		line = line.substring(6);
+		Block block;
 	private static void dofile(String file) {
 		try {
 			Block block = ParserUtil.loadFile(file);
