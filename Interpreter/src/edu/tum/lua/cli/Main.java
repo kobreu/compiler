@@ -2,6 +2,7 @@ package edu.tum.lua.cli;
 
 import java.util.Deque;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.SortedSet;
@@ -32,24 +33,46 @@ public class Main {
 		reader.addCompletor(completer);
 
 		History history = new History();
+		List<Object> results = null;
+		StringBuilder result = new StringBuilder();
 
 		String line;
 		StringBuilder chunk = new StringBuilder();
 		while ((line = reader.readLine()) != null) {
 			history.addToHistory(line);
+
+			// allows "= 5" input in interactive mode
+			if (line.startsWith("=")) {
+				line = line.replaceFirst("=", "return ");
+			}
+
 			manageKeys(line);
 			chunk.append(line);
 
 			if (keysStack.isEmpty()) {
 				Block block = ParserUtil.loadString(chunk.toString());
-				LuaInterpreter.eval(block, environment);
+				results = LuaInterpreter.eval(block, environment);
 				completer.setCandidates(getStringSubset(environment.keySet()));
 				chunk = new StringBuilder();
+
+				if (results != null && !results.isEmpty()) {
+					for (Object r : results) {
+						if (r instanceof String) {
+							result.append((String) r);
+						} else {
+							result.append(r);
+						}
+						result.append(", ");
+					}
+					result.setLength(result.length() - 2);
+					System.out.println(result);
+				}
+
+				result = new StringBuilder();
+			} else if (keysStack.peek() == Keyword.QUOTATION) {
+				keysStack.pop();
 			}
 
-			// TODO:
-			// optional print non empty return lists
-			// print directly after '=' or 'return'
 		}
 	}
 
@@ -66,24 +89,36 @@ public class Main {
 	}
 
 	// FIXME: support all multi line inputs?
+	/**
+	 * reads whole strings or puts expected keywords onto stack
+	 * 
+	 * @param line
+	 */
 	private static void manageKeys(String line) {
 		StringTokenizer tokenizer = new StringTokenizer(line);
 		while (tokenizer.hasMoreTokens()) {
 			String token = tokenizer.nextToken();
 
+			StringBuilder intermediateResult = new StringBuilder();
+
 			try {
+				intermediateResult.append(token);
 				if (token.startsWith("\"")) {
 					do {
 						token = tokenizer.nextToken();
+						intermediateResult.append(token);
 					} while (token.endsWith("\""));
 				}
 
 				if (token.startsWith("'")) {
 					do {
 						token = tokenizer.nextToken();
+						intermediateResult.append(token);
 					} while (token.endsWith("'"));
 				}
 			} catch (NoSuchElementException nsee) {
+				keysStack.push(Keyword.QUOTATION);
+				System.out.println("unfinished string near '" + intermediateResult + "'");
 				break;
 			}
 
