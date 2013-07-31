@@ -33,7 +33,6 @@ public class Main {
 
 		History history = new History();
 		List<Object> results = null;
-		StringBuilder result = new StringBuilder();
 
 		String line;
 		StringBuilder chunk = new StringBuilder();
@@ -42,53 +41,56 @@ public class Main {
 			history.addToHistory(line);
 
 			reader.setDefaultPrompt("> ");
-			Block block;
 
 			if (line.startsWith("dofile ")) { // load lua files
-				line = line.substring(6);
-
-				try {
-					block = ParserUtil.loadFile(line);
-					results = LuaInterpreter.eval(block, environment);
-					printResult(results, result);
-				} catch (FileNotFoundException e) {
-					System.out.println("cannot open " + line + ": No such file or directory");
-				} catch (SyntaxError se) {
-					System.out.println("Syntax error");
-					se.printStackTrace();
-				} catch (Exception e) {
-					System.out.println("Error while parsing file");
-					e.printStackTrace();
-				}
-
-			} else {
-
-				// allows e.g. "= 5" input in interactive mode
-				if (line.startsWith("=")) {
-					line = line.replaceFirst("=", "return ");
-				}
-
-				chunk.append(line);
-
-				try {
-					block = ParserUtil.loadStringInteractive(chunk.toString());
-					results = LuaInterpreter.eval(block, environment);
-
-					completer.setCandidates(getStringSubset(environment.keySet()));
-					chunk = new StringBuilder();
-
-					printResult(results, result);
-				} catch (StatementNotFinishedException snfe) {
-					reader.setDefaultPrompt(">> ");
-					chunk.append(" ");
-				} catch (SyntaxError se) {
-					chunk = new StringBuilder();
-					System.out.println("Syntax error while parsing");
-				}
+				String todo = line;
+				line = dofile(todo);
 
 			}
 
+			// allows e.g. "= 5" input in interactive mode
+			if (line.startsWith("=")) {
+				line = line.replaceFirst("=", "return ");
+			}
+
+			chunk.append(line);
+
+			try {
+				Block block = ParserUtil.loadStringInteractive(chunk.toString());
+				results = LuaInterpreter.eval(block, environment);
+
+				completer.setCandidates(getStringSubset(environment.keySet()));
+				chunk = new StringBuilder();
+
+				printResult(results);
+			} catch (StatementNotFinishedException snfe) {
+				reader.setDefaultPrompt(">> ");
+				chunk.append(" ");
+			} catch (SyntaxError se) {
+				chunk = new StringBuilder();
+				System.out.println("Syntax error while parsing");
+			}
+
 		}
+
+	}
+
+	private static String dofile(String line) {
+		line = line.substring(6);
+		Block block;
+		try {
+			block = ParserUtil.loadFile(line);
+			printResult(LuaInterpreter.eval(block, environment));
+		} catch (FileNotFoundException e) {
+			System.out.println("cannot open " + line + ": No such file or directory");
+		} catch (SyntaxError se) {
+			System.out.println("Syntax error");
+			se.printStackTrace();
+		} catch (Exception e) {
+			System.out.println("Error while parsing file");
+			e.printStackTrace();
+		}
+		return line;
 	}
 
 	private static SortedSet<String> getStringSubset(Set<Object> keySet) {
@@ -103,7 +105,8 @@ public class Main {
 		return subset;
 	}
 
-	private static void printResult(List<Object> results, StringBuilder result) {
+	private static void printResult(List<Object> results) {
+		StringBuilder result = new StringBuilder();
 		if (results != null && !results.isEmpty()) {
 			for (Object r : results) {
 				if (r instanceof String) {
@@ -116,7 +119,6 @@ public class Main {
 			result.setLength(result.length() - 2);
 			System.out.println(result);
 		}
-		result = new StringBuilder();
 		results = null;
 	}
 }
