@@ -27,17 +27,23 @@ parser code {:
       lexer = lex;
      
   }
+  
+  public int line, column;
 
   
   public void report_error(String message, Object info) {
     syntaxErrors = true;
     
-    //System.out.print(message);
+    System.out.print(message);
     
     if ( !(info instanceof Symbol) ) return;
     Symbol symbol = (Symbol) info;
     
+    line = symbol.left;
+    column = symbol.right;
+    
     if ( symbol.left < 0 || symbol.right < 0 ) return;
+    
     
     //System.out.println(" at line "+symbol.left+", column "+symbol.right);
   }

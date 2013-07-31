@@ -9,11 +9,31 @@ import java.io.StringReader;
 import edu.tum.lua.ast.Block;
 import edu.tum.lua.parser.Lexer;
 import edu.tum.lua.parser.Parser;
+import edu.tum.lua.parser.exception.StatementNotFinishedException;
+import edu.tum.lua.parser.exception.SyntaxError;
 
 public class ParserUtil {
 
 	public static Block loadString(String block) throws Exception {
 		return parse(new StringReader(block));
+	}
+	
+	public static Block loadStringInteractive(String block) throws StatementNotFinishedException, SyntaxError {
+		Lexer scanner = new Lexer(new StringReader(block));
+		Block prog = null;
+
+		Parser p = new Parser(scanner);
+		try {
+			prog = (Block) p.parse().value;
+		} catch(Exception ex) { // syntax exception or statement not finished?
+			if (p.line == -1 && p.column == -1) {
+				throw new StatementNotFinishedException();
+			} else {
+				throw new SyntaxError();
+			}
+		}
+		
+		return prog;
 	}
 
 	public static Block loadFile(String uri) throws FileNotFoundException, Exception {
