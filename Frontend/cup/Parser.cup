@@ -32,14 +32,14 @@ parser code {:
   public void report_error(String message, Object info) {
     syntaxErrors = true;
     
-    System.out.print(message);
+    //System.out.print(message);
     
     if ( !(info instanceof Symbol) ) return;
     Symbol symbol = (Symbol) info;
     
     if ( symbol.left < 0 || symbol.right < 0 ) return;
     
-    System.out.println(" at line "+symbol.left+", column "+symbol.right);
+    //System.out.println(" at line "+symbol.left+", column "+symbol.right);
   }
 :}; 
 
@@ -104,38 +104,39 @@ start with block;
 
 block 			::=    statlist:stats laststat:lstat
                  		{:       
-                 			System.out.println("Inside block with laststat");    
+                 			//System.out.println("Inside block with laststat");    
                  			RESULT = new Block(stats,lstat); 
                  		:}
                  		| statlist:stats 
                  		{:       
-                 			System.out.println("Inside block with laststat");     	    
+                 			//System.out.println("Inside block with laststat");     	    
                  			RESULT = new Block(stats,null); 	
                  		:}
                  		| laststat:lstat {:
                  		 		RESULT = new Block(null,lstat);  :}
                  		| 
                  		empty {: 
-                 				System.out.println("Inside empty block"); RESULT = new Block(null,null);;
-                 				 :}
+                 				//System.out.println("Inside empty block"); 
+                 				RESULT = new Block(null,null);;
+                 		:}
                  		;
 
 	
 
 statlist		::=		 stat:s optsemi 
 						{: 	
-							System.out.println("Inside single stat"); 			
+							//System.out.println("Inside single stat"); 			
 							RESULT = new StatList(s);
 						:}							
 						
 						|   stat:s  optsemi  statlist:sl 
 						{:						
 					   		if(sl== null){
-					    	System.out.println("Inside recu stat"); 	
+					    	//System.out.println("Inside recu stat"); 	
 					    	sl =new StatList(s);
 							RESULT = sl;}
 							else{
-							System.out.println("Inside recu stat");
+							//System.out.println("Inside recu stat");
 							sl.insertElementAt(s,0);
 							RESULT = sl;
 							}
@@ -148,11 +149,11 @@ statlist		::=		 stat:s optsemi
 
 prefixexp		::=		var:v
 						{:
-							System.out.println("inside prefixexp var");
+							//System.out.println("inside prefixexp var");
 							RESULT = new PrefixExpVar(v);
 						:}
 						| functioncall:fc {:
-							System.out.println("inside prefixexp");
+							//System.out.println("inside prefixexp");
 							RESULT =  new PrefixExpFuncCall(fc);
 						:}
 						| LPAREN exp:e RPAREN
@@ -165,7 +166,7 @@ prefixexp		::=		var:v
 					
 stat        	::=    		varlist:vl  ASM  explist:el 
 						{: 
-								System.out.println("Inside stat");
+								//System.out.println("Inside stat");
 								RESULT = new Asm(vl,el);
 						:}
 						| functioncall:fc
@@ -175,7 +176,7 @@ stat        	::=    		varlist:vl  ASM  explist:el
 						
 						| 	DO  block:b END 
 						{:    
-								System.out.println("Inside DO END");
+								//System.out.println("Inside DO END");
 								RESULT = new DoExp(b); 
 						:}
 						|  	WHILE  exp:e   DO  block:b END
@@ -209,12 +210,12 @@ stat        	::=    		varlist:vl  ASM  explist:el
 					
 laststat		::=		RETURN  optsemi
 						{:    
-							System.out.println("Inside laststat");
+							//System.out.println("Inside laststat");
 							RESULT = new LastReturn(null); 
 						:}
 						|	RETURN  explist:el  optsemi	
 						{:    
-							System.out.println("Inside laststat");
+							//System.out.println("Inside laststat");
 							RESULT = new LastReturn(el); 
 						:}
 						| BREAK  optsemi{: RESULT = new LastBreak(); :}	
@@ -280,9 +281,9 @@ optasmexplist   ::=   ASM  explist:el
 					 		
 namelist    	::=    	ID:id  
 						{: RESULT = new NameList(new Name(id)); 
-						System.out.println("Inside Namelist"); :}  
+						//System.out.println("Inside Namelist"); :}  
 						 | namelist:nl  COM  ID:id
-						{: 	System.out.println("Inside Namelist COM"); 
+						{: 	//System.out.println("Inside Namelist COM"); 
 							
 							nl.append(new Name(id));
 							RESULT = nl;
@@ -294,7 +295,7 @@ namelist    	::=    	ID:id
 					
 var				::=		ID:id
 						{:  			
-						System.out.println("Var: ID");			
+						//System.out.println("Var: ID");			
 						RESULT =  new Variable(id);						
 						:}	
 						| prefixexp:pe LBRACK exp:e RBRACK	
@@ -303,7 +304,7 @@ var				::=		ID:id
 						:}	
 						| prefixexp:pe  DOT ID:id
 						{:
-							System.out.println("DOTvar");
+							//System.out.println("DOTvar");
 							TextExp textExp = new TextExp(id);
 							RESULT = new VarTabIndex(pe, textExp);
 						:}
@@ -317,7 +318,7 @@ exp				::=		NIL
 						| TRUE
 							{: RESULT = new BooleanExp(true); :} 
 						| NUMBER:num
-							{: 	System.out.println("Inside Number expression");				   
+							{: 	//System.out.println("Inside Number expression");				   
 								RESULT = new NumberExp(num); 						
 							:} 
 						| TEXT:t 
@@ -326,17 +327,17 @@ exp				::=		NIL
 						   {: RESULT = new Dots(); :}
 						
 						| prefixexp:prefixexp
-							{: System.out.println("Inside prefixexp expression operator");
+							{: //System.out.println("Inside prefixexp expression operator");
 							RESULT = new PreExp(prefixexp); :}
 						| tableconstructor:tc
 								{: RESULT = new TableConstructorExp(tc); :} 
 						| exp:e1 binop:op  exp:e2 
 							{: 
-								System.out.println("Inside AND expression operator");
+								//System.out.println("Inside AND expression operator");
 								RESULT = new Binop(e1,op,e2); :}
 						| exp:e1 WS binop:op  exp:e2 
 							{: 
-								System.out.println("Inside AND expression operator");
+								//System.out.println("Inside AND expression operator");
 								RESULT = new Binop(e1,op,e2); :}
 						| unop:uop  exp:e
 							{: RESULT = new Unop(uop,e); :}
@@ -349,7 +350,7 @@ exp				::=		NIL
 	
 functioncall	::= 	prefixexp:pexp args:ar
 						{:
-							System.out.println("inside functioncall");
+							//System.out.println("inside functioncall");
 							RESULT = new FuncCall(pexp,ar);
 						:}
 						| prefixexp:pexp DDOT ID:id args:ar
@@ -385,7 +386,7 @@ parlist			::=		namelist:nl
 						namelist:nl  COM  PARAMS
 						{:
 							
-							System.out.println("Inside namelist comma params"); 
+							//System.out.println("Inside namelist comma params"); 
 							RESULT = new ParList(nl,true);
 						:}	
 								

@@ -48,15 +48,15 @@ public class TestParserXML extends XMLTestCase {
 	public void setUp() {
 		List<String> xmlFiles = new ArrayList<>();
 		List<String> luaFiles = new ArrayList<>();
+		
+		xmlFiles.add("testinput/grammar/for_2_exps.xml");
+		luaFiles.add("testinput/grammar/for_2_exps.lua");
 
 		xmlFiles.add("testinput/grammar/var_prefix_dot.xml");
 		luaFiles.add("testinput/grammar/var_prefix_dot_whitespace.lua");
 		
 		xmlFiles.add("testinput/grammar/var_prefix_dot.xml");
 		luaFiles.add("testinput/grammar/var_prefix_dot.lua");
-		
-		xmlFiles.add("testinput/grammar/for_2_exps.xml");
-		luaFiles.add("testinput/grammar/for_2_exps.lua");
 		
 		xmlFiles.add("testinput/grammar/for.xml");
 		luaFiles.add("testinput/grammar/for.lua");
