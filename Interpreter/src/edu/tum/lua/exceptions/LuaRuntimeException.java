@@ -3,9 +3,9 @@ package edu.tum.lua.exceptions;
 import java.util.Deque;
 import java.util.LinkedList;
 
+import edu.tum.lua.ast.SyntaxNode;
 import location.Location;
 import location.LocationTableFactory;
-import edu.tum.lua.ast.SyntaxNode;
 
 public class LuaRuntimeException extends RuntimeException {
 

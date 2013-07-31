@@ -4,9 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import edu.tum.lua.ast.SyntaxNode;
+import grammarlistener.ProductionRule;
+import grammarlistener.ProductionRuleListener;
 
-public class DefaultLocationProvider implements LocationTable {
-
+public class DefaultLocationTable implements LocationTable, ProductionRuleListener {
+	
 	private Map<SyntaxNode, Location> locationMap = new HashMap<>();
 
 	@Override
@@ -14,17 +16,14 @@ public class DefaultLocationProvider implements LocationTable {
 		return locationMap.get(syntaxNode);
 	}
 	
-	private static DefaultLocationProvider instance;
-	
 	public void addLocation(SyntaxNode syntaxNode, Location location) {
 		locationMap.put(syntaxNode, location);
 	}
-	
-	public static DefaultLocationProvider instance() {
-		if(instance == null) {
-			instance = new DefaultLocationProvider();
-		}
-		return instance;
+
+	@Override
+	public void appliedRule(ProductionRule rule) {
+		System.out.println("applied rule!");
+		
 	}
 	
 	

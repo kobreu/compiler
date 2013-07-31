@@ -8,6 +8,9 @@ import java_cup.runtime.Symbol;
 import java_cup.runtime.*;
 import edu.tum.lua.ast.*;
 
+import location.*;
+import grammarlistener.*;
+
 import asttweaks.*;
 
 
@@ -19,14 +22,30 @@ parser code {:
   public boolean syntaxErrors;
 
 
+  DefaultProductionRuleBroadcaster productionRuleBroadcaster;
+
   Lexer lexer;
+  
+  DefaultLocationTable locationTable;
 
   public Parser(Lexer lex) {
-  		
       super(lex);
+
+  	  productionRuleBroadcaster = new DefaultProductionRuleBroadcaster();
+  	  
+  	  locationTable = new DefaultLocationTable();
+  	  
+  	  productionRuleBroadcaster.registerListener(locationTable);
+	
       lexer = lex;
      
   }
+  
+  public LocationTable getLocationTable() {
+  		return locationTable;
+  }
+  
+  
   
   public int line, column;
 
@@ -34,7 +53,7 @@ parser code {:
   public void report_error(String message, Object info) {
     syntaxErrors = true;
     
-    System.out.print(message);
+    //System.out.print(message);
     
     if ( !(info instanceof Symbol) ) return;
     Symbol symbol = (Symbol) info;
@@ -170,7 +189,7 @@ prefixexp		::=		var:v
 
  
 					
-stat        	::=    		varlist:vl  ASM  explist:el 
+stat        	::=    		varlist:vl  ASM:a  explist:el 
 						{: 
 								//System.out.println("Inside stat");
 								RESULT = new Asm(vl,el);

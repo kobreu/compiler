@@ -50,11 +50,7 @@
 		<mkdir dir="${dist}" />
 	</target>
 
-	<target name="classgen" depends="init">
-		<classgen file="${cl}/ast.cl" destdir="${java}" visitor="true" public="true" />
-	</target>
-
-	<target name="cup" depends="classgen">
+	<target name="cup" depends="init">
 		<cup srcfile="${cup}/Parser.cup" destdir="${java}/edu/tum/lua/parser" interface="true" package="edu.tum.lua.parser"
 parser="Parser" expect="19" />
 	</target>
@@ -116,7 +112,7 @@ parser="Parser" expect="19" />
 
 
 	<target name="clean">
-		<delete dir="${java}" />
+		<delete dir="${java}/edu/tum/lua/parser" />
 		<delete dir="${classes}" />
 		<delete dir="${dist}" />
 	</target>
