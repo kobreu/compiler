@@ -48,12 +48,13 @@
   	        <property name="build.dir" value="subant1.build"/>
   	</subant>
   </target>
-
+	
   <target name="compile" depends="compiledependencies">
     <javac srcdir="${src}" destdir="${bin}" debug="on">
     	<classpath refid="binaries" />
     </javac>
   </target>
+	
 
   <target name="test" depends="compile">
   	 <junit>

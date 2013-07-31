@@ -314,7 +314,6 @@ public class TestLexer {
 	
 	@Test
 	public void testNext_token() throws IOException {
-	
 		for(String file : files) {
 			System.out.println(file);
 			lexer = new Lexer(new java.io.FileReader(file));
