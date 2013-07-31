@@ -23,7 +23,7 @@ public class TextLexerMultiLineStrings {
 		file = "testinput/lexer/multiline_string.lua";
 		lexer = new Lexer(new FileReader(file));
 		
-		Integer[] symbolsForCase = { sym.ID, sym.WS, sym.ASM, sym.WS, sym.TEXT};
+		Integer[] symbolsForCase = { sym.ID, sym.ASM, sym.TEXT};
 		String[] strings =  { "I am a \nmultiline string"};
 		
 		int j = 0;
