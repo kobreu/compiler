@@ -1,6 +1,7 @@
 package edu.tum.lua;
 
 import edu.tum.lua.stdlib.Assert;
+import edu.tum.lua.stdlib.DoFile;
 import edu.tum.lua.stdlib.Error;
 import edu.tum.lua.stdlib.GetMetatable;
 import edu.tum.lua.stdlib.Getfenv;
@@ -103,7 +104,7 @@ public class GlobalEnvironment extends LuaTable {
 
 		set("assert", new Assert());
 		set("collectgarbage", new VoidFunction());
-		set("dofile", new NotImplementedFunction());
+		set("dofile", new DoFile());
 		set("error", new Error());
 		set("_G", this);
 		set("getfenv", new Getfenv());

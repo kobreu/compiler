@@ -187,8 +187,9 @@ public class ExpVisitor extends VisitorAdaptor {
 			}
 		} catch (LuaRuntimeException ex) {
 			if (ex.getLocation() == null) {
-				System.out.println("TODO Remove, Message: " + ex.getMessage() + ex.getClass());
-				ex.setLocation(call);
+				// System.out.println("TODO Remove, Message: " + ex.getMessage()
+				// + ex.getClass());
+				// ex.setLocation(call);
 				throw ex;
 			}
 
@@ -354,7 +355,7 @@ public class ExpVisitor extends VisitorAdaptor {
 
 		if (LuaType.getTypeOf(evaluationStack.peekLast()) != LuaType.TABLE) {
 			throw new LuaRuntimeException(varTabIndex, "attempt to index a "
-					+ LuaType.getTypeOf(LuaType.getTypeOf(evaluationStack.peekLast())));
+					+ LuaType.getTypeOf(evaluationStack.peekLast()));
 		}
 
 		LuaTable table = (LuaTable) evaluationStack.removeLast();
