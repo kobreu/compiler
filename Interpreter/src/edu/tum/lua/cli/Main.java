@@ -2,13 +2,9 @@ package edu.tum.lua.cli;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Deque;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.SortedSet;
-import java.util.StringTokenizer;
 import java.util.TreeSet;
 
 import jline.ConsoleReader;
@@ -24,7 +20,6 @@ import edu.tum.lua.parser.exception.SyntaxError;
 public class Main {
 
 	private static GlobalEnvironment environment = new GlobalEnvironment();
-	private static Deque<Keyword> keysStack = new LinkedList<>();
 
 	public static void main(String... args) throws IOException {
 
@@ -42,14 +37,14 @@ public class Main {
 
 		String line;
 		StringBuilder chunk = new StringBuilder();
+
 		while ((line = reader.readLine()) != null) {
 			history.addToHistory(line);
 
 			reader.setDefaultPrompt("> ");
 			Block block;
 
-			// load lua files
-			if (line.startsWith("dofile ")) {
+			if (line.startsWith("dofile ")) { // load lua files
 				line = line.substring(6);
 
 				try {
@@ -68,17 +63,15 @@ public class Main {
 
 			} else {
 
-				// allows "= 5" input in interactive mode
+				// allows e.g. "= 5" input in interactive mode
 				if (line.startsWith("=")) {
 					line = line.replaceFirst("=", "return ");
 				}
 
-				// manageKeys(line);
 				chunk.append(line);
 
 				try {
 					block = ParserUtil.loadStringInteractive(chunk.toString());
-					System.out.println("parsed correctly: " + chunk.toString());
 					results = LuaInterpreter.eval(block, environment);
 
 					completer.setCandidates(getStringSubset(environment.keySet()));
@@ -88,7 +81,6 @@ public class Main {
 				} catch (StatementNotFinishedException snfe) {
 					reader.setDefaultPrompt(">> ");
 					chunk.append(" ");
-					// System.out.println("not finished");
 				} catch (SyntaxError se) {
 					chunk = new StringBuilder();
 					System.out.println("Syntax error while parsing");
@@ -109,81 +101,6 @@ public class Main {
 		}
 
 		return subset;
-	}
-
-	// FIXME: support all multi line inputs?
-	/**
-	 * reads whole strings or puts expected keywords onto stack
-	 * 
-	 * @param line
-	 */
-	private static void manageKeys(String line) {
-		StringTokenizer tokenizer = new StringTokenizer(line);
-		while (tokenizer.hasMoreTokens()) {
-			String token = tokenizer.nextToken();
-
-			StringBuilder intermediateResult = new StringBuilder();
-
-			// FIXME: resolve '"test""bla"'
-			try {
-				intermediateResult.append(token);
-
-				if (token.startsWith("\"")) {
-					if (token.contains("\"")) {
-						break;
-					}
-					do {
-						token = tokenizer.nextToken();
-						intermediateResult.append(token);
-					} while (token.endsWith("\""));
-				}
-
-				if (token.startsWith("'")) {
-					if (token.contains("'")) {
-						break;
-					}
-					do {
-						token = tokenizer.nextToken();
-						intermediateResult.append(token);
-					} while (token.endsWith("'"));
-				}
-			} catch (NoSuchElementException nsee) {
-				keysStack.push(Keyword.QUOTATION);
-				System.out.println("unfinished string near '" + intermediateResult + "'");
-				break;
-			}
-
-			switch (token) {
-			case "function":
-				keysStack.push(Keyword.END);
-				break;
-			case "do":
-				if (keysStack.peek() == Keyword.DO) {
-					keysStack.pop();
-				}
-				keysStack.push(Keyword.END);
-				break;
-			case "while":
-				keysStack.push(Keyword.DO);
-				break;
-			case "for":
-				keysStack.push(Keyword.DO);
-				break;
-			case "repeat":
-				keysStack.push(Keyword.UNTIL);
-				break;
-			case "end":
-				if (keysStack.peek() == Keyword.END) {
-					keysStack.pop();
-				}
-			case "until":
-				if (keysStack.peek() == Keyword.UNTIL) {
-					keysStack.pop();
-				}
-			default:
-				break;
-			}
-		}
 	}
 
 	private static void printResult(List<Object> results, StringBuilder result) {
