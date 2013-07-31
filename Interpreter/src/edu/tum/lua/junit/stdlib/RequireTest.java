@@ -16,7 +16,7 @@ import edu.tum.lua.GlobalEnvironment;
 import edu.tum.lua.LocalEnvironment;
 import edu.tum.lua.LuaInterpreter;
 import edu.tum.lua.ast.Block;
-import edu.tum.lua.types.LuaTable;
+import edu.tum.lua.types.LuaType;
 
 public class RequireTest {
 
@@ -55,16 +55,15 @@ public class RequireTest {
 		assertEquals(null, environment.get("m"));
 		LuaInterpreter.eval(block1, environment);
 		LuaInterpreter.eval(block2, environment);
-		assertEquals(LuaTable.class, environment.get("m").getClass());
-		assertEquals(LuaTable.class, g.getLuaTable("package").getLuaTable("loaded").get("mymodule").getClass());
+		assertEquals(LuaType.TABLE, LuaType.getTypeOf(environment.get("m")));
+		assertEquals(LuaType.TABLE, LuaType.getTypeOf(g.getLuaTable("package").getLuaTable("loaded").get("mymodule")));
 
 	}
 
-	@Test
+	@Test(expected = LuaIOException)
 	public void testRequire2() throws Exception {
 
-		// TODO add (expected=FileNotFound) to test definition!
-		Block block1 = ParserUtil.loadString("m=require(\"mymodule22\")");
+		Block block1 = ParserUtil.loadString("m=require(\"notexisting\")");
 		LuaInterpreter.eval(block1, environment);
 
 	}

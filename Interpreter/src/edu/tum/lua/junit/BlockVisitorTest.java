@@ -160,66 +160,65 @@ public class BlockVisitorTest {
 	}
 
 	@Test
-	public void testVisitForExp() throws Exception {
+	public void testVisitForExp_NormalIteration() throws Exception {
 
 		Block block1, block2;
 
-		// Normal iteration setUp();
 		block1 = ParserUtil.loadString("b=0");
-		block2 = ParserUtil.loadString("for a = 1,3,0.5 do b=a end");
+		block2 = ParserUtil.loadString("for a=1,3 do b=a end");
 
 		LuaInterpreter.eval(block1, environment);
 		assertEquals(0.0, environment.get("b"));
 		LuaInterpreter.eval(block2, environment);
 		assertEquals(3.0, environment.get("b"));
+	}
 
-		// Negative iteration
+	@Test
+	public void testVisitForExp_SteppedIteration() throws Exception {
 
-		setUp();
+		Block block1, block2;
 		block1 = ParserUtil.loadString("b=0");
-		block2 = ParserUtil.loadString("for a = 3,1,-0.5 do b=a end");
+		block2 = ParserUtil.loadString("for a=1,2.9,0.5 do b=a end");
+
+		assertEquals(null, environment.get("b"));
+		LuaInterpreter.eval(block1, environment);
+		assertEquals(0.0, environment.get("b"));
+		LuaInterpreter.eval(block2, environment);
+		assertEquals(2.5, environment.get("b"));
+
+	}
+
+	@Test
+	public void testVisitForExp_NegativeIteration() throws Exception {
+
+		Block block1, block2;
+		block1 = ParserUtil.loadString("b=0");
+		block2 = ParserUtil.loadString("for a = 3,1,-1 do b=a end");
 
 		LuaInterpreter.eval(block1, environment);
 		assertEquals(0.0, environment.get("b"));
 		LuaInterpreter.eval(block2, environment);
 		assertEquals(1.0, environment.get("b"));
-
-		// No step given
-
-		setUp();
-		block1 = ParserUtil.loadString("b=0");
-		block2 = ParserUtil.loadString("for a = 1,3 do b=b+1 end");
-
-		LuaInterpreter.eval(block1, environment);
-		assertEquals(0.0, environment.get("b"));
-		LuaInterpreter.eval(block2, environment);
-		assertEquals(3.0, environment.get("b"));
-
-		// Do not change
-
-		// Do not change "a" // > a = 1 // > for a = 1,3 do print(a) end
-		// > print(a) >> 1
-		block1 = ParserUtil.loadString("a=1");
-		block2 = ParserUtil.loadString("for a = 1,3,0.5 do b=a end");
-
-		assertEquals(null, environment.get("a"));
-		LuaInterpreter.eval(block1, environment);
-		LuaInterpreter.eval(block2, environment);
-		assertEquals(1.0, environment.get("a"));
-
 	}
 
 	@Test
-	public void testVisitForExp2() throws Exception {
-
-		Block block1 = ParserUtil.loadString("a=1");
-		Block block2 = ParserUtil.loadString("for a = 1,3,0.5 do print(a) end");
+	public void testVisitForExp_LocalVar() throws Exception {
+		/*-
+		 * Do not change "a"
+		 * > a = 1
+		 * > for a = 1,3 do b=a end
+		 * > print(a,b) >> 1 3
+		 */
+		Block block1, block2;
+		block1 = ParserUtil.loadString("a=1");
+		block2 = ParserUtil.loadString("for a = 1,3 do b=a end");
 
 		assertEquals(null, environment.get("a"));
 		LuaInterpreter.eval(block1, environment);
+		assertEquals(1.0, environment.get("a"));
 		LuaInterpreter.eval(block2, environment);
 		assertEquals(1.0, environment.get("a"));
-
+		assertEquals(3.0, environment.get("b"));
 	}
 
 	@Test
