@@ -23,6 +23,7 @@ import edu.tum.lua.ast.Nil;
 import edu.tum.lua.ast.NumberExp;
 import edu.tum.lua.ast.PreExp;
 import edu.tum.lua.ast.PrefixExp;
+import edu.tum.lua.ast.PrefixExpExp;
 import edu.tum.lua.ast.PrefixExpFuncCall;
 import edu.tum.lua.ast.PrefixExpVar;
 import edu.tum.lua.ast.Stat;
@@ -186,6 +187,7 @@ public class ExpVisitor extends VisitorAdaptor {
 			}
 		} catch (LuaRuntimeException ex) {
 			if (ex.getLocation() == null) {
+				System.out.println("TODO Remove, Message: " + ex.getMessage() + ex.getClass());
 				ex.setLocation(call);
 				throw ex;
 			}
@@ -261,6 +263,11 @@ public class ExpVisitor extends VisitorAdaptor {
 	@Override
 	public void visit(PrefixExp exp) {
 		exp.accept(this);
+	}
+
+	@Override
+	public void visit(PrefixExpExp exp) {
+		exp.exp.accept(this);
 	}
 
 	@Override
