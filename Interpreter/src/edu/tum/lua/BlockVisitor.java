@@ -125,8 +125,7 @@ public class BlockVisitor extends VisitorAdaptor {
 				Object object = visitor.popLast();
 
 				if (LuaType.getTypeOf(object) != LuaType.TABLE) {
-					throw new LuaRuntimeException(varTabIndex, "attempt to index a "
-							+ LuaType.getTypeOf(LuaType.getTypeOf(object)));
+					throw new LuaRuntimeException(varTabIndex, "attempt to index a " + LuaType.getTypeOf(object));
 				}
 
 				LuaTable table = (LuaTable) object;
@@ -320,6 +319,7 @@ public class BlockVisitor extends VisitorAdaptor {
 			stmt.block.accept(this);
 
 			if (Break) {
+				Break = false;
 				break;
 			}
 
@@ -335,6 +335,7 @@ public class BlockVisitor extends VisitorAdaptor {
 			stmt.block.accept(this);
 
 			if (Break) {
+				Break = false;
 				break;
 			}
 
