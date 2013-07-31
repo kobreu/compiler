@@ -78,6 +78,15 @@ public class BlockVisitorTest {
 	}
 
 	@Test
+	public void testVisitIfThenElse() throws Exception {
+		Block block = ParserUtil.loadString("a=false if a then b=2 elseif a then b=3 else b=1 end");
+		assertEquals(null, environment.get("a"));
+		LuaInterpreter.eval(block, environment);
+		assertFalse((boolean) environment.get("a"));
+		assertEquals(1.0, environment.get("b"));
+	}
+
+	@Test
 	public void testVisitIf() throws Exception {
 
 		environment = new LocalEnvironment();
@@ -111,6 +120,21 @@ public class BlockVisitorTest {
 		assertEquals(null, environment.get("c"));
 		LuaInterpreter.eval(block2, environment);
 		assertEquals(0.0, environment.get("c"));
+
+	}
+
+	@Test
+	public void testVisitIf_noElseBlock() throws Exception {
+
+		Block block = ParserUtil.loadString("a=1; if a==1 then b=1 end; if a~=1 then c=1 end");
+
+		assertEquals(null, environment.get("a"));
+		assertEquals(null, environment.get("b"));
+		assertEquals(null, environment.get("c"));
+		LuaInterpreter.eval(block, environment);
+		assertEquals(1.0, environment.get("a"));
+		assertEquals(1.0, environment.get("b"));
+		assertEquals(null, environment.get("c"));
 
 	}
 
@@ -152,15 +176,6 @@ public class BlockVisitorTest {
 		LuaInterpreter.eval(block, environment);
 		assertEquals("aaa", environment.get("a"));
 		assertEquals(2.0, environment.get("b"));
-	}
-
-	@Test
-	public void testVisitIfThenElse() throws Exception {
-		Block block = ParserUtil.loadString("a=false if a then b=2 elseif a then b=3 else b=1 end");
-		assertEquals(null, environment.get("a"));
-		LuaInterpreter.eval(block, environment);
-		assertFalse((boolean) environment.get("a"));
-		assertEquals(1.0, environment.get("b"));
 	}
 
 	@Test

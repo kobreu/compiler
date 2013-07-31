@@ -280,7 +280,9 @@ public class BlockVisitor extends VisitorAdaptor {
 		if (isTrue(stmt.ifexp)) {
 			stmt.thenblock.accept(this);
 		} else {
-			stmt.elseblock.accept(this);
+			if (stmt.elseblock != null) {
+				stmt.elseblock.accept(this);
+			}
 		}
 	}
 
