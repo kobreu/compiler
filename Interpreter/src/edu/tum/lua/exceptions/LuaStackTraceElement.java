@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.List;
 
 import location.Location;
-import location.LocationProviderFactory;
+import location.LocationTableFactory;
 import edu.tum.lua.ast.SyntaxNode;
 
 public class LuaStackTraceElement {
@@ -21,7 +21,7 @@ public class LuaStackTraceElement {
 
 	public LuaStackTraceElement(SyntaxNode s, String f, List<Object> a) {
 		functionName = f;
-		location = LocationProviderFactory.locationProvider().getLocation(s);
+		location = LocationTableFactory.locationProvider().getLocation(s);
 		args = Collections.unmodifiableList(a);
 	}
 }

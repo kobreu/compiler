@@ -52,7 +52,7 @@ white_space = [ \r\n\t\f]+
 Comment = {EndOfLineComment} | {MultipleLineComment}
 EndOfLineComment = "--" {input_character}* {line_terminator}
 MultipleLineComment = "--[""="*"[" {CommentContent} "]""="*"]"
-CommentContent = ([^("]""="*"]")])*
+CommentContent = (!("]""="*"]"))*
 
 %state STRINGDOUBLE
 %state STRINGSINGLE

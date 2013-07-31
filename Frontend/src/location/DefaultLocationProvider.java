@@ -5,7 +5,7 @@ import java.util.Map;
 
 import edu.tum.lua.ast.SyntaxNode;
 
-public class DefaultLocationProvider implements LocationProvider {
+public class DefaultLocationProvider implements LocationTable {
 
 	private Map<SyntaxNode, Location> locationMap = new HashMap<>();
 

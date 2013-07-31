@@ -15,6 +15,7 @@ import java_cup.runtime.Symbol;
 import org.junit.Before;
 import org.junit.Test;
 
+import unittest.parser.TestParser;
 import edu.tum.lua.parser.Lexer;
 import edu.tum.lua.parser.sym;
 
@@ -30,6 +31,10 @@ public class TestLexer {
 		Integer[] symbolsForCase;
 		String file;
 		
+		file = "testinput/lexer/multiline_comment.lua";
+		files.add(file);
+		symbolsForCase = new Integer[] { sym.ID, sym.LPAREN, sym.TEXT, sym.RPAREN };
+		symbols.put(file, Arrays.asList(symbolsForCase));
 		
 		file = "testinput/grammar/args_explist_none.lua";
 		files.add(file);
@@ -320,9 +325,10 @@ public class TestLexer {
 			List<Integer> symbolsForFile = symbols.get(file);
 			for(int i : symbolsForFile) {
 				Symbol curr = lexer.next_token();
-				//System.out.println(i + " " + curr.sym);
+				System.out.print(TestParser.tokenLookup(curr.sym) + " ");
 				assertEquals(i, curr.sym);
 			}
+			System.out.println();
 			// do it once again to check that all tokens have be read
 			assertEquals(0, lexer.next_token().sym);
 		}

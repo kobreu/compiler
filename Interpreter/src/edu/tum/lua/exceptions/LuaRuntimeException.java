@@ -4,7 +4,7 @@ import java.util.Deque;
 import java.util.LinkedList;
 
 import location.Location;
-import location.LocationProviderFactory;
+import location.LocationTableFactory;
 import edu.tum.lua.ast.SyntaxNode;
 
 public class LuaRuntimeException extends RuntimeException {
@@ -39,6 +39,6 @@ public class LuaRuntimeException extends RuntimeException {
 	}
 
 	public void setLocation(SyntaxNode n) {
-		location = LocationProviderFactory.locationProvider().getLocation(n);
+		location = LocationTableFactory.locationProvider().getLocation(n);
 	}
 }
