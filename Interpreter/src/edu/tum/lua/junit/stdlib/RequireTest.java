@@ -16,6 +16,7 @@ import edu.tum.lua.GlobalEnvironment;
 import edu.tum.lua.LocalEnvironment;
 import edu.tum.lua.LuaInterpreter;
 import edu.tum.lua.ast.Block;
+import edu.tum.lua.exceptions.LuaIOException;
 import edu.tum.lua.types.LuaType;
 
 public class RequireTest {
@@ -60,7 +61,7 @@ public class RequireTest {
 
 	}
 
-	@Test(expected = LuaIOException)
+	@Test(expected = LuaIOException.class)
 	public void testRequire2() throws Exception {
 
 		Block block1 = ParserUtil.loadString("m=require(\"notexisting\")");
