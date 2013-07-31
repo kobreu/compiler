@@ -50,8 +50,11 @@ public class Main {
 			chunk.append(line);
 
 			if (keysStack.isEmpty()) {
+
+				reader.setDefaultPrompt("> ");
 				Block block = ParserUtil.loadString(chunk.toString());
 				results = LuaInterpreter.eval(block, environment);
+
 				completer.setCandidates(getStringSubset(environment.keySet()));
 				chunk = new StringBuilder();
 
@@ -71,6 +74,8 @@ public class Main {
 				result = new StringBuilder();
 			} else if (keysStack.peek() == Keyword.QUOTATION) {
 				keysStack.pop();
+			} else {
+				reader.setDefaultPrompt(">> ");
 			}
 
 		}
@@ -101,9 +106,14 @@ public class Main {
 
 			StringBuilder intermediateResult = new StringBuilder();
 
+			// FIXME: resolve '"test""bla"'
 			try {
 				intermediateResult.append(token);
+
 				if (token.startsWith("\"")) {
+					if (token.contains("\"")) {
+						break;
+					}
 					do {
 						token = tokenizer.nextToken();
 						intermediateResult.append(token);
@@ -111,6 +121,9 @@ public class Main {
 				}
 
 				if (token.startsWith("'")) {
+					if (token.contains("'")) {
+						break;
+					}
 					do {
 						token = tokenizer.nextToken();
 						intermediateResult.append(token);
