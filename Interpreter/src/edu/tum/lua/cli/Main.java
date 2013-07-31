@@ -44,7 +44,7 @@ public class Main {
 
 			if (line.startsWith("dofile ")) { // load lua files
 				String todo = line;
-				line = dofile(todo);
+				dofile(todo);
 
 			}
 
@@ -75,14 +75,12 @@ public class Main {
 
 	}
 
-	private static String dofile(String line) {
-		line = line.substring(6);
-		Block block;
+	private static void dofile(String file) {
 		try {
-			block = ParserUtil.loadFile(line);
+			Block block = ParserUtil.loadFile(file);
 			printResult(LuaInterpreter.eval(block, environment));
 		} catch (FileNotFoundException e) {
-			System.out.println("cannot open " + line + ": No such file or directory");
+			System.out.println("cannot open " + file + ": No such file or directory");
 		} catch (SyntaxError se) {
 			System.out.println("Syntax error");
 			se.printStackTrace();
@@ -90,7 +88,6 @@ public class Main {
 			System.out.println("Error while parsing file");
 			e.printStackTrace();
 		}
-		return line;
 	}
 
 	private static SortedSet<String> getStringSubset(Set<Object> keySet) {
