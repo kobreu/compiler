@@ -131,11 +131,18 @@ block 			::=    statlist:stats laststat:lstat
                  			RESULT = new Block(stats,null); 	
                  		:}
                  		| laststat:lstat {:
-                 		 		RESULT = new Block(new StatList(),lstat);  :}
+                 				StatList statlist = new StatList();
+                 				statlist.setStart(lstat.getStart());
+                 				statlist.setEnd(lstat.getStart());
+                 		 		RESULT = new Block(statlist,lstat);  :}
                  		| 
                  		empty {: 
+                 				
+                 				StatList statlist = new StatList();
+                 				statlist.setStart(LocationFactory.fromSymbol(null));
+                 				statlist.setEnd(LocationFactory.fromSymbol(null));
                  				//System.out.println("Inside empty block"); 
-                 				RESULT = new Block(new StatList(),null);;
+                 				RESULT = new Block(statlist, null);
                  		:}
                  		;
 
@@ -215,7 +222,12 @@ stat        	::=    		varlist:vl  ASM:a  explist:el
 						| FUNC:f  funcname:fn  funcbody:fb  
 						{:
 							VarList vl = SyntacticSugar.funcNameToVarList(fn);
+							vl.setStart(fn.getStart());
+							vl.setEnd(fn.getEnd());
+							
 							ExpList args = SyntacticSugar.methodDefinitionToExpression(fn, fb);
+							args.setStart(fb.getStart());
+							args.setEnd(fb.getEnd());
 							
 							Asm asm = new Asm(vl, args);
 						
@@ -412,10 +424,16 @@ parlist			::=		namelist:nl
 						
 						| PARAMS
 						{:
-							RESULT = new ParList(new NameList(),true); /* empty namelist */
+							NameList nl = new NameList();
+							nl.setStart(LocationFactory.fromSymbol(null));
+							nl.setEnd(LocationFactory.fromSymbol(null));
+							RESULT = new ParList(nl,true); /* empty namelist */
 						:}
 						| {:
-							RESULT = new ParList(new NameList(), false); /* empty namelist */
+							NameList nl = new NameList();
+							nl.setStart(LocationFactory.fromSymbol(null));
+							nl.setEnd(LocationFactory.fromSymbol(null));
+							RESULT = new ParList(nl, false); /* empty namelist */
 						  :}
 						  
 						;	

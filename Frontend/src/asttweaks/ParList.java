@@ -8,7 +8,7 @@ import edu.tum.lua.ast.NameList;
 import edu.tum.lua.ast.SyntaxNode;
 import edu.tum.lua.ast.Visitor;
 
-public class ParList {
+public class ParList extends SyntaxNode {
 
   private SyntaxNode parent;
   protected NameList namelist;
@@ -47,4 +47,28 @@ public class ParList {
     buffer.append(") [ParList]");
     return buffer.toString();
   }
+
+@Override
+public void accept(Visitor visitor) {
+	throw new RuntimeException("Should not be here!");
+	
+}
+
+@Override
+public void childrenAccept(Visitor visitor) {
+	throw new RuntimeException("Should not be here!");
+	
+}
+
+@Override
+public void traverseBottomUp(Visitor visitor) {
+	throw new RuntimeException("Should not be here!");
+	
+}
+
+@Override
+public void traverseTopDown(Visitor visitor) {
+	throw new RuntimeException("Should not be here!");
+	
+}
 }

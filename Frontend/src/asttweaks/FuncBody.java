@@ -6,7 +6,7 @@ package asttweaks;
 
 import edu.tum.lua.ast.*;
 
-public class FuncBody {
+public class FuncBody extends SyntaxNode {
 
   private SyntaxNode parent;
   private ParList parlist;
@@ -39,6 +39,33 @@ public boolean getVarArgs() {
 
 public Block getBlock() {
 	return block;
+}
+
+@Override
+public void accept(Visitor visitor) {
+	throw new RuntimeException("Should not be here!");
+	
+}
+
+@Override
+public void childrenAccept(Visitor visitor) {
+	// TODO Auto-generated method stub
+	throw new RuntimeException("Should not be here!");
+	
+}
+
+@Override
+public void traverseBottomUp(Visitor visitor) {
+	// TODO Auto-generated method stub
+	throw new RuntimeException("Should not be here!");
+	
+}
+
+@Override
+public void traverseTopDown(Visitor visitor) {
+	// TODO Auto-generated method stub
+	throw new RuntimeException("Should not be here!");
+	
 }
 
 
