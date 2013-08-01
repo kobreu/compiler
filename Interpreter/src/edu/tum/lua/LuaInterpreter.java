@@ -1,6 +1,7 @@
 package edu.tum.lua;
 
 import java.io.FileNotFoundException;
+import java.util.Collections;
 import java.util.List;
 
 import util.ParserUtil;
@@ -10,30 +11,31 @@ import edu.tum.lua.exceptions.PrettyPrinter;
 
 public class LuaInterpreter {
 
+	private static GlobalEnvironment currentGlobalEnvironment;
+
+	public static List<Object> eval(Block block) {
+		return eval(block, currentGlobalEnvironment);
+	}
+
 	public static List<Object> eval(Block block, GlobalEnvironment environment) {
-		try {
-			LocalEnvironment localEnv = new LocalEnvironment(environment);
-			BlockVisitor blockVisitor = new BlockVisitor(localEnv);
-			blockVisitor.visit(block);
-			return blockVisitor.getReturn();
-		} catch (LuaRuntimeException e) {
-
-			PrettyPrinter.print(e);
-
-		}
-		return null;
+		currentGlobalEnvironment = environment;
+		LocalEnvironment localEnv = new LocalEnvironment(environment);
+		return eval(block, localEnv);
 	}
 
 	public static List<Object> eval(Block block, LocalEnvironment environment) {
 		try {
 			BlockVisitor blockVisitor = new BlockVisitor(environment);
 			blockVisitor.visit(block);
+			List<Object> ret = blockVisitor.getReturn();
+			if (ret == null) {
+				return Collections.emptyList();
+			}
 			return blockVisitor.getReturn();
 		} catch (LuaRuntimeException e) {
 			PrettyPrinter.print(e);
+			return Collections.emptyList();
 		}
-
-		return null;
 	}
 
 	public static void main(String[] args) throws FileNotFoundException, Exception {
