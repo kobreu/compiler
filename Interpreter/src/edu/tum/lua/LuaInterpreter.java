@@ -11,14 +11,7 @@ import edu.tum.lua.exceptions.PrettyPrinter;
 
 public class LuaInterpreter {
 
-	private static GlobalEnvironment currentGlobalEnvironment;
-
-	public static List<Object> eval(Block block) {
-		return eval(block, currentGlobalEnvironment);
-	}
-
 	public static List<Object> eval(Block block, GlobalEnvironment environment) {
-		currentGlobalEnvironment = environment;
 		LocalEnvironment localEnv = new LocalEnvironment(environment);
 		return eval(block, localEnv);
 	}

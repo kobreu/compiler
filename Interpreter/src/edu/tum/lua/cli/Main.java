@@ -8,6 +8,8 @@ public class Main {
 
 	public static void main(String... args) throws Exception {
 
+		CommandLine cmd = null;
+
 		if (args.length > 0) {
 			switch (args[0]) {
 			case "-h":
@@ -16,8 +18,9 @@ public class Main {
 				System.out.println("Not implemented yet");
 				return;
 			case "-i":
+				cmd = new CommandLine();
 				if (args.length >= 2) {
-					LuaInterpreter.eval(ParserUtil.loadFile(args[1]), new GlobalEnvironment());
+					cmd.doFile(args[1]);
 				}
 				break;
 			case "-f":
@@ -33,8 +36,6 @@ public class Main {
 			}
 		}
 
-		CommandLine cmd = new CommandLine();
 		cmd.run();
 	}
-
 }
