@@ -22,10 +22,10 @@ public class Sub extends LuaFunctionNative {
 		}
 
 		String s = (String) arguments.get(0);
-		int i = (int) Math.rint(((Double) arguments.get(1)).doubleValue()) - 1;
+		int i = (int) Math.floor(((Double) arguments.get(1)).doubleValue()) - 1;
 		int j = s.length();
 		if (arguments.size() >= 3) {
-			j = (int) Math.rint(((Double) arguments.get(2)).doubleValue());
+			j = (int) Math.floor(((Double) arguments.get(2)).doubleValue());
 		}
 
 		if (i > s.length()) {
