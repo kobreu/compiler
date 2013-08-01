@@ -13,6 +13,8 @@ import util.ParserUtil;
 import edu.tum.lua.GlobalEnvironment;
 import edu.tum.lua.LuaInterpreter;
 import edu.tum.lua.ast.Block;
+import edu.tum.lua.exceptions.LuaRuntimeException;
+import edu.tum.lua.exceptions.PrettyPrinter;
 import edu.tum.lua.parser.exception.StatementNotFinishedException;
 import edu.tum.lua.parser.exception.SyntaxError;
 import edu.tum.lua.stdlib.DoFile;
@@ -91,6 +93,8 @@ public class CommandLine {
 				chunk = new StringBuilder();
 				printer.apply(Arrays.asList("Syntax error while parsing"));
 				reader.setDefaultPrompt("> ");
+			} catch (LuaRuntimeException e) {
+				PrettyPrinter.print(e);
 			}
 		}
 	}
