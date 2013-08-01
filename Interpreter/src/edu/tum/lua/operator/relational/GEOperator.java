@@ -5,7 +5,11 @@ import edu.tum.lua.operator.BinaryOperator;
 public class GEOperator extends BinaryOperator {
 	/* Translate a >= b to b <= a */
 
-	private LEOperator leoperator;
+	private final LEOperator leoperator;
+
+	public GEOperator() {
+		leoperator = new LEOperator();
+	}
 
 	@Override
 	public Boolean apply(Object o1, Object o2) {
