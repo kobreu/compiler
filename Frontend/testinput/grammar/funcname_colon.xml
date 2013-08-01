@@ -12,11 +12,7 @@
 			                <PrefixExpVar>
 			                  <Variable var="func"/>
 			                </PrefixExpVar>
-			                <PreExp>
-			                  <PrefixExpVar>
-			                    <Variable var="colon"/>
-			                  </PrefixExpVar>
-			                </PreExp>
+			                <TextExp text="colon" />
 			              </VarTabIndex>
 			            </PrefixExpVar>
           			</PreExp>

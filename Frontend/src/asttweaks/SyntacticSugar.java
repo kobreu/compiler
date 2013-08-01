@@ -13,6 +13,7 @@ import edu.tum.lua.ast.NameList;
 import edu.tum.lua.ast.PreExp;
 import edu.tum.lua.ast.PrefixExp;
 import edu.tum.lua.ast.PrefixExpVar;
+import edu.tum.lua.ast.TextExp;
 import edu.tum.lua.ast.Var;
 import edu.tum.lua.ast.VarList;
 import edu.tum.lua.ast.VarTabIndex;
@@ -36,22 +37,13 @@ public class SyntacticSugar {
 			prefixExp.setStart(var2.getStart());
 			prefixExp.setEnd(var2.getEnd());
 			
-			Variable selfvar = new Variable(
-					funcNameDDotVar.funcname.name);
+			TextExp selfvar = new TextExp(funcNameDDotVar.funcname.name);
 			selfvar.setStart(funcNameDDotVar.funcname.getStart());
 			selfvar.setEnd(funcNameDDotVar.funcname.getEnd());
 			
-			PrefixExpVar selfpre = new PrefixExpVar(selfvar);
-			selfpre.setStart(selfvar.getStart());
-			selfpre.setEnd(selfvar.getEnd());
-			
-			PreExp preexp = new PreExp(selfpre);
-			preexp.setStart(selfpre.getStart());
-			preexp.setEnd(selfpre.getEnd());
-			
-			VarTabIndex head = new VarTabIndex(prefixExp, preexp);
+			VarTabIndex head = new VarTabIndex(prefixExp, selfvar);
 			head.setStart(prefixExp.getStart());
-			head.setStart(preexp.getEnd());
+			head.setStart(selfvar.getEnd());
 			
 			var = head;
 		}
@@ -105,8 +97,7 @@ public class SyntacticSugar {
 		} else if (fn instanceof FuncNameDDotVar) {
 			FuncNameDDotVar ddotVar = (FuncNameDDotVar) fn;
 			VarTabIndex head = new VarTabIndex(new PrefixExpVar(new Variable(
-					ddotVar.selffuncname.name)), new PreExp(new PrefixExpVar(
-					new Variable(ddotVar.funcname.name))));
+					ddotVar.selffuncname.name)), new TextExp(ddotVar.funcname.name));
 			head.setStart(ddotVar.getStart());
 			head.setEnd(ddotVar.getEnd());
 			vl.append(head);
