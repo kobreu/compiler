@@ -38,6 +38,6 @@ public class LuaRuntimeException extends RuntimeException {
 	}
 
 	public void setLocation(SyntaxNode n) {
-		location = n.getMarker();
+		location = n.getStart();
 	}
 }
