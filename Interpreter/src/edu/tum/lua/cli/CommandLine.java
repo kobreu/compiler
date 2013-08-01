@@ -1,6 +1,7 @@
 package edu.tum.lua.cli;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -14,16 +15,20 @@ import edu.tum.lua.LuaInterpreter;
 import edu.tum.lua.ast.Block;
 import edu.tum.lua.parser.exception.StatementNotFinishedException;
 import edu.tum.lua.parser.exception.SyntaxError;
+import edu.tum.lua.stdlib.DoFile;
 import edu.tum.lua.stdlib.Print;
 
 public class CommandLine {
 
-	private final static GlobalEnvironment environment = new GlobalEnvironment();
-	private final  ConsoleReader reader;
+	private final GlobalEnvironment environment;
+	private final ConsoleReader reader;
 	private final SimpleCompletor completor;
 	private final History history;
+	private final Print printer;
 
 	public CommandLine() throws IOException {
+		environment = new GlobalEnvironment();
+
 		reader = new ConsoleReader();
 		reader.setBellEnabled(false);
 		reader.setDefaultPrompt("> ");
@@ -33,11 +38,16 @@ public class CommandLine {
 		reader.addCompletor(completor);
 
 		history = new History();
+
+		printer = new Print();
+	}
+
+	public void doFile(String file) {
+		new DoFile(environment).apply(file);
 	}
 
 	public void run() throws IOException {
 		StringBuilder chunk = new StringBuilder();
-		Print printer = new Print();
 		String line;
 
 		while ((line = reader.readLine()) != null) {
@@ -67,7 +77,7 @@ public class CommandLine {
 				chunk.append(" ");
 			} catch (SyntaxError se) {
 				chunk = new StringBuilder();
-				System.out.println("Syntax error while parsing");
+				printer.apply(Arrays.asList("Syntax error while parsing"));
 				reader.setDefaultPrompt("> ");
 			}
 		}
@@ -81,6 +91,7 @@ public class CommandLine {
 				subset.add((String) o);
 			}
 		}
+
 		return subset;
 	}
 }

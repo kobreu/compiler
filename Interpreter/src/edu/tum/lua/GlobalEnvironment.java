@@ -105,7 +105,7 @@ public class GlobalEnvironment extends LuaTable {
 
 		set("assert", new Assert());
 		set("collectgarbage", new VoidFunction());
-		set("dofile", new DoFile());
+		set("dofile", new DoFile(this));
 		set("error", new Error());
 		set("_G", this);
 		set("getfenv", new Getfenv());
