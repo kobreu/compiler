@@ -29,7 +29,7 @@ public class Sub extends LuaFunctionNative {
 		}
 
 		if (i > s.length()) {
-			return Collections.emptyList();
+			return Collections.singletonList((Object) "");
 		}
 
 		if (j > s.length()) {
@@ -52,7 +52,7 @@ public class Sub extends LuaFunctionNative {
 		if (i >= 0 && j >= 0) {
 			return Arrays.asList(new Object[] { s.substring(i, j) });
 		} else {
-			return Collections.emptyList();
+			return Collections.singletonList((Object) "");
 		}
 	}
 }

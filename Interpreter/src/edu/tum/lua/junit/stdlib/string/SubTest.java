@@ -26,6 +26,7 @@ public class SubTest {
 
 		assertEquals("e", f.apply("Hello", 2.9, 2.4).get(0));
 		assertEquals("", f.apply("Hello", 6.0, 6.0).get(0));
+		assertEquals("", f.apply("Hello", 7.0, 6.0).get(0));
 	}
 
 }
