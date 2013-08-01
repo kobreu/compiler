@@ -20,7 +20,7 @@ public final class LegacyAdapter {
 		Enumeration<Name> iterator = nameList.elements();
 		List<String> list = new LinkedList<>();
 
-		if (iterator.hasMoreElements()) {
+		while (iterator.hasMoreElements()) {
 			list.add(iterator.nextElement().name);
 		}
 
