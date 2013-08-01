@@ -13,6 +13,8 @@ import util.ParserUtil;
 import edu.tum.lua.GlobalEnvironment;
 import edu.tum.lua.LuaInterpreter;
 import edu.tum.lua.ast.Block;
+import edu.tum.lua.exceptions.LuaRuntimeException;
+import edu.tum.lua.exceptions.PrettyPrinter;
 import edu.tum.lua.parser.exception.StatementNotFinishedException;
 import edu.tum.lua.parser.exception.SyntaxError;
 import edu.tum.lua.stdlib.DoFile;
@@ -63,11 +65,19 @@ public class CommandLine {
 			case "--help":
 			case "--h":
 			case "--?":
+				doc.printHelp();
+				continue;
+			case "--list":
+			case "--l":
 				if (line.split(" ").length > 1) {
-					doc.printSpecialHelp(line.split(" ")[1]);
+					doc.listSpecialFunction(line.split(" ")[1]);
 				} else {
-					doc.printGlobalHelp(environment);
+					doc.listFunctions(environment);
 				}
+				continue;
+			case "--env":
+			case "--e":
+				doc.listEnvironment(environment);
 				continue;
 			}
 
@@ -91,6 +101,8 @@ public class CommandLine {
 				chunk = new StringBuilder();
 				printer.apply(Arrays.asList("Syntax error while parsing"));
 				reader.setDefaultPrompt("> ");
+			} catch (LuaRuntimeException e) {
+				PrettyPrinter.print(e);
 			}
 		}
 	}

@@ -30,12 +30,16 @@ public class HomeworkTest {
 		Block block = ParserUtil.loadFile("../Frontend/testinput/homework/matthias_knapsack_interpretable.lua");
 		LuaInterpreter.eval(block, environment);
 
+		System.out.println("======================");
+
 	}
 
 	@Test
 	public void testJohannes() throws FileNotFoundException, Exception {
 		Block block = ParserUtil.loadFile("../Frontend/testinput/homework/johannes_parser_test.lua");
 		LuaInterpreter.eval(block, environment);
+
+		System.out.println("======================");
 	}
 
 	@Test
@@ -45,6 +49,8 @@ public class HomeworkTest {
 		ge.getLuaTable("package").set("path",
 				ge.getLuaTable("package").get("path") + ";../Frontend/testinput/homework/lisa_avltree/?.lua");
 		LuaInterpreter.eval(block, ge);
+
+		System.out.println("======================");
 	}
 
 }

@@ -9,6 +9,7 @@ import edu.tum.lua.GlobalEnvironment;
 import edu.tum.lua.LuaInterpreter;
 import edu.tum.lua.Preconditions;
 import edu.tum.lua.ast.Block;
+import edu.tum.lua.exceptions.LuaRuntimeException;
 import edu.tum.lua.parser.exception.SyntaxError;
 import edu.tum.lua.types.LuaFunctionNative;
 import edu.tum.lua.types.LuaType;
@@ -35,6 +36,8 @@ public class DoFile extends LuaFunctionNative {
 		} catch (SyntaxError se) {
 			System.out.println("Syntax error in file " + file);
 			se.printStackTrace();
+		} catch (LuaRuntimeException e) {
+			throw e;
 		} catch (Exception e) {
 			System.out.println("Error while parsing file " + file);
 			e.printStackTrace();

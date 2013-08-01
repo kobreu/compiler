@@ -163,12 +163,13 @@ end
 -- returns the parent node to the given key, before possible rotations or the node itself if it already exists
 -- binary search starts at "node"
 function Tree:search(key, node, pred)
-	if node == nil then 
+	if (node == nil) then 
+		assert(pred)
 		return pred
 	end
-	if key == node.key then 
+	if (key == (node.key)) then 
 		return node
-	elseif key < node.key then 
+	elseif (key < (node.key)) then 
 		return self:search(key, node.leftChild, node)
 	else
 		return self:search(key, node.rightChild, node)
@@ -197,7 +198,7 @@ end
 -- deletes the node with given key
 function Tree:delete(key)
   local path = self:searchPath(key)
-  local nodeParent = path[#path - 1]
+  local nodeParent = path[(#path) - 1]
   node = self:search(key, self.root)
 
   if node.key ~= key then
