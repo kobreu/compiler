@@ -29,17 +29,17 @@ public class SyntacticSugar {
 		@Override
 		public void visit(FuncNameDDotVar funcNameDDotVar) {
 			Variable var2 = new Variable(
-					funcNameDDotVar.funcname.name);
-			var2.setStart(funcNameDDotVar.funcname.getStart());
-			var2.setEnd(funcNameDDotVar.funcname.getEnd());
+					funcNameDDotVar.selffuncname.name);
+			var2.setStart(funcNameDDotVar.selffuncname.getStart());
+			var2.setEnd(funcNameDDotVar.selffuncname.getEnd());
 			PrefixExp prefixExp = new PrefixExpVar(var2);
 			prefixExp.setStart(var2.getStart());
 			prefixExp.setEnd(var2.getEnd());
 			
 			Variable selfvar = new Variable(
-					funcNameDDotVar.selffuncname.name);
-			selfvar.setStart(funcNameDDotVar.selffuncname.getStart());
-			selfvar.setEnd(funcNameDDotVar.selffuncname.getEnd());
+					funcNameDDotVar.funcname.name);
+			selfvar.setStart(funcNameDDotVar.funcname.getStart());
+			selfvar.setEnd(funcNameDDotVar.funcname.getEnd());
 			
 			PrefixExpVar selfpre = new PrefixExpVar(selfvar);
 			selfpre.setStart(selfvar.getStart());
@@ -105,8 +105,8 @@ public class SyntacticSugar {
 		} else if (fn instanceof FuncNameDDotVar) {
 			FuncNameDDotVar ddotVar = (FuncNameDDotVar) fn;
 			VarTabIndex head = new VarTabIndex(new PrefixExpVar(new Variable(
-					ddotVar.funcname.name)), new PreExp(new PrefixExpVar(
-					new Variable(ddotVar.selffuncname.name))));
+					ddotVar.selffuncname.name)), new PreExp(new PrefixExpVar(
+					new Variable(ddotVar.funcname.name))));
 			head.setStart(ddotVar.getStart());
 			head.setEnd(ddotVar.getEnd());
 			vl.append(head);

@@ -49,8 +49,8 @@ public class TestParserXML extends XMLTestCase {
 		List<String> xmlFiles = new ArrayList<>();
 		List<String> luaFiles = new ArrayList<>();
 		
-		xmlFiles.add("testinput/grammar/equals_precedence.xml");
-		luaFiles.add("testinput/grammar/equals_precedence.lua");
+		/*xmlFiles.add("testinput/grammar/equals_precedence.xml");
+		luaFiles.add("testinput/grammar/equals_precedence.lua");*/
 		
 		xmlFiles.add("testinput/grammar/comment_multiline.xml");
 		luaFiles.add("testinput/grammar/comment_multiline.lua");

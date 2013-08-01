@@ -10,11 +10,11 @@
 			            <PrefixExpVar>
 			              <VarTabIndex>
 			                <PrefixExpVar>
-			                  <Variable var="colon"/>
+			                  <Variable var="func"/>
 			                </PrefixExpVar>
 			                <PreExp>
 			                  <PrefixExpVar>
-			                    <Variable var="func"/>
+			                    <Variable var="colon"/>
 			                  </PrefixExpVar>
 			                </PreExp>
 			              </VarTabIndex>

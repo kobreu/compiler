@@ -20,6 +20,8 @@ public class TestSimpleRun {
 
 	@Before
 	public void setUp() {
+		testFiles.add("testinput/homework/salomon_2sat/graph.lua");
+
 		// reference test suite
 		// outcommented does not work yet
 		testFiles.add("testinput/lua5.1-tests/all.lua");
@@ -55,7 +57,6 @@ public class TestSimpleRun {
 
 		testFiles.add("testinput/homework/salomon_2sat/formula.lua");
 		
-		testFiles.add("testinput/homework/salomon_2sat/graph.lua");
 		
 		testFiles.add("testinput/homework/lisa_avltree/avltree.lua");
 		
