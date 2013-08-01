@@ -10,11 +10,11 @@ public class PrettyPrinter {
 		System.out.println("stack traceback:");
 
 		String errormessage = e.getMessage();
-		int errorcolumn = e.getLocation().getColumn();
+		//int errorcolumn = e.getLocation().getColumn();
 
 		String errorcode;
 
-		printErrorWithArrow(errormessage, errorcolumn);
+		printErrorWithArrow(errormessage, 0);
 
 		for (LuaStackTraceElement stackTraceElement : e.stacktrace) {
 
