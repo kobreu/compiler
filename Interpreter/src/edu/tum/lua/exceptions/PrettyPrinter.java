@@ -12,7 +12,7 @@ public class PrettyPrinter {
 
 		if (e.getLocation() != null) {
 			int errorcolumn = e.getLocation().getColumn();
-			System.out.println(e.getLocation().getRow() + " "  + e.getLocation().getColumn());
+			System.out.println("Location:" + e.getLocation().getRow() + " " + e.getLocation().getColumn());
 			printErrorWithArrow(errormessage, errorcolumn);
 		} else {
 			printError(errormessage);
@@ -51,11 +51,11 @@ public class PrettyPrinter {
 		 * main.lua:5 print("error")
 		 */
 		// TODO change int to String
-		int filename = /*stacktrace.location.getFileName()*/ 0;
+		int filename = /* stacktrace.location.getFileName() */0;
 		int row = -1;
-		if(stacktrace.location != null) {
+		if (stacktrace.location != null) {
 			row = stacktrace.location.getRow();
-		} 
+		}
 		String functionname = stacktrace.functionName;
 		List<Object> args = stacktrace.args;
 
