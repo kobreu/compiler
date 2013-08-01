@@ -34,4 +34,21 @@ public class HomeworkTest {
 		fail("Not yet implemented");
 	}
 
+	@Test
+	public void testJohannes() throws FileNotFoundException, Exception {
+		Block block = ParserUtil.loadFile("../Frontend/testinput/homework/johannes_parser_test.lua");
+		LuaInterpreter.eval(block, environment);
+	}
+
+	@Test
+	public void testLisa() throws FileNotFoundException, Exception {
+		Block block = ParserUtil.loadFile("../Frontend/testinput/homework/lisa_avltree/avltree_test.lua");
+		LuaInterpreter.eval(block, environment);
+		System.out.println("Minitest - Lisa");
+		block = ParserUtil.loadFile("../Frontend/testinput/homework/lisa_avltree/avltree.lua");
+		LuaInterpreter.eval(block, environment);
+
+		fail("Not yet implemented");
+	}
+
 }
