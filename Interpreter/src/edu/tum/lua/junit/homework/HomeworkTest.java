@@ -1,7 +1,5 @@
 package edu.tum.lua.junit.homework;
 
-import static org.junit.Assert.fail;
-
 import java.io.FileNotFoundException;
 
 import org.junit.Before;
@@ -29,11 +27,9 @@ public class HomeworkTest {
 		 * Run the knapsack lua file, expected return value is 32
 		 */
 
-		// Block block =
-		// ParserUtil.loadFile("../Frontend/testinput/homework/matthias_knapsack_TMP.lua");
-		// LuaInterpreter.eval(block, environment);
+		Block block = ParserUtil.loadFile("../Frontend/testinput/homework/matthias_knapsack_interpretable.lua");
+		LuaInterpreter.eval(block, environment);
 
-		fail("Not yet implemented");
 	}
 
 	@Test
