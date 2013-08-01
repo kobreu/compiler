@@ -11,10 +11,7 @@ import edu.tum.lua.ast.SyntaxNode;
 import edu.tum.lua.ast.VisitorNode;
 import edu.tum.lua.parser.Lexer;
 import edu.tum.lua.parser.Parser;
-import edu.tum.lua.parser.exception.StatementNotFinishedException;
-import edu.tum.lua.parser.exception.SyntaxError;
 import serialization.VisitorAdapterGeneric;
-import util.ParserUtil;
 
 public class TestLocation {
 
@@ -32,7 +29,15 @@ public class TestLocation {
 				
 				@Override
 				public void visitGeneric(VisitorNode node) {
-					System.out.println(node.getClass().getSimpleName() + " " + ((SyntaxNode) node).getStart());
+					Location start = ((SyntaxNode) node).getStart();
+					Location marker =((SyntaxNode) node).getMarker();
+					Location end = ((SyntaxNode) node).getEnd();
+					System.out.print(node.getClass().getSimpleName());
+					if(start != null) System.out.print(" Start: " + start.getRow() + " " + start.getColumn());
+					if(marker != null) System.out.print (" Marker: " + marker.getRow() + " " + marker.getColumn());
+					if(end != null) System.out.print(" End: " + end.getRow() + " " + end.getColumn());
+					System.out.println();
+					node.childrenAccept(this);
 				}
 			});
 		} catch(Exception ex) { 

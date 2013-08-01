@@ -10,7 +10,7 @@
 				<NumberExp number="3.0"/>
 			</ExpList>
 			<Block>
-				<Null />
+				<StatList />
 				<Null />
 			</Block>
 		</ForIn>

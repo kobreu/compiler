@@ -45,7 +45,7 @@ parser code {:
   public void report_error(String message, Object info) {
     syntaxErrors = true;
     
-    //System.out.print(message);
+    System.out.print(message);
     
     if ( !(info instanceof Symbol) ) return;
     Symbol symbol = (Symbol) info;
@@ -56,7 +56,7 @@ parser code {:
     if ( symbol.left < 0 || symbol.right < 0 ) return;
     
     
-    //System.out.println(" at line "+symbol.left+", column "+symbol.right);
+    System.out.println(" at line "+symbol.left+", column "+symbol.right);
   }
 :}; 
 
@@ -130,11 +130,11 @@ block 			::=    statlist:stats laststat:lstat
                  			RESULT = new Block(stats,null); 	
                  		:}
                  		| laststat:lstat {:
-                 		 		RESULT = new Block(null,lstat);  :}
+                 		 		RESULT = new Block(new StatList(),lstat);  :}
                  		| 
                  		empty {: 
                  				//System.out.println("Inside empty block"); 
-                 				RESULT = new Block(null,null);;
+                 				RESULT = new Block(new StatList(),null);;
                  		:}
                  		;
 

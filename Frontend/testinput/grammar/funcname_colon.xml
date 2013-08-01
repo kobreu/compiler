@@ -28,7 +28,7 @@
             		<Name name="self"/>
           		</NameList>
 				<Block>
-					<Null />
+					<StatList />
 					<Null />
 				</Block>
 				</FunctionExp>

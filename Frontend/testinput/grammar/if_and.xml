@@ -14,7 +14,7 @@
 				</PreExp>
 			</Binop>
 			<Block>
-				<Null />
+				<StatList />
 				<Null />
 			</Block>
 			<Null />

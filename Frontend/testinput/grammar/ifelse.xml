@@ -3,11 +3,11 @@
 		<IfThenElse>
 			<BooleanExp value="true" />
 			<Block>
-				<Null />
+				<StatList />
 				<Null />
 			</Block>
 			<Block>
-				<Null />
+				<StatList />
 				<Null />
 			</Block>
 		</IfThenElse>

@@ -32,7 +32,7 @@ public class LuaInterpreter {
 	}
 
 	public static void main(String[] args) throws FileNotFoundException, Exception {
-		Block block = ParserUtil.loadFile("../Frontend/testinput/homework/matthias_knapsack.lua");
+		Block block = ParserUtil.loadFile("../Frontend/testinput/homework/salomon_2sat/runSelfCheck.lua");
 		eval(block, new GlobalEnvironment());
 	}
 }

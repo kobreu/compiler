@@ -3,7 +3,7 @@
 		<LocalFuncDef name="a" varargs="false">
 					<NameList />
 				<Block>
-			 		<Null />
+			 		<StatList />
 			 		<Null />
 			 	</Block>
 		</LocalFuncDef>
