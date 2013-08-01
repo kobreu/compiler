@@ -10,7 +10,7 @@
 					<Name name="b" />
           		</NameList>
 				<Block>
-					<Null />
+					<StatList />
 					<Null />
 				</Block>
 				</FunctionExp>

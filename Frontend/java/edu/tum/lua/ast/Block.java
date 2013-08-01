@@ -68,7 +68,11 @@ public class Block extends SyntaxNode {
 	
 	@Override
 	public Location getEnd() {
-		return last.getEnd();
+		if(last != null) {
+			return last.getEnd();
+		} else {
+			return stats.getEnd();
+		}
 	}
 
 	public String toString() {

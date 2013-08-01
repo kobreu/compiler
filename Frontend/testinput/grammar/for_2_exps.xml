@@ -5,7 +5,7 @@
 				<NumberExp number="2.0" />
 				<NumberExp number="1.0"/>
 			<Block>
-				<Null />
+				<StatList />
 				<Null />
 			</Block>
 		</ForExp>

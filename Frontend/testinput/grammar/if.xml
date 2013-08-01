@@ -3,7 +3,7 @@
 		<IfThenElse>
 			<BooleanExp value="true" />
 			<Block>
-				<Null />
+				<StatList />
 				<Null />
 			</Block>
 			<Null />

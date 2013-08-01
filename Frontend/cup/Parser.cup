@@ -130,11 +130,11 @@ block 			::=    statlist:stats laststat:lstat
                  			RESULT = new Block(stats,null); 	
                  		:}
                  		| laststat:lstat {:
-                 		 		RESULT = new Block(null,lstat);  :}
+                 		 		RESULT = new Block(new StatList(),lstat);  :}
                  		| 
                  		empty {: 
                  				//System.out.println("Inside empty block"); 
-                 				RESULT = new Block(null,null);;
+                 				RESULT = new Block(new StatList(),null);;
                  		:}
                  		;
 
