@@ -21,6 +21,7 @@ import edu.tum.lua.ast.FunctionExp;
 import edu.tum.lua.ast.LegacyAdapter;
 import edu.tum.lua.ast.Nil;
 import edu.tum.lua.ast.NumberExp;
+import edu.tum.lua.ast.Op;
 import edu.tum.lua.ast.PreExp;
 import edu.tum.lua.ast.PrefixExp;
 import edu.tum.lua.ast.PrefixExpExp;
@@ -39,6 +40,7 @@ import edu.tum.lua.exceptions.LuaRuntimeException;
 import edu.tum.lua.exceptions.LuaStackTraceElement;
 import edu.tum.lua.operator.Operator;
 import edu.tum.lua.operator.OperatorRegistry;
+import edu.tum.lua.operator.logical.LogicalOperatorSupport;
 import edu.tum.lua.types.LuaFunction;
 import edu.tum.lua.types.LuaFunctionInterpreted;
 import edu.tum.lua.types.LuaTable;
@@ -80,6 +82,16 @@ public class ExpVisitor extends VisitorAdaptor {
 	public void visit(Binop binop) {
 		binop.leftexp.accept(this);
 		Object op1 = evaluationStack.removeLast();
+
+		if (binop.op == Op.AND && !LogicalOperatorSupport.isTrue(op1)) {
+			evaluationStack.addLast(op1);
+			return;
+		}
+
+		if (binop.op == Op.OR && LogicalOperatorSupport.isTrue(op1)) {
+			evaluationStack.addLast(op1);
+			return;
+		}
 
 		binop.rightexp.accept(this);
 		Object op2 = evaluationStack.removeLast();
