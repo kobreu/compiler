@@ -113,7 +113,7 @@ public class GlobalEnvironment extends LuaTable {
 		set("dofile", new DoFile(this));
 		set("error", new Error());
 		set("_G", this);
-		set("getfenv", new Getfenv());
+		set("getfenv", new Getfenv(this));
 		set("getmetatable", new GetMetatable());
 		set("ipairs", new IPairs());
 		set("load", new Load());
@@ -123,7 +123,7 @@ public class GlobalEnvironment extends LuaTable {
 		set("pairs", new Pairs());
 		set("pcall", new PCall());
 		set("print", new Print());
-		set("require", new Require());
+		set("require", new Require(this));
 		set("rawequal", new RawEqual());
 		set("rawget", new RawGet());
 		set("rawset", new RawSet());

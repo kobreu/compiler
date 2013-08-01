@@ -27,14 +27,16 @@ public class LuaInterpreter {
 			return blockVisitor.getReturn();
 		} catch (LuaRuntimeException e) {
 			PrettyPrinter.print(e);
+			e.printStackTrace();
 			return Collections.emptyList();
 		}
 	}
 
 	public static void main(String[] args) throws FileNotFoundException, Exception {
 		Block block = ParserUtil.loadFile("../Frontend/testinput/homework/salomon_2sat/runSelfCheck.lua");
-		GlobalEnvironment ge = GlobalEnvironment.getGlobalEnvironment();
-		ge.getLuaTable("package").set("path", ge.getLuaTable("package").get("path")+";../Frontend/testinput/homework/salomon_2sat/?.lua");
+		GlobalEnvironment ge = new GlobalEnvironment();
+		ge.getLuaTable("package").set("path",
+				ge.getLuaTable("package").get("path") + ";../Frontend/testinput/homework/salomon_2sat/?.lua");
 		eval(block, ge);
 	}
 }

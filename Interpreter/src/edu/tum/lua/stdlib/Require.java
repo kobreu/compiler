@@ -20,6 +20,10 @@ public class Require extends LuaFunctionNative {
 	GlobalEnvironment g;
 	LoadFile loadfile;
 
+	public Require(GlobalEnvironment ge) {
+		this.g = ge;
+	}
+
 	@Override
 	public List<Object> apply(List<Object> arguments) {
 		/*
@@ -35,7 +39,6 @@ public class Require extends LuaFunctionNative {
 
 		checkArguments("assert", arguments, expectedTypes);
 		modulename = (String) arguments.get(0);
-		g = GlobalEnvironment.getGlobalEnvironment();
 		loadfile = new LoadFile();
 
 		// 1) Search _G.package.loaded[modulename]
@@ -56,7 +59,12 @@ public class Require extends LuaFunctionNative {
 					List<Object> returned_value_list = interpretedfunction.apply(Collections.emptyList());
 
 					// Get the first return value, omit all others
-					Object returned_value = returned_value_list.get(0);
+					Object returned_value;
+					if (returned_value_list == null) {
+						returned_value = true;
+					} else {
+						returned_value = returned_value_list.get(0);
+					}
 
 					// Register to _G.package.loaded
 					g.getLuaTable("package").getLuaTable("loaded").set(modulename, returned_value);
