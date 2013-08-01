@@ -25,8 +25,9 @@ public class CommandLine {
 	private final SimpleCompletor completor;
 	private final History history;
 	private final Print printer;
+	private final Documentation doc;
 
-	public CommandLine() throws IOException {
+	public CommandLine() throws Exception {
 		environment = new GlobalEnvironment();
 
 		reader = new ConsoleReader();
@@ -40,6 +41,8 @@ public class CommandLine {
 		history = new History();
 
 		printer = new Print();
+
+		doc = new Documentation();
 	}
 
 	public void doFile(String file) {
@@ -57,6 +60,15 @@ public class CommandLine {
 			case "--end":
 			case "--exit":
 				System.exit(0);
+			case "--help":
+			case "--h":
+			case "--?":
+				if (line.split(" ").length > 1) {
+					doc.printSpecialHelp(line.split(" ")[1]);
+				} else {
+					doc.printGlobalHelp(environment);
+				}
+				continue;
 			}
 
 			// allows e.g. "= 5" input in interactive mode
