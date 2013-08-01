@@ -51,15 +51,18 @@ public class PrettyPrinter {
 		 * main.lua:5 print("error")
 		 */
 		// TODO change int to String
-		int filename = /* stacktrace.location.getFileName() */0;
+		int filename = -1;
 		int row = -1;
-		if (stacktrace.location != null) {
-			row = stacktrace.location.getRow();
-		}
 		String functionname = stacktrace.functionName;
 		List<Object> args = stacktrace.args;
 
-		System.out.printf("%d:%d: %s(", filename, row, functionname);
+		if (stacktrace.location != null) {
+			row = stacktrace.location.getRow();
+			filename = stacktrace.location.getFileName();
+			System.out.printf("%d:%d: %s(", filename, row, functionname);
+		} else {
+			System.out.printf("no location given: %s(", functionname);
+		}
 
 		boolean afterFirst = false;
 		for (Object arg : args) {
