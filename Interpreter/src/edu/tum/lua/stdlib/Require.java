@@ -61,8 +61,8 @@ public class Require extends LuaFunctionNative {
 		String[] filestrings = path.split(";");
 		for (String filestring : filestrings) {
 			File file = new File(filestring);
-			if (file.isFile() && file.canRead()) {
 
+			if (file.isFile() && file.canRead()) {
 				List<Object> returned_value_list = new ArrayList<>();
 				try {
 					returned_value_list = LuaInterpreter.eval(ParserUtil.loadFile(file), g);
@@ -82,6 +82,5 @@ public class Require extends LuaFunctionNative {
 		}
 
 		throw new LuaIOException("File Not Found");
-
 	}
 }
