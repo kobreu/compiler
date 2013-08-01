@@ -13,6 +13,7 @@ import edu.tum.lua.ast.Asm;
 import edu.tum.lua.ast.Block;
 import edu.tum.lua.ast.DoExp;
 import edu.tum.lua.ast.Exp;
+import edu.tum.lua.ast.ExpList;
 import edu.tum.lua.ast.ForExp;
 import edu.tum.lua.ast.ForIn;
 import edu.tum.lua.ast.FuncCallStmt;
@@ -170,6 +171,9 @@ public class BlockVisitor extends VisitorAdaptor {
 
 		LastReturn last = (LastReturn) block.last;
 		ExpVisitor visit = new ExpVisitor(environment, vararg);
+		if (last.explist == null) {
+			last.explist = new ExpList();
+		}
 		last.explist.accept(visit);
 		Return = visit.popAll();
 	}

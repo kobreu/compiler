@@ -7,21 +7,27 @@ public class PrettyPrinter {
 	static public void print(LuaRuntimeException e) {
 
 		System.out.println("Exception!");
-		System.out.println("stack traceback:");
 
 		String errormessage = e.getMessage();
-		//int errorcolumn = e.getLocation().getColumn();
 
-		String errorcode;
-
-		printErrorWithArrow(errormessage, 0);
-
-		for (LuaStackTraceElement stackTraceElement : e.stacktrace) {
-
-			printStackTraceElement(stackTraceElement);
-
+		if (e.getLocation() != null) {
+			int errorcolumn = e.getLocation().getColumn();
+			printErrorWithArrow(errormessage, errorcolumn);
+		} else {
+			printError(errormessage);
 		}
 
+		if (e.stacktrace.size() != 0) {
+			System.out.println("stack traceback:");
+			for (LuaStackTraceElement stackTraceElement : e.stacktrace) {
+				printStackTraceElement(stackTraceElement);
+			}
+		}
+
+	}
+
+	static private void printError(String errormessage) {
+		System.out.println(errormessage);
 	}
 
 	static private void printErrorWithArrow(String errormessage, int col) {
@@ -29,7 +35,7 @@ public class PrettyPrinter {
 		 * Prints out the error message with an arrow pointing to column
 		 */
 
-		System.out.println(errormessage);
+		printError(errormessage);
 
 		for (int i = 0; i < col - 1; ++i) {
 			System.out.print("-");
