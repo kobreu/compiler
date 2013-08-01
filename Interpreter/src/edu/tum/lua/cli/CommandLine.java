@@ -19,9 +19,9 @@ import edu.tum.lua.stdlib.Print;
 public class CommandLine {
 
 	private final static GlobalEnvironment environment = new GlobalEnvironment();
-	private ConsoleReader reader;
-	private SimpleCompletor completor;
-	private History history;
+	private final  ConsoleReader reader;
+	private final SimpleCompletor completor;
+	private final History history;
 
 	public CommandLine() throws IOException {
 		reader = new ConsoleReader();

@@ -64,6 +64,7 @@ import edu.tum.lua.stdlib.math.Tanh;
 import edu.tum.lua.stdlib.os.Clock;
 import edu.tum.lua.stdlib.os.Date;
 import edu.tum.lua.stdlib.os.Difftime;
+import edu.tum.lua.stdlib.os.Exit;
 import edu.tum.lua.stdlib.os.Rename;
 import edu.tum.lua.stdlib.os.Time;
 import edu.tum.lua.stdlib.string.Byte;
@@ -213,7 +214,7 @@ public class GlobalEnvironment extends LuaTable {
 		os.set("date", new Date());
 		os.set("difftime", new Difftime());
 		os.set("execute", new NotImplementedFunction());
-		os.set("exit", new NotImplementedFunction());
+		os.set("exit", new Exit());
 		os.set("getenv", new NotImplementedFunction());
 		os.set("remove", new edu.tum.lua.stdlib.os.Remove());
 		os.set("rename", new Rename());
