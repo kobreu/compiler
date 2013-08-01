@@ -3,7 +3,7 @@
 CompilerFrontend/bin
 CompilerFrontend/gen
 CompilerFrontend/dist
-Frontend/java
+Frontend/java/edu/tum/lua/parser
 Frontend/classes
 Frontend/bin
 

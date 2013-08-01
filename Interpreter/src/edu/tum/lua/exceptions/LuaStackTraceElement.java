@@ -3,9 +3,8 @@ package edu.tum.lua.exceptions;
 import java.util.Collections;
 import java.util.List;
 
-import location.Location;
-import location.LocationTableFactory;
 import edu.tum.lua.ast.SyntaxNode;
+import location.Location;
 
 public class LuaStackTraceElement {
 
@@ -21,7 +20,7 @@ public class LuaStackTraceElement {
 
 	public LuaStackTraceElement(SyntaxNode s, String f, List<Object> a) {
 		functionName = f;
-		location = LocationTableFactory.locationProvider().getLocation(s);
+		location = s.getMarker();
 		args = Collections.unmodifiableList(a);
 	}
 }

@@ -2,9 +2,8 @@ package grammarlistener;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
 
-public class DefaultProductionRuleBroadcaster extends Observable {
+public class DefaultProductionRuleBroadcaster implements ProductionRuleBroadcaster {
 
 	List<ProductionRuleListener> productionRuleListeners = new ArrayList<>();
 	
@@ -12,6 +11,11 @@ public class DefaultProductionRuleBroadcaster extends Observable {
 		for(ProductionRuleListener listener : productionRuleListeners) {
 			listener.appliedRule(rule);
 		}
+	}
+
+	@Override
+	public void registerListener(ProductionRuleListener listener) {
+		productionRuleListeners.add(listener);
 	}
 
 }
