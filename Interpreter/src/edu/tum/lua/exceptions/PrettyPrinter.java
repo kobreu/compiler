@@ -50,17 +50,16 @@ public class PrettyPrinter {
 		 * Print something like this:
 		 * main.lua:5 print("error")
 		 */
-
-		// TODO remove this output
-		System.out.println("Stack detrace element");
-
 		// TODO change int to String
-		int filename = stacktrace.location.getFileName();
-		int row = stacktrace.location.getRow();
+		int filename = /*stacktrace.location.getFileName()*/ 0;
+		int row = -1;
+		if(stacktrace.location != null) {
+			row = stacktrace.location.getRow();
+		} 
 		String functionname = stacktrace.functionName;
 		List<Object> args = stacktrace.args;
 
-		System.out.printf("%i:%i: %s(", filename, row, functionname);
+		System.out.printf("%d:%d: %s(", filename, row, functionname);
 
 		boolean afterFirst = false;
 		for (Object arg : args) {

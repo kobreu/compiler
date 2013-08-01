@@ -170,7 +170,7 @@ public class BlockVisitor extends VisitorAdaptor {
 		}
 
 		LastReturn last = (LastReturn) block.last;
-		ExpVisitor visit = new ExpVisitor(environment, vararg);
+		ExpVisitor visit = new ExpVisitor(visitor.environment, vararg);
 		if (last.explist == null) {
 			last.explist = new ExpList();
 		}

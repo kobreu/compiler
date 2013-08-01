@@ -17,13 +17,21 @@ function Graph:insertVertex(v)
 		self.edges[vertex] = {}
 	end
 	
+	print("here");
+	assert(vertex ~= nil)
 	return vertex
 end
 
 function Graph:insertEdge(v, w)
-	local vVertex = self:insertVertex(v)
+	print("insert");
+	vVertex = self:insertVertex(v)
 	local wVertex = self:insertVertex(w)
 	
+	
+	assert(self ~= nil)
+	print("here2");
+	assert(vVertex ~= nil)
+	-- assert(self.edges ~= nil)
 	row = self.edges[vVertex]
 	row[wVertex] = true;
 end

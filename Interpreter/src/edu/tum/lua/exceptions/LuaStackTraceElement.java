@@ -20,7 +20,7 @@ public class LuaStackTraceElement {
 
 	public LuaStackTraceElement(SyntaxNode s, String f, List<Object> a) {
 		functionName = f;
-		location = s.getMarker();
+		location = s.getStart();
 		args = Collections.unmodifiableList(a);
 	}
 }
