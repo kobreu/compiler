@@ -22,7 +22,10 @@ import org.xml.sax.SAXException;
 
 import edu.tum.lua.GlobalEnvironment;
 import edu.tum.lua.stdlib.NotImplementedFunction;
+import edu.tum.lua.stdlib.ToString;
+import edu.tum.lua.types.LuaFunctionNative;
 import edu.tum.lua.types.LuaTable;
+import edu.tum.lua.types.LuaType;
 
 public class Documentation {
 
@@ -35,8 +38,10 @@ public class Documentation {
 		URL url = new URL("http://www.lua.org/manual/5.1/manual.html");
 		InputStream in = url.openConnection().getInputStream();
 
-		String s = new Scanner(in, "UTF-8").useDelimiter("\\A").next();
+		Scanner sc = new Scanner(in, "UTF-8");
+		String s = sc.useDelimiter("\\A").next();
 
+		sc.close();
 		in.close();
 
 		s = s.replace("<hr>", "</div><div>").replace("<h2>", "</div><h2>").replace("</h2>", "</h2><div>")
@@ -61,44 +66,65 @@ public class Documentation {
 		xpath = XPathFactory.newInstance().newXPath();
 	}
 
-	public void printSpecialHelp(String function) {
-		System.out.println("Usage:\t" + getUsage(function));
-		System.out.println("\nDescription\n" + getLongDescription(function));
+	public void printHelp() {
+		System.out.println("Lua Help\n\npossible Help-Functions in the Interpreter:");
+		System.out.println("--help\t\tshow this help");
+		System.out
+				.println("--list\t\tlist all available lua functions (functions from the standard library with a short description)");
+		System.out
+				.println("--list <function>\tshow a more detailed help for the specific function (only functions from standard library)");
+		System.out.println("--env\t\tshow all members, their types and their values of the interpreter's environment");
 	}
 
-	public void printGlobalHelp(GlobalEnvironment ge) {
-		System.out.println("LUA");
+	public void listFunctions(GlobalEnvironment ge) {
+		System.out.println("Functions");
 
 		for (Entry<Object, Object> pair : ge) {
-			if (pair.getValue() instanceof NotImplementedFunction) {
+			if (pair.getValue() instanceof NotImplementedFunction || pair.getValue() == null) {
 				continue;
 			}
-
-			subTableHelper("", pair, 1);
+			listFunctionsRecursive("", pair, 1);
 		}
 	}
 
-	private void subTableHelper(String parent, Entry<Object, Object> pair, int deep) {
+	private void listFunctionsRecursive(String parent, Entry<Object, Object> pair, int deep) {
+
 		if (deep > 5) {
-			System.out.println("probably recursive Table");
-			return;
+			System.out.println("try to resolve ");
 		}
 
-		System.out.println(new String(new char[deep]).replace("\0", " |") + "-- " + pair.getKey() + "\t\t"
-				+ getShortDescription(parent + pair.getKey().toString()));
+		parent += ToString.toString(pair.getKey());
 
-		if (pair.getKey().toString().equals("_G")) {
-			return;
-		}
-
-		if (pair.getValue() instanceof LuaTable) {
-			Iterator<Entry<Object, Object>> iter = ((LuaTable) pair.getValue()).iterator();
-
-			parent += pair.getKey() + ".";
-			while (iter.hasNext()) {
-				subTableHelper(parent, iter.next(), deep + 1);
+		switch (LuaType.getTypeOf(pair.getValue())) {
+		case FUNCTION:
+			if (pair.getValue() instanceof LuaFunctionNative) {
+				System.out.println(new String(new char[deep]).replace("\0", " |") + "-- "
+						+ ToString.toString(pair.getKey()) + "\t\t" + getShortDescription(parent));
+			} else {
+				System.out.println(new String(new char[deep]).replace("\0", " |") + "-- "
+						+ ToString.toString(pair.getKey()) + "\t\tuser defined function");
 			}
+			return;
+		case TABLE:
+			System.out.println(new String(new char[deep]).replace("\0", " |") + "-- "
+					+ ToString.toString(pair.getKey()) + "\t\t" + getShortDescription(parent));
+			if (!ToString.toString(pair.getKey()).equals("_G")) {
+				parent += ".";
+				deep++;
+				Iterator<Entry<Object, Object>> iter = ((LuaTable) pair.getValue()).iterator();
+				while (iter.hasNext()) {
+					listFunctionsRecursive(parent, iter.next(), deep);
+				}
+			}
+			return;
+		default:
+			return;
 		}
+	}
+
+	public void listSpecialFunction(String function) {
+		System.out.println("Usage:\t" + getUsage(function));
+		System.out.println("\nDescription\n" + getLongDescription(function));
 	}
 
 	private String getUsage(String function) {
@@ -113,22 +139,50 @@ public class Documentation {
 		}
 	}
 
-	public String getShortDescription(String function) {
+	private String getShortDescription(String function) {
 		String response = getLongDescription(function);
-		response = response.replaceAll("\\p{Space}+", " ").trim().split("\\. ")[0];
+		response = response.replaceAll("\\p{Space}+", " ").split("\\. ")[0];
 
 		return response;
 	}
 
-	public String getLongDescription(String function) {
+	private String getLongDescription(String function) {
 		String search = "//a[@name=\"pdf-" + function + "\"]/parent::*";
 
 		String response;
 		try {
 			response = xpath.compile(search).evaluate(xmlDocument);
-			return response.replace(getUsage(function), "").trim();
+			return response.replace(getUsage(function), "").trim().replace("\n\n\n", "\n\n");
 		} catch (XPathExpressionException e) {
 			return "";
+		}
+	}
+
+	public void listEnvironment(GlobalEnvironment ge) {
+		System.out.println("Name\t\tType\t\tValue");
+
+		for (Entry<Object, Object> pair : ge) {
+			if (pair.getValue() instanceof NotImplementedFunction || pair.getValue() == null) {
+				continue;
+			}
+
+			switch (LuaType.getTypeOf(pair.getValue())) {
+			case NIL:
+			case STRING:
+			case NUMBER:
+			case BOOLEAN:
+				System.out.println(ToString.toString(pair.getKey()) + "\t\t" + LuaType.getTypeOf(pair.getValue())
+						+ "\t\t" + ToString.toString(pair.getValue()));
+				break;
+			case TABLE:
+			case FUNCTION:
+			case USERDATA:
+			case THREAD:
+				System.out.println(ToString.toString(pair.getKey()) + "\t\t" + LuaType.getTypeOf(pair.getValue()));
+				break;
+			default:
+				break;
+			}
 		}
 	}
 }
