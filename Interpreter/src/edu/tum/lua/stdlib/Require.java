@@ -3,13 +3,15 @@ package edu.tum.lua.stdlib;
 import static edu.tum.lua.Preconditions.checkArguments;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
+import util.ParserUtil;
 import edu.tum.lua.GlobalEnvironment;
+import edu.tum.lua.LuaInterpreter;
 import edu.tum.lua.exceptions.LuaIOException;
-import edu.tum.lua.types.LuaFunction;
 import edu.tum.lua.types.LuaFunctionNative;
 import edu.tum.lua.types.LuaType;
 
@@ -48,32 +50,36 @@ public class Require extends LuaFunctionNative {
 
 		// 2) Look in _G.package.path for the file modulename
 		String path = g.getLuaTable("package").getString("path");
-		if (path != null) {
-			path = path.replace("?", modulename);
-			String[] filestrings = path.split(";");
-			for (String filestring : filestrings) {
-				File file = new File(filestring);
-				if (file.isFile() && file.canRead()) {
 
-					LuaFunction interpretedfunction = (LuaFunction) loadfile.apply(Arrays.asList(filestring)).get(0);
-					List<Object> returned_value_list = interpretedfunction.apply(Collections.emptyList());
+		if (path == null) {
+			throw new LuaIOException("File Not Found");
+		}
 
-					// Get the first return value, omit all others
-					Object returned_value;
-					if (returned_value_list == null) {
-						returned_value = true;
-					} else {
-						returned_value = returned_value_list.get(0);
-					}
+		path = path.replace("?", modulename);
+		String[] filestrings = path.split(";");
+		for (String filestring : filestrings) {
+			File file = new File(filestring);
+			if (file.isFile() && file.canRead()) {
 
-					// Register to _G.package.loaded
-					g.getLuaTable("package").getLuaTable("loaded").set(modulename, returned_value);
-					return Arrays.asList(returned_value);
-
+				List<Object> returned_value_list = new ArrayList<>();
+				try {
+					returned_value_list = LuaInterpreter.eval(ParserUtil.loadFile(file), g);
+				} catch (FileNotFoundException e) {
+					throw new LuaIOException("File " + filestring + " not found");
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
+
+				// Get the first return value, omit all others
+				Object returned_value = returned_value_list.isEmpty() ? true : returned_value_list.get(0);
+
+				// Register to _G.package.loaded
+				g.getLuaTable("package").getLuaTable("loaded").set(modulename, returned_value);
+				return Arrays.asList(returned_value);
 			}
 		}
 
 		throw new LuaIOException("File Not Found");
+
 	}
 }
