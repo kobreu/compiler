@@ -15,7 +15,9 @@ function Formula:insertClause(literal1, literal2)
 end
 
 function Formula:getSatisfyingAssignment()
+	print("before create graph");
 	local g = Graph:new()
+	print("after create graph");
 	
 	for _, clause in ipairs(self) do
 		g:insertEdge(-clause[1], clause[2])
@@ -69,8 +71,15 @@ function Formula:selfCheck()
 	local formula1 = Formula:new{{1, -1}, {2, 1}, {3, -1}}
 	local formula2 = Formula:new{{2, -3}, {3, -1}, {1, -2}, {-1, -1}, {1, 1}}
 	
+	print("after local");
+	
+	
 	assert(formula1:eval(formula1:getSatisfyingAssignment()))
+	
+	print("after call1");
+	
 	assert(not formula2:eval(formula2:getSatisfyingAssignment()))	
+	
 	
 	local function randomLiteral(vars)
 		local l = math.random(vars)

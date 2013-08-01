@@ -17,19 +17,16 @@ function Graph:insertVertex(v)
 		self.edges[vertex] = {}
 	end
 	
-	print("here");
 	assert(vertex ~= nil)
 	return vertex
 end
 
 function Graph:insertEdge(v, w)
-	print("insert");
-	vVertex = self:insertVertex(v)
+	local vVertex = self:insertVertex(v)
 	local wVertex = self:insertVertex(w)
 	
 	
 	assert(self ~= nil)
-	print("here2");
 	assert(vVertex ~= nil)
 	-- assert(self.edges ~= nil)
 	row = self.edges[vVertex]
@@ -71,21 +68,25 @@ function Graph:getSCC()
  	S = {}
  	SCC = {}
  	
+ 	
 	for _, v in pairs(self.vertices) do
 		if not v.index then
 			strongconnect(self, v)
 		end
 	end
 	
+	
 	-- Release Memory
 	
 	index = nil
 	S = nil
 	
+	
 	for _, v in pairs(self.vertices) do
 		v.index = nil
 		v.lowlink = nil
 	end
+	
 	
 	return SCC
 end
@@ -101,18 +102,25 @@ function Graph:selfCheck()
 	g:insertEdge(5, 6)
 	g:insertEdge(6, 5)
 	
+	
 	scc = g:getSCC()
 	
-	assert(#scc == 3)
-	assert(#scc[1] == 2)
-	assert(#scc[2] == 3)
-	assert(#scc[3] == 1)
-	assert(scc[1][1].key == 5 or scc[1][1].key == 6)
-	assert(scc[1][2].key == 5 or scc[1][2].key == 6)
-	assert(scc[2][1].key == 2 or scc[2][1].key == 3 or scc[2][1].key == 4)
-	assert(scc[2][2].key == 2 or scc[2][2].key == 3 or scc[2][2].key == 4)
-	assert(scc[2][3].key == 2 or scc[2][3].key == 3 or scc[2][3].key == 4)
+	
+	assert((#scc) == 3)
+	
+	
+	assert((#scc[1]) == 2)
+	assert((#scc[2]) == 3)
+	assert((#scc[3]) == 1)
+	assert((scc[1][1].key == 5) or (scc[1][1].key == 6))
+	assert((scc[1][2].key == 5) or (scc[1][2].key == 6))
+	assert((scc[2][1].key == 2) or (scc[2][1].key == 3) or (scc[2][1].key == 4))
+	assert((scc[2][2].key == 2) or (scc[2][2].key == 3) or (scc[2][2].key == 4))
+	assert((scc[2][3].key == 2) or (scc[2][3].key == 3) or (scc[2][3].key == 4))
 	assert(scc[3][1].key == 1)
+	
+	
+	
 end
 
 return Graph
