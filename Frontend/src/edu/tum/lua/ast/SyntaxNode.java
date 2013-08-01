@@ -16,27 +16,27 @@ public abstract class SyntaxNode implements VisitorNode {
 
 	private Location end;
 
-	public Location getMarker() {
+	public final Location getMarker() {
 		return marker;
 	}
 
-	public void setMarker(Location location) {
+	public final void setMarker(Location location) {
 		this.marker = location;
 	}
 
-	public Location getEnd() {
+	public final Location getEnd() {
 		return end;
 	}
 
-	public Location getStart() {
+	public final Location getStart() {
 		return start;
 	}
 
-	public void setEnd(Location end) {
+	public final void setEnd(Location end) {
 		this.end = end;
 	}
 
-	public void setStart(Location start) {
+	public final void setStart(Location start) {
 		this.start = start;
 	}
 

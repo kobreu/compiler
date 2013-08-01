@@ -6,6 +6,10 @@ package edu.tum.lua.parser;
 import java_cup.runtime.Symbol;
 import java.util.regex.Pattern;
 
+import java_cup.runtime.SymbolFactory;
+import edu.tum.lua.symbol.CustomSymbolFactory;
+
+
 
 
 %%
@@ -18,6 +22,12 @@ import java.util.regex.Pattern;
 %column
 
 %{
+
+  SymbolFactory symbolFactory = new CustomSymbolFactory();
+  
+  public SymbolFactory getSymbolFactory() {
+  	return symbolFactory;
+  }
 
   StringBuffer string = new StringBuffer();
 

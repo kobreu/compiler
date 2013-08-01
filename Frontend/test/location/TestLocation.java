@@ -18,6 +18,7 @@ public class TestLocation {
 	@Test
 	public void test() throws Exception {
 		String code = "function blub() end";
+		//String code = "a=b";
 		Lexer scanner = new Lexer(new StringReader(code));
 		Block prog = null;
 

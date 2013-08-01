@@ -56,25 +56,6 @@ public class Block extends SyntaxNode {
 		accept(visitor);
 	}
 
-	@Override
-	public Location getStart() {
-		return stats.getStart();
-	}
-
-	@Override
-	public Location getMarker() {
-		return stats.getStart();
-	}
-	
-	@Override
-	public Location getEnd() {
-		if(last != null) {
-			return last.getEnd();
-		} else {
-			return stats.getEnd();
-		}
-	}
-
 	public String toString() {
 		return toString("");
 	}

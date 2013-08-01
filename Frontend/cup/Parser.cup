@@ -32,6 +32,7 @@ parser code {:
 
   	  productionRuleBroadcaster = new DefaultProductionRuleBroadcaster();
   	  
+  	  symbolFactory = lex.getSymbolFactory();
   	  
       lexer = lex;
      
@@ -185,7 +186,6 @@ stat        	::=    		varlist:vl  ASM:a  explist:el
 						{: 
 								//System.out.println("Inside stat");
 								RESULT = new Asm(vl,el);
-								RESULT.setMarker(LocationFactory.fromSymbol((Symbol)a));
 						:}
 						| functioncall:fc
 						{:
@@ -211,7 +211,6 @@ stat        	::=    		varlist:vl  ASM:a  explist:el
 						:}
 						| FOR:fo  namelist:nl  IN  explist:el  DO  block:b END
 						{: RESULT = new ForIn(nl,el, b);
-							RESULT.setMarker(LocationFactory.fromSymbol((Symbol) fo));
 						 :}
 						| FUNC:f  funcname:fn  funcbody:fb  
 						{:
@@ -219,7 +218,6 @@ stat        	::=    		varlist:vl  ASM:a  explist:el
 							ExpList args = SyntacticSugar.methodDefinitionToExpression(fn, fb);
 							
 							Asm asm = new Asm(vl, args);
-							asm.setMarker(LocationFactory.fromSymbol((Symbol) f));
 						
 							RESULT = asm;
 						:} 
@@ -334,21 +332,12 @@ var				::=		ID:id
 					
 exp				::=		NIL:f
 							{: RESULT = new Nil(); 
-								RESULT.setStart(LocationFactory.fromSymbol((Symbol) f));
-								RESULT.setMarker(LocationFactory.fromSymbol((Symbol) f));
-								RESULT.setEnd(LocationFactory.fromSymbol((Symbol) f));
 							:}  
 						| FALSE:f
 							{: RESULT = new BooleanExp(false);
-								RESULT.setStart(LocationFactory.fromSymbol((Symbol) f));
-								RESULT.setMarker(LocationFactory.fromSymbol((Symbol) f));
-								RESULT.setEnd(LocationFactory.fromSymbol((Symbol) f));
 							:}							  
 						| TRUE:f
 							{: RESULT = new BooleanExp(true);
-								RESULT.setStart(LocationFactory.fromSymbol((Symbol) f));
-								RESULT.setMarker(LocationFactory.fromSymbol((Symbol) f));
-								RESULT.setEnd(LocationFactory.fromSymbol((Symbol) f));
 							 :} 
 						| NUMBER:num
 							{: 	//System.out.println("Inside Number expression");				   

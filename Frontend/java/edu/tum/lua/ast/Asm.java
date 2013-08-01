@@ -22,17 +22,6 @@ public class Asm extends Stat {
     visitor.visit(this);
   }
   
-  	@Override
-	public Location getStart() {
-		return varlist.getStart();
-	}
-  	
-  	@Override
-  		public Location getEnd() {
-  			return explist.getEnd();
-  		}
-  	
-
   public void childrenAccept(Visitor visitor) {
     if (varlist != null) varlist.accept(visitor);
     if (explist != null) explist.accept(visitor);
