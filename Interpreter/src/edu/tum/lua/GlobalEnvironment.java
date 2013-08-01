@@ -1,6 +1,7 @@
 package edu.tum.lua;
 
 import edu.tum.lua.stdlib.Assert;
+import edu.tum.lua.stdlib.DoFile;
 import edu.tum.lua.stdlib.Error;
 import edu.tum.lua.stdlib.GetMetatable;
 import edu.tum.lua.stdlib.Getfenv;
@@ -86,12 +87,6 @@ import edu.tum.lua.types.LuaTable;
 
 public class GlobalEnvironment extends LuaTable {
 
-	private final static GlobalEnvironment _G = new GlobalEnvironment();
-
-	public static GlobalEnvironment getGlobalEnvironment() {
-		return _G;
-	}
-
 	public GlobalEnvironment(String[] arg) {
 		this();
 
@@ -115,7 +110,7 @@ public class GlobalEnvironment extends LuaTable {
 
 		set("assert", new Assert());
 		set("collectgarbage", new VoidFunction());
-		set("dofile", new NotImplementedFunction());
+		set("dofile", new DoFile(this));
 		set("error", new Error());
 		set("_G", this);
 		set("getfenv", new Getfenv());
@@ -147,11 +142,11 @@ public class GlobalEnvironment extends LuaTable {
 
 		string.set("byte", new Byte());
 		string.set("char", new Char());
-		string.set("dump", new NotImplementedFunction());
+		string.set("dump", new VoidFunction());
 		string.set("find", new Find());
 		string.set("format", new Format());
 		string.set("gmatch", new GMatch());
-		string.set("gsub", new NotImplementedFunction());
+		string.set("gsub", new VoidFunction());
 		string.set("len", new Len());
 		string.set("lower", new Lower());
 		string.set("match", new Match());
