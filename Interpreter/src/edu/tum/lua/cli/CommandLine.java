@@ -53,7 +53,7 @@ public class CommandLine {
 		StringBuilder chunk = new StringBuilder();
 		String line;
 
-		LOOP: while ((line = reader.readLine()) != null) {
+		while ((line = reader.readLine()) != null) {
 			history.addToHistory(line);
 
 			switch (line.split(" ")[0]) {
@@ -68,7 +68,7 @@ public class CommandLine {
 				} else {
 					doc.printGlobalHelp(environment);
 				}
-				continue LOOP;
+				continue;
 			}
 
 			// allows e.g. "= 5" input in interactive mode

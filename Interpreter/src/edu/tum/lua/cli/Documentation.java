@@ -50,13 +50,13 @@ public class Documentation {
 		TagNode tagNode = new HtmlCleaner().clean(s);
 		xmlDocument = new org.htmlcleaner.DomSerializer(new CleanerProperties()).createDOM(tagNode);
 
-		/*// Help for debugging
-		TransformerFactory tFactory = TransformerFactory.newInstance();
-		Transformer transformer = tFactory.newTransformer();
-		DOMSource source = new DOMSource(xmlDocument);
-		StreamResult result = new StreamResult(System.out);
-		transformer.transform(source, result);
-		*/
+		/*
+		 * // Help for debugging TransformerFactory tFactory =
+		 * TransformerFactory.newInstance(); Transformer transformer =
+		 * tFactory.newTransformer(); DOMSource source = new
+		 * DOMSource(xmlDocument); StreamResult result = new
+		 * StreamResult(System.out); transformer.transform(source, result);
+		 */
 
 		xpath = XPathFactory.newInstance().newXPath();
 	}
@@ -69,7 +69,7 @@ public class Documentation {
 	public void printGlobalHelp(GlobalEnvironment ge) {
 		System.out.println("LUA");
 
-		for (Entry<Object, Object> pair : ge.getGlobalEnvironment()) {
+		for (Entry<Object, Object> pair : ge) {
 			if (pair.getValue() instanceof NotImplementedFunction) {
 				continue;
 			}
