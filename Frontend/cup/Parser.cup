@@ -113,7 +113,9 @@ non terminal optsemi, empty;
 precedence nonassoc LPAREN, RPAREN; 
 precedence nonassoc WS, COM ;
 
-precedence left ADD, MUL, SUB, DIV, MOD, POW, CONCAT, EQ, LEQ ,NEQ , LE, GR, GEQ, AND, OR;
+/*precedence left EQ, LEQ, NEQ, LE, GR, GEQ;*/
+precedence left ADD, MUL, SUB, DIV, MOD, POW, CONCAT, AND, OR;
+precedence left LENGTH;
 
 /* Grammar */
 

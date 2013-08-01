@@ -12,6 +12,7 @@ public class PrettyPrinter {
 
 		if (e.getLocation() != null) {
 			int errorcolumn = e.getLocation().getColumn();
+			System.out.println(e.getLocation().getRow() + " "  + e.getLocation().getColumn());
 			printErrorWithArrow(errormessage, errorcolumn);
 		} else {
 			printError(errormessage);

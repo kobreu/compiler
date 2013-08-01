@@ -100,7 +100,7 @@ public class GlobalEnvironment extends LuaTable {
 		LuaTable _package = new LuaTable();
 		LuaTable _package_loaded = new LuaTable();
 		_package.set("loaded", _package_loaded);
-		_package.set("path", "./?.lua");
+		_package.set("path", "../Frontend/testinput/homework/salomon_2sat/?.lua");
 		set("package", _package);
 
 		set("assert", new Assert());

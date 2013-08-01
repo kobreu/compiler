@@ -36,6 +36,7 @@ public class LoadFile extends LuaFunctionNative {
 			String line = inputReader.readLine();
 			while (line != null) {
 				result = result.concat(line);
+				result = result.concat("\n");
 				line = inputReader.readLine();
 			}
 			inputReader.close();
