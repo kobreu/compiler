@@ -5,7 +5,6 @@ import java.util.LinkedList;
 
 import edu.tum.lua.ast.SyntaxNode;
 import location.Location;
-import location.LocationTableFactory;
 
 public class LuaRuntimeException extends RuntimeException {
 
@@ -39,6 +38,6 @@ public class LuaRuntimeException extends RuntimeException {
 	}
 
 	public void setLocation(SyntaxNode n) {
-		location = LocationTableFactory.locationProvider().getLocation(n);
+		location = n.getMarker();
 	}
 }
