@@ -92,6 +92,18 @@ public class GlobalEnvironment extends LuaTable {
 		return _G;
 	}
 
+	public GlobalEnvironment(String[] arg) {
+		this();
+
+		LuaTable argTable = new LuaTable();
+
+		for (int i = 0; i < arg.length; i++) {
+			argTable.set(i + 1.0, arg[i]);
+		}
+
+		set("arg", argTable);
+	}
+
 	/** Create a new global environment. */
 	public GlobalEnvironment() {
 
