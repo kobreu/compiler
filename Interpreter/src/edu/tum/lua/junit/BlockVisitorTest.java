@@ -78,6 +78,30 @@ public class BlockVisitorTest {
 	}
 
 	@Test
+	public void testVisitFuncCallStmt_OneParam() throws Exception {
+		Block block1 = ParserUtil.loadString("foo = function(x) a=x end");
+		Block block2 = ParserUtil.loadString("foo(1)");
+
+		assertEquals(null, environment.get("a"));
+		LuaInterpreter.eval(block1, environment);
+		LuaInterpreter.eval(block2, environment);
+		assertEquals(1.0, environment.get("a"));
+	}
+
+	@Test
+	public void testVisitFuncCallStmt_TwoParams() throws Exception {
+		Block block1 = ParserUtil.loadString("foo = function(x,y) a=x; b=y end");
+		Block block2 = ParserUtil.loadString("foo(1,2)");
+
+		assertEquals(null, environment.get("a"));
+		assertEquals(null, environment.get("b"));
+		LuaInterpreter.eval(block1, environment);
+		LuaInterpreter.eval(block2, environment);
+		assertEquals(1.0, environment.get("a"));
+		assertEquals(2.0, environment.get("b"));
+	}
+
+	@Test
 	public void testVisitIfThenElse() throws Exception {
 		Block block = ParserUtil.loadString("a=false if a then b=2 elseif a then b=3 else b=1 end");
 		assertEquals(null, environment.get("a"));

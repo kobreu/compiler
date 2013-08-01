@@ -28,7 +28,7 @@ public class HomeworkTest {
 		 * Run the knapsack lua file, expected return value is 32
 		 */
 
-		Block block = ParserUtil.loadFile("../Frontend/testinput/homework/matthias_knapsack.lua");
+		Block block = ParserUtil.loadFile("../Frontend/testinput/homework/matthias_knapsack_TMP.lua");
 		LuaInterpreter.eval(block, environment);
 
 		fail("Not yet implemented");
