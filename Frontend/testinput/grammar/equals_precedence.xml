@@ -1,0 +1,22 @@
+<Block>
+	<StatList>
+		<Asm>
+			<VarList>
+				<Variable var="b" />
+			</VarList>
+			<ExpList>
+				<Binop op="DIV">
+					<Unop op="EQ">
+						<PreExp>
+							<PreExpVar>
+								<Variable var="a" />
+							</PreExpVar>
+						</PreExp>
+					</Unop>
+					<NumberExp number="0.0" />
+				</Binop>
+			</ExpList>
+		</Asm>
+	</StatList>
+	<Null />
+</Block>

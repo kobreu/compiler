@@ -1,7 +1,6 @@
 package edu.tum.lua;
 
 import edu.tum.lua.stdlib.Assert;
-import edu.tum.lua.stdlib.DoFile;
 import edu.tum.lua.stdlib.Error;
 import edu.tum.lua.stdlib.GetMetatable;
 import edu.tum.lua.stdlib.Getfenv;
@@ -64,7 +63,6 @@ import edu.tum.lua.stdlib.math.Tanh;
 import edu.tum.lua.stdlib.os.Clock;
 import edu.tum.lua.stdlib.os.Date;
 import edu.tum.lua.stdlib.os.Difftime;
-import edu.tum.lua.stdlib.os.Exit;
 import edu.tum.lua.stdlib.os.Rename;
 import edu.tum.lua.stdlib.os.Time;
 import edu.tum.lua.stdlib.string.Byte;
@@ -100,12 +98,12 @@ public class GlobalEnvironment extends LuaTable {
 		LuaTable _package = new LuaTable();
 		LuaTable _package_loaded = new LuaTable();
 		_package.set("loaded", _package_loaded);
-		_package.set("path", "../Frontend/testinput/homework/salomon_2sat/?.lua");
+		_package.set("path", "./?.lua");
 		set("package", _package);
 
 		set("assert", new Assert());
 		set("collectgarbage", new VoidFunction());
-		set("dofile", new DoFile(this));
+		set("dofile", new NotImplementedFunction());
 		set("error", new Error());
 		set("_G", this);
 		set("getfenv", new Getfenv());
@@ -214,7 +212,7 @@ public class GlobalEnvironment extends LuaTable {
 		os.set("date", new Date());
 		os.set("difftime", new Difftime());
 		os.set("execute", new NotImplementedFunction());
-		os.set("exit", new Exit());
+		os.set("exit", new NotImplementedFunction());
 		os.set("getenv", new NotImplementedFunction());
 		os.set("remove", new edu.tum.lua.stdlib.os.Remove());
 		os.set("rename", new Rename());

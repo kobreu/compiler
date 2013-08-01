@@ -1,11 +1,11 @@
 graph = require("graph")
 
-io.write("Run selfCheck on Graph: ")
+print("Run selfCheck on Graph: ")
 graph:selfCheck()
-io.write("OK\n")
+print("OK\n")
 
 formula = require("formula")
 
-io.write("Run selfCheck on Formula: ")
+print("Run selfCheck on Formula: ")
 formula:selfCheck()
-io.write("OK\n")
+print("OK\n")
