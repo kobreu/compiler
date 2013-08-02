@@ -25,7 +25,7 @@ public class PrettyPrinterTest {
 		Block block = ParserUtil.loadFile(crash);
 
 		map.put(block, crash);
-		PrettyPrinter pp = new PrettyPrinter(map);
+		PrettyPrinter pp = new PrettyPrinter();
 		try {
 			LuaInterpreter.eval(block, new GlobalEnvironment());
 		} catch (LuaRuntimeException ex) {
