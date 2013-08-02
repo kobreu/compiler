@@ -25,7 +25,7 @@ public class IPairs extends LuaFunctionNative {
 				// return nothing (empty list)
 				return Arrays.asList();
 			}
-			return Arrays.asList(table.get(nextindex), nextindex);
+			return Arrays.asList(nextindex, table.get(nextindex));
 		}
 	}
 

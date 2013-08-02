@@ -15,13 +15,14 @@ function Formula:insertClause(literal1, literal2)
 end
 
 function Formula:getSatisfyingAssignment()
-	print("before create graph");
 	local g = Graph:new()
-	print("after create graph");
 	
-	for _, clause in ipairs(self) do
-		g:insertEdge(-clause[1], clause[2])
-		g:insertEdge(-clause[2], clause[1])
+	for a, clause in ipairs(self) do
+		assert(a~=nil);
+		assert(clause~=nil);
+	
+		g:insertEdge((-clause[1]), clause[2])
+		g:insertEdge((-clause[2]), clause[1])
 	end
 
 	local scc = g:getSCC()
@@ -45,21 +46,19 @@ function Formula:getSatisfyingAssignment()
 			end
 		end 
 	end 
-
+	
 	return assignment
 end
 
 function Formula:eval(assignment)
 	if assignment == nil then return false end
 	
-	for _, clause in ipairs(self) do
+	for a, clause in ipairs(self) do
 		local value1 = assignment[clause[1]]
 		local value2 = assignment[clause[2]]
 		
-		assert(value1 ~= nil)
-		assert(value2 ~= nil)
 		
-		if not value1 and not value2 then
+		if (not value1) and (not value2) then
 			return false
 		end
 	end
@@ -71,12 +70,10 @@ function Formula:selfCheck()
 	local formula1 = Formula:new{{1, -1}, {2, 1}, {3, -1}}
 	local formula2 = Formula:new{{2, -3}, {3, -1}, {1, -2}, {-1, -1}, {1, 1}}
 	
-	print("after local");
 	
 	
 	assert(formula1:eval(formula1:getSatisfyingAssignment()))
 	
-	print("after call1");
 	
 	assert(not formula2:eval(formula2:getSatisfyingAssignment()))	
 	
