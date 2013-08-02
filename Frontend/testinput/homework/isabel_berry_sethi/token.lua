@@ -1,0 +1,6 @@
+OR=1;
+AND=2;
+STAR=3;
+MAYBE=4;
+EPSILON=5;
+LEAF=6;
