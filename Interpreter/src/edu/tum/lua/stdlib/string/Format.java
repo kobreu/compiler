@@ -75,14 +75,15 @@ public class Format extends LuaFunctionNative {
 				}
 				replacement = String.valueOf((char) ((Double) o[n]).intValue());
 				break;
+
 			default:
 				if (LuaType.getTypeOf(o[n]) != LuaType.NUMBER) {
 					throw new LuaBadArgumentException(n + 1, "string.format", LuaType.NUMBER.toString(),
 							o[n].toString());
 				}
-				replacement = String.format("%" + String.valueOf(formChar), ((Double) o[n]).floatValue()).replace(',',
-						'.');
-				break;
+
+				// replacement = String.format("%d", ((Double)
+				// o[n]).floatValue()).replace(',', '.');
 			}
 
 			s = s.replaceFirst("%[cdEefgGiouXxqs]", replacement);

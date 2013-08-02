@@ -38,16 +38,17 @@ public class Sort extends LuaFunctionNative {
 				String s1 = o1.toString();
 				String s2 = o2.toString();
 				return s1.compareTo(s2);
-			} else {
-				boolean b1 = (boolean) comp.apply(o1, o2).get(0);
-				boolean b2 = (boolean) comp.apply(o2, o1).get(0);
-				if (!b1)
-					return 1;
-				else if (!b2)
-					return -1;
-				else
-					return 0;
 			}
+
+			boolean b1 = (boolean) comp.apply(o1, o2).get(0);
+			boolean b2 = (boolean) comp.apply(o2, o1).get(0);
+
+			if (!b1)
+				return 1;
+			else if (!b2)
+				return -1;
+			else
+				return 0;
 		}
 
 	}
