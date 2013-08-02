@@ -92,21 +92,21 @@ function solveRecurse (_remainingItemSet, _remainingCapabilities, _reachedGain)
 	return bestGain, bestItemSet
 end
 
-function test() 
-	
 
+function test(capabilities) 
+	
 	-- Example from Wikipedia. Result should be 36, {0, 0, 3, 3}
-	items = {
+
+	reachedGain, itemSet = solveRecurse(items, capabilities, 0)
+	
+	print("Gain " .. reachedGain)
+	print("Item Set {" .. itemSet[1] .. ", " .. itemSet[2] .. ", " .. itemSet[3] .. ", " .. itemSet[4] .. "}")
+end
+
+items = {
 		{ 4, {12}},
 		{ 2, { 2}},
 		{ 2, { 1}},
 		{10, { 4}}}
-	
-	reachedGain, itemSet = solveRecurse(items, {15, 15}, 0)
-	
-	print("Gain " .. reachedGain)
-	print("Item Set " .. #itemSet)
-	print("Item Set " .. itemSet[1] .. " " .. itemSet[2] .. " " .. itemSet[3] .. " " .. itemSet[4])
-end
 
-test()
+test({15})

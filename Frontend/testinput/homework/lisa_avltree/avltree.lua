@@ -17,7 +17,7 @@ function Node:new()
 end
 
 local function getHeight(node)
-	return node and node.height or 0
+	return (node and node.height) or 0
 end
 
 function Node:getBalance()
@@ -45,7 +45,7 @@ end
 -- set child accesses according to the given direction
 local function setAccess(direction)
   thisChild = direction .. "Child" -- "leftChild" if direction equals "left", "rightChild" respectively
-  otherChild = direction == "left" and "rightChild" or "leftChild"
+  otherChild = ((direction == "left") and "rightChild") or "leftChild"
   return thisChild, otherChild
 end
 
@@ -106,7 +106,7 @@ end
 -------------------       More helper functions     ------------------
 
 local function updateHeights(path)
-  for i=#path,1, -1 do
+  for i=(#path),1, -1 do
     setHeight(path[i])
   end
 end
@@ -119,7 +119,7 @@ local function rebalance(tree, key)
   updateHeights(heightPath)
 
   -- rebalance
-  for i=#heightPath,1, -1 do
+  for i=(#heightPath),1, -1 do
     if math.abs(heightPath[i]:getBalance()) > 1 then
       rotate(tree, heightPath[i], heightPath[i-1])
       -- keep heights updated
@@ -163,13 +163,12 @@ end
 -- returns the parent node to the given key, before possible rotations or the node itself if it already exists
 -- binary search starts at "node"
 function Tree:search(key, node, pred)
-	if (node == nil) then 
-		assert(pred)
+	if node == nil then 
 		return pred
 	end
-	if (key == (node.key)) then 
+	if key == node.key then 
 		return node
-	elseif (key < (node.key)) then 
+	elseif key < node.key then 
 		return self:search(key, node.leftChild, node)
 	else
 		return self:search(key, node.rightChild, node)
@@ -207,7 +206,7 @@ function Tree:delete(key)
   end
 
   -- node is a leaf
-  if node.leftChild == nil and node.rightChild == nil then
+  if (node.leftChild == nil) and (node.rightChild == nil) then
     -- node is root
     if node == self.root then
       self.root = nil
@@ -218,7 +217,7 @@ function Tree:delete(key)
     end
     tmp = nodeParent
   -- node has 1 child
-  elseif node.leftChild == nil or node.rightChild == nil then
+  elseif (node.leftChild == nil) or (node.rightChild == nil) then
     child = node.leftChild or node.rightChild
     setParentChild(node, child, nodeParent)
     -- update root
@@ -237,10 +236,10 @@ function Tree:delete(key)
     repeat
       table.insert(leftMostChildPath, current)
       current = current.leftChild
-    until current == nil
+    until (current == nil)
 
     local b = leftMostChildPath[#leftMostChildPath]
-    local c = leftMostChildPath[#leftMostChildPath - 1]
+    local c = leftMostChildPath[(#leftMostChildPath) - 1]
 
     -- b is a leaf or has only a right subtree, replace node with b
     if c then

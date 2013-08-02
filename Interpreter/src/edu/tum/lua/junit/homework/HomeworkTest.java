@@ -24,7 +24,7 @@ public class HomeworkTest {
 	public void testMatthias() throws FileNotFoundException, Exception {
 
 		/*
-		 * Run the knapsack lua file, expected return value is 32
+		 * Run the knapsack lua file, expected return value is 36
 		 */
 
 		Block block = ParserUtil.loadFile("../Frontend/testinput/homework/matthias_knapsack_interpretable.lua");
@@ -37,7 +37,10 @@ public class HomeworkTest {
 	@Test
 	public void testJohannes() throws FileNotFoundException, Exception {
 		Block block = ParserUtil.loadFile("../Frontend/testinput/homework/johannes_parser_test.lua");
-		LuaInterpreter.eval(block, environment);
+		String[] arg = new String[1];
+		arg[0] = "(a)";
+		GlobalEnvironment ge = new GlobalEnvironment(arg);
+		LuaInterpreter.eval(block, ge);
 
 		System.out.println("======================");
 	}
