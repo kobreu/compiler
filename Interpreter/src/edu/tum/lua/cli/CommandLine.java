@@ -27,7 +27,7 @@ public class CommandLine {
 	private final SimpleCompletor completor;
 	private final History history;
 	private final Print printer;
-	private final Documentation doc;
+	private Documentation doc;
 	private final PrettyPrinter prettyPrinter;
 
 	public CommandLine() throws Exception {
@@ -45,8 +45,6 @@ public class CommandLine {
 
 		printer = new Print();
 
-		doc = new Documentation(reader.getTermwidth());
-
 		prettyPrinter = new PrettyPrinter();
 	}
 
@@ -61,27 +59,36 @@ public class CommandLine {
 		while ((line = reader.readLine()) != null) {
 			history.addToHistory(line);
 
-			switch (line.split(" ")[0]) {
-			case "--end":
-			case "--exit":
-			case "--e":
-				System.exit(0);
-			case "--help":
-			case "--h":
-			case "--?":
-				doc.printHelp();
-				continue;
-			case "--list":
-			case "--l":
-				if (line.split(" ").length > 1) {
-					doc.listSpecialFunction(line.split(" ")[1]);
-				} else {
-					doc.listFunctions(environment);
+			if (line.startsWith("--")) {
+				try {
+					doc = new Documentation(reader.getTermwidth());
+				} catch (Exception e) {
+					System.out.println("no ducumentation there");
+					continue;
 				}
-				continue;
-			case "--env":
-				doc.listEnvironment(environment);
-				continue;
+
+				switch (line.split(" ")[0]) {
+				case "--end":
+				case "--exit":
+				case "--e":
+					System.exit(0);
+				case "--help":
+				case "--h":
+				case "--?":
+					doc.printHelp();
+					continue;
+				case "--list":
+				case "--l":
+					if (line.split(" ").length > 1) {
+						doc.listSpecialFunction(line.split(" ")[1]);
+					} else {
+						doc.listFunctions(environment);
+					}
+					continue;
+				case "--env":
+					doc.listEnvironment(environment);
+					continue;
+				}
 			}
 
 			// allows e.g. "= 5" input in interactive mode

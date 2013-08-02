@@ -1,12 +1,8 @@
 package edu.tum.lua.cli;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
@@ -43,42 +39,48 @@ public class Documentation {
 
 		this.terminalWidth = termwidth;
 
-		if (!new File(System.getProperty("java.io.tmpdir") + "lua_documentation.data").isFile()) {
-			URL url = new URL("http://www.lua.org/manual/5.1/manual.html");
-			InputStream in = url.openConnection().getInputStream();
+		// if (!new File(System.getProperty("java.io.tmpdir") + "lua_documentation.data").isFile()) {
+		URL url = new URL("http://www.lua.org/manual/5.1/manual.html");
+		InputStream in = url.openConnection().getInputStream();
 
-			Scanner sc = new Scanner(in, "UTF-8");
-			String s = sc.useDelimiter("\\A").next();
+		Scanner sc = new Scanner(in, "UTF-8");
+		String s = sc.useDelimiter("\\A").next();
 
-			sc.close();
-			in.close();
+		sc.close();
+		in.close();
 
-			s = s.replace("<hr>", "</div><div>").replace("<h2>", "</div><h2>").replace("</h2>", "</h2><div>")
-					.replace("<h1>", "</div><h1>").replace("</h1>", "</h1><div>").replace("<br/>", "\n")
-					.replaceAll("[ \t]+", " ").replace("<code>", "").replace("</code>", "").replace("<em>", "")
-					.replace("</em>", "").replace("<p>", "").replace("</p>", "").replace("<h3>", "")
-					.replace("</h3>", "").replace("<b>", "").replace("</b>", "").replace("<sup>", "^(")
-					.replace("</sup>", ")").replace("<pre>", "").replace("</pre>", "").replace("&quot;", "'")
-					.replace("&nbsp;", " ").replace("\"", "'");
+		s = s.replace("<hr>", "</div><div>").replace("<h2>", "</div><h2>").replace("</h2>", "</h2><div>")
+				.replace("<h1>", "</div><h1>").replace("</h1>", "</h1><div>").replace("<br/>", "\n")
+				.replaceAll("[ \t]+", " ").replace("<code>", "").replace("</code>", "").replace("<em>", "")
+				.replace("</em>", "").replace("<p>", "").replace("</p>", "").replace("<h3>", "").replace("</h3>", "")
+				.replace("<b>", "").replace("</b>", "").replace("<sup>", "^(").replace("</sup>", ")")
+				.replace("<pre>", "").replace("</pre>", "").replace("&quot;", "'").replace("&nbsp;", " ")
+				.replace("\"", "'");
 
-			TagNode tagNode = new HtmlCleaner().clean(s);
-			xmlDocument = new org.htmlcleaner.DomSerializer(new CleanerProperties()).createDOM(tagNode);
+		System.out.println("begin parsing");
 
-			FileOutputStream f_out = new FileOutputStream(System.getProperty("java.io.tmpdir")
-					+ "lua_documentation.data");
-			ObjectOutputStream obj_out = new ObjectOutputStream(f_out);
-			obj_out.writeObject(xmlDocument);
-			obj_out.close();
-			f_out.close();
+		TagNode tagNode = new HtmlCleaner().clean(s);
+		xmlDocument = new org.htmlcleaner.DomSerializer(new CleanerProperties()).createDOM(tagNode);
 
-			/*
-			 * // Help for debugging TransformerFactory tFactory =
-			 * TransformerFactory.newInstance(); Transformer transformer =
-			 * tFactory.newTransformer(); DOMSource source = new
-			 * DOMSource(xmlDocument); StreamResult result = new
-			 * StreamResult(System.out); transformer.transform(source, result);
-			 */
-		} else {
+		System.out.println("begin serialize");
+
+		/*FileOutputStream f_out = new FileOutputStream(System.getProperty("java.io.tmpdir")
+				+ "lua_documentation.data");
+		ObjectOutputStream obj_out = new ObjectOutputStream(f_out);
+		obj_out.writeObject(xmlDocument);
+		obj_out.close();
+		f_out.close();*/
+
+		System.out.println("Downloaded succesfull");
+
+		/*
+		 * // Help for debugging TransformerFactory tFactory =
+		 * TransformerFactory.newInstance(); Transformer transformer =
+		 * tFactory.newTransformer(); DOMSource source = new
+		 * DOMSource(xmlDocument); StreamResult result = new
+		 * StreamResult(System.out); transformer.transform(source, result);
+		 */
+		/*} else {
 			FileInputStream f_in = new FileInputStream(System.getProperty("java.io.tmpdir") + "lua_documentation.data");
 			ObjectInputStream obj_in = new ObjectInputStream(f_in);
 			Object obj = obj_in.readObject();
@@ -91,7 +93,7 @@ public class Documentation {
 				new File(System.getProperty("java.io.tmpdir") + "lua_documentation.data").delete();
 				xmlDocument = null;
 			}
-		}
+		}*/
 
 		xpath = XPathFactory.newInstance().newXPath();
 	}
