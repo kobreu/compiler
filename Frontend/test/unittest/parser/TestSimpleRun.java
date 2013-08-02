@@ -26,28 +26,34 @@ public class TestSimpleRun {
 		// outcommented does not work yet
 		testFiles.add("testinput/lua5.1-tests/all.lua");
 		testFiles.add("testinput/lua5.1-tests/api.lua");
-		testFiles.add("testinput/lua5.1-tests/attrib.lua");
-		testFiles.add("testinput/lua5.1-tests/big.lua");
+		//testFiles.add("testinput/lua5.1-tests/attrib.lua");
+		//testFiles.add("testinput/lua5.1-tests/big.lua");
 		testFiles.add("testinput/lua5.1-tests/calls.lua");
 		testFiles.add("testinput/lua5.1-tests/checktable.lua");
 		testFiles.add("testinput/lua5.1-tests/closure.lua");
 		testFiles.add("testinput/lua5.1-tests/code.lua");
-		testFiles.add("testinput/lua5.1-tests/constructs.lua");
-		testFiles.add("testinput/lua5.1-tests/db.lua");
+		//testFiles.add("testinput/lua5.1-tests/constructs.lua");
+		//testFiles.add("testinput/lua5.1-tests/db.lua");
 		testFiles.add("testinput/lua5.1-tests/errors.lua");
 		testFiles.add("testinput/lua5.1-tests/events.lua");
-		testFiles.add("testinput/lua5.1-tests/files.lua");
+		//testFiles.add("testinput/lua5.1-tests/files.lua");
 		testFiles.add("testinput/lua5.1-tests/gc.lua");
-		testFiles.add("testinput/lua5.1-tests/literals.lua");
+		//testFiles.add("testinput/lua5.1-tests/literals.lua");
 		testFiles.add("testinput/lua5.1-tests/locals.lua");
-		testFiles.add("testinput/lua5.1-tests/main.lua");
-		testFiles.add("testinput/lua5.1-tests/math.lua");
-		testFiles.add("testinput/lua5.1-tests/nextvar.lua");
-		testFiles.add("testinput/lua5.1-tests/pm.lua");
+		// special comment on first line
+		// testFiles.add("testinput/lua5.1-tests/main.lua");
+		// scientific numbers
+		//  testFiles.add("testinput/lua5.1-tests/math.lua");
+		// scientific numbers
+		//testFiles.add("testinput/lua5.1-tests/nextvar.lua");
+		// field sep at end
+		//testFiles.add("testinput/lua5.1-tests/pm.lua");
 		testFiles.add("testinput/lua5.1-tests/sort.lua");
-		testFiles.add("testinput/lua5.1-tests/strings.lua");
+		// scientific numbers
+		// testFiles.add("testinput/lua5.1-tests/strings.lua");
 		testFiles.add("testinput/lua5.1-tests/vararg.lua");
-		testFiles.add("testinput/lua5.1-tests/verybig.lua");
+		// field sep at end
+		//testFiles.add("testinput/lua5.1-tests/verybig.lua");
 		
 		
 		testFiles.add("testinput/homework/korbinian_sorting.lua");
@@ -113,7 +119,8 @@ public class TestSimpleRun {
 				 * serializer.serialize(chunk));
 				 */
 			} catch(Exception ex) {
-				
+				ex.printStackTrace();
+				fail();
 			}
 		}
 

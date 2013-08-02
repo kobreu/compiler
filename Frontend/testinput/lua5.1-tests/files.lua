@@ -210,7 +210,7 @@ io.input(file)
 local _,a,b,c,d,e,h,__ = io.read(1, '*n', '*n', '*l', '*l', '*l', '*a', 10)
 assert(io.close(io.input()))
 assert(_ == ' ' and __ == nil)
-assert(type(a) == 'number' and a==123.4 and b==-56e-2)
+assert((type(a) == 'number') and (a==123.4) and (b==-56e-2))
 assert(d=='second line' and e=='third line')
 assert(h==[[
 

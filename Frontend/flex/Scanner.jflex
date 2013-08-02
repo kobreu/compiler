@@ -66,6 +66,7 @@ CommentContent = (!("]""="*"]"))*
 
 %state STRINGDOUBLE
 %state STRINGSINGLE
+%state STRINGBRACKET
 %state MULTILINE
 
 %%
@@ -74,6 +75,7 @@ CommentContent = (!("]""="*"]"))*
 
 \" { string.setLength(0); yybegin(STRINGDOUBLE); }
 \' { string.setLength(0); yybegin(STRINGSINGLE); }
+\[\[ { string.setLength(0); yybegin(STRINGBRACKET); }
 
 /* keywords */
 "local"         {return symbol(LOCAL); }
@@ -162,6 +164,21 @@ CommentContent = (!("]""="*"]"))*
 	"\\r" 			{ string.append("\r"); }
 	/* Every other escape sequence is not valid */
 	/*"\\." 			{ string.append(yytext()); }*/
+	\\\"			{ string.append("\""); }
+	"\n"			{ string.append("\n"); } // Multiline Strings
+	\\\\            { string.append("\\"); }
+	"\\"			{ string.append("");   }
+	
+}
+
+<STRINGBRACKET> {
+	\]\] 				{ yybegin(YYINITIAL);
+					  return symbol(TEXT,
+					  string.toString()); }
+	[^\]]+ 	{ string.append( yytext() ); }
+	"\\t" 			{ string.append("\t"); }
+	"\\n" 			{ string.append("\n"); }
+	"\\r" 			{ string.append("\r"); }
 	\\\"			{ string.append("\""); }
 	"\n"			{ string.append("\n"); } // Multiline Strings
 	\\\\            { string.append("\\"); }

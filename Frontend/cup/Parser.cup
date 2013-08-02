@@ -106,6 +106,7 @@ non terminal TableConstructor tableconstructor;
 non terminal FieldList fieldlist;
 non terminal Field field;
 non terminal fieldsep;
+non terminal optfieldsep;
 non terminal Integer binop;
 non terminal Integer unop;
 non terminal optsemi, empty;
@@ -480,7 +481,10 @@ field			::=		LBRACK exp:e1 RBRACK ASM exp:e2
 						
 
 fieldsep		::=		COM | SEMI						
-						;		
+						;
+optfieldsep		::= 	COM | SEMI | empty;
+
+		
 binop			::=		ADD
 						{: RESULT = Op.ADD; :}
 						| SUB
