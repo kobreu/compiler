@@ -6,6 +6,8 @@ import java.util.List;
 
 import util.ParserUtil;
 import edu.tum.lua.ast.Block;
+import edu.tum.lua.exceptions.LuaRuntimeException;
+import edu.tum.lua.exceptions.LuaStackTraceElement;
 
 public class LuaInterpreter {
 
@@ -16,11 +18,21 @@ public class LuaInterpreter {
 
 	public static List<Object> eval(Block block, LocalEnvironment environment) {
 		BlockVisitor blockVisitor = new BlockVisitor(environment);
-		blockVisitor.visit(block);
+		try {
+			blockVisitor.visit(block);
+		} catch (LuaRuntimeException ex) {
+			ex.offerSyntaxNode(block);
+
+			ex.addLuaStackTraceElement(new LuaStackTraceElement(block, "main chunk", Collections.emptyList()));
+			throw ex;
+		}
+
 		List<Object> ret = blockVisitor.getReturn();
+
 		if (ret == null) {
 			return Collections.emptyList();
 		}
+
 		return blockVisitor.getReturn();
 	}
 

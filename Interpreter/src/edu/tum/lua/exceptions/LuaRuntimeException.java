@@ -3,41 +3,42 @@ package edu.tum.lua.exceptions;
 import java.util.Deque;
 import java.util.LinkedList;
 
-import edu.tum.lua.ast.SyntaxNode;
 import location.Location;
+import edu.tum.lua.ast.SyntaxNode;
 
 public class LuaRuntimeException extends RuntimeException {
 
 	private static final long serialVersionUID = -1964316201991351991L;
 
-	private Location location;
+	private SyntaxNode node;
 
 	Deque<LuaStackTraceElement> stacktrace;
 
 	public LuaRuntimeException(String message) {
 		super(message);
-		this.location = null;
 		stacktrace = new LinkedList<>();
 	}
 
 	public LuaRuntimeException(SyntaxNode node, String m) {
 		this(m);
-		setLocation(node);
+		this.node = node;
 	}
 
 	public Location getLocation() {
-		return location;
+		return node.getStart();
 	}
 
 	public void addLuaStackTraceElement(LuaStackTraceElement e) {
 		stacktrace.addLast(e);
 	}
 
-	public void setLocation(Location l) {
-		location = l;
+	public void offerSyntaxNode(SyntaxNode n) {
+		if (node == null) {
+			node = n;
+		}
 	}
 
-	public void setLocation(SyntaxNode n) {
-		location = n.getStart();
+	public SyntaxNode getSyntaxNode() {
+		return node;
 	}
 }
