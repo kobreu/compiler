@@ -197,7 +197,7 @@ end
 -- deletes the node with given key
 function Tree:delete(key)
   local path = self:searchPath(key)
-  local nodeParent = path[#path - 1]
+  local nodeParent = path[(#path) - 1]
   node = self:search(key, self.root)
 
   if node.key ~= key then
@@ -206,7 +206,7 @@ function Tree:delete(key)
   end
 
   -- node is a leaf
-  if node.leftChild == nil and node.rightChild == nil then
+  if (node.leftChild == nil) and (node.rightChild == nil) then
     -- node is root
     if node == self.root then
       self.root = nil
@@ -217,7 +217,7 @@ function Tree:delete(key)
     end
     tmp = nodeParent
   -- node has 1 child
-  elseif node.leftChild == nil or node.rightChild == nil then
+  elseif (node.leftChild == nil) or (node.rightChild == nil) then
     child = node.leftChild or node.rightChild
     setParentChild(node, child, nodeParent)
     -- update root
@@ -236,10 +236,10 @@ function Tree:delete(key)
     repeat
       table.insert(leftMostChildPath, current)
       current = current.leftChild
-    until current == nil
+    until (current == nil)
 
     local b = leftMostChildPath[#leftMostChildPath]
-    local c = leftMostChildPath[#leftMostChildPath - 1]
+    local c = leftMostChildPath[(#leftMostChildPath) - 1]
 
     -- b is a leaf or has only a right subtree, replace node with b
     if c then
