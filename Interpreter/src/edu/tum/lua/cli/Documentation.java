@@ -85,6 +85,8 @@ public class Documentation {
 			}
 			listFunctionsRecursive("", pair, 1);
 		}
+
+		System.out.println("\nSee --list <function> for more details");
 	}
 
 	private void listFunctionsRecursive(String parent, Entry<Object, Object> pair, int deep) {
@@ -98,16 +100,12 @@ public class Documentation {
 		switch (LuaType.getTypeOf(pair.getValue())) {
 		case FUNCTION:
 			if (pair.getValue() instanceof LuaFunctionNative) {
-				System.out.println(new String(new char[deep]).replace("\0", " |") + "-- "
-						+ ToString.toString(pair.getKey()) + "\t\t" + getShortDescription(parent));
+				System.out.println(parent + "\t\t" + getShortDescription(parent));
 			} else {
-				System.out.println(new String(new char[deep]).replace("\0", " |") + "-- "
-						+ ToString.toString(pair.getKey()) + "\t\tuser defined function");
+				System.out.println(parent + "\t\tuser defined function");
 			}
 			return;
 		case TABLE:
-			System.out.println(new String(new char[deep]).replace("\0", " |") + "-- "
-					+ ToString.toString(pair.getKey()) + "\t\t" + getShortDescription(parent));
 			if (!ToString.toString(pair.getKey()).equals("_G")) {
 				parent += ".";
 				deep++;
