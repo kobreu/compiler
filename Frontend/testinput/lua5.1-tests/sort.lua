@@ -68,11 +68,13 @@ a = {"álo", "\0first :-)", "alo", "then this one", "45", "and a new"}
 table.sort(a)
 check(a)
 
-table.sort(a, function (x, y)
-          loadstring(string.format("a[%q] = ''", x))()
-          collectgarbage()
-          return x<y
-        end)
+--print('fancy function')
+--table.sort(a, function (x, y)
+--          loadstring(string.format("a[%q] = ''", x))()
+--          collectgarbage()
+--          return x<y
+--        end)
+--print('fancy function end')
 
 
 tt = {__lt = function (a,b) return a.val < b.val end}

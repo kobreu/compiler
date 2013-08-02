@@ -9,6 +9,7 @@ import edu.tum.lua.Preconditions;
 import edu.tum.lua.exceptions.LuaBadArgumentException;
 import edu.tum.lua.exceptions.LuaRuntimeException;
 import edu.tum.lua.operator.list.LengthOperator;
+import edu.tum.lua.operator.relational.LTOperator;
 import edu.tum.lua.types.LuaFunction;
 import edu.tum.lua.types.LuaFunctionNative;
 import edu.tum.lua.types.LuaTable;
@@ -34,23 +35,32 @@ public class Sort extends LuaFunctionNative {
 
 		@Override
 		public int compare(Object o1, Object o2) {
+			boolean b1;
+			boolean b2;
 			if (type == 1) {
-				String s1 = o1.toString();
-				String s2 = o2.toString();
-				return s1.compareTo(s2);
+				LTOperator op = new LTOperator();
+				b1 = op.apply(o1, o2);
+				b2 = op.apply(o2, o1);
+			} else {
+				b1 = true;
+				b2 = true;
+				if (comp.apply(o1, o2).get(0) == null
+						|| (LuaType.getTypeOf(comp.apply(o1, o2).get(0)) == LuaType.BOOLEAN && !((boolean) comp.apply(
+								o1, o2).get(0))))
+					b1 = false;
+				if (comp.apply(o2, o1).get(0) == null
+						|| (LuaType.getTypeOf(comp.apply(o2, o1).get(0)) == LuaType.BOOLEAN && !((boolean) comp.apply(
+								o2, o1).get(0))))
+					b2 = false;
 			}
-
-			boolean b1 = (boolean) comp.apply(o1, o2).get(0);
-			boolean b2 = (boolean) comp.apply(o2, o1).get(0);
-
 			if (!b1)
 				return 1;
 			else if (!b2)
 				return -1;
 			else
 				return 0;
-		}
 
+		}
 	}
 
 	@Override
@@ -72,10 +82,11 @@ public class Sort extends LuaFunctionNative {
 			length = (double) op.apply(table);
 		} catch (LuaRuntimeException e) {
 		}
-
+		if (table.keySet().isEmpty())
+			return Collections.emptyList();
 		if (length != 0.0) {
 			LuaType type = LuaType.getTypeOf(table.get(1.0));
-			if (type == LuaType.STRING && comp == null)
+			if (comp == null)
 				comp = new Comp();
 			Object[] t = new Object[(int) length];
 			for (double pos = 1.0; pos <= length; pos = pos + 1) {
@@ -84,12 +95,7 @@ public class Sort extends LuaFunctionNative {
 							+ LuaType.getTypeOf(table.get(pos)).toString());
 				t[(int) pos - 1] = table.get(pos);
 			}
-			if (comp == null && type != LuaType.NUMBER)
-				throw new LuaRuntimeException("attempt to compare two " + type.toString() + " values");
-			else if (comp == null)
-				Arrays.sort(t);
-			else
-				Arrays.sort(t, comp);
+			Arrays.sort(t, comp);
 			for (int i = 0; i < t.length; i++) {
 				table.set((double) (i + 1), t[i]);
 			}

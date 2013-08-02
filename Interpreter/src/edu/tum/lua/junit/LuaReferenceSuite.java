@@ -11,7 +11,6 @@ import edu.tum.lua.GlobalEnvironment;
 import edu.tum.lua.LuaInterpreter;
 import edu.tum.lua.ast.Block;
 import edu.tum.lua.exceptions.LuaRuntimeException;
-import edu.tum.lua.exceptions.PrettyPrinter;
 import edu.tum.lua.parser.exception.SyntaxError;
 
 public class LuaReferenceSuite {
@@ -34,7 +33,8 @@ public class LuaReferenceSuite {
 				LuaInterpreter.eval(block, ge);
 			} catch (LuaRuntimeException ex) {
 				System.out.println("LuaRuntimeException in: " + file.getName());
-				(new PrettyPrinter()).print(ex);
+				// (new PrettyPrinter()).print(ex);
+				throw ex;
 			} catch (SyntaxError ex) {
 				System.out.println("SyntaxError: " + file.getName());
 			}
