@@ -66,7 +66,7 @@ public class PrettyPrinter {
 		}
 
 		// Print Exception Message
-		System.out.println("attempt to " + e.getMessage());
+		System.out.println("reason: " + e.getMessage());
 		System.out.println();
 
 		if (e.stacktrace.size() != 0) {
