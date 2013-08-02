@@ -28,7 +28,6 @@ public class CommandLine {
 	private final History history;
 	private final Print printer;
 	private final Documentation doc;
-	private final PrettyPrinter prettyPrinter;
 
 	public CommandLine() throws Exception {
 		environment = new GlobalEnvironment();
@@ -46,8 +45,6 @@ public class CommandLine {
 		printer = new Print();
 
 		doc = new Documentation(reader.getTermwidth());
-
-		prettyPrinter = new PrettyPrinter();
 	}
 
 	public void doFile(String file) {
@@ -105,8 +102,9 @@ public class CommandLine {
 				printer.apply(Arrays.asList("Syntax error while parsing"));
 				reader.setDefaultPrompt("> ");
 			} catch (LuaRuntimeException e) {
-				prettyPrinter.print(e);
+				PrettyPrinter.print(e);
 				chunk = new StringBuilder();
+				reader.setDefaultPrompt("> ");
 			}
 		}
 	}
