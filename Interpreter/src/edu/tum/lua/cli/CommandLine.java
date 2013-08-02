@@ -44,7 +44,7 @@ public class CommandLine {
 
 		printer = new Print();
 
-		doc = new Documentation();
+		doc = new Documentation(reader.getTermwidth());
 	}
 
 	public void doFile(String file) {
@@ -61,6 +61,7 @@ public class CommandLine {
 			switch (line.split(" ")[0]) {
 			case "--end":
 			case "--exit":
+			case "--e":
 				System.exit(0);
 			case "--help":
 			case "--h":
@@ -76,7 +77,6 @@ public class CommandLine {
 				}
 				continue;
 			case "--env":
-			case "--e":
 				doc.listEnvironment(environment);
 				continue;
 			}
