@@ -24,7 +24,7 @@ public class HomeworkTest {
 	public void testMatthias() throws FileNotFoundException, Exception {
 
 		/*
-		 * Run the knapsack lua file, expected return value is 32
+		 * Run the knapsack lua file, expected return value is 36
 		 */
 
 		Block block = ParserUtil.loadFile("../Frontend/testinput/homework/matthias_knapsack_interpretable.lua");
