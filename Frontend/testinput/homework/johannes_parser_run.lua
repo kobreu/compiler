@@ -1,5 +1,3 @@
-marker = 1
-
 current_symbol = function()
 	return string.sub(input, marker,marker)
 end
@@ -80,26 +78,43 @@ function C()
 
 end
 
+
+
+function parse()
+
+	local originalinput = input
+
+	marker = 1
+
+	-- Add a dollar to the end of the string
+	if string.sub(input, -1) ~= '$' then
+		input = input .. '$'
+	end
+	
+	if (E() and (current_symbol() == '$')) then
+		print('parsing ' .. originalinput .. ' .. ' .. 'parse succesful')
+	else
+		print('parsing ' .. originalinput .. ' .. ' .. 'parse failed')
+	end
+	
+	marker = 1
+end
+
 --[[
  Program start
 --]]
 
--- Check command line input
-if (arg[1]) then
-	input = arg[1]
-else
-	input = '(a+a)$'
-end
+print('Recursive descent parser for regular expressions (homework Johannes)')
+print('METHODS: input="regex"; parse()')
+print('---- Sample Inputs ----')
 
--- Add a dollar to the end of the string
-if string.sub(input, -1) ~= '$' then
-	input = input .. '$'
-end
+input = '(a+a)'
+parse()
+input = '(((aa)+l)*)$'
+parse()
+input = '(a+a)*'
+parse()
+input = '(a+a'
+parse()
 
-print('parsing ' .. input .. ' ..')
 
-if (E() and (current_symbol() == '$')) then
-	print('parse succesful')
-else
-	print('parse failed')
-end
