@@ -17,14 +17,15 @@ public class Status extends LuaFunctionNative {
 		Preconditions.checkArguments("coroutine.status", arguments, expectedTypes);
 		LuaThread t = (LuaThread) arguments.get(0);
 		String status = null;
-		if (t.getState() == Thread.State.RUNNABLE)
+		if (t.getState() == Thread.State.RUNNABLE) {
 			status = "running";
-		else if (t.isDead())
+		} else if (t.isDead()) {
 			status = "dead";
-		else if (t.isInterrupted() || t.getState() == Thread.State.NEW)
+		} else if (t.isInterrupted() || t.getState() == Thread.State.NEW) {
 			status = "suspended";
-		else
+		} else {
 			status = "normal";
+		}
 		return Arrays.asList((Object) status);
 	}
 

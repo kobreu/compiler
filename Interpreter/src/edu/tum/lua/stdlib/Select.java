@@ -20,8 +20,9 @@ public class Select extends LuaFunctionNative {
 		Object firstArgument = arguments.get(0);
 		if (LuaType.getTypeOf(firstArgument) == LuaType.NUMBER) {
 			double index = (double) firstArgument;
-			if (index < 1)
+			if (index < 1) {
 				throw new LuaIndexOutOfRangeException(1, "select");
+			}
 			for (int i = 0; i < index; i++) {
 				arguments.remove(0);
 			}

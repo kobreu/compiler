@@ -46,18 +46,21 @@ public class Sort extends LuaFunctionNative {
 				b2 = true;
 				if (comp.apply(o1, o2).get(0) == null
 						|| (LuaType.getTypeOf(comp.apply(o1, o2).get(0)) == LuaType.BOOLEAN && !((boolean) comp.apply(
-								o1, o2).get(0))))
+								o1, o2).get(0)))) {
 					b1 = false;
+				}
 				if (comp.apply(o2, o1).get(0) == null
 						|| (LuaType.getTypeOf(comp.apply(o2, o1).get(0)) == LuaType.BOOLEAN && !((boolean) comp.apply(
-								o2, o1).get(0))))
+								o2, o1).get(0)))) {
 					b2 = false;
+				}
 			}
 			if (!b1) {
-				if (!b2)
+				if (!b2) {
 					return 0;
-				else
+				} else {
 					return 1;
+				}
 			}
 			return -1;
 
@@ -71,9 +74,10 @@ public class Sort extends LuaFunctionNative {
 		LuaTable table = (LuaTable) arguments.get(0);
 
 		if (arguments.size() > 1) {
-			if (LuaType.getTypeOf(arguments.get(1)) != LuaType.FUNCTION)
+			if (LuaType.getTypeOf(arguments.get(1)) != LuaType.FUNCTION) {
 				throw new LuaBadArgumentException(2, "table.sort", "function", LuaType.getTypeOf(arguments.get(1))
 						.toString());
+			}
 			comp = new Comp((LuaFunction) arguments.get(1));
 		}
 
@@ -83,17 +87,20 @@ public class Sort extends LuaFunctionNative {
 			length = (double) op.apply(table);
 		} catch (LuaRuntimeException e) {
 		}
-		if (table.keySet().isEmpty())
+		if (table.keySet().isEmpty()) {
 			return Collections.emptyList();
+		}
 		if (length != 0.0) {
 			LuaType type = LuaType.getTypeOf(table.get(1.0));
-			if (comp == null)
+			if (comp == null) {
 				comp = new Comp();
+			}
 			Object[] t = new Object[(int) length];
 			for (double pos = 1.0; pos <= length; pos = pos + 1) {
-				if (LuaType.getTypeOf(table.get(pos)) != type)
+				if (LuaType.getTypeOf(table.get(pos)) != type) {
 					throw new LuaRuntimeException("attempt to compare " + type.toString() + " with "
 							+ LuaType.getTypeOf(table.get(pos)).toString());
+				}
 				t[(int) pos - 1] = table.get(pos);
 			}
 			Arrays.sort(t, comp);

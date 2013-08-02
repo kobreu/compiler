@@ -12,7 +12,7 @@ import edu.tum.lua.types.LuaType;
 
 public class Getfenv extends LuaFunctionNative {
 
-	private GlobalEnvironment globalEnvironment;
+	private final GlobalEnvironment globalEnvironment;
 
 	public Getfenv(GlobalEnvironment globalEnvironment) {
 		this.globalEnvironment = globalEnvironment;
@@ -20,15 +20,19 @@ public class Getfenv extends LuaFunctionNative {
 
 	@Override
 	public List<Object> apply(List<Object> arguments) {
-		if (arguments.isEmpty())
+		if (arguments.isEmpty()) {
 			return Arrays.asList((Object) globalEnvironment);
+		}
 		Object f = arguments.get(0);
-		if (LuaType.getTypeOf(f) == LuaType.NUMBER)
+		if (LuaType.getTypeOf(f) == LuaType.NUMBER) {
 			throw new LuaNotSupportedException();
-		if (LuaType.getTypeOf(f) != LuaType.FUNCTION)
+		}
+		if (LuaType.getTypeOf(f) != LuaType.FUNCTION) {
 			throw new LuaBadArgumentException(1, "getfenv", "number", LuaType.getTypeOf(f).toString());
-		if (f instanceof LuaFunctionNative)
+		}
+		if (f instanceof LuaFunctionNative) {
 			return Arrays.asList((Object) globalEnvironment);
+		}
 		return Arrays.asList((Object) ((LuaFunctionInterpreted) f).getGlobalEnvironment());
 	}
 

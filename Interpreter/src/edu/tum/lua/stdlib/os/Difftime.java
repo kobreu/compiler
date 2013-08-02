@@ -16,6 +16,6 @@ public class Difftime extends LuaFunctionNative {
 		Preconditions.checkArguments("os.difftime", arguments, expectedTypes);
 		double result = ((double) arguments.get(0)) - ((double) arguments.get(1));
 		return Arrays.asList((Object) result);
-	};
+	}
 
 }

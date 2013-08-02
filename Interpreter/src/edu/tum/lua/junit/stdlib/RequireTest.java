@@ -54,7 +54,8 @@ public class RequireTest {
 		LuaInterpreter.eval(block1, globalEnvironment);
 		LuaInterpreter.eval(block2, globalEnvironment);
 		assertEquals(LuaType.TABLE, LuaType.getTypeOf(globalEnvironment.get("m")));
-		assertEquals(LuaType.TABLE, LuaType.getTypeOf(globalEnvironment.getLuaTable("package").getLuaTable("loaded").get("mymodule")));
+		assertEquals(LuaType.TABLE,
+				LuaType.getTypeOf(globalEnvironment.getLuaTable("package").getLuaTable("loaded").get("mymodule")));
 
 	}
 

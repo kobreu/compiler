@@ -1,6 +1,5 @@
 package edu.tum.lua.operator;
 
-
 public abstract class BinaryOperator extends Operator {
 
 	public BinaryOperator() {

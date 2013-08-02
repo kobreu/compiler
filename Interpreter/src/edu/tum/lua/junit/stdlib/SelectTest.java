@@ -1,6 +1,7 @@
 package edu.tum.lua.junit.stdlib;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.util.LinkedList;
 
@@ -26,32 +27,30 @@ public class SelectTest {
 		double d0 = 0;
 		LinkedList<Object> l4 = new LinkedList<Object>();
 		l4.add("#");
-		
-		try{
+
+		try {
 			assertEquals(s.apply(l1).get(0), s.apply(l2).get(0));
-			assertEquals(s.apply(l4).get(0),d0);
-		}
-		catch (LuaRuntimeException e){
+			assertEquals(s.apply(l4).get(0), d0);
+		} catch (LuaRuntimeException e) {
 			fail();
 		}
-		
+
 		LinkedList<Object> l3 = new LinkedList<Object>();
-		
+
 		l3.addFirst(d0);
 		l3.addLast("a");
 		LinkedList<Object> l6 = new LinkedList<Object>();
 		l6.addFirst("ed");
 		l6.addLast("a");
-		
+
 		LinkedList<LinkedList<Object>> errorObjects = new LinkedList<LinkedList<Object>>();
 		errorObjects.add(l3);
 		errorObjects.add(l6);
-		
-		for (LinkedList<Object> l : errorObjects){
-			try{
+
+		for (LinkedList<Object> l : errorObjects) {
+			try {
 				s.apply(l);
-			}
-			catch (LuaRuntimeException e){
+			} catch (LuaRuntimeException e) {
 				continue;
 			}
 			fail("Missing LuaRuntimeException");

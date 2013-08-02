@@ -28,10 +28,12 @@ public class LocalEnvironment {
 	}
 
 	public Object get(Object key) {
-		if (local.containsKey(key))
+		if (local.containsKey(key)) {
 			return local.get(key);
-		if (forward == null)
+		}
+		if (forward == null) {
 			return global.get(key);
+		}
 		return forward.get(key);
 	}
 
@@ -47,12 +49,13 @@ public class LocalEnvironment {
 	 * local environments, otherwise put it in the global environment
 	 */
 	public void set(Object key, Object value) {
-		if (local.containsKey(key))
+		if (local.containsKey(key)) {
 			local.put(key, value);
-		else if (forward == null)
+		} else if (forward == null) {
 			global.set(key, value);
-		else
+		} else {
 			forward.set(key, value);
+		}
 	}
 
 	public void setGlobalEnvironment(GlobalEnvironment env) {

@@ -1,6 +1,5 @@
 package edu.tum.lua.types;
 
-
 public enum LuaType {
 	BOOLEAN("boolean"), FUNCTION("function"), NIL("nil"), NUMBER("number"), STRING("string"), TABLE("table"), USERDATA(
 			"userdata"), THREAD("thread");

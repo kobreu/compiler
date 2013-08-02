@@ -29,10 +29,12 @@ public class Date extends LuaFunctionNative {
 			java.util.Date d = new java.util.Date((long) arguments.get(1));
 			c.setTime(d);
 		}
-		if (format.charAt(0) == '!')
+		if (format.charAt(0) == '!') {
 			format = format.substring(1);
-		if (!format.equals("*t"))
+		}
+		if (!format.equals("*t")) {
 			return Arrays.asList((Object) format);
+		}
 		LuaTable date = new LuaTable();
 		date.set("year", (double) c.get(Calendar.YEAR));
 		date.set("month", (double) c.get(Calendar.MONTH));
@@ -42,10 +44,11 @@ public class Date extends LuaFunctionNative {
 		date.set("sec", (double) c.get(Calendar.SECOND));
 		date.set("wday", (double) c.get(Calendar.DAY_OF_WEEK));
 		date.set("yday", (double) c.get(Calendar.DAY_OF_YEAR));
-		if (c.get(Calendar.AM_PM) == Calendar.AM)
+		if (c.get(Calendar.AM_PM) == Calendar.AM) {
 			date.set("isdst", true);
-		else
+		} else {
 			date.set("isdst", false);
+		}
 		return Arrays.asList((Object) date);
 	}
 

@@ -10,8 +10,9 @@ public class Running extends LuaFunctionNative {
 	@Override
 	public List<Object> apply(List<Object> arguments) {
 		Thread currentThread = Thread.currentThread();
-		if (currentThread.getName().equals("main"))
+		if (currentThread.getName().equals("main")) {
 			return null;
+		}
 		return Arrays.asList((Object) currentThread);
 	}
 

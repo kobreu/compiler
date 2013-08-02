@@ -29,9 +29,10 @@ public class Assert extends LuaFunctionNative {
 
 			if (arguments.size() > 1) {
 				if (LuaType.getTypeOf(arguments.get(1)) != LuaType.NUMBER
-						&& LuaType.getTypeOf(arguments.get(1)) != LuaType.STRING)
+						&& LuaType.getTypeOf(arguments.get(1)) != LuaType.STRING) {
 					throw new LuaBadArgumentException(2, "assert", "string", LuaType.getTypeOf(arguments.get(1))
 							.toString());
+				}
 				message = arguments.get(1).toString();
 			}
 

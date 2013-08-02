@@ -87,41 +87,41 @@ public class XMLDeserializer {
 						.attributeValue("number")));
 				return exp;
 			} else if (ele.getName().equals("Binop")) {
-				Exp child1 = (Exp) deserialize((Element) ele.elements().get(0));
-				Exp child2 = (Exp) deserialize((Element) ele.elements().get(1));
+				Exp child1 = (Exp) deserialize(ele.elements().get(0));
+				Exp child2 = (Exp) deserialize(ele.elements().get(1));
 
 				Binop binop = new Binop(child1,
 						opToInt(ele.attributeValue("op")), child2);
 				return binop;
 			} else if (ele.getName().equals("Unop")) {
-				Exp child = (Exp) deserialize((Element) ele.elements().get(0));
+				Exp child = (Exp) deserialize(ele.elements().get(0));
 				Unop unop = new Unop(opToInt(ele.attributeValue("op")), child);
 				return unop;
 			} else if (ele.getName().equals("BooleanExp")) {
 				BooleanExp bexp = new BooleanExp(Boolean.valueOf((ele.attributeValue("value"))).booleanValue());
 				return bexp;
 			} else if (ele.getName().equals("FieldNameExp")) {
-				Exp exp = (Exp) deserialize((Element) ele.elements().get(0));
+				Exp exp = (Exp) deserialize(ele.elements().get(0));
 				return new FieldNameExp(ele.attributeValue("ident"), exp);
 			} else if (ele.getName().equals("ForExp")) {
-				Exp ex1 = (Exp) deserialize((Element) ele.elements().get(0));
-				Exp ex2 = (Exp) deserialize((Element) ele.elements().get(1));
-				Exp ex3 = (Exp) deserialize((Element) ele.elements().get(2));
-				Block block = (Block) deserialize((Element) ele.elements().get(
+				Exp ex1 = (Exp) deserialize(ele.elements().get(0));
+				Exp ex2 = (Exp) deserialize(ele.elements().get(1));
+				Exp ex3 = (Exp) deserialize(ele.elements().get(2));
+				Block block = (Block) deserialize(ele.elements().get(
 						3));
 				return new ForExp(ele.attributeValue("ident"), ex1, ex2, ex3,
 						block);
 			} else if (ele.getName().equals("Name")) {
 				return new Name(ele.attributeValue("name"));
 			} else if (ele.getName().equals("LocalFuncDef")) {
-				NameList args = (NameList) deserialize((Element) ele.elements()
+				NameList args = (NameList) deserialize(ele.elements()
 						.get(0));
-				Block block = (Block) deserialize((Element) ele.elements().get(1));
+				Block block = (Block) deserialize(ele.elements().get(1));
 				return new LocalFuncDef(ele.attributeValue("name"), args, Boolean.valueOf(ele.attributeValue("varargs")), block);
 			} else if (ele.getName().equals("FunctionExp")) {
-				NameList args = (NameList) deserialize((Element) ele.elements()
+				NameList args = (NameList) deserialize(ele.elements()
 						.get(0));
-				Block block = (Block) deserialize((Element) ele.elements().get(1));
+				Block block = (Block) deserialize(ele.elements().get(1));
 				return new FunctionExp(args, Boolean.valueOf(ele.attributeValue("varargs")), block);
 			} else if (ele.getName().equals("TextExp")) {
 				return new TextExp(ele.attributeValue("text"));
@@ -138,7 +138,7 @@ public class XMLDeserializer {
 				Class[] constructorClasses = new Class[ele.elements().size()];
 
 				for (int i = 0; i < ele.elements().size(); i++) {
-					Element child = (Element) ele.elements().get(i);
+					Element child = ele.elements().get(i);
 
 					deserializedChildren[i] = deserialize(child);
 					if (deserializedChildren[i] != null) {
@@ -237,7 +237,7 @@ public class XMLDeserializer {
 		Document document;
 		try {
 			document = reader.read(file);
-			return (Block) deserialize(document.getRootElement());
+			return deserialize(document.getRootElement());
 
 		} catch (DocumentException e) {
 			// TODO Auto-generated catch block

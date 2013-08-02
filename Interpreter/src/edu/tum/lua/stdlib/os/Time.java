@@ -20,25 +20,31 @@ public class Time extends LuaFunctionNative {
 		Calendar c = Calendar.getInstance();
 		if (arguments.size() != 0) {
 			LuaTable table = (LuaTable) arguments.get(0);
-			if (table.get("year") == null)
+			if (table.get("year") == null) {
 				throw new LuaRuntimeException("field 'year' missing in date table");
-			else
+			} else {
 				c.set(Calendar.YEAR, new Double((double) table.get("year")).intValue());
+			}
 
-			if (table.get("month") == null)
+			if (table.get("month") == null) {
 				throw new LuaRuntimeException("field 'month' missing in date table");
-			else
+			} else {
 				c.set(Calendar.MONTH, new Double((double) table.get("month")).intValue());
-			if (table.get("day") == null)
+			}
+			if (table.get("day") == null) {
 				throw new LuaRuntimeException("field 'day' missing in date table");
-			else
+			} else {
 				c.set(Calendar.DAY_OF_MONTH, new Double((double) table.get("day")).intValue());
-			if (table.get("hour") != null)
+			}
+			if (table.get("hour") != null) {
 				c.set(Calendar.HOUR, new Double((double) table.get("hour")).intValue());
-			if (table.get("min") != null)
+			}
+			if (table.get("min") != null) {
 				c.set(Calendar.MINUTE, new Double((double) table.get("min")).intValue());
-			if (table.get("sec") != null)
+			}
+			if (table.get("sec") != null) {
 				c.set(Calendar.SECOND, new Double((double) table.get("sec")).intValue());
+			}
 		}
 		java.util.Date d = c.getTime();
 		double time = d.getTime();

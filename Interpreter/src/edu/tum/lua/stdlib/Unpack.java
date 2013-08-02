@@ -22,8 +22,9 @@ public class Unpack extends LuaFunctionNative {
 
 		double from = 1;
 		if (arguments.size() > 1) {
-			if (LuaType.getTypeOf(arguments.get(1)) != LuaType.NUMBER)
+			if (LuaType.getTypeOf(arguments.get(1)) != LuaType.NUMBER) {
 				throw new LuaBadArgumentException(2, "unpack", "number", LuaType.getTypeOf(arguments.get(1)).toString());
+			}
 			from = (double) arguments.get(1);
 		}
 
@@ -36,8 +37,9 @@ public class Unpack extends LuaFunctionNative {
 
 		double to = length;
 		if (arguments.size() > 2) {
-			if (LuaType.getTypeOf(arguments.get(2)) != LuaType.NUMBER)
+			if (LuaType.getTypeOf(arguments.get(2)) != LuaType.NUMBER) {
 				throw new LuaBadArgumentException(3, "unpack", "number", LuaType.getTypeOf(arguments.get(1)).toString());
+			}
 			to = (double) arguments.get(2);
 		}
 

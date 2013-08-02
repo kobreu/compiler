@@ -11,9 +11,9 @@ public final class Preconditions {
 	private static String printTypes(LuaType[] types) {
 		StringBuilder builder = new StringBuilder();
 
-		if (types == null)
+		if (types == null) {
 			builder.append("any type");
-		else {
+		} else {
 			for (int i = 0; i < types.length; i++) {
 				if (types[i] == null) {
 					builder.append("optional");

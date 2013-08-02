@@ -10,7 +10,6 @@ import java.util.Map.Entry;
 import java.util.Scanner;
 
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
@@ -19,7 +18,6 @@ import org.htmlcleaner.CleanerProperties;
 import org.htmlcleaner.HtmlCleaner;
 import org.htmlcleaner.TagNode;
 import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
 
 import edu.tum.lua.GlobalEnvironment;
 import edu.tum.lua.stdlib.NotImplementedFunction;
@@ -34,8 +32,7 @@ public class Documentation {
 	private final Document xmlDocument;
 	private final int terminalWidth;
 
-	public Documentation(int termwidth) throws ParserConfigurationException, MalformedURLException, SAXException,
-			IOException, TransformerException {
+	public Documentation(int termwidth) throws ParserConfigurationException, MalformedURLException, IOException {
 
 		this.terminalWidth = termwidth;
 
@@ -97,7 +94,8 @@ public class Documentation {
 		case FUNCTION:
 			if (pair.getValue() instanceof LuaFunctionNative) {
 				formatPrint(parent, getShortDescription(parent));
-				// System.out.println(parent + "\t\t" + getShortDescription(parent));
+				// System.out.println(parent + "\t\t" +
+				// getShortDescription(parent));
 			} else {
 				System.out.println(parent + "\t\tuser defined function");
 			}
@@ -157,12 +155,12 @@ public class Documentation {
 		String temp = header + new String(new char[24 - header.length()]).replace("\0", " ");
 		String[] words = content.split(" ");
 
-		for (int i = 0; i < words.length; i++) {
-			if ((words[i].length() + temp.length()) > terminalWidth - 2) {
+		for (String word : words) {
+			if ((word.length() + temp.length()) > terminalWidth - 2) {
 				System.out.println(temp);
 				temp = new String(new char[24]).replace("\0", " ");
 			}
-			temp += words[i] + " ";
+			temp += word + " ";
 		}
 
 		System.out.println(temp);

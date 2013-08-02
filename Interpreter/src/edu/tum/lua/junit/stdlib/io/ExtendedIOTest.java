@@ -8,10 +8,10 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import edu.tum.lua.stdlib.io.FileRead;
-import edu.tum.lua.stdlib.io.FileWrite;
 import edu.tum.lua.stdlib.io.FileOpen;
+import edu.tum.lua.stdlib.io.FileRead;
 import edu.tum.lua.stdlib.io.FileSeek;
+import edu.tum.lua.stdlib.io.FileWrite;
 
 public class ExtendedIOTest {
 

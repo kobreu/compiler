@@ -25,17 +25,19 @@ public class Concat extends LuaFunctionNative {
 		String sep = "";
 		if (arguments.size() > 1) {
 			if (LuaType.getTypeOf(arguments.get(1)) != LuaType.STRING
-					&& LuaType.getTypeOf(arguments.get(1)) != LuaType.NUMBER)
+					&& LuaType.getTypeOf(arguments.get(1)) != LuaType.NUMBER) {
 				throw new LuaBadArgumentException(2, "table.concat", "string", LuaType.getTypeOf(arguments.get(1))
 						.toString());
+			}
 			sep = arguments.get(1).toString();
 		}
 
 		double begin = 1.0;
 		if (arguments.size() > 2) {
-			if (LuaType.getTypeOf(arguments.get(2)) != LuaType.NUMBER)
+			if (LuaType.getTypeOf(arguments.get(2)) != LuaType.NUMBER) {
 				throw new LuaBadArgumentException(3, "table.concat", "number", LuaType.getTypeOf(arguments.get(2))
 						.toString());
+			}
 			begin = (double) arguments.get(2);
 		}
 
@@ -43,9 +45,10 @@ public class Concat extends LuaFunctionNative {
 		double end = (double) l.apply(table);
 
 		if (arguments.size() > 3) {
-			if (LuaType.getTypeOf(arguments.get(3)) != LuaType.NUMBER)
+			if (LuaType.getTypeOf(arguments.get(3)) != LuaType.NUMBER) {
 				throw new LuaBadArgumentException(4, "table.concat", "number", LuaType.getTypeOf(arguments.get(3))
 						.toString());
+			}
 			end = (double) arguments.get(3);
 		}
 
@@ -53,12 +56,14 @@ public class Concat extends LuaFunctionNative {
 			r.add(result);
 			return r;
 		}
-		if (table.get(begin) == null)
+		if (table.get(begin) == null) {
 			throw new LuaRuntimeException("invalid value at index " + begin + " in table for concat");
+		}
 		result = table.get(begin).toString();
 		for (double i = begin + 1; i <= end; i = i + 1) {
-			if (LuaType.getTypeOf(table.get(i)) != LuaType.NUMBER && LuaType.getTypeOf(table.get(i)) != LuaType.STRING)
+			if (LuaType.getTypeOf(table.get(i)) != LuaType.NUMBER && LuaType.getTypeOf(table.get(i)) != LuaType.STRING) {
 				throw new LuaRuntimeException("invalid value at index " + i + " in table for concat");
+			}
 			result = result.concat(sep);
 			result = result.concat(table.get(i).toString());
 		}

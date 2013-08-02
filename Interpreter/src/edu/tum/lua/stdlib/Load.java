@@ -21,10 +21,12 @@ public class Load extends LuaFunctionNative {
 		String result = "";
 
 		while (iter != null && !iter.isEmpty()) {
-			if (LuaType.getTypeOf(iter.get(0)) != LuaType.STRING)
+			if (LuaType.getTypeOf(iter.get(0)) != LuaType.STRING) {
 				throw new LuaIOException("The function doesn't return a string");
-			if (iter.get(0).toString().length() == 0)
+			}
+			if (iter.get(0).toString().length() == 0) {
 				break;
+			}
 			result = result.concat(iter.get(0).toString());
 			iter = f.apply(Collections.emptyList());
 		}

@@ -18,10 +18,12 @@ public class Setfenv extends LuaFunctionNative {
 	public List<Object> apply(List<Object> arguments) {
 		Preconditions.checkArguments("setfenv", arguments, expectedTypes);
 		Object f = arguments.get(0);
-		if (LuaType.getTypeOf(f) == LuaType.NUMBER)
+		if (LuaType.getTypeOf(f) == LuaType.NUMBER) {
 			throw new LuaNotSupportedException();
-		if (f instanceof LuaFunctionNative)
+		}
+		if (f instanceof LuaFunctionNative) {
 			throw new LuaNotSupportedException();
+		}
 		((LuaFunctionInterpreted) f).setGlobalEnvironment((GlobalEnvironment) arguments.get(1));
 		return Arrays.asList(f);
 	}

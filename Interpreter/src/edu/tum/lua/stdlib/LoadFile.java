@@ -19,9 +19,10 @@ public class LoadFile extends LuaFunctionNative {
 	public List<Object> apply(List<Object> arguments) {
 		InputStream input = System.in;
 		if (arguments.size() > 0) {
-			if (LuaType.getTypeOf(arguments.get(0)) != LuaType.STRING)
+			if (LuaType.getTypeOf(arguments.get(0)) != LuaType.STRING) {
 				throw new LuaBadArgumentException(1, "loadfile", "string", LuaType.getTypeOf(arguments.get(0))
 						.toString());
+			}
 			try {
 				input = new FileInputStream(arguments.get(0).toString());
 			} catch (FileNotFoundException e) {
