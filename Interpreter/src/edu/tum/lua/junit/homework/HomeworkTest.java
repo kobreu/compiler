@@ -20,6 +20,19 @@ public class HomeworkTest {
 		environment = new LocalEnvironment();
 	}
 
+	// @Test
+	// public void testIsa() throws FileNotFoundException, Exception {
+	// Block block =
+	// ParserUtil.loadFile("../Frontend/testinput/homework/isabel_berry_sethi/test.lua");
+	// GlobalEnvironment ge = new GlobalEnvironment();
+	// ge.getLuaTable("package").set("path",
+	// ge.getLuaTable("package").get("path") +
+	// ";../Frontend/testinput/homework/isabel_berry_sethi/?.lua");
+	//
+	// LuaInterpreter.eval(block, ge);
+	// System.out.println("======================");
+	// }
+
 	@Test
 	public void testMatthias() throws FileNotFoundException, Exception {
 

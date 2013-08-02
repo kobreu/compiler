@@ -1,6 +1,6 @@
-require 'token'
-require 'tree'
-require 'automaton'
+t = require("token")
+tr = require("tree")
+a = require("automaton")
 
 
 Conversion ={}
@@ -42,7 +42,7 @@ local iter = list_iter(l)
 local exist = false
 while true do
 	local el = iter()
-	if el=nil then break
+	if el==nil then break
 	elseif el == i then exist = true;
 	end
 end
@@ -62,7 +62,7 @@ end
 local iter2 = list_iter(l2)
 while true do
 	local el = iter2()
-	if el = nil then break
+	if el == nil then break
 	else result = self.add(result,el)
 	end
 end
@@ -194,20 +194,20 @@ for i,v in ipairs(self.leaves) do
 	local iter = list_iter(self.nex[i])
 	while true do
 		local el = iter()
-		if el = nil then break
+		if el == nil then break
 		else a:addTransition(i,el,self.leaves[el]) end
 	end
 end
 local iter = list_iter(self.first[init])
 while true do
 	local el = iter()
-	if el = nil then break
+	if el == nil then break
 	else a:addTransition(init,el,self.leaves[el]) end
 end
 local iter2 = list_iter(self.last[init])
 while true do
 	local el = iter2()
-	if el = nil then break
+	if el == nil then break
 	else a:addFinal(el) end
 end
 if self.empty[init] then a:addFinal(init) end
