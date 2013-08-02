@@ -35,11 +35,10 @@ public class Documentation {
 	private final int terminalWidth;
 
 	public Documentation(int termwidth) throws ParserConfigurationException, MalformedURLException, SAXException,
-			IOException, TransformerException, ClassNotFoundException {
+			IOException, TransformerException {
 
 		this.terminalWidth = termwidth;
 
-		// if (!new File(System.getProperty("java.io.tmpdir") + "lua_documentation.data").isFile()) {
 		URL url = new URL("http://www.lua.org/manual/5.1/manual.html");
 		InputStream in = url.openConnection().getInputStream();
 
@@ -57,43 +56,8 @@ public class Documentation {
 				.replace("<pre>", "").replace("</pre>", "").replace("&quot;", "'").replace("&nbsp;", " ")
 				.replace("\"", "'");
 
-		System.out.println("begin parsing");
-
 		TagNode tagNode = new HtmlCleaner().clean(s);
 		xmlDocument = new org.htmlcleaner.DomSerializer(new CleanerProperties()).createDOM(tagNode);
-
-		System.out.println("begin serialize");
-
-		/*FileOutputStream f_out = new FileOutputStream(System.getProperty("java.io.tmpdir")
-				+ "lua_documentation.data");
-		ObjectOutputStream obj_out = new ObjectOutputStream(f_out);
-		obj_out.writeObject(xmlDocument);
-		obj_out.close();
-		f_out.close();*/
-
-		System.out.println("Downloaded succesfull");
-
-		/*
-		 * // Help for debugging TransformerFactory tFactory =
-		 * TransformerFactory.newInstance(); Transformer transformer =
-		 * tFactory.newTransformer(); DOMSource source = new
-		 * DOMSource(xmlDocument); StreamResult result = new
-		 * StreamResult(System.out); transformer.transform(source, result);
-		 */
-		/*} else {
-			FileInputStream f_in = new FileInputStream(System.getProperty("java.io.tmpdir") + "lua_documentation.data");
-			ObjectInputStream obj_in = new ObjectInputStream(f_in);
-			Object obj = obj_in.readObject();
-
-			if (obj instanceof Document) {
-				xmlDocument = (Document) obj;
-			} else {
-				obj_in.close();
-				f_in.close();
-				new File(System.getProperty("java.io.tmpdir") + "lua_documentation.data").delete();
-				xmlDocument = null;
-			}
-		}*/
 
 		xpath = XPathFactory.newInstance().newXPath();
 	}
