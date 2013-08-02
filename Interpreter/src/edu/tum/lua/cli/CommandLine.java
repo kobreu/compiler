@@ -53,6 +53,7 @@ public class CommandLine {
 	}
 
 	public void run() throws IOException {
+		PrettyPrinter pp = new PrettyPrinter();
 		StringBuilder chunk = new StringBuilder();
 		String line;
 
