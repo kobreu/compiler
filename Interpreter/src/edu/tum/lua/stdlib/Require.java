@@ -12,8 +12,6 @@ import util.ParserUtil;
 import edu.tum.lua.GlobalEnvironment;
 import edu.tum.lua.LuaInterpreter;
 import edu.tum.lua.exceptions.LuaIOException;
-import edu.tum.lua.types.LuaFunction;
-import edu.tum.lua.types.LuaFunctionInterpreted;
 import edu.tum.lua.types.LuaFunctionNative;
 import edu.tum.lua.types.LuaType;
 
@@ -54,7 +52,7 @@ public class Require extends LuaFunctionNative {
 		String path = g.getLuaTable("package").getString("path");
 
 		if (path == null) {
-			throw new LuaIOException("File Not Found");
+			throw new LuaIOException("File Not Found, because path is empty");
 		}
 
 		path = path.replace("?", modulename);
@@ -81,6 +79,11 @@ public class Require extends LuaFunctionNative {
 			}
 		}
 
-		throw new LuaIOException("File Not Found");
+		String errorstring = "module '" + modulename + "' not found:";
+		errorstring = errorstring.concat("\n\tno field package.preload['" + modulename + "']");
+		for (String filestring : filestrings) {
+			errorstring = errorstring.concat("\n\tno file " + filestring);
+		}
+		throw new LuaIOException(errorstring);
 	}
 }
