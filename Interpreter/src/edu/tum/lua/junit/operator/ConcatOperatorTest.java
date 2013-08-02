@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import edu.tum.lua.exceptions.LuaRuntimeException;
 import edu.tum.lua.operator.list.ConcatOperator;
+import edu.tum.lua.stdlib.ToString;
 import edu.tum.lua.types.LuaTable;
 
 public class ConcatOperatorTest {
@@ -28,9 +29,9 @@ public class ConcatOperatorTest {
 		double op4 = 4;
 
 		assertEquals(op1.concat(op2), op.apply(op1, op2));
-		assertEquals(op1.concat(((Object) op3).toString()), op.apply(op1, op3));
-		assertEquals(((Object) op3).toString().concat(op2), op.apply(op3, op2));
-		assertEquals(((Object) op3).toString().concat(((Object) op4).toString()), op.apply(op3, op4));
+		assertEquals(op1.concat(ToString.toString(op3)), op.apply(op1, op3));
+		assertEquals((ToString.toString(op3)).concat(op2), op.apply(op3, op2));
+		assertEquals((ToString.toString(op3)).concat((ToString.toString(op4))), op.apply(op3, op4));
 
 		LuaTable table = new LuaTable();
 		table.setMetatable(new LuaTable());
