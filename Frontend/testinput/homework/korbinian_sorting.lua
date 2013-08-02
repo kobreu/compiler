@@ -1,7 +1,7 @@
 
 -- Check for an array if it is sorted and print the result
 function is_sorted(a)
-	for i = 1,#(a)-1,1 do
+	for i = 1,(#(a))-1,1 do
 		if(a[i]>a[i+1]) then
 			print ("false")
 			return
@@ -48,22 +48,22 @@ end
 function merge(left,right)
 	local i=1;local j=1
 	local merged={}
-	while i <= #left and j <= #right do
+	while (i <= (#left)) and (j <= (#right)) do
 		if(left[i]<=right[j]) then
-			merged[#merged+1] = left[i]
+			merged[(#merged)+1] = left[i]
 			i = i + 1
 		else
-			merged[#merged+1] = right[j]
+			merged[(#merged)+1] = right[j]
 			j = j +1
 		end
 	end
-	while i <= #left do
-		merged[#merged+1] = left[i]
+	while i <= (#left) do
+		merged[(#merged)+1] = left[i]
 		i = i + 1
 
 	end
-	while j <= #right do
-		merged[#merged+1] = right[j]
+	while j <= (#right) do
+		merged[(#merged)+1] = right[j]
 		j = j+1
 	end
 	return merged
@@ -98,19 +98,22 @@ function split(a, left, right)
 	i = left
 	j = right-1
 	pivot = a[right]
+	
 
 	repeat
-		while (a[i] <= pivot and i < right) do
+	
+		while ((a[i] <= pivot) and (i < right)) do
 			i = i + 1
 		end
-		while (a[j] >= pivot and j > left) do
+		
+		while ((a[j] >= pivot) and (j > left)) do
 			j = j - 1
 		end
 		if i < j then
 			swap(a,i,j)
 		end
 	until i >= j
-
+	
 	if a[i] > pivot then
 		swap(a, i, right)
 	end
@@ -151,7 +154,7 @@ end
 
 -- https://en.wikipedia.org/wiki/Stooge_sort
 function stoogesort_rec(a, left, right)
-	-- print(left .. " " .. right)
+	print(left .. " " .. right)
 	if a[right] < a[left] then
 		swap(a,left,right)
 	end
@@ -164,13 +167,16 @@ function stoogesort_rec(a, left, right)
 end
 
 function stoogesort(a)
-	stoogesort_rec(a,1,#a)
+	stoogesort_rec(a,1,(#a))
 end
+
 
 a={99,101,29,192,21,4,52,15,2,51,25,125,1,2,64,3,6,73,73,47,3,321,1}
 bubblesort(a)
 
+
 is_sorted(a)
+
 
 b={}
 b["a"]=2
@@ -178,9 +184,11 @@ b["c"]=3
 bubblesort(b)
 is_sorted(b)
 
+
 c={152,6,32,6,234,7,2,7,89,457,347,3,62,35,12,1,51,125,12,51,6,4326,3}
 quicksort(c)
 is_sorted(c)
+
 
 d={}
 quicksort(d)
@@ -207,8 +215,17 @@ sort = Sortable.create(h)
 mergesort(sort)
 is_sorted(sort:getArray())
 
-i = {2118,2,15,2,43,63,46,632,62,11,526,473,3,4,46,23,5,1,251,21,12,52,6,32,12}
-stoogesort(i)
-is_sorted(i)
+-- does not work
+--i = {2118,2,15,2,43,63,46,632,62,11,526,473,3,4,46,23,5,1,251,21,12,52,6,32,12}
+--stoogesort(i)
+--is_sorted(i)
 
--- print_array(i)
+
+print("USAGE: i = {1,15,2,...}, quicksort(i), bubblesort(i), print_array(i), is_sorted(i)");
+print("INPUT: i = {5,4,3,2,1}");
+k = {5,4,3,2,1}
+quicksort(k);
+print("OUTPUT:");
+print_array(k);
+print("is sorted?");
+print (is_sorted(k));

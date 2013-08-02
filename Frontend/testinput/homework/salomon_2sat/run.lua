@@ -25,6 +25,8 @@ formula = require("formula")
 
 local formula1 = Formula:new{{1, -1}, {2, 1}, {3, -1}}
 
+print("METHODS: Formula:new{{1,2}, ...}, formula:getSatisfyingAssignment(), formula:eval(assignment), print_formula(formula), print_assignment(assignment)");
+
 print("IN:");
 
 print_formula(formula1);

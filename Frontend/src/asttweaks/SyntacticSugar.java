@@ -12,6 +12,7 @@ import edu.tum.lua.ast.Name;
 import edu.tum.lua.ast.NameList;
 import edu.tum.lua.ast.PreExp;
 import edu.tum.lua.ast.PrefixExp;
+import edu.tum.lua.ast.PrefixExpExp;
 import edu.tum.lua.ast.PrefixExpVar;
 import edu.tum.lua.ast.TextExp;
 import edu.tum.lua.ast.Var;
@@ -26,6 +27,8 @@ public class SyntacticSugar {
 	private static final class FuncNameToPrefixExpVisitor extends
 			VisitorAdaptor {
 		public Var var;
+		
+		public PrefixExp prefixexp;
 
 		@Override
 		public void visit(FuncNameDDotVar funcNameDDotVar) {
@@ -50,18 +53,26 @@ public class SyntacticSugar {
 
 		@Override
 		public void visit(FuncNameVar funcNameVar) {
-			var = new Variable(funcNameVar.name.name);
+			// TODO not correct
+			prefixexp = new PrefixExpExp(new TextExp(funcNameVar.name.name));
 		}
 		
 		@Override
 		public void visit(FuncNameVarDotFuncName funcNameVarDotFuncName) {
-			VarTabIndex newHead = new VarTabIndex(new PrefixExpVar(
-					new Variable(funcNameVarDotFuncName.name.name)), null);
-			newHead.setStart(funcNameVarDotFuncName.getStart());
-			newHead.setEnd(funcNameVarDotFuncName.getEnd());
-			funcNameVarDotFuncName.funcnamelist.accept(this);
-			newHead.indexexp = new PreExp(new PrefixExpVar(var));
-			var = newHead;
+			if(funcNameVarDotFuncName.funcnamelist instanceof FuncNameVar) {
+				FuncNameVar fn = (FuncNameVar) funcNameVarDotFuncName.funcnamelist;
+				VarTabIndex newHead = new VarTabIndex(new PrefixExpVar(new Variable(funcNameVarDotFuncName.name.name)), new TextExp(fn.name.name));
+				var = newHead;
+			} else {
+				// TODO not correct
+				VarTabIndex newHead = new VarTabIndex(new PrefixExpVar(
+						new Variable(funcNameVarDotFuncName.name.name)), null);
+				newHead.setStart(funcNameVarDotFuncName.getStart());
+				newHead.setEnd(funcNameVarDotFuncName.getEnd());
+				funcNameVarDotFuncName.funcnamelist.accept(this);
+				newHead.indexexp = new PreExp(new PrefixExpVar(var));
+				var = newHead;
+			}
 		}
 	}
 
