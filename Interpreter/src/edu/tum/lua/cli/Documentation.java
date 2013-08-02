@@ -31,9 +31,12 @@ public class Documentation {
 
 	private final XPath xpath;
 	private final Document xmlDocument;
+	private final int terminalWidth;
 
-	public Documentation() throws ParserConfigurationException, MalformedURLException, SAXException, IOException,
-			TransformerException {
+	public Documentation(int termwidth) throws ParserConfigurationException, MalformedURLException, SAXException,
+			IOException, TransformerException {
+
+		this.terminalWidth = termwidth;
 
 		URL url = new URL("http://www.lua.org/manual/5.1/manual.html");
 		InputStream in = url.openConnection().getInputStream();
@@ -100,7 +103,8 @@ public class Documentation {
 		switch (LuaType.getTypeOf(pair.getValue())) {
 		case FUNCTION:
 			if (pair.getValue() instanceof LuaFunctionNative) {
-				System.out.println(parent + "\t\t" + getShortDescription(parent));
+				formatPrint(parent, getShortDescription(parent));
+				// System.out.println(parent + "\t\t" + getShortDescription(parent));
 			} else {
 				System.out.println(parent + "\t\tuser defined function");
 			}
@@ -154,6 +158,21 @@ public class Documentation {
 		} catch (XPathExpressionException e) {
 			return "";
 		}
+	}
+
+	private void formatPrint(String header, String content) {
+		String temp = header + new String(new char[24 - header.length()]).replace("\0", " ");
+		String[] words = content.split(" ");
+
+		for (int i = 0; i < words.length; i++) {
+			if ((words[i].length() + temp.length()) > terminalWidth - 2) {
+				System.out.println(temp);
+				temp = new String(new char[24]).replace("\0", " ");
+			}
+			temp += words[i] + " ";
+		}
+
+		System.out.println(temp);
 	}
 
 	public void listEnvironment(GlobalEnvironment ge) {
