@@ -1,6 +1,7 @@
 package edu.tum.lua.types;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import edu.tum.lua.BlockVisitor;
@@ -41,13 +42,17 @@ public class LuaFunctionInterpreted implements LuaFunction {
 		}
 
 		BlockVisitor blockVisitor;
+		List<Object> varargList = null;
 
 		if (vararg) {
-			blockVisitor = new BlockVisitor(currentEnvironment, arguments.subList(argumentNames.size(),
-					arguments.size()));
-		} else {
-			blockVisitor = new BlockVisitor(currentEnvironment);
+			if (arguments.size() < argumentNames.size()) {
+				varargList = Collections.emptyList();
+			} else {
+				varargList = arguments.subList(argumentNames.size(), arguments.size());
+			}
 		}
+
+		blockVisitor = new BlockVisitor(currentEnvironment, varargList);
 
 		block.accept(blockVisitor);
 
