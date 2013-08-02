@@ -45,8 +45,6 @@ public class CommandLine {
 		printer = new Print();
 
 		doc = new Documentation(reader.getTermwidth());
-
-		prettyPrinter = new PrettyPrinter();
 	}
 
 	public void doFile(String file) {
