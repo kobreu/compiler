@@ -6,7 +6,6 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import util.BlockRegistry;
-
 import edu.tum.lua.ast.Block;
 import edu.tum.lua.ast.SyntaxNode;
 import edu.tum.lua.stdlib.ToString;
@@ -57,7 +56,7 @@ public class PrettyPrinter {
 
 				// Print Arrow
 				for (int i = 0; i < column + prefix.length() + 1; i++) {
-					System.out.print("-");
+					System.out.print("~");
 				}
 
 				System.out.println("^");

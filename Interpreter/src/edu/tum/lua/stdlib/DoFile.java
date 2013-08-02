@@ -1,6 +1,6 @@
 package edu.tum.lua.stdlib;
 
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
@@ -41,16 +41,13 @@ public class DoFile extends LuaFunctionNative {
 		try {
 			Block block = ParserUtil.loadFile(file);
 			return LuaInterpreter.eval(block, globalEnvironment);
-		} catch (FileNotFoundException e) {
-			System.out.println("Cannot open " + file + ": No such file or directory");
+		} catch (IOException e) {
+			System.out.println("Cannot open " + file + ": " + e.getMessage());
 		} catch (SyntaxError se) {
 			System.out.println("Syntax error in file " + file);
 			se.printStackTrace();
 		} catch (LuaRuntimeException e) {
 			throw e;
-		} catch (Exception e) {
-			System.out.println("Error while parsing file " + file);
-			e.printStackTrace();
 		}
 
 		return Collections.emptyList();

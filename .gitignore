@@ -15,3 +15,5 @@ Interpreter/testoutput/*
 *.war
 *.ear
     
+/Interpreter/crash.lua~
+/Frontend/testinput/lua5.1-tests/sort.lua~

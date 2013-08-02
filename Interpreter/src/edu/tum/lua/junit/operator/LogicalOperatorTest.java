@@ -4,6 +4,9 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import edu.tum.lua.GlobalEnvironment;
+import edu.tum.lua.LuaInterpreter;
+import edu.tum.lua.ast.Block;
 import edu.tum.lua.operator.logical.AndOperator;
 import edu.tum.lua.operator.logical.NotOperator;
 import edu.tum.lua.operator.logical.OrOperator;
@@ -14,6 +17,13 @@ public class LogicalOperatorTest {
 
 	private final Object[] falseObjects = { null, false };
 	private final Object[] trueObjects = { "a", new LuaTable(), new VoidFunction(), 1.0, true };
+
+	@Test
+	public void testSpecial() throws Exception {
+		GlobalEnvironment _G = new GlobalEnvironment();
+		Block block = util.ParserUtil.loadString("function f (x) return x and x.y or 0 end");
+		LuaInterpreter.eval(block, _G);
+	}
 
 	@Test
 	public void testAnd() {
