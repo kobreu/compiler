@@ -1,4 +1,4 @@
-require("token")
+t=require("token")
 
 Tree ={}
 
