@@ -27,9 +27,26 @@ public class Main {
 					System.out.println("with -f you need to specify a second argument. See -h for help");
 					return;
 				}
-				LuaInterpreter.eval(ParserUtil.loadFile(args[1]), new GlobalEnvironment());
+				if (args.length > 2) {
+					String[] arg = new String[args.length - 2];
+					for (int i = 2; i < args.length; i++) {
+						arg[i - 2] = args[i];
+					}
+					LuaInterpreter.eval(ParserUtil.loadFile(args[1]), new GlobalEnvironment(arg));
+				} else {
+					LuaInterpreter.eval(ParserUtil.loadFile(args[1]), new GlobalEnvironment());
+				}
 				return;
 			default:
+				if (args.length > 1) {
+					String[] arg = new String[args.length - 1];
+					for (int i = 1; i < args.length; i++) {
+						arg[i - 1] = args[i];
+					}
+					LuaInterpreter.eval(ParserUtil.loadFile(args[0]), new GlobalEnvironment(arg));
+				} else {
+					LuaInterpreter.eval(ParserUtil.loadFile(args[0]), new GlobalEnvironment());
+				}
 				LuaInterpreter.eval(ParserUtil.loadFile(args[0]), new GlobalEnvironment());
 				return;
 			}
