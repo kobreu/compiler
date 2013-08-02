@@ -92,20 +92,49 @@ function solveRecurse (_remainingItemSet, _remainingCapabilities, _reachedGain)
 	return bestGain, bestItemSet
 end
 
-function test(capabilities) 
-	
-	-- Example from Wikipedia. Result should be 36, {0, 0, 3, 3}
-
-	reachedGain, itemSet = solveRecurse(items, capabilities, 0)
-	
-	print("Gain " .. reachedGain)
-	print("Item Set {" .. itemSet[1] .. ", " .. itemSet[2] .. ", " .. itemSet[3] .. ", " .. itemSet[4] .. "}")
-end
-
 items = {
 		{ 4, {12}},
 		{ 2, { 2}},
 		{ 2, { 1}},
 		{10, { 4}}}
 
-test({15})
+caps = {15}
+
+function run() 
+
+	print("Usage for one gain and multipe weights per item")
+	print("Define items: items = { {<gain>, {<effort>, <effort>,...}}, ...}")
+	print("Define max. effort: cap = { <effort>, ...}")
+	print("run with: run()")
+	print()
+
+	print("Item\tGain\tEffort")
+
+	for k,v in pairs(items) do
+		s = k .. "\t" .. v[1] .. "\t{"
+		for x,y in pairs(v[2]) do
+			s = s .. y ..", "
+		end
+		s = string.sub(s, 1, (#s)-2)
+		print(s .. "}")
+	end
+
+	s = "max. allowed effort: {"
+	for x,y in pairs(caps) do
+		s = s .. y ..", "
+	end
+	s = string.sub(s, 1, (#s)-2)
+	print(s .. "}")
+	
+	reachedGain, itemSet = solveRecurse(items, caps, 0)
+
+	print("\nbest possible result: " .. reachedGain)
+	
+	for k,v in pairs(itemSet) do
+		print("Item " .. k .. ":\t" .. v .. " times")
+	end
+	
+end
+
+run()
+

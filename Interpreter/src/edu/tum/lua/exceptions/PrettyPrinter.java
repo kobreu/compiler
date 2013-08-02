@@ -1,22 +1,74 @@
 package edu.tum.lua.exceptions;
 
-import java.util.List;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+
+import util.BlockRegistry;
+
+import edu.tum.lua.ast.Block;
+import edu.tum.lua.ast.SyntaxNode;
+import edu.tum.lua.stdlib.ToString;
 
 public class PrettyPrinter {
 
-	static public void print(LuaRuntimeException e) {
+	private File getFile(SyntaxNode node) {
+		SyntaxNode current = node;
 
-		System.out.println("Exception!");
-
-		String errormessage = e.getMessage();
-
-		if (e.getLocation() != null) {
-			int errorcolumn = e.getLocation().getColumn();
-			System.out.println("Location:" + e.getLocation().getRow() + " " + e.getLocation().getColumn());
-			printErrorWithArrow(errormessage, errorcolumn);
-		} else {
-			printError(errormessage);
+		while (current.getParent() != null) {
+			current = current.getParent();
 		}
+
+		if (current instanceof Block) {
+			return BlockRegistry.lookup((Block) current);
+		}
+
+		return null;
+	}
+
+	private String getFileName(SyntaxNode node) {
+		File file = getFile(node);
+
+		if (file == null) {
+			return "?";
+		}
+
+		return file.getName();
+	}
+
+	public void print(LuaRuntimeException e) {
+		SyntaxNode errorNode = e.getSyntaxNode();
+
+		// Print Exception Location
+		File file = getFile(errorNode);
+
+		final int column = e.getLocation().getColumn();
+		final int row = e.getLocation().getRow();
+
+		if (file != null) {
+			try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+				for (int i = 0; i < row - 1; i++) {
+					reader.readLine();
+				}
+
+				String prefix = file.getPath() + ":" + row + ": ";
+				System.out.println(prefix + reader.readLine());
+
+				// Print Arrow
+				for (int i = 0; i < column + prefix.length() + 1; i++) {
+					System.out.print("-");
+				}
+
+				System.out.println("^");
+			} catch (IOException ex) {
+				System.out.print("Failed to find error location");
+			}
+		}
+
+		// Print Exception Message
+		System.out.println("attempt to " + e.getMessage());
+		System.out.println();
 
 		if (e.stacktrace.size() != 0) {
 			System.out.println("stack traceback:");
@@ -24,55 +76,29 @@ public class PrettyPrinter {
 				printStackTraceElement(stackTraceElement);
 			}
 		}
-
 	}
 
-	static private void printError(String errormessage) {
-		System.out.println(errormessage);
-	}
-
-	static private void printErrorWithArrow(String errormessage, int col) {
-		/*
-		 * Prints out the error message with an arrow pointing to column
-		 */
-
-		printError(errormessage);
-
-		for (int i = 0; i < col - 1; ++i) {
-			System.out.print("-");
-		}
-		System.out.println("^");
-
-	}
-
-	static private void printStackTraceElement(LuaStackTraceElement stacktrace) {
-		/*-
-		 * Print something like this:
-		 * main.lua:5 print("error")
-		 */
-		// TODO change int to String
-		int filename = -1;
-		int row = -1;
-		String functionname = stacktrace.functionName;
-		List<Object> args = stacktrace.args;
+	private void printStackTraceElement(LuaStackTraceElement stacktrace) {
+		System.out.print("\t");
 
 		if (stacktrace.location != null) {
-			row = stacktrace.location.getRow();
-			filename = stacktrace.location.getFileName();
-			System.out.printf("%d:%d: %s(", filename, row, functionname);
+			System.out.printf("%s:%d: %s(", getFileName(stacktrace.node), stacktrace.location.getRow(),
+					stacktrace.functionName);
 		} else {
-			System.out.printf("no location given: %s(", functionname);
+			System.out.printf("no location given: %s(", stacktrace.functionName);
 		}
 
+		// Print args
 		boolean afterFirst = false;
-		for (Object arg : args) {
+		for (Object arg : stacktrace.args) {
 			if (afterFirst) {
 				System.out.print(", ");
 			}
 
-			System.out.print(arg.toString());
+			System.out.print(ToString.toString(arg));
 			afterFirst = true;
 		}
+
 		System.out.println(")");
 	}
 }

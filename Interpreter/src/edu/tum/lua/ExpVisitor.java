@@ -1,6 +1,5 @@
 package edu.tum.lua;
 
-import java.util.Collections;
 import java.util.Deque;
 import java.util.Enumeration;
 import java.util.LinkedList;
@@ -97,7 +96,13 @@ public class ExpVisitor extends VisitorAdaptor {
 		Object op2 = evaluationStack.removeLast();
 
 		Operator operator = OperatorRegistry.registry[binop.op];
-		evaluationStack.addLast(operator.apply(op1, op2));
+
+		try {
+			evaluationStack.addLast(operator.apply(op1, op2));
+		} catch (LuaRuntimeException ex) {
+			ex.offerSyntaxNode(binop);
+			throw ex;
+		}
 	}
 
 	@Override
@@ -150,12 +155,6 @@ public class ExpVisitor extends VisitorAdaptor {
 		return f.apply(argsPrefix);
 	}
 
-	private List<Object> call(Object object, ExpList args) {
-		ExpVisitor visitor = new ExpVisitor(environment, vararg);
-		args.accept(visitor);
-		return call(object, visitor.popAll());
-	}
-
 	private List<Object> call(Object object, String name, List<Object> args) {
 		Deque<Object> argsPrefix = findCallHandler(object, name);
 		LuaFunction f = (LuaFunction) argsPrefix.removeFirst();
@@ -164,18 +163,16 @@ public class ExpVisitor extends VisitorAdaptor {
 		return f.apply(argsPrefix);
 	}
 
-	private List<Object> call(Object object, String name, ExpList args) {
-		ExpVisitor visitor = new ExpVisitor(environment, vararg);
-		args.accept(visitor);
-		return call(object, name, visitor.popAll());
-	}
-
 	@Override
 	public void visit(FuncCall call) {
 		call.preexp.accept(this);
 
+		ExpVisitor visitor = new ExpVisitor(environment, vararg);
+		call.explist.accept(visitor);
+		List<Object> args = visitor.popAll();
+
 		try {
-			List<Object> result = call(evaluationStack.removeLast(), call.explist);
+			List<Object> result = call(evaluationStack.removeLast(), args);
 
 			SyntaxNode callParent = call.getParent();
 
@@ -198,12 +195,7 @@ public class ExpVisitor extends VisitorAdaptor {
 				evaluationStack.add(result.get(0));
 			}
 		} catch (LuaRuntimeException ex) {
-			if (ex.getLocation() == null) {
-				// System.out.println("TODO Remove, Message: " + ex.getMessage()
-				// + ex.getClass());
-				// ex.setLocation(call);
-				throw ex;
-			}
+			ex.offerSyntaxNode(call);
 
 			String name = "?";
 
@@ -215,7 +207,7 @@ public class ExpVisitor extends VisitorAdaptor {
 				}
 			}
 
-			ex.addLuaStackTraceElement(new LuaStackTraceElement(call, name, Collections.emptyList()));
+			ex.addLuaStackTraceElement(new LuaStackTraceElement(call, name, args));
 			throw ex;
 		}
 	}
@@ -224,8 +216,12 @@ public class ExpVisitor extends VisitorAdaptor {
 	public void visit(FuncCallSelf call) {
 		call.preexp.accept(this);
 
+		ExpVisitor visitor = new ExpVisitor(environment, vararg);
+		call.explist.accept(visitor);
+		List<Object> args = visitor.popAll();
+
 		try {
-			List<Object> result = call(evaluationStack.removeLast(), call.name, call.explist);
+			List<Object> result = call(evaluationStack.removeLast(), call.name, args);
 
 			SyntaxNode callParent = call.getParent();
 
@@ -248,12 +244,8 @@ public class ExpVisitor extends VisitorAdaptor {
 			}
 
 		} catch (LuaRuntimeException ex) {
-			if (ex.getLocation() == null) {
-				ex.setLocation(call);
-				throw ex;
-			}
-
-			ex.addLuaStackTraceElement(new LuaStackTraceElement(call, call.name, Collections.emptyList()));
+			ex.offerSyntaxNode(call);
+			ex.addLuaStackTraceElement(new LuaStackTraceElement(call, call.name, args));
 			throw ex;
 		}
 	}
@@ -358,7 +350,13 @@ public class ExpVisitor extends VisitorAdaptor {
 		Object op = evaluationStack.removeLast();
 
 		Operator operator = OperatorRegistry.registry[unop.op];
-		evaluationStack.addLast(operator.apply(op));
+
+		try {
+			evaluationStack.addLast(operator.apply(op));
+		} catch (LuaRuntimeException ex) {
+			ex.offerSyntaxNode(unop);
+			throw ex;
+		}
 	}
 
 	@Override
@@ -417,7 +415,7 @@ public class ExpVisitor extends VisitorAdaptor {
 				throw new LuaRuntimeException("attempt to call method " + name + " (a" + LuaType.getTypeOf(res)
 						+ " value)");
 			}
-			result = new LinkedList<Object>();
+			result = new LinkedList<>();
 			result.add(res);
 			return result;
 

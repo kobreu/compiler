@@ -1,7 +1,12 @@
 package edu.tum.lua.cli;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
@@ -34,49 +39,71 @@ public class Documentation {
 	private final int terminalWidth;
 
 	public Documentation(int termwidth) throws ParserConfigurationException, MalformedURLException, SAXException,
-			IOException, TransformerException {
+			IOException, TransformerException, ClassNotFoundException {
 
 		this.terminalWidth = termwidth;
 
-		URL url = new URL("http://www.lua.org/manual/5.1/manual.html");
-		InputStream in = url.openConnection().getInputStream();
+		if (!new File(System.getProperty("java.io.tmpdir") + "lua_documentation.data").isFile()) {
+			URL url = new URL("http://www.lua.org/manual/5.1/manual.html");
+			InputStream in = url.openConnection().getInputStream();
 
-		Scanner sc = new Scanner(in, "UTF-8");
-		String s = sc.useDelimiter("\\A").next();
+			Scanner sc = new Scanner(in, "UTF-8");
+			String s = sc.useDelimiter("\\A").next();
 
-		sc.close();
-		in.close();
+			sc.close();
+			in.close();
 
-		s = s.replace("<hr>", "</div><div>").replace("<h2>", "</div><h2>").replace("</h2>", "</h2><div>")
-				.replace("<h1>", "</div><h1>").replace("</h1>", "</h1><div>").replace("<br/>", "\n")
-				.replaceAll("[ \t]+", " ").replace("<code>", "").replace("</code>", "").replace("<em>", "")
-				.replace("</em>", "").replace("<p>", "").replace("</p>", "").replace("<h3>", "").replace("</h3>", "")
-				.replace("<b>", "").replace("</b>", "").replace("<sup>", "^(").replace("</sup>", ")")
-				.replace("<pre>", "").replace("</pre>", "").replace("&quot;", "'").replace("&nbsp;", " ")
-				.replace("\"", "'");
+			s = s.replace("<hr>", "</div><div>").replace("<h2>", "</div><h2>").replace("</h2>", "</h2><div>")
+					.replace("<h1>", "</div><h1>").replace("</h1>", "</h1><div>").replace("<br/>", "\n")
+					.replaceAll("[ \t]+", " ").replace("<code>", "").replace("</code>", "").replace("<em>", "")
+					.replace("</em>", "").replace("<p>", "").replace("</p>", "").replace("<h3>", "")
+					.replace("</h3>", "").replace("<b>", "").replace("</b>", "").replace("<sup>", "^(")
+					.replace("</sup>", ")").replace("<pre>", "").replace("</pre>", "").replace("&quot;", "'")
+					.replace("&nbsp;", " ").replace("\"", "'");
 
-		TagNode tagNode = new HtmlCleaner().clean(s);
-		xmlDocument = new org.htmlcleaner.DomSerializer(new CleanerProperties()).createDOM(tagNode);
+			TagNode tagNode = new HtmlCleaner().clean(s);
+			xmlDocument = new org.htmlcleaner.DomSerializer(new CleanerProperties()).createDOM(tagNode);
 
-		/*
-		 * // Help for debugging TransformerFactory tFactory =
-		 * TransformerFactory.newInstance(); Transformer transformer =
-		 * tFactory.newTransformer(); DOMSource source = new
-		 * DOMSource(xmlDocument); StreamResult result = new
-		 * StreamResult(System.out); transformer.transform(source, result);
-		 */
+			FileOutputStream f_out = new FileOutputStream(System.getProperty("java.io.tmpdir")
+					+ "lua_documentation.data");
+			ObjectOutputStream obj_out = new ObjectOutputStream(f_out);
+			obj_out.writeObject(xmlDocument);
+			obj_out.close();
+			f_out.close();
+
+			/*
+			 * // Help for debugging TransformerFactory tFactory =
+			 * TransformerFactory.newInstance(); Transformer transformer =
+			 * tFactory.newTransformer(); DOMSource source = new
+			 * DOMSource(xmlDocument); StreamResult result = new
+			 * StreamResult(System.out); transformer.transform(source, result);
+			 */
+		} else {
+			FileInputStream f_in = new FileInputStream(System.getProperty("java.io.tmpdir") + "lua_documentation.data");
+			ObjectInputStream obj_in = new ObjectInputStream(f_in);
+			Object obj = obj_in.readObject();
+
+			if (obj instanceof Document) {
+				xmlDocument = (Document) obj;
+			} else {
+				obj_in.close();
+				f_in.close();
+				new File(System.getProperty("java.io.tmpdir") + "lua_documentation.data").delete();
+				xmlDocument = null;
+			}
+		}
 
 		xpath = XPathFactory.newInstance().newXPath();
 	}
 
 	public void printHelp() {
 		System.out.println("Lua Help\n\npossible Help-Functions in the Interpreter:");
-		System.out.println("--help\t\tshow this help");
-		System.out
-				.println("--list\t\tlist all available lua functions (functions from the standard library with a short description)");
-		System.out
-				.println("--list <function>\tshow a more detailed help for the specific function (only functions from standard library)");
-		System.out.println("--env\t\tshow all members, their types and their values of the interpreter's environment");
+		formatPrint("--help", "show this help");
+		formatPrint("--list",
+				"list all available lua functions (functions from the standard library with a short description)");
+		formatPrint("--list <function>",
+				"show a more detailed help for the specific function (only functions from standard library)");
+		formatPrint("--env", "show all members, their types and their values of the interpreter's environment");
 	}
 
 	public void listFunctions(GlobalEnvironment ge) {
@@ -176,7 +203,7 @@ public class Documentation {
 	}
 
 	public void listEnvironment(GlobalEnvironment ge) {
-		System.out.println("Name\t\tType\t\tValue");
+		formatPrint("Name", "Type\t\tValue");
 
 		for (Entry<Object, Object> pair : ge) {
 			if (pair.getValue() instanceof NotImplementedFunction || pair.getValue() == null) {
@@ -184,22 +211,26 @@ public class Documentation {
 			}
 
 			switch (LuaType.getTypeOf(pair.getValue())) {
-			case NIL:
 			case STRING:
 			case NUMBER:
 			case BOOLEAN:
-				System.out.println(ToString.toString(pair.getKey()) + "\t\t" + LuaType.getTypeOf(pair.getValue())
-						+ "\t\t" + ToString.toString(pair.getValue()));
+				formatPrint(ToString.toString(pair.getKey()),
+						LuaType.getTypeOf(pair.getValue()) + "\t\t" + ToString.toString(pair.getValue()));
 				break;
 			case TABLE:
-			case FUNCTION:
 			case USERDATA:
 			case THREAD:
-				System.out.println(ToString.toString(pair.getKey()) + "\t\t" + LuaType.getTypeOf(pair.getValue()));
+				formatPrint(ToString.toString(pair.getKey()), LuaType.getTypeOf(pair.getValue()).toString());
 				break;
+			case NIL:
+			case FUNCTION:
 			default:
 				break;
 			}
 		}
+	}
+
+	public void deleteDocumentation() {
+		new File(System.getProperty("java.io.tmpdir") + "lua_documentation.data").delete();
 	}
 }
