@@ -47,7 +47,6 @@ public class Main {
 				} else {
 					LuaInterpreter.eval(ParserUtil.loadFile(args[0]), new GlobalEnvironment());
 				}
-				LuaInterpreter.eval(ParserUtil.loadFile(args[0]), new GlobalEnvironment());
 				return;
 			}
 		}
