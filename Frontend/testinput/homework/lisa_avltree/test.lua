@@ -12,7 +12,7 @@ local function printStep(key, delete)
   print("--------------")
 end
 
-print("\nMETHODS: Tree:new(), tree:insert(key), tree:delete(key), tree:searchPath(key), tree:printAVL() \n");
+print("\nMETHODS: Tree:new(), tree:insert(key), tree:delete(key), tree:printAVL() \n");
 print("TESTINPUT: insert/delete-sequence: \n");
 
 
