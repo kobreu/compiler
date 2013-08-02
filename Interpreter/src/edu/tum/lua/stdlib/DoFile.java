@@ -28,6 +28,16 @@ public class DoFile extends LuaFunctionNative {
 		Preconditions.checkArguments("dofile", arguments, expectedTypes);
 		String file = (String) arguments.get(0);
 
+		int lastSlash = file.lastIndexOf("/");
+		String prefix = file.substring(0, lastSlash + 1);
+		String suffix = file.substring(lastSlash + 1);
+		String[] filename = suffix.split("\\.");
+		StringBuilder location = new StringBuilder();
+		location.append(prefix).append("?.").append(filename[1]);
+
+		globalEnvironment.getLuaTable("package").set("path",
+				globalEnvironment.getLuaTable("package").get("path") + ";" + location.toString());
+
 		try {
 			Block block = ParserUtil.loadFile(file);
 			return LuaInterpreter.eval(block, globalEnvironment);
