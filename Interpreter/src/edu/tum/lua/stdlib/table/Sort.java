@@ -53,12 +53,13 @@ public class Sort extends LuaFunctionNative {
 								o2, o1).get(0))))
 					b2 = false;
 			}
-			if (!b1)
-				return 1;
-			else if (!b2)
-				return -1;
-			else
-				return 0;
+			if (!b1) {
+				if (!b2)
+					return 0;
+				else
+					return 1;
+			}
+			return -1;
 
 		}
 	}
