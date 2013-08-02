@@ -84,8 +84,12 @@ end
  Program start
 --]]
 
-input = '(a+a)$'
-
+-- Check command line input
+if (arg[1]) then
+	input = arg[1]
+else
+	input = '(a+a)$'
+end
 
 -- Add a dollar to the end of the string
 if string.sub(input, -1) ~= '$' then

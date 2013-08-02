@@ -13,7 +13,7 @@ local function printStep(key, delete)
 end
 
 b = Tree:new()
-delete = true
+bla = true
 
 printStep(10)
 printStep(5)
@@ -21,15 +21,15 @@ printStep(17)
 printStep(3)
 printStep(1)
 printStep(4)
-printStep(4, delete)
+printStep(4, bla)
 printStep(8)
 printStep(2)
 printStep(7)
 printStep(6)
 printStep(9)
-printStep(2, delete)
-printStep(1, delete)
-printStep(8, delete)
-printStep(10, delete)
+printStep(2, bla)
+printStep(1, bla)
+printStep(8, bla)
+printStep(10, bla)
 
 

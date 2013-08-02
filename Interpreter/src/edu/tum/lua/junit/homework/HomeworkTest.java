@@ -37,7 +37,10 @@ public class HomeworkTest {
 	@Test
 	public void testJohannes() throws FileNotFoundException, Exception {
 		Block block = ParserUtil.loadFile("../Frontend/testinput/homework/johannes_parser_test.lua");
-		LuaInterpreter.eval(block, environment);
+		String[] arg = new String[1];
+		arg[0] = "(a)";
+		GlobalEnvironment ge = new GlobalEnvironment(arg);
+		LuaInterpreter.eval(block, ge);
 
 		System.out.println("======================");
 	}
