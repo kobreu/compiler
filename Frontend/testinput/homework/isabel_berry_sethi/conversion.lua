@@ -6,67 +6,56 @@ a = require("automaton")
 Conversion ={}
 
 function Conversion:new()
-newObj={size = nil, empty = nil, first=nil, nex = nil, last = nil, leaves = nil, result=nil, input=nil}
+newObj={size = 0, empty = {}, first={}, nex = {}, last = {}, leaves = {}, result=nil, input=nil}
 self.__index=self
 return setmetatable(newObj,self)
 end
 
 function Conversion:count(t)
-t.number = self.size
 self.size = self.size+1
-if t.token == LEAF then self.leaves[self.size-1]=t.label
-elseif t.token == EPSILON then self.leaves[self.size-1] = "epsilon"
+t.number = self.size
+if t.token == LEAF then self.leaves[self.size]=t.label
+elseif t.token == EPSILON then self.leaves[self.size] = "epsilon"
 else  
-if t.childLeft ~= nil then self.count(t.childLeft)
-end
-if t.childRight ~= nil then self.count(t.childRight)
-end
+if t.childLeft ~= nil then self:count(t.childLeft) end
+if t.childRight ~= nil then self:count(t.childRight) end
 end
 end
 
 function Conversion:setInput(t)
 self.input = t
-self.count(t)
+self:count(t)
 self.nex[t.number]=nil;
 end;
 
-function list_iter (l)
-	return function ()
-		if l~=nil then return l.value end
-		l = l.next
-	end
-end
 
 function Conversion:addList(l,i)
 local iter = list_iter(l)
 local exist = false
-while true do
-	local el = iter()
-	if el==nil then break
-	elseif el == i then exist = true;
-	end
+local el = iter()
+while (el~=nil) do
+	if el == i then exist = true end
+	el = iter()
 end
 if not exist then l = {next = l, value =i} end
 return l
 end	
 
 function Conversion:fusion(l1,l2)
-local result = nil
+local res = nil
 local iter1 = list_iter(l1)
-while true do
-	local el = iter1()
-	if el == nil then break 
-	else result = {next = result, value = el}
-	end
+local el = iter1()
+while (el ~=nil) do 
+	res = {next = res, value = el}
+	el = iter1()
 end
 local iter2 = list_iter(l2)
-while true do
-	local el = iter2()
-	if el == nil then break
-	else result = self.add(result,el)
-	end
+el = iter2()
+while (el ~= nil) do
+	res = self:addList(res,el)
+	el = iter2()
 end
-return result
+return res
 end
 
 function Conversion:doEmpty(t)
@@ -104,14 +93,14 @@ function Conversion:doFirst(t)
 local result = nil
 local tok = t.token
 if tok == OR then
-	left = self:doFirst(t.childLeft)
-	right = self:doFirst(t.childRight)
+	local left = self:doFirst(t.childLeft)
+	local right = self:doFirst(t.childRight)
 	result = self:fusion(left,right)
 	self.first[t.number]=result
 elseif tok == AND then
-	left = self:doFirst(t.childLeft)
-	right = self:doFirst(t.childRight)
-	if self.empty[t.number] then result = fusion(left,right)
+	local left = self:doFirst(t.childLeft)
+	local right = self:doFirst(t.childRight)
+	if self.empty[t.number] then result = self:fusion(left,right)
 	else result = left end
 	self.first[t.number]=result
 elseif tok == STAR then
@@ -124,8 +113,7 @@ elseif tok == EPSILON then
 	result = nil
 	self.first[t.number] = result
 elseif tok == LEAF then
-	result = nil
-	result = {next = result, value = t.number}
+	result = {next = nil, value = t.number}
 	self.first[t.number] = result
 end
 return result
@@ -160,26 +148,25 @@ if tok == OR then
 	local left = self:doLast(t.childLeft)
 	local right = self:doLast(t.childRight)
 	result = self:fusion(left,right)
-	last[t.number] = result
+	self.last[t.number] = result
 elseif tok == AND then
 	local left = self:doLast(t.childLeft)
 	local right = self:doLast(t.childRight)
 	if self.empty[t.childRight.number] then result = self:fusion(left,right)
 	else result = right end
-	last[t.number]=result
+	self.last[t.number]=result
 elseif tok == STAR then
 	result = self:doLast(t.childLeft)
-	last[t.number]=result
+	self.last[t.number]=result
 elseif tok == MAYBE then
 	result = self:doLast(t.childLeft)
-	last[t.number]=result
+	self.last[t.number]=result
 elseif tok == EPSILON then
 	result = nil
-	last[t.number]=result
+	self.last[t.number]=result
 elseif tok == LEAF then
-	result = nil
-	result = {next=result,value=t.number}
-	last[t.number] = result
+	result = {next=nil,value=t.number}
+	self.last[t.number] = result
 end
 return result
 end
@@ -189,26 +176,26 @@ local a = Automaton:new()
 local init = self.input.number
 a:addState(init)
 a:setInitial(init)
-for i,v in ipairs(self.leaves) do
+for i,v in pairs(self.leaves) do
 	a:addState(i)
 	local iter = list_iter(self.nex[i])
-	while true do
-		local el = iter()
-		if el == nil then break
-		else a:addTransition(i,el,self.leaves[el]) end
+	local el = iter()
+	while (el ~= nil) do
+		a:addTransition(i,el,self.leaves[el])
+		el = iter()
 	end
 end
 local iter = list_iter(self.first[init])
-while true do
-	local el = iter()
-	if el == nil then break
-	else a:addTransition(init,el,self.leaves[el]) end
+local el = iter()
+while (el ~= nil) do
+	a:addTransition(init,el,self.leaves[el])
+	el = iter()
 end
-local iter2 = list_iter(self.last[init])
-while true do
-	local el = iter2()
-	if el == nil then break
-	else a:addFinal(el) end
+iter = list_iter(self.last[init])
+el = iter()
+while (el ~= nil) do
+	a:addFinal(el)
+	el = iter()
 end
 if self.empty[init] then a:addFinal(init) end
 return a
