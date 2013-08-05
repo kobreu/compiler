@@ -49,9 +49,9 @@ public class MathTest {
 		assertEquals(Math.PI, acos.apply(-1.0).get(0));
 		assertEquals(Math.PI / 2, acos.apply(0.0).get(0));
 		assertEquals(0.0, acos.apply(1.0).get(0));
-		// TODO acos only defined on [-1,1]
-		// assertEquals(NaN, acos.apply(-1.01));
-		// assertEquals(Nan, acos.apply(1.01));
+		// acos only defined on [-1,1]
+		assertEquals(Double.NaN, acos.apply(-1.01).get(0));
+		assertEquals(Double.NaN, acos.apply(1.01).get(0));
 
 		// Max
 		assertEquals(5.0, max.apply(3.0, 5.0, 4.0).get(0));
