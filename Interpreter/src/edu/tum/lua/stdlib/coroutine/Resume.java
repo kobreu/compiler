@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import edu.tum.lua.Preconditions;
+import edu.tum.lua.exceptions.LuaInterruptException;
 import edu.tum.lua.types.LuaFunctionNative;
 import edu.tum.lua.types.LuaThread;
 import edu.tum.lua.types.LuaType;
@@ -22,18 +23,30 @@ public class Resume extends LuaFunctionNative {
 		try {
 			t.run();
 			while (true) {
-				if (t.isInterrupted() || !t.isAlive()) {
+				if (!t.isAlive()) {
 					LinkedList<Object> l = new LinkedList<Object>();
-					l.add(true);
-					Iterator<Object> iter = t.getReturnValue().iterator();
-					while (iter.hasNext()) {
-						l.add(iter.next());
+					l.addFirst(true);
+					if (t.getReturnValue() != null) {
+						Iterator<Object> iter = t.getReturnValue().iterator();
+						while (iter.hasNext()) {
+							l.addLast(iter.next());
+						}
 					}
 					return l;
 				}
-				t.wait(5);
 			}
+		} catch (LuaInterruptException e) {
+			LinkedList<Object> l = new LinkedList<Object>();
+			l.addFirst(true);
+			if (t.getReturnValue() != null) {
+				Iterator<Object> iter = t.getReturnValue().iterator();
+				while (iter.hasNext()) {
+					l.addLast(iter.next());
+				}
+			}
+			return l;
 		} catch (Exception e) {
+			e.printStackTrace();
 			return Arrays.asList((Object) false, e.getMessage());
 		}
 	}

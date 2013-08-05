@@ -1,3 +1,4 @@
+t=require("token")
 
 Transition={}
 
@@ -20,7 +21,7 @@ self.label = l
 end
 
 function Transition:isEqual(t)
-return self.from == t.from and self.to == t.to and self.label == t.label;
+return ((self.from == t.from) and (self.to == t.to) and (self.label == t.label));
 end
 
 function Transition:printTransition()
@@ -50,43 +51,46 @@ self.finalStates = {next = self.finalStates, value = i};
 end
 
 function Automaton:addTransition(f,t,l)
-t = Transition:new()
-t.setFrom(f)
-t.setTo(t)
-t.setLabel(l)
-self.delta = {next = self.delta, value = t};
-end
-
-function list_iter (l)
-	return function ()
-		if l~=nil then return l.value end
-		l = l.next
-	end
+trans = Transition:new()
+trans:setFrom(f)
+trans:setTo(t)
+trans:setLabel(l)
+self.delta = {next = self.delta, value = trans};
 end
 
 function Automaton:printStates()
 print('states of the automaton:')
 local iter = list_iter(self.states);
-while true do
-	local el = iter()
-	if el == nil then break
-	else print(el)
+local el = iter()
+while (el ~= nil) do
+	print(el)
+	el = iter()
+end
+end
+
+function Automaton:printFinal()
+print('final states:')
+local iter = list_iter(self.finalStates)
+local el = iter()
+while (el~=nil) do
+	print(el)
+	el = iter()
 	end
-end
-end
+	end
+	
 
 function Automaton:printDelta()
 print('Transitions:')
 local iter = list_iter(self.delta);
-while true do
-	local el = iter()
-	if el == nil then break
-	else el:printTransition()
-	end
+local el = iter()
+while (el~=nil) do
+	el:printTransition()
+	el = iter()
 end
 end	
 
 function Automaton:printAutomaton()
 self:printStates()
+self:printFinal()
 self:printDelta()
 end
