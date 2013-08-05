@@ -11,6 +11,7 @@ import edu.tum.lua.stdlib.math.Abs;
 import edu.tum.lua.stdlib.math.Acos;
 import edu.tum.lua.stdlib.math.Max;
 import edu.tum.lua.stdlib.math.Min;
+import edu.tum.lua.stdlib.math.Modf;
 import edu.tum.lua.stdlib.math.Pow;
 import edu.tum.lua.stdlib.math.Rad;
 import edu.tum.lua.stdlib.math.Random;
@@ -21,6 +22,7 @@ public class MathTest {
 	Acos acos;
 	Max max;
 	Min min;
+	Modf modf;
 	Pow pow;
 	Rad rad;
 	Random random;
@@ -33,6 +35,7 @@ public class MathTest {
 
 		max = new Max();
 		min = new Min();
+		modf = new Modf();
 		pow = new Pow();
 		rad = new Rad();
 		random = new Random();
@@ -60,7 +63,10 @@ public class MathTest {
 		assertEquals(4.0, min.apply(10.0, 4.0, 5.0, 4.0).get(0));
 
 		// Modf
-		// TODO modf not implemented yet
+		assertEquals(10.0, modf.apply(10.7).get(0));
+		assertEquals(0.7, modf.apply(10.7).get(1));
+		assertEquals(20.0, modf.apply(20.3).get(0));
+		assertEquals(0.3, modf.apply(20.3).get(1));
 
 		// Pow
 		assertEquals(8.0, pow.apply(2.0, 3.0).get(0));

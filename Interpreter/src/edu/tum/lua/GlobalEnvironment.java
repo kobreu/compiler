@@ -53,6 +53,7 @@ import edu.tum.lua.stdlib.math.Log;
 import edu.tum.lua.stdlib.math.Log10;
 import edu.tum.lua.stdlib.math.Max;
 import edu.tum.lua.stdlib.math.Min;
+import edu.tum.lua.stdlib.math.Modf;
 import edu.tum.lua.stdlib.math.Pow;
 import edu.tum.lua.stdlib.math.Rad;
 import edu.tum.lua.stdlib.math.Random;
@@ -184,7 +185,7 @@ public class GlobalEnvironment extends LuaTable {
 		math.set("log10", new Log10());
 		math.set("max", new Max());
 		math.set("min", new Min());
-		math.set("modf", new NotImplementedFunction());
+		math.set("modf", new Modf());
 		math.set("pi", Math.PI);
 		math.set("pow", new Pow());
 		math.set("rad", new Rad());
