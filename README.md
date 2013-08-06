@@ -18,6 +18,6 @@ Team
  * Johannes (mikulasc (at) in.tum.de)
  * Salomon (sickert (at) in.tum.de)
  * Isábel isabel.delesques-grauby@polytechnique.edu
- * Matthias kneidel@in.tum.de
+ * Matthias (kneidel (at) in.tum.de)
  * Shruthi shruthi.padma@tum.de
  * Korbinian Korbinian.breu@mytum.de
