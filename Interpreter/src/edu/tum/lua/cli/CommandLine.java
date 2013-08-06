@@ -27,7 +27,7 @@ public class CommandLine {
 	private final SimpleCompletor completor;
 	private final History history;
 	private final Print printer;
-	private Documentation doc;
+	private Documentation doc = null;
 	private final PrettyPrinter prettyPrinter;
 
 	public CommandLine() throws Exception {
@@ -60,11 +60,13 @@ public class CommandLine {
 			history.addToHistory(line);
 
 			if (line.startsWith("--")) {
-				try {
-					doc = new Documentation(reader.getTermwidth());
-				} catch (Exception e) {
-					System.out.println("no ducumentation there");
-					continue;
+				if (doc == null) {
+					try {
+						doc = new Documentation(reader.getTermwidth());
+					} catch (Exception e) {
+						System.out.println("no ducumentation there");
+						continue;
+					}
 				}
 
 				switch (line.split(" ")[0]) {

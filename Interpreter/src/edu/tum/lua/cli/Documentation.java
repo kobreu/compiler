@@ -84,8 +84,8 @@ public class Documentation {
 
 	private void listFunctionsRecursive(String parent, Entry<Object, Object> pair, int deep) {
 
-		if (deep > 5) {
-			System.out.println("try to resolve ");
+		if (deep > 3) {
+			return;
 		}
 
 		parent += ToString.toString(pair.getKey());
@@ -94,8 +94,6 @@ public class Documentation {
 		case FUNCTION:
 			if (pair.getValue() instanceof LuaFunctionNative) {
 				formatPrint(parent, getShortDescription(parent));
-				// System.out.println(parent + "\t\t" +
-				// getShortDescription(parent));
 			} else {
 				System.out.println(parent + "\t\tuser defined function");
 			}

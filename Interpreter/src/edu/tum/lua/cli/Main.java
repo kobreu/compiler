@@ -55,8 +55,6 @@ public class Main {
 	}
 
 	private static void printHelp() {
-		System.out
-				.println("Java based Lua Interpreter\nTUM CS CC-Labcourse 2013 K. Breu, I. Delesques-Grauby, M. Kneidel, J. Mikulasch, S. Padma, S. Sickert, L. Velden");
 		System.out.println("\nUsage: java -jar lua.jar [-options] [lua-File]\nwith following options:");
 
 		System.out.println("\t-help, -h, -?\t\tShow this help");
