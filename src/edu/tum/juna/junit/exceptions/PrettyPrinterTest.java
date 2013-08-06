@@ -21,7 +21,7 @@ public class PrettyPrinterTest {
 	public void testPrint() throws SyntaxError, IOException {
 		Map<Block, File> map = new HashMap<>();
 
-		File crash = new File("crash.lua");
+		File crash = new File("testinput/crash.lua");
 		Block block = ParserUtil.loadFile(crash);
 
 		map.put(block, crash);

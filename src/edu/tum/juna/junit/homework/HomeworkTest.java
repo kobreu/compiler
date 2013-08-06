@@ -20,19 +20,6 @@ public class HomeworkTest {
 		environment = new LocalEnvironment();
 	}
 
-	// @Test
-	// public void testIsa() throws FileNotFoundException, Exception {
-	// Block block =
-	// ParserUtil.loadFile("../Frontend/testinput/homework/isabel_berry_sethi/test.lua");
-	// GlobalEnvironment ge = new GlobalEnvironment();
-	// ge.getLuaTable("package").set("path",
-	// ge.getLuaTable("package").get("path") +
-	// ";../Frontend/testinput/homework/isabel_berry_sethi/?.lua");
-	//
-	// LuaInterpreter.eval(block, ge);
-	// System.out.println("======================");
-	// }
-
 	@Test
 	public void testMatthias() throws FileNotFoundException, Exception {
 
@@ -40,16 +27,15 @@ public class HomeworkTest {
 		 * Run the knapsack lua file, expected return value is 36
 		 */
 
-		Block block = ParserUtil.loadFile("../Frontend/testinput/homework/matthias_knapsack_run.lua");
+		Block block = ParserUtil.loadFile("testinput/homework/matthias_knapsack_run.lua");
 		LuaInterpreter.eval(block, environment);
 
 		System.out.println("======================");
-
 	}
 
 	@Test
 	public void testJohannes() throws FileNotFoundException, Exception {
-		Block block = ParserUtil.loadFile("../Frontend/testinput/homework/johannes_parser_run.lua");
+		Block block = ParserUtil.loadFile("testinput/homework/johannes_parser_run.lua");
 		String[] arg = new String[1];
 		arg[0] = "(a)";
 		GlobalEnvironment ge = new GlobalEnvironment(arg);
@@ -60,10 +46,10 @@ public class HomeworkTest {
 
 	@Test
 	public void testLisa() throws FileNotFoundException, Exception {
-		Block block = ParserUtil.loadFile("../Frontend/testinput/homework/lisa_avltree/test.lua");
+		Block block = ParserUtil.loadFile("testinput/homework/lisa_avltree/test.lua");
 		GlobalEnvironment ge = new GlobalEnvironment();
 		ge.getLuaTable("package").set("path",
-				ge.getLuaTable("package").get("path") + ";../Frontend/testinput/homework/lisa_avltree/?.lua");
+				ge.getLuaTable("package").get("path") + ";testinput/homework/lisa_avltree/?.lua");
 		LuaInterpreter.eval(block, ge);
 
 		System.out.println("======================");

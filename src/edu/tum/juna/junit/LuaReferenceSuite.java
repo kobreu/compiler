@@ -19,7 +19,7 @@ public class LuaReferenceSuite {
 
 	@Test
 	public void test() throws Exception {
-		for (File file : new File("../Frontend/testinput/lua5.1-tests/").listFiles()) {
+		for (File file : new File("testinput/lua5.1-tests/").listFiles()) {
 
 			if (!file.getName().endsWith(".lua") || blacklisted.contains(file.getName())) {
 				continue;
