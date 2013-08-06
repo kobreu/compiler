@@ -66,6 +66,7 @@
 	</target>
 
 	<target name="test" depends="compile">
+		<mkdir dir="${testoutput}" />
 		<junit>
 			<classpath>
 				<pathelement location="${bin}" />
@@ -75,8 +76,7 @@
 				<pathelement location="${lib}/dom4j-2.0.0-ALPHA-2.jar" />
 				<pathelement location="${lib}/java-cup-11a-runtime.jar" />
 				<pathelement location="${lib}/jaxen-1.1-beta-6.jar" />
-			</classpath>
-			<mkdir dir="${testoutput}" />
+			</classpath>	
 			<batchtest todir="testoutput">
 				<fileset dir="${bin}">
 					<include name="**/*Test*" />
