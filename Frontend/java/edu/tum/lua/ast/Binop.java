@@ -4,8 +4,6 @@
  */
 package edu.tum.lua.ast;
 
-import location.Location;
-
 public class Binop extends Exp {
 
   public Exp leftexp;
@@ -20,28 +18,33 @@ public class Binop extends Exp {
     if (rightexp != null) rightexp.setParent(this);
   }
 
-  public void accept(Visitor visitor) {
+  @Override
+public void accept(Visitor visitor) {
     visitor.visit(this);
   }
   
-  public void childrenAccept(Visitor visitor) {
+  @Override
+public void childrenAccept(Visitor visitor) {
     if (leftexp != null) leftexp.accept(visitor);
     if (rightexp != null) rightexp.accept(visitor);
   }
 
-  public void traverseTopDown(Visitor visitor) {
+  @Override
+public void traverseTopDown(Visitor visitor) {
     accept(visitor);
     if (leftexp != null) leftexp.traverseTopDown(visitor);
     if (rightexp != null) rightexp.traverseTopDown(visitor);
   }
 
-  public void traverseBottomUp(Visitor visitor) {
+  @Override
+public void traverseBottomUp(Visitor visitor) {
     if (leftexp != null) leftexp.traverseBottomUp(visitor);
     if (rightexp != null) rightexp.traverseBottomUp(visitor);
     accept(visitor);
   }
 
-  public String toString(String tab) {
+  @Override
+public String toString(String tab) {
     StringBuffer buffer = new StringBuffer();
     buffer.append(tab);
     buffer.append("Binop(\n");

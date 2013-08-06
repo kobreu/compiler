@@ -18,6 +18,7 @@ public class LoadFile extends LuaFunctionNative {
 	@Override
 	public List<Object> apply(List<Object> arguments) {
 		InputStream input = System.in;
+
 		if (arguments.size() > 0) {
 			if (LuaType.getTypeOf(arguments.get(0)) != LuaType.STRING) {
 				throw new LuaBadArgumentException(1, "loadfile", "string", LuaType.getTypeOf(arguments.get(0))
@@ -29,11 +30,10 @@ public class LoadFile extends LuaFunctionNative {
 				throw new LuaIOException("File not found");
 			}
 		}
-		String result = "";
-		try {
 
-			InputStreamReader isr = new InputStreamReader(input);
-			BufferedReader inputReader = new BufferedReader(isr);
+		String result = "";
+
+		try (BufferedReader inputReader = new BufferedReader(new InputStreamReader(input))) {
 			String line = inputReader.readLine();
 			while (line != null) {
 				result = result.concat(line);
@@ -43,8 +43,7 @@ public class LoadFile extends LuaFunctionNative {
 			inputReader.close();
 		} catch (IOException e) {
 		}
-		LoadString l = new LoadString();
-		return l.apply(result);
-	}
 
+		return new LoadString().apply(result);
+	}
 }

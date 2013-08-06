@@ -4,8 +4,6 @@
  */
 package edu.tum.lua.ast;
 
-import location.Location;
-
 public class Block extends SyntaxNode {
 
 	private SyntaxNode parent;
@@ -21,18 +19,22 @@ public class Block extends SyntaxNode {
 			last.setParent(this);
 	}
 
+	@Override
 	public SyntaxNode getParent() {
 		return parent;
 	}
 
+	@Override
 	public void setParent(SyntaxNode parent) {
 		this.parent = parent;
 	}
 
+	@Override
 	public void accept(Visitor visitor) {
 		visitor.visit(this);
 	}
 
+	@Override
 	public void childrenAccept(Visitor visitor) {
 		if (stats != null)
 			stats.accept(visitor);
@@ -40,6 +42,7 @@ public class Block extends SyntaxNode {
 			last.accept(visitor);
 	}
 
+	@Override
 	public void traverseTopDown(Visitor visitor) {
 		accept(visitor);
 		if (stats != null)
@@ -48,6 +51,7 @@ public class Block extends SyntaxNode {
 			last.traverseTopDown(visitor);
 	}
 
+	@Override
 	public void traverseBottomUp(Visitor visitor) {
 		if (stats != null)
 			stats.traverseBottomUp(visitor);
@@ -56,6 +60,7 @@ public class Block extends SyntaxNode {
 		accept(visitor);
 	}
 
+	@Override
 	public String toString() {
 		return toString("");
 	}

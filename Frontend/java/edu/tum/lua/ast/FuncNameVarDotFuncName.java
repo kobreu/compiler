@@ -16,28 +16,33 @@ public class FuncNameVarDotFuncName extends FuncName {
     if (funcnamelist != null) funcnamelist.setParent(this);
   }
 
-  public void accept(Visitor visitor) {
+  @Override
+public void accept(Visitor visitor) {
     visitor.visit(this);
   }
 
-  public void childrenAccept(Visitor visitor) {
+  @Override
+public void childrenAccept(Visitor visitor) {
     if (name != null) name.accept(visitor);
     if (funcnamelist != null) funcnamelist.accept(visitor);
   }
 
-  public void traverseTopDown(Visitor visitor) {
+  @Override
+public void traverseTopDown(Visitor visitor) {
     accept(visitor);
     if (name != null) name.traverseTopDown(visitor);
     if (funcnamelist != null) funcnamelist.traverseTopDown(visitor);
   }
 
-  public void traverseBottomUp(Visitor visitor) {
+  @Override
+public void traverseBottomUp(Visitor visitor) {
     if (name != null) name.traverseBottomUp(visitor);
     if (funcnamelist != null) funcnamelist.traverseBottomUp(visitor);
     accept(visitor);
   }
 
-  public String toString(String tab) {
+  @Override
+public String toString(String tab) {
     StringBuffer buffer = new StringBuffer();
     buffer.append(tab);
     buffer.append("FuncNameVarDotFuncName(\n");

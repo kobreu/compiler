@@ -45,7 +45,9 @@ public class AssertTest {
 			a.apply(false, "a");
 			fail();
 		} catch (LuaRuntimeException e) {
+			// NOP
 		}
+
 		try {
 			List<Object> l = a.apply("a", "b", "c");
 			assertEquals(3, l.size());

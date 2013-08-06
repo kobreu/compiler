@@ -22,6 +22,7 @@ public class Min extends LuaFunctionNative {
 				min = (double) argument;
 			}
 		}
+
 		return Arrays.asList((Object) min);
 	}
 }

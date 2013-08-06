@@ -14,33 +14,40 @@ public class TableConstructor extends SyntaxNode {
     if (fieldlist != null) fieldlist.setParent(this);
   }
 
-  public SyntaxNode getParent() {
+  @Override
+public SyntaxNode getParent() {
     return parent;
   }
 
-  public void setParent(SyntaxNode parent) {
+  @Override
+public void setParent(SyntaxNode parent) {
     this.parent = parent;
   }
 
-  public void accept(Visitor visitor) {
+  @Override
+public void accept(Visitor visitor) {
     visitor.visit(this);
   }
 
-  public void childrenAccept(Visitor visitor) {
+  @Override
+public void childrenAccept(Visitor visitor) {
     if (fieldlist != null) fieldlist.accept(visitor);
   }
 
-  public void traverseTopDown(Visitor visitor) {
+  @Override
+public void traverseTopDown(Visitor visitor) {
     accept(visitor);
     if (fieldlist != null) fieldlist.traverseTopDown(visitor);
   }
 
-  public void traverseBottomUp(Visitor visitor) {
+  @Override
+public void traverseBottomUp(Visitor visitor) {
     if (fieldlist != null) fieldlist.traverseBottomUp(visitor);
     accept(visitor);
   }
 
-  public String toString() {
+  @Override
+public String toString() {
     return toString("");
   }
 

@@ -19,16 +19,19 @@ public class ParList extends SyntaxNode {
     this.varparlist = varparlist;
   }
 
-  public SyntaxNode getParent() {
+  @Override
+public SyntaxNode getParent() {
     return parent;
   }
 
-  public void setParent(SyntaxNode parent) {
+  @Override
+public void setParent(SyntaxNode parent) {
     this.parent = parent;
   }
 
 
-  public String toString() {
+  @Override
+public String toString() {
     return toString("");
   }
 

@@ -1,7 +1,5 @@
 package location;
 
-import static org.junit.Assert.*;
-
 import java.io.StringReader;
 
 import org.junit.Test;

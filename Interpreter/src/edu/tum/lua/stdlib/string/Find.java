@@ -109,7 +109,9 @@ public class Find extends LuaFunctionNative {
 		return new int[] { i, j - 1 };
 	}
 
-	public static String convertPattern(String p) {
+	public static String convertPattern(String s) {
+		String p = s;
+
 		if (p.length() == 0) {
 			return "[^.]*";
 		}

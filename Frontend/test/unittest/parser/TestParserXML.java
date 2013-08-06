@@ -1,10 +1,6 @@
 package unittest.parser;
 
-import static org.junit.Assert.*;
-
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,19 +8,14 @@ import java_cup.runtime.Symbol;
 
 import org.custommonkey.xmlunit.XMLTestCase;
 import org.dom4j.Document;
-import org.dom4j.DocumentHelper;
 import org.dom4j.Node;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
-import org.hamcrest.BaseMatcher;
-import org.hamcrest.Description;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
-import org.xml.sax.SAXException;
-
 import edu.tum.lua.ast.Block;
 import edu.tum.lua.parser.Lexer;
 import edu.tum.lua.parser.Parser;
@@ -44,6 +35,7 @@ public class TestParserXML extends XMLTestCase {
 
 	
 	
+	@Override
 	@Before
 	public void setUp() {
 		List<String> xmlFiles = new ArrayList<>();

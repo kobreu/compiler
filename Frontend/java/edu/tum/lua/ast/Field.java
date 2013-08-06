@@ -8,19 +8,26 @@ public abstract class Field extends SyntaxNode {
 
   private SyntaxNode parent;
 
-  public SyntaxNode getParent() {
+  @Override
+public SyntaxNode getParent() {
     return parent;
   }
 
-  public void setParent(SyntaxNode parent) {
+  @Override
+public void setParent(SyntaxNode parent) {
     this.parent = parent;
   }
 
-  public abstract void accept(Visitor visitor);
-  public abstract void childrenAccept(Visitor visitor);
-  public abstract void traverseTopDown(Visitor visitor);
-  public abstract void traverseBottomUp(Visitor visitor);
-  public String toString() {
+  @Override
+public abstract void accept(Visitor visitor);
+  @Override
+public abstract void childrenAccept(Visitor visitor);
+  @Override
+public abstract void traverseTopDown(Visitor visitor);
+  @Override
+public abstract void traverseBottomUp(Visitor visitor);
+  @Override
+public String toString() {
     return toString("");
   }
 

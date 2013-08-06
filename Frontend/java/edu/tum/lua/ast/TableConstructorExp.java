@@ -13,25 +13,30 @@ public class TableConstructorExp extends Exp {
     if (tablecons != null) tablecons.setParent(this);
   }
 
-  public void accept(Visitor visitor) {
+  @Override
+public void accept(Visitor visitor) {
     visitor.visit(this);
   }
 
-  public void childrenAccept(Visitor visitor) {
+  @Override
+public void childrenAccept(Visitor visitor) {
     if (tablecons != null) tablecons.accept(visitor);
   }
 
-  public void traverseTopDown(Visitor visitor) {
+  @Override
+public void traverseTopDown(Visitor visitor) {
     accept(visitor);
     if (tablecons != null) tablecons.traverseTopDown(visitor);
   }
 
-  public void traverseBottomUp(Visitor visitor) {
+  @Override
+public void traverseBottomUp(Visitor visitor) {
     if (tablecons != null) tablecons.traverseBottomUp(visitor);
     accept(visitor);
   }
 
-  public String toString(String tab) {
+  @Override
+public String toString(String tab) {
     StringBuffer buffer = new StringBuffer();
     buffer.append(tab);
     buffer.append("TableConstructorExp(\n");

@@ -85,8 +85,6 @@ public class MathTest {
 		assertEquals(1.0, random.apply(1.4).get(0));
 		assertEquals(0.0, random.apply(0.0, 0.0).get(0));
 		assertEquals(2.0, random.apply(2.0, 2.0).get(0));
-		// TODO maybe some statistical tests?
-
 	}
 
 	@Test

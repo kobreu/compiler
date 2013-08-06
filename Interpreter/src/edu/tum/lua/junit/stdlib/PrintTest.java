@@ -15,7 +15,7 @@ public class PrintTest {
 	@Test
 	public void test() {
 		Print p = new Print();
-		LinkedList<Object> l = new LinkedList<Object>();
+		LinkedList<Object> l = new LinkedList<>();
 
 		l.add(1.0);
 		l.add("abc");
@@ -23,7 +23,7 @@ public class PrintTest {
 		l.add(true);
 		l.add(new LuaTable());
 		l.add(new VoidFunction());
-		LinkedList<Object> l1 = new LinkedList<Object>();
+		LinkedList<Object> l1 = new LinkedList<>();
 
 		assertEquals(0, p.apply(l).size());
 		assertEquals(0, p.apply(l1).size());

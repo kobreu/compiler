@@ -27,7 +27,6 @@ public final class LegacyAdapter {
 		return list;
 	}
 
-	@SuppressWarnings("unchecked")
 	public static List<Exp> convert(ExpList explist) {
 		return convert(explist.elements());
 	}

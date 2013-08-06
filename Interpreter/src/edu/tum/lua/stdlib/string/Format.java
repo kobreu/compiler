@@ -17,7 +17,7 @@ public class Format extends LuaFunctionNative {
 	public List<Object> apply(List<Object> arguments) {
 		Preconditions.checkArguments("string.format", arguments, expectedTypes);
 
-		List<Object> list = new LinkedList<Object>();
+		List<Object> list = new LinkedList<>();
 		for (int i = 1; i < arguments.size(); i++) {
 			if (LuaType.getTypeOf(arguments.get(1)) != LuaType.STRING
 					&& LuaType.getTypeOf(arguments.get(i)) != LuaType.NUMBER) {
@@ -50,6 +50,7 @@ public class Format extends LuaFunctionNative {
 				long l = ((Double) o[n]).intValue() & 0xFFFFFFFFL;
 				replacement = String.valueOf(l);
 				break;
+
 			case 'o':
 			case 'x':
 			case 'X':
@@ -59,15 +60,18 @@ public class Format extends LuaFunctionNative {
 				}
 				replacement = String.format("%" + String.valueOf(formChar), ((Double) o[n]).intValue());
 				break;
+
 			case 'q':
 				if (LuaType.getTypeOf(o[n]) != LuaType.STRING) {
 					o[n] = ToString.toString(o[n]);
 				}
 				replacement = "\"" + ((String) o[n]) + "\"";
 				break;
+
 			case 's':
 				replacement = String.format("%s", o[n]);
 				break;
+
 			case 'c':
 				if (LuaType.getTypeOf(o[n]) != LuaType.NUMBER) {
 					throw new LuaBadArgumentException(n + 1, "string.format", LuaType.NUMBER.toString(),
@@ -82,8 +86,7 @@ public class Format extends LuaFunctionNative {
 							o[n].toString());
 				}
 
-				// replacement = String.format("%d", ((Double)
-				// o[n]).floatValue()).replace(',', '.');
+				replacement = String.format("%d", ((Double) o[n]).floatValue()).replace(',', '.');
 			}
 
 			s = s.replaceFirst("%[cdEefgGiouXxqs]", replacement);

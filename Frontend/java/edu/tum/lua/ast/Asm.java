@@ -4,8 +4,6 @@
  */
 package edu.tum.lua.ast;
 
-import location.Location;
-
 public class Asm extends Stat {
 
   public VarList varlist;
@@ -18,28 +16,33 @@ public class Asm extends Stat {
     if (explist != null) explist.setParent(this);
   }
 
-  public void accept(Visitor visitor) {
+  @Override
+public void accept(Visitor visitor) {
     visitor.visit(this);
   }
   
-  public void childrenAccept(Visitor visitor) {
+  @Override
+public void childrenAccept(Visitor visitor) {
     if (varlist != null) varlist.accept(visitor);
     if (explist != null) explist.accept(visitor);
   }
 
-  public void traverseTopDown(Visitor visitor) {
+  @Override
+public void traverseTopDown(Visitor visitor) {
     accept(visitor);
     if (varlist != null) varlist.traverseTopDown(visitor);
     if (explist != null) explist.traverseTopDown(visitor);
   }
 
-  public void traverseBottomUp(Visitor visitor) {
+  @Override
+public void traverseBottomUp(Visitor visitor) {
     if (varlist != null) varlist.traverseBottomUp(visitor);
     if (explist != null) explist.traverseBottomUp(visitor);
     accept(visitor);
   }
 
-  public String toString(String tab) {
+  @Override
+public String toString(String tab) {
     StringBuffer buffer = new StringBuffer();
     buffer.append(tab);
     buffer.append("Asm(\n");

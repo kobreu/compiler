@@ -16,7 +16,7 @@ public class RawequalTest {
 	@Test
 	public void test() {
 		RawEqual r = new RawEqual();
-		LinkedList<Object> l = new LinkedList<Object>();
+		LinkedList<Object> l = new LinkedList<>();
 
 		try {
 			r.apply(l);

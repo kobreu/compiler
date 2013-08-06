@@ -16,28 +16,33 @@ public class FuncNameDDotVar extends FuncName {
     if (funcname != null) funcname.setParent(this);
   }
 
-  public void accept(Visitor visitor) {
+  @Override
+public void accept(Visitor visitor) {
     visitor.visit(this);
   }
 
-  public void childrenAccept(Visitor visitor) {
+  @Override
+public void childrenAccept(Visitor visitor) {
     if (selffuncname != null) selffuncname.accept(visitor);
     if (funcname != null) funcname.accept(visitor);
   }
 
-  public void traverseTopDown(Visitor visitor) {
+  @Override
+public void traverseTopDown(Visitor visitor) {
     accept(visitor);
     if (selffuncname != null) selffuncname.traverseTopDown(visitor);
     if (funcname != null) funcname.traverseTopDown(visitor);
   }
 
-  public void traverseBottomUp(Visitor visitor) {
+  @Override
+public void traverseBottomUp(Visitor visitor) {
     if (selffuncname != null) selffuncname.traverseBottomUp(visitor);
     if (funcname != null) funcname.traverseBottomUp(visitor);
     accept(visitor);
   }
 
-  public String toString(String tab) {
+  @Override
+public String toString(String tab) {
     StringBuffer buffer = new StringBuffer();
     buffer.append(tab);
     buffer.append("FuncNameDDotVar(\n");

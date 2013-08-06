@@ -15,6 +15,7 @@ public class Concat extends LuaFunctionNative {
 
 	private static final LuaType[][] expectedTypes = { { LuaType.TABLE } };
 
+	@SuppressWarnings("unused")
 	@Override
 	public List<Object> apply(List<Object> arguments) {
 		Preconditions.checkArguments("table.concat", arguments, expectedTypes);

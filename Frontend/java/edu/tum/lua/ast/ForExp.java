@@ -24,18 +24,21 @@ public class ForExp extends Stat {
     if (block != null) block.setParent(this);
   }
 
-  public void accept(Visitor visitor) {
+  @Override
+public void accept(Visitor visitor) {
     visitor.visit(this);
   }
 
-  public void childrenAccept(Visitor visitor) {
+  @Override
+public void childrenAccept(Visitor visitor) {
     if (start != null) start.accept(visitor);
     if (end != null) end.accept(visitor);
     if (step != null) step.accept(visitor);
     if (block != null) block.accept(visitor);
   }
 
-  public void traverseTopDown(Visitor visitor) {
+  @Override
+public void traverseTopDown(Visitor visitor) {
     accept(visitor);
     if (start != null) start.traverseTopDown(visitor);
     if (end != null) end.traverseTopDown(visitor);
@@ -43,7 +46,8 @@ public class ForExp extends Stat {
     if (block != null) block.traverseTopDown(visitor);
   }
 
-  public void traverseBottomUp(Visitor visitor) {
+  @Override
+public void traverseBottomUp(Visitor visitor) {
     if (start != null) start.traverseBottomUp(visitor);
     if (end != null) end.traverseBottomUp(visitor);
     if (step != null) step.traverseBottomUp(visitor);
@@ -51,7 +55,8 @@ public class ForExp extends Stat {
     accept(visitor);
   }
 
-  public String toString(String tab) {
+  @Override
+public String toString(String tab) {
     StringBuffer buffer = new StringBuffer();
     buffer.append(tab);
     buffer.append("ForExp(\n");

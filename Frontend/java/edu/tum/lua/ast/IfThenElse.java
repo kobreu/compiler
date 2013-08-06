@@ -19,31 +19,36 @@ public class IfThenElse extends Stat {
     if (elseblock != null) elseblock.setParent(this);
   }
 
-  public void accept(Visitor visitor) {
+  @Override
+public void accept(Visitor visitor) {
     visitor.visit(this);
   }
 
-  public void childrenAccept(Visitor visitor) {
+  @Override
+public void childrenAccept(Visitor visitor) {
     if (ifexp != null) ifexp.accept(visitor);
     if (thenblock != null) thenblock.accept(visitor);
     if (elseblock != null) elseblock.accept(visitor);
   }
 
-  public void traverseTopDown(Visitor visitor) {
+  @Override
+public void traverseTopDown(Visitor visitor) {
     accept(visitor);
     if (ifexp != null) ifexp.traverseTopDown(visitor);
     if (thenblock != null) thenblock.traverseTopDown(visitor);
     if (elseblock != null) elseblock.traverseTopDown(visitor);
   }
 
-  public void traverseBottomUp(Visitor visitor) {
+  @Override
+public void traverseBottomUp(Visitor visitor) {
     if (ifexp != null) ifexp.traverseBottomUp(visitor);
     if (thenblock != null) thenblock.traverseBottomUp(visitor);
     if (elseblock != null) elseblock.traverseBottomUp(visitor);
     accept(visitor);
   }
 
-  public String toString(String tab) {
+  @Override
+public String toString(String tab) {
     StringBuffer buffer = new StringBuffer();
     buffer.append(tab);
     buffer.append("IfThenElse(\n");

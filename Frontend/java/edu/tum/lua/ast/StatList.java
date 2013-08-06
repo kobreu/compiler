@@ -9,11 +9,11 @@ import java.util.Enumeration;
 
 public class StatList extends SyntaxNode {
 
-  private Vector items;
+  private Vector<Stat> items;
   private SyntaxNode parent;
 
   public StatList() {
-    items = new Vector();
+    items = new Vector<Stat>();
   }
 
   public StatList(Stat anItem) {
@@ -28,12 +28,12 @@ public class StatList extends SyntaxNode {
     return this;
   }
 
-  public Enumeration elements() {
+  public Enumeration<Stat> elements() {
     return items.elements();
   }
 
   public Stat elementAt(int index) {
-    return (Stat) items.elementAt(index);
+    return items.elementAt(index);
   }
 
   public void setElementAt(Stat item, int index) {
@@ -65,7 +65,8 @@ public class StatList extends SyntaxNode {
     return items.indexOf(item);
   }
 
-  public String toString() {
+  @Override
+public String toString() {
     return toString("");
   }
 
@@ -75,7 +76,7 @@ public class StatList extends SyntaxNode {
     buffer.append("StatList (\n");
     int size = items.size();
     for (int i = 0; i < size; i++) {
-      buffer.append(((Stat) items.elementAt(i)).toString("  "+tab));
+      buffer.append(items.elementAt(i).toString("  "+tab));
       buffer.append("\n");
     }
     buffer.append(tab);
@@ -83,30 +84,36 @@ public class StatList extends SyntaxNode {
     return buffer.toString();
   }
 
-  public SyntaxNode getParent() {
+  @Override
+public SyntaxNode getParent() {
     return parent;
   }
 
-  public void setParent(SyntaxNode parent) {
+  @Override
+public void setParent(SyntaxNode parent) {
     this.parent = parent;
   }
 
-  public void accept(Visitor visitor) {
+  @Override
+public void accept(Visitor visitor) {
     visitor.visit(this);
   }
 
-  public void childrenAccept(Visitor visitor) {
+  @Override
+public void childrenAccept(Visitor visitor) {
     for (int i = 0; i < size(); i++)
       if (elementAt(i) != null) elementAt(i).accept(visitor);
   }
 
-  public void traverseTopDown(Visitor visitor) {
+  @Override
+public void traverseTopDown(Visitor visitor) {
     this.accept(visitor);
     for (int i = 0; i < size(); i++)
       if (elementAt(i) != null) elementAt(i).traverseTopDown(visitor);
   }
 
-  public void traverseBottomUp(Visitor visitor) {
+  @Override
+public void traverseBottomUp(Visitor visitor) {
     for (int i = 0; i < size(); i++)
       if (elementAt(i) != null) elementAt(i).traverseBottomUp(visitor);
     this.accept(visitor);

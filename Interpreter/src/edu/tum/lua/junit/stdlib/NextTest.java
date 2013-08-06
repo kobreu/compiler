@@ -39,10 +39,8 @@ public class NextTest {
 		assertEquals(Collections.singletonList(null), next.apply(testTable, 1.0));
 
 		// > next({[1] = 4, [2] = 5}, nil) >> 1,4 or 2,5
-		// TODO
 
 		// > next({[1] = 4, [2] = 5}, 1) >> 2,5 or nil
 		testTable.set(2.0, 5.0);
-		// TODO
 	}
 }

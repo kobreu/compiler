@@ -1,7 +1,5 @@
 package util;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 
 import edu.tum.lua.parser.exception.StatementNotFinishedException;

@@ -51,8 +51,8 @@ public class Sub extends LuaFunctionNative {
 
 		if (i >= 0 && j >= 0) {
 			return Arrays.asList(new Object[] { s.substring(i, j) });
-		} else {
-			return Collections.singletonList((Object) "");
 		}
+
+		return Collections.singletonList((Object) "");
 	}
 }

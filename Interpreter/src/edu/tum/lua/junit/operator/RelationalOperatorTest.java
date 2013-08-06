@@ -28,7 +28,7 @@ public class RelationalOperatorTest {
 	}
 
 	@Test
-	public void testApply() throws NoSuchMethodException {
+	public void testApply() {
 
 		/*
 		 * Equal ==

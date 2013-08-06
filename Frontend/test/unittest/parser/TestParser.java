@@ -1,11 +1,9 @@
 package unittest.parser;
 
-import static org.junit.Assert.*;
 import java_cup.runtime.Symbol;
 
 import org.junit.Test;
 
-import serialization.XMLSerializer;
 import edu.tum.lua.ast.Block;
 import edu.tum.lua.parser.*;
 

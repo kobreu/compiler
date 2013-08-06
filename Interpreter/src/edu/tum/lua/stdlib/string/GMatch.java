@@ -16,6 +16,10 @@ public class GMatch extends LuaFunctionNative {
 	private class NextMatch extends LuaFunctionNative {
 		LuaType[][] expectedTypes = { { LuaType.STRING }, { LuaType.STRING } };
 
+		public NextMatch() {
+			// TODO Auto-generated constructor stub
+		}
+
 		@Override
 		public List<Object> apply(List<Object> arguments) {
 			checkArguments("nextmatch", arguments, expectedTypes);

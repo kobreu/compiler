@@ -1,7 +1,5 @@
 package grammarlistener;
 
-import java.util.Observer;
-
 
 public interface ProductionRuleBroadcaster {
 	

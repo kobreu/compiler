@@ -4,69 +4,71 @@
  */
 package asttweaks;
 
-import edu.tum.lua.ast.*;
+import edu.tum.lua.ast.Block;
+import edu.tum.lua.ast.NameList;
+import edu.tum.lua.ast.SyntaxNode;
+import edu.tum.lua.ast.Visitor;
 
 public class FuncBody extends SyntaxNode {
 
-  private SyntaxNode parent;
-  private ParList parlist;
-  private Block block;
+	private SyntaxNode parent;
+	private final ParList parlist;
+	private final Block block;
 
-  public FuncBody (ParList parlist, Block block) {
-    this.parlist = parlist;
-    this.block = block;
-  }
+	public FuncBody(ParList parlist, Block block) {
+		this.parlist = parlist;
+		this.block = block;
+	}
 
-  public SyntaxNode getParent() {
-    return parent;
-  }
+	@Override
+	public SyntaxNode getParent() {
+		return parent;
+	}
 
-  public void setParent(SyntaxNode parent) {
-    this.parent = parent;
-  }
+	@Override
+	public void setParent(SyntaxNode parent) {
+		this.parent = parent;
+	}
 
-  public String toString() {
-    return "FuncBody";
-  }
+	@Override
+	public String toString() {
+		return "FuncBody";
+	}
 
-public NameList getArgs() {
-	return parlist.namelist;
-}
+	public NameList getArgs() {
+		return parlist.namelist;
+	}
 
-public boolean getVarArgs() {
-	return parlist.varparlist;
-}
+	public boolean getVarArgs() {
+		return parlist.varparlist;
+	}
 
-public Block getBlock() {
-	return block;
-}
+	public Block getBlock() {
+		return block;
+	}
 
-@Override
-public void accept(Visitor visitor) {
-	throw new RuntimeException("Should not be here!");
-	
-}
+	@Override
+	public void accept(Visitor visitor) {
+		throw new RuntimeException("Should not be here!");
 
-@Override
-public void childrenAccept(Visitor visitor) {
-	// TODO Auto-generated method stub
-	throw new RuntimeException("Should not be here!");
-	
-}
+	}
 
-@Override
-public void traverseBottomUp(Visitor visitor) {
-	// TODO Auto-generated method stub
-	throw new RuntimeException("Should not be here!");
-	
-}
+	@Override
+	public void childrenAccept(Visitor visitor) {
+		throw new RuntimeException("Should not be here!");
 
-@Override
-public void traverseTopDown(Visitor visitor) {
-	// TODO Auto-generated method stub
-	throw new RuntimeException("Should not be here!");
-	
-}
+	}
 
+	@Override
+	public void traverseBottomUp(Visitor visitor) {
+		throw new RuntimeException("Should not be here!");
+
+	}
+
+	@Override
+	public void traverseTopDown(Visitor visitor) {
+		throw new RuntimeException("Should not be here!");
+
+	}
 
 }

@@ -164,8 +164,6 @@ public class GlobalEnvironment extends LuaTable {
 		table.set("remove", new Remove());
 		table.set("sort", new Sort());
 
-		// TODO math.huge math.pi
-		// TODO set implemented functions
 		LuaTable math = new LuaTable();
 		math.set("abs", new Abs());
 		math.set("acos", new Acos());

@@ -1,7 +1,6 @@
 package asttweaks;
 
 import serialization.VisitorAdapterGeneric;
-import edu.tum.lua.ast.Exp;
 import edu.tum.lua.ast.ExpList;
 import edu.tum.lua.ast.FuncName;
 import edu.tum.lua.ast.FuncNameDDotVar;
@@ -24,30 +23,28 @@ import edu.tum.lua.ast.VisitorNode;
 
 public class SyntacticSugar {
 
-	private static final class FuncNameToPrefixExpVisitor extends
-			VisitorAdaptor {
+	static final class FuncNameToPrefixExpVisitor extends VisitorAdaptor {
 		public Var var;
-		
+
 		public PrefixExp prefixexp;
 
 		@Override
 		public void visit(FuncNameDDotVar funcNameDDotVar) {
-			Variable var2 = new Variable(
-					funcNameDDotVar.selffuncname.name);
+			Variable var2 = new Variable(funcNameDDotVar.selffuncname.name);
 			var2.setStart(funcNameDDotVar.selffuncname.getStart());
 			var2.setEnd(funcNameDDotVar.selffuncname.getEnd());
 			PrefixExp prefixExp = new PrefixExpVar(var2);
 			prefixExp.setStart(var2.getStart());
 			prefixExp.setEnd(var2.getEnd());
-			
+
 			TextExp selfvar = new TextExp(funcNameDDotVar.funcname.name);
 			selfvar.setStart(funcNameDDotVar.funcname.getStart());
 			selfvar.setEnd(funcNameDDotVar.funcname.getEnd());
-			
+
 			VarTabIndex head = new VarTabIndex(prefixExp, selfvar);
 			head.setStart(prefixExp.getStart());
 			head.setStart(selfvar.getEnd());
-			
+
 			var = head;
 		}
 
@@ -56,17 +53,18 @@ public class SyntacticSugar {
 			// TODO not correct
 			prefixexp = new PrefixExpExp(new TextExp(funcNameVar.name.name));
 		}
-		
+
 		@Override
 		public void visit(FuncNameVarDotFuncName funcNameVarDotFuncName) {
-			if(funcNameVarDotFuncName.funcnamelist instanceof FuncNameVar) {
+			if (funcNameVarDotFuncName.funcnamelist instanceof FuncNameVar) {
 				FuncNameVar fn = (FuncNameVar) funcNameVarDotFuncName.funcnamelist;
-				VarTabIndex newHead = new VarTabIndex(new PrefixExpVar(new Variable(funcNameVarDotFuncName.name.name)), new TextExp(fn.name.name));
+				VarTabIndex newHead = new VarTabIndex(new PrefixExpVar(new Variable(funcNameVarDotFuncName.name.name)),
+						new TextExp(fn.name.name));
 				var = newHead;
 			} else {
 				// TODO not correct
-				VarTabIndex newHead = new VarTabIndex(new PrefixExpVar(
-						new Variable(funcNameVarDotFuncName.name.name)), null);
+				VarTabIndex newHead = new VarTabIndex(new PrefixExpVar(new Variable(funcNameVarDotFuncName.name.name)),
+						null);
 				newHead.setStart(funcNameVarDotFuncName.getStart());
 				newHead.setEnd(funcNameVarDotFuncName.getEnd());
 				funcNameVarDotFuncName.funcnamelist.accept(this);
@@ -76,10 +74,13 @@ public class SyntacticSugar {
 		}
 	}
 
-	private static final class DoesFuncNameHaveADDotCall extends
-			VisitorAdaptor {
+	private static final class DoesFuncNameHaveADDotCall extends VisitorAdaptor {
 
 		public boolean ddotcall = false;
+
+		public DoesFuncNameHaveADDotCall() {
+			// TODO Auto-generated constructor stub
+		}
 
 		@Override
 		public void visit(FuncNameDDotVar funcNameDDotVar) {
@@ -107,8 +108,8 @@ public class SyntacticSugar {
 			return vl;
 		} else if (fn instanceof FuncNameDDotVar) {
 			FuncNameDDotVar ddotVar = (FuncNameDDotVar) fn;
-			VarTabIndex head = new VarTabIndex(new PrefixExpVar(new Variable(
-					ddotVar.selffuncname.name)), new TextExp(ddotVar.funcname.name));
+			VarTabIndex head = new VarTabIndex(new PrefixExpVar(new Variable(ddotVar.selffuncname.name)), new TextExp(
+					ddotVar.funcname.name));
 			head.setStart(ddotVar.getStart());
 			head.setEnd(ddotVar.getEnd());
 			vl.append(head);
@@ -133,13 +134,13 @@ public class SyntacticSugar {
 		// does the funcname contain a : ? If yes, add self as first argument
 		DoesFuncNameHaveADDotCall d = new DoesFuncNameHaveADDotCall();
 		fn.accept(d);
-		if(d.ddotcall) {
+		if (d.ddotcall) {
 			final NameList newnl = new NameList(new Name("self"));
 			nl.childrenAccept(new VisitorAdapterGeneric() {
-					@Override
-					public void visitGeneric(VisitorNode node) {
-						newnl.append((Name) node);
-					}
+				@Override
+				public void visitGeneric(VisitorNode node) {
+					newnl.append((Name) node);
+				}
 			});
 			nl = newnl;
 		}

@@ -31,7 +31,6 @@ public class PairsTest {
 		assertEquals((new Next()).getClass(), pairs.apply(table).get(0).getClass());
 
 		// Second return-value is the same table
-		// TODO Did it get changed??
 		assertEquals(table, pairs.apply(table).get(1));
 
 		// Third return-value is nil

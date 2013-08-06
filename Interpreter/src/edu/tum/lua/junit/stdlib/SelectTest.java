@@ -35,15 +35,15 @@ public class SelectTest {
 			fail();
 		}
 
-		LinkedList<Object> l3 = new LinkedList<Object>();
+		LinkedList<Object> l3 = new LinkedList<>();
 
 		l3.addFirst(d0);
 		l3.addLast("a");
-		LinkedList<Object> l6 = new LinkedList<Object>();
+		LinkedList<Object> l6 = new LinkedList<>();
 		l6.addFirst("ed");
 		l6.addLast("a");
 
-		LinkedList<LinkedList<Object>> errorObjects = new LinkedList<LinkedList<Object>>();
+		LinkedList<LinkedList<Object>> errorObjects = new LinkedList<>();
 		errorObjects.add(l3);
 		errorObjects.add(l6);
 

@@ -1,6 +1,5 @@
 package edu.tum.lua.cli;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -190,9 +189,5 @@ public class Documentation {
 				break;
 			}
 		}
-	}
-
-	public void deleteDocumentation() {
-		new File(System.getProperty("java.io.tmpdir") + "lua_documentation.data").delete();
 	}
 }

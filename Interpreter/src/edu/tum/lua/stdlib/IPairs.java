@@ -14,6 +14,10 @@ public class IPairs extends LuaFunctionNative {
 	private class INext extends LuaFunctionNative {
 		LuaType[][] expectedTypes = { { LuaType.TABLE, LuaType.NUMBER } };
 
+		public INext() {
+			// TODO Auto-generated constructor stub
+		}
+
 		@Override
 		public List<Object> apply(List<Object> arguments) {
 			checkArguments("inext", arguments, expectedTypes);

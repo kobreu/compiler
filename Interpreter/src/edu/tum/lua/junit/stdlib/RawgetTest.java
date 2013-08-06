@@ -55,7 +55,7 @@ public class RawgetTest {
 			l.removeLast();
 			l.addLast(3.0);
 			assertEquals(r.apply(l).get(0), null);
-			l = new LinkedList<Object>();
+			l = new LinkedList<>();
 			l.add(new LuaTable());
 			l.add("a");
 			assertEquals(r.apply(l).get(0), null);
