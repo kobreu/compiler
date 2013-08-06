@@ -1,5 +1,5 @@
 
-package edu.tum.lua.ast;
+package edu.tum.juna.ast;
 
 Block ::= StatList:stats LastStat:last
 

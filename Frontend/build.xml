@@ -51,7 +51,7 @@
 	</target>
 
 	<target name="cup" depends="init">
-		<cup srcfile="${cup}/Parser.cup" destdir="${java}/edu/tum/lua/parser" interface="true" package="edu.tum.lua.parser"
+		<cup srcfile="${cup}/Parser.cup" destdir="${java}/edu/tum/lua/parser" interface="true" package="edu.tum.juna.parser"
 parser="Parser" expect="19" />
 	</target>
 

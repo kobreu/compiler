@@ -6,12 +6,10 @@ import java.util.*;
 import java.io.*;
 import java_cup.runtime.Symbol;
 import java_cup.runtime.*;
-import edu.tum.lua.ast.*;
-
-import location.*;
-import grammarlistener.*;
-
-import asttweaks.*;
+import edu.tum.juna.ast.*;
+import edu.tum.juna.parser.location.*;
+import edu.tum.juna.parser.grammerlistener.*;
+import edu.tum.juna.ast.*;
 
 
 /* Preliminaries to use the scanner.  */
