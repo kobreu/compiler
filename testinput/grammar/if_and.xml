@@ -1,0 +1,24 @@
+<Block>
+	<StatList>
+		<IfThenElse>
+			<Binop op="AND">
+				<PreExp>
+					<PrefixExpVar>
+						<Variable var="a" />
+					</PrefixExpVar>
+				</PreExp>
+				<PreExp>
+					<PrefixExpVar>
+						<Variable var="b" />
+					</PrefixExpVar>
+				</PreExp>
+			</Binop>
+			<Block>
+				<StatList />
+				<Null />
+			</Block>
+			<Null />
+		</IfThenElse>
+	</StatList>
+	<Null />
+</Block>

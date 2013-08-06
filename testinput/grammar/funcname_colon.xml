@@ -1,0 +1,35 @@
+<Block>
+	<StatList>
+		<Asm>
+			<VarList>
+				<VarTabIndex>
+					<PrefixExpVar>
+						<Variable var="bla" />
+					</PrefixExpVar>
+					<PreExp>
+			            <PrefixExpVar>
+			              <VarTabIndex>
+			                <PrefixExpVar>
+			                  <Variable var="func"/>
+			                </PrefixExpVar>
+			                <TextExp text="colon" />
+			              </VarTabIndex>
+			            </PrefixExpVar>
+          			</PreExp>
+				</VarTabIndex>
+			</VarList>
+			<ExpList>
+				<FunctionExp varargs="false">
+				<NameList>
+            		<Name name="self"/>
+          		</NameList>
+				<Block>
+					<StatList />
+					<Null />
+				</Block>
+				</FunctionExp>
+			</ExpList>
+		</Asm>
+	</StatList>
+	<Null />
+</Block>

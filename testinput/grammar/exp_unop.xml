@@ -1,0 +1,15 @@
+<Block>
+	<StatList>
+		<Asm>
+			<VarList>
+				<Variable var="a" />
+			</VarList>
+			<ExpList>
+				<Unop op="UNM">
+					<NumberExp number="5.0" />
+				</Unop>
+			</ExpList>
+		</Asm>
+	</StatList>
+	<Null />
+</Block>

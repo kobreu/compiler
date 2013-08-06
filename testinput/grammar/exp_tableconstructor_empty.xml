@@ -1,0 +1,18 @@
+<Block>
+	<StatList>
+		<Asm>
+			<VarList>
+				<Variable var="a" />
+			</VarList>
+			<ExpList>
+				<TableConstructorExp>
+					<TableConstructor>
+						<FieldList>
+						</FieldList>
+					</TableConstructor>
+				</TableConstructorExp>
+			</ExpList>
+		</Asm>
+	</StatList>
+	<Null />
+</Block>

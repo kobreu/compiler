@@ -1,0 +1,116 @@
+<project name="Compiler" default="jflex" basedir=".">
+	<property name="cup" location="cup" />
+	<property name="flex" location="flex" />
+	<property name="src" location="src" />
+	<property name="gen" location="gen" />
+	<property name="testoutput" location="testoutput" />
+	<property name="bin" location="bin" />
+	<property name="lib" location="lib" />
+	<property name="tools" location="tools" />
+	<property environment="env" />
+
+	<!-- We rely on CUP-10k-TUM, JFlex 1.3.5  -->
+	<!-- residing in our directory ``tools'' -->
+	<path id="binaries">
+		<pathelement location="${tools}" />
+		
+		<fileset dir="${tools}">
+			<include name="**/*.jar" />
+			<include name="**/*.zip" />
+		</fileset>
+		<pathelement path="${java.class.path}" />
+		<pathelement path="${bin}" />
+		<pathelement location="${lib}/xmlunit-1.4.jar" />
+	</path>
+
+	<path id="libraries">
+		<pathelement location="${lib}" />
+
+		<fileset dir="${lib}">
+			<include name="**/*.jar" />
+			<include name="**/*.zip" />
+		</fileset>
+		<pathelement path="${java.class.path}" />
+	</path>
+
+	<!-- This is JFlex -->
+	<taskdef name="jflex" classname="JFlex.anttask.JFlexTask" classpath="${tools}/JFlex.jar"  />
+	<!-- We have Classgen 1.5pre -->
+	<taskdef name="classgen" classname="classgen.AntTask" classpath="${tools}/classgen.jar" />
+	<!-- We also use CUP-TUM -->
+	<taskdef name="cup" classname="java_cup.anttask.CUPTask" classpath="${tools}/java-cup-11a.jar"   />
+
+	<target name="init">
+		<mkdir dir="${bin}" />
+		<mkdir dir="${gen}" />
+	</target>
+
+	<target name="cup" depends="init">
+		<cup srcfile="${cup}/Parser.cup" destdir="${gen}/edu/tum/juna/parser" interface="true" package="edu.tum.juna.parser" parser="Parser" expect="19" />
+	</target>
+
+	<target name="jflex" depends="cup">
+		<jflex file="${flex}/Scanner.jflex" destdir="${gen}" />
+	</target>
+
+	<target name="gen" depends="jflex" />
+
+	<target name="compile" depends="gen">
+		<javac destdir="${bin}" includeantruntime="false" debug="on">
+            <src path="${src}"/>  
+            <src path="${gen}"/>  
+
+			<classpath refid="libraries">
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="test" depends="compile">
+		<junit>
+			<classpath>
+				<pathelement location="${bin}" />
+				<pathelement location="${lib}/junit-4.11.jar" />
+				<pathelement location="${lib}/hamcrest-core-1.3.jar" />
+				<pathelement location="${lib}/xmlunit-1.4.jar" />
+				<pathelement location="${lib}/dom4j-2.0.0-ALPHA-2.jar" />
+				<pathelement location="${lib}/java-cup-11a-runtime.jar" />
+				<pathelement location="${lib}/jaxen-1.1-beta-6.jar" />
+			</classpath>
+			<mkdir dir="${testoutput}" />
+			<batchtest todir="testoutput">
+				<fileset dir="${bin}">
+					<include name="**/*Test*" />
+				</fileset>
+			</batchtest>
+			<formatter type="xml" usefile="true" />
+		</junit>
+	</target>
+
+    <target name="jar" depends="compile">
+        <jar destfile="juna.jar">
+            <manifest>
+                <attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"/>
+                <attribute name="Rsrc-Main-Class" value="edu.tum.juna.cli.Main"/>
+                <attribute name="Class-Path" value="."/>
+                <attribute name="Rsrc-Class-Path" value="./ java-cup-11a-runtime.jar xmlunit-1.4.jar dom4j-2.0.0-ALPHA-2.jar commons-lang3-3.1.jar jaxen-1.1-beta-6.jar jline-1.0.jar htmlcleaner-2.5.jar junit-4.11.jar hamcrest-core-1.3.jar"/>
+            </manifest>
+            <zipfileset src="jar-in-jar-loader.zip"/>
+            <fileset dir="${bin}"/>
+            <zipfileset dir="${lib}" includes="java-cup-11a-runtime.jar"/>
+            <zipfileset dir="${lib}" includes="xmlunit-1.4.jar"/>
+            <zipfileset dir="${lib}" includes="dom4j-2.0.0-ALPHA-2.jar"/>
+            <zipfileset dir="${lib}" includes="commons-lang3-3.1.jar"/>
+            <zipfileset dir="${lib}" includes="jaxen-1.1-beta-6.jar"/>
+            <zipfileset dir="${lib}" includes="jline-1.0.jar"/>
+            <zipfileset dir="${lib}" includes="htmlcleaner-2.5.jar"/>
+            <zipfileset dir="${lib}" includes="junit-4.11"/>
+            <zipfileset dir="${lib}" includes="hamcrest-core-1.3.jar"/>
+        </jar>
+    </target>
+
+	<target name="clean">
+		<delete dir="${gen}"/>
+		<delete dir="${bin}" />
+		<delete dir="testoutput" />
+	</target>
+</project>

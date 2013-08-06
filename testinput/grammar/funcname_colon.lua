@@ -1,0 +1,1 @@
+function bla.func:colon () end

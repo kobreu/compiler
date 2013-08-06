@@ -1,40 +1,23 @@
-compiler
+Juna
 ========
 
-Continuous Integration
-======
+License
+===
+GPLv3
 
-Jenkins: http://131.159.58.108:80/
+Build Instructions
+===
 
-Getting "Frontend" to run
-=====
-
- 1. Import Project in Eclipse
- 2. run build.xml
- 3. Profit!!!
+* ant gen - generates lexer and parser
+* ant compile - compiles everything
+* ant jar - bundles everything into a single jar 
 
 Team
-======
-
- * Lisa velden@in.tum.de
- * Johannes mikulasc@in.tum.de
- * Salomon sickert@in.tum.de
+===
+ * Lisa (velden (at) in.tum.de)
+ * Johannes (mikulasc (at) in.tum.de)
+ * Salomon (sickert (at) in.tum.de)
  * Isábel isabel.delesques-grauby@polytechnique.edu
  * Matthias kneidel@in.tum.de
  * Shruthi shruthi.padma@tum.de
  * Korbinian Korbinian.breu@mytum.de
- 
- velden@in.tum.de, mikulasc@in.tum.de, sickert@in.tum.de, isabel.delesques-grauby@polytechnique.edu, kneidel@in.tum.de, shruthi.padma@tum.de, Korbinian.breu@mytum.de 
- 
-Holidays
-======
- 
- * Isabel: 23/07/13 until 10.30am, 01/08/13
- * Lisa: 05/08/13, 06/08/13, 07/08/13
- * Johannes: 30/07/13
- * Korbi: 05/08/13, 06/08/13, 07/08/13
- * Matthias: 23/07/13 until 10am, 24/07/13 until 1pm, 29/07/13 until 1pm, 31/07/13 until 2pm
- * Salomon: 1/8/13, 6/8/13
- * Shruthi: 30/7/13, 01/08/13, 02/08/13
-  
-  

@@ -1,0 +1,19 @@
+<Block>
+	<StatList>
+		<Asm>
+			<VarList>
+				<Variable var="a" />
+			</VarList>
+			<ExpList>
+				<Unop op="NOT">
+					<PreExp>
+						<PrefixExpVar>
+							<Variable var="b" />
+						</PrefixExpVar>
+					</PreExp>
+				</Unop>
+			</ExpList>
+		</Asm>
+	</StatList>
+	<Null />
+</Block>
