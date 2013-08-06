@@ -55,15 +55,44 @@
 <a name="build-instructions" class="anchor" href="#build-instructions"><span class="octicon octicon-link"></span></a><em>Build Instructions</em>
 </h4>
 
-<h4>
+<ul>
+<li>    <code>ant gen</code> generates lexer and parser</li>
+<li>    <code>ant compile</code> compiles everything</li>
+<li>    <code>ant jar</code> bundles everything into a single jar</li>
+<li>    <code>ant clean</code> cleans the project</li>
+</ul><h4>
 <a name="interactivebatch-mode" class="anchor" href="#interactivebatch-mode"><span class="octicon octicon-link"></span></a><em>Interactive/Batch Mode</em>
 </h4>
 
-<h3>
+<p><strong>Usage in Batch Mode:</strong>    <code>java -jar juna.jar [-options] [Lua-File]</code>
+with following options:</p>
 
-<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
+<ul>
+<li>   <code>-h</code>, <code>-help</code>   show the Batch-Help</li>
+<li>   <code>[-i [&lt;file&gt;]]</code> open Juna in interactive Mode (Default) and if set, execute the given Lua-File (equal to <code>dofile(&lt;file&gt;)</code> in the interactive mode)</li>
+<li>   <code>[-f] &lt;file&gt;</code>   executes a File in batch Mode (Default for Files) and exit Juna afterwards</li>
+</ul><p><strong>Usage in Interactive Mode:</strong></p>
 
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
+<ul>
+<li>   <code>--help</code>    show the Interactive-Help</li>
+<li>   <code>--list</code>    list all available functions in the global environment with a short description</li>
+<li>   <code>--list &lt;function&gt;</code> print detailed help for a predefinied function</li>
+<li>   <code>--env</code>     list all members (without functions) of the global environment with their types and values</li>
+<li>   <code>--exit</code>    leave the interactive mode and exit Juna</li>
+<li>   all other inputs are handled in Lua behavior (in realtime) and probably closing Juna in consequences of an error</li>
+</ul><h3>
+<a name="architecture" class="anchor" href="#architecture"><span class="octicon octicon-link"></span></a>Architecture</h3>
+
+<p>The interpreter is divided into two modules:</p>
+
+<ul>
+<li>The Scanner and the Parser that creates an Abstract Syntax Tree out of a Lua Code.</li>
+<li>The Interpreter that steps through the AST and handle the Lua functions and operators</li>
+</ul><h4>
+<a name="scanner-and-parser" class="anchor" href="#scanner-and-parser"><span class="octicon octicon-link"></span></a><em>Scanner and Parser</em>
+</h4>
+
+<p>The Scanner (JFLEX) takes an Lua Code, either the current line in the interactive mode or from a file, and produce a Token-Stream. The Parser (Cup) generates out of the Token-Stream together with the different block types provided by Classgen an Abstract Syntax Tree matching the Lua grammar.</p>
       </section>
     </div>
 
