@@ -59,6 +59,10 @@ public class FindTest {
 		back = f.apply(s, "my", 10.0, new Boolean(true)).toArray();
 		assertTrue(((Double) back[0]).intValue() == 17 && ((Double) back[1]).intValue() == 18);
 
+		s = "Hello (World)!";
+		res = Find.getIndexOfPattern(s, "%([^%(%)]*%)");
+		assertTrue(res[0] == 6 && res[1] == 12);
+
 		back = f.apply(5.5, ".").toArray();
 		assertTrue(((Double) back[0]).intValue() == 1 && ((Double) back[1]).intValue() == 1);
 
@@ -70,12 +74,14 @@ public class FindTest {
 	}
 
 	private void checkPatternConvertion() {
-		assertEquals("", Find.convertPattern(""));
 		assertEquals("[a-zA-Z]", Find.convertPattern("%a"));
 		assertEquals("[a-zA-Z]*", Find.convertPattern("%a*"));
 		assertEquals("\\p{Alnum}", Find.convertPattern("%w"));
 		assertEquals("[\\p{XDigit}]+", Find.convertPattern("[%x]+"));
 		assertEquals("[^\\p{Upper}]?", Find.convertPattern("[^%u]?"));
+		assertEquals("[[^\\p{Upper}]]?", Find.convertPattern("[%U]?"));
+		assertEquals("[\\+\\-\\*/]?", Find.convertPattern("[%+%-%*/]?"));
+		assertEquals("[\\{\\(\\)\\}]", Find.convertPattern("[{%(%)}]"));
 
 		try {
 			Find.convertPattern("%z");

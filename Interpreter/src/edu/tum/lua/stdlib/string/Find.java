@@ -110,6 +110,12 @@ public class Find extends LuaFunctionNative {
 	}
 
 	public static String convertPattern(String p) {
+		if (p.length() == 0) {
+			return "[^.]*";
+		}
+
+		p = p.replaceAll("\\{", "\\\\{");
+		p = p.replaceAll("\\}", "\\\\}");
 
 		if (p.matches(".*%z.*")) {
 			throw new NotImplementedException();
@@ -122,6 +128,16 @@ public class Find extends LuaFunctionNative {
 		if (p.matches(".*%[1-9].*")) {
 			throw new NotImplementedException();
 		}
+
+		p = p.replaceAll("%A", "[^%a]");
+		p = p.replaceAll("%C", "[^%c]");
+		p = p.replaceAll("%D", "[^%d]");
+		p = p.replaceAll("%L", "[^%l]");
+		p = p.replaceAll("%P", "[^%p]");
+		p = p.replaceAll("%S", "[^%s]");
+		p = p.replaceAll("%U", "[^%u]");
+		p = p.replaceAll("%W", "[^%w]");
+		p = p.replaceAll("%X", "[^%x]");
 
 		p = p.replaceAll("%a", "[a-zA-Z]");
 		p = p.replaceAll("%c", "\\\\p{Cntrl}");
@@ -137,9 +153,18 @@ public class Find extends LuaFunctionNative {
 			throw new NotImplementedException();
 		}
 
-		if (p.matches("\\^.*")) {
-			throw new NotImplementedException();
-		}
+		// replace escaped sequences
+		p = p.replaceAll("%%", "%");
+		p = p.replaceAll("%\\+", "\\\\+");
+		p = p.replaceAll("%\\?", "\\\\?");
+		p = p.replaceAll("%\\*", "\\\\*");
+		p = p.replaceAll("%\\-", "\\\\-");
+		p = p.replaceAll("%\\^", "\\\\^");
+		p = p.replaceAll("%\\$", "\\\\$");
+		p = p.replaceAll("%\\(", "\\\\(");
+		p = p.replaceAll("%\\)", "\\\\)");
+		p = p.replaceAll("%\\[", "\\\\[");
+		p = p.replaceAll("%\\]", "\\\\]");
 
 		return p;
 	}
