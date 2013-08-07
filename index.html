@@ -45,9 +45,9 @@
 <li>JFLEX - used for scanning the program. <a href="http://www-inst.eecs.berkeley.edu/%7Ecs164/sp08/docs/jflex/manual.pdf">Download Manual</a>. Licensed by GNU General Public License.</li>
 <li>Java CUP Parser - used for parsing the program. <a href="http://www2.cs.tum.edu/projects/cup/">More about CUP parser</a> .This is an open source license. It is also GPL-Compatible</li>
 <li>
-<a href="Java%20library%20for%20handling%20console%20input.">JLine</a> - used for handling the console input. JLine is distributed under the BSD license. 
-
-</li>
+<a href="Java%20library%20for%20handling%20console%20input.">JLine</a> - used for handling the console input. JLine is distributed under the BSD license. </li>
+<li>
+<a href="http://htmlcleaner.sourceforge.net/">HtmlCleaner</a> - used for removing the syntactically wrong HTML code. Licensed by BSD license</li>
 </ul><h3>
 <a name="getting-started" class="anchor" href="#getting-started"><span class="octicon octicon-link"></span></a>Getting Started</h3>
 
@@ -69,30 +69,66 @@ with following options:</p>
 
 <ul>
 <li>   <code>-h</code>, <code>-help</code>   show the Batch-Help</li>
-<li>   <code>[-i [&lt;file&gt;]]</code> open Juna in interactive Mode (Default) and if set, execute the given Lua-File (equal to <code>dofile(&lt;file&gt;)</code> in the interactive mode)</li>
-<li>   <code>[-f] &lt;file&gt;</code>   executes a File in batch Mode (Default for Files) and exit Juna afterwards</li>
+<li>   <code>[-i [&lt;file&gt;]]</code> open Juna in interactive Mode (Default) and if set,
+execute the given Lua-File (equal to <code>dofile(&lt;file&gt;)</code> in the interactive
+mode)</li>
+<li>   <code>[-f] &lt;file&gt;</code>   executes a File in batch Mode (Default for Files) and
+exit Juna afterwards</li>
 </ul><p><strong>Usage in Interactive Mode:</strong></p>
 
 <ul>
 <li>   <code>--help</code>    show the Interactive-Help</li>
-<li>   <code>--list</code>    list all available functions in the global environment with a short description</li>
+<li>   <code>--list</code>    list all available functions in the global environment with
+a short description</li>
 <li>   <code>--list &lt;function&gt;</code> print detailed help for a predefinied function</li>
-<li>   <code>--env</code>     list all members (without functions) of the global environment with their types and values</li>
+<li>   <code>--env</code>     list all members (without functions) of the global
+environment with their types and values</li>
 <li>   <code>--exit</code>    leave the interactive mode and exit Juna</li>
-<li>   all other inputs are handled in Lua behavior (in realtime) and probably closing Juna in consequences of an error</li>
+<li>   all other inputs are handled in Lua behavior (in realtime) and probably
+closing Juna in consequences of an error</li>
 </ul><h3>
 <a name="architecture" class="anchor" href="#architecture"><span class="octicon octicon-link"></span></a>Architecture</h3>
 
 <p>The interpreter is divided into two modules:</p>
 
 <ul>
-<li>The Scanner and the Parser that creates an Abstract Syntax Tree out of a Lua Code.</li>
-<li>The Interpreter that steps through the AST and handle the Lua functions and operators</li>
+<li>The Scanner and the Parser that creates an Abstract Syntax Tree out of a
+Lua Code.</li>
+<li>The Interpreter that steps through the AST and handle the Lua functions
+and operators</li>
 </ul><h4>
 <a name="scanner-and-parser" class="anchor" href="#scanner-and-parser"><span class="octicon octicon-link"></span></a><em>Scanner and Parser</em>
 </h4>
 
-<p>The Scanner (JFLEX) takes an Lua Code, either the current line in the interactive mode or from a file, and produce a Token-Stream. The Parser (Cup) generates out of the Token-Stream together with the different block types provided by Classgen an Abstract Syntax Tree matching the Lua grammar.</p>
+<p>The Scanner (JFLEX) takes an Lua Code, either the current line in the
+interactive mode or from a file, and produce a Token-Stream. The Parser
+(Cup) generates out of the Token-Stream together with the different block
+types provided by Classgen an Abstract Syntax Tree matching the Lua grammar.</p>
+
+<h4>
+<a name="interpreter" class="anchor" href="#interpreter"><span class="octicon octicon-link"></span></a><em>Interpreter</em>
+</h4>
+
+<p>The Interpreter simply step through the abstract syntax tree and handle each
+block. The tree visitor differ a block by operator (like '+', '-'), by block
+element (like loops or conditions) or by functions (standard library
+functions as well as user defined functions). Currently, all operations and
+block elements are implemented but some standard library functions are still
+missing yet.</p>
+
+<h4>
+<a name="important-annotation" class="anchor" href="#important-annotation"><span class="octicon octicon-link"></span></a><em>Important annotation</em>
+</h4>
+
+<p>Thus Juna is based on Java there won't be exactly the same behavior like it
+is given by the Lua implementation in C. Especially the possibility to
+communicate with the underlying environment is missing in Java. Therefor
+Juna is more secure than the official Lua interpreter.</p>
+
+<h3>
+<a name="contact-us" class="anchor" href="#contact-us"><span class="octicon octicon-link"></span></a>Contact Us</h3>
+
+<p>Please send in your queries to <a href="cc-labcourse@t-online.de">cc-labcourse@t-online.de</a></p>
       </section>
     </div>
 
