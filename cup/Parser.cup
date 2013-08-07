@@ -108,11 +108,16 @@ non terminal Integer unop;
 non terminal optsemi, empty;
 
 precedence nonassoc LPAREN, RPAREN; 
-precedence nonassoc WS, COM ;
+precedence nonassoc  COM,WS ;
+precedence left OR;
+precedence left AND;
+precedence left LEQ,  LE, GR, GEQ ,EQ, NEQ; 
+precedence right CONCAT ;
+precedence left ADD, SUB;
+precedence left MUL, DIV, MOD;
+precedence left NOT, LENGTH;
+precedence right POW;
 
-/*precedence left EQ, LEQ, NEQ, LE, GR, GEQ;*/
-precedence left ADD, MUL, SUB, DIV, MOD, POW, CONCAT, AND, OR;
-precedence left LENGTH;
 
 /* Grammar */
 
@@ -169,6 +174,7 @@ statlist		::=		 stat:s optsemi
 							
 						;
 					
+	
 						
 
 prefixexp		::=		var:v
@@ -457,6 +463,7 @@ fieldlist		 ::= 	field:f
 									RESULT = fl;
 								}						
 							:}
+						 
  						;
  						
  						
@@ -476,9 +483,9 @@ field			::=		LBRACK exp:e1 RBRACK ASM exp:e2
 						;
 						
 
-fieldsep		::=		COM | SEMI						
+fieldsep		::=		COM | SEMI 						
 						;
-optfieldsep		::= 	COM | SEMI | empty;
+
 
 		
 binop			::=		ADD
@@ -527,4 +534,3 @@ optsemi			::= 	SEMI  | empty ;
 
 
 empty			::=		;
-
